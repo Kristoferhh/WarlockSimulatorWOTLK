@@ -38,7 +38,7 @@ export enum ItemSlotDetailed {
 
 export interface Item {
   Name: string
-  Id: number
+  Id: ItemId
   ItemSlot: ItemSlot
   Quality: Quality
   Stats: StatsCollection
@@ -46,7 +46,7 @@ export interface Item {
   Sockets?: SocketColor[]
   SocketBonus?: StatsCollection
   Set?: ItemSet
-  DisplayId?: number
+  DisplayId?: ItemId
   Unique?: boolean
   Source: ItemSource
   Phase: Phase
@@ -58,7 +58,7 @@ export interface Enchant {
   ItemSlot: ItemSlot
   Quality: Quality
   Stats: StatsCollection
-  Id: number
+  Id: EnchantId
   Source: ItemSource
   Phase: Phase
 }
@@ -729,7 +729,7 @@ export enum SpellId {
   Shadowfury = 30283,
   ChaosBolt = 50796,
   DarkPact = 59092,
-  CurseOfRecklessness = 16231
+  CurseOfRecklessness = 16231,
 }
 
 export enum AuraId {

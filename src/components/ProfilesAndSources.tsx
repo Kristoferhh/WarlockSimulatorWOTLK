@@ -37,12 +37,11 @@ import {
 import { Phase, Profile, ProfileContainer, Race, Setting } from '../Types'
 
 const phases: { title: string; phase: Phase }[] = [
-  { title: 'Classic', phase: 0 },
+  { title: 'TBC', phase: 0 },
   { title: 'P1', phase: 1 },
   { title: 'P2', phase: 2 },
   { title: 'P3', phase: 3 },
   { title: 'P4', phase: 4 },
-  { title: 'P5', phase: 5 },
 ]
 
 export default function ProfilesAndSources() {

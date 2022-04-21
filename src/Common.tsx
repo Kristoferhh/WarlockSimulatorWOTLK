@@ -318,8 +318,8 @@ export function getItemsStats(
   Object.values(items).forEach((itemId) => {
     const itemObj = Items.find((e) => e.Id === itemId)
 
-    if (itemObj) {
-      Object.entries(itemObj).forEach((item) => {
+    if (itemObj?.Stats) {
+      Object.entries(itemObj.Stats).forEach((item) => {
         if (item[0] in Stat) {
           addOrMultiplyStat(
             statsObj || stats,
@@ -372,7 +372,7 @@ export function getGemsStats(
         ) {
           const itemObj = Items.find((e) => e.Id === item[1])
 
-          itemObj?.SocketBonus &&
+          if (itemObj?.SocketBonus) {
             Object.entries(itemObj.SocketBonus).forEach((stat) => {
               addOrMultiplyStat(
                 statsObj || stats,
@@ -380,6 +380,7 @@ export function getGemsStats(
                 stat[1]
               )
             })
+          }
         }
       }
     }
@@ -404,8 +405,8 @@ export function getEnchantsStats(
     ) {
       const enchantObj = Enchants.find((e) => e.Id === enchant[1])
 
-      enchantObj &&
-        Object.entries(enchantObj).forEach((prop) => {
+      if (enchantObj?.Stats) {
+        Object.entries(enchantObj.Stats).forEach((prop) => {
           if (prop[0] in Stat) {
             addOrMultiplyStat(
               statsObj || stats,
@@ -414,6 +415,7 @@ export function getEnchantsStats(
             )
           }
         })
+      }
     }
   })
 
