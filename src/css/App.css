@@ -522,7 +522,7 @@ img {
 
 .talent-tree-div {
   display: inline-block;
-  width: 206px;
+  width: 204px;
 }
 
 .talent-tree-table {
@@ -542,7 +542,8 @@ img {
 .talent-icon {
   position: relative;
   display: inline-block;
-  margin-left: 5px;
+  margin-left: 4px;
+  margin-top: 2.3px;
   cursor: pointer;
   user-select: none;
 }

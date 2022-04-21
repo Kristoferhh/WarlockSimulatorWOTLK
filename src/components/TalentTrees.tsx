@@ -96,7 +96,7 @@ export default function TalentTrees() {
             <img
               src={`${process.env.PUBLIC_URL}/img/talent_tree_background_${talentTree.Name}.jpg`}
               alt={talentTree.Name}
-              style={{ position: 'absolute', height: '430px', width: '206px' }}
+              style={{ position: 'absolute', height: '554px', width: '204px' }}
             />
             <table
               id={'talent-table-' + talentTree.Name}

@@ -716,6 +716,15 @@ export enum SpellId {
   SearingPain = 47815,
   Shadowflame = 61290,
   SoulFire = 47825,
+  SiphonLife = 63108,
+  AmplifyCurse = 18288,
+  UnstableAffliction = 30108,
+  Haunt = 48181,
+  SoulLink = 19028,
+  Shadowburn = 17877,
+  Conflagrate = 17962,
+  Shadowfury = 30283,
+  ChaosBolt = 50796
 }
 
 export enum AuraId {
