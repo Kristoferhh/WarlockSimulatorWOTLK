@@ -149,7 +149,7 @@ export default function StatsDisplay() {
     critPercent += playerState.Talents['Demonic Tactics'] || 0
     critPercent += getIntellect() * StatConstant.CritPercentPerIntellect
     if (playerState.Auras.includes(AuraId.MoonkinAura)) critPercent += 5
-    if (playerState.Auras.includes(AuraId.JudgementOfTheCrusader))
+    if (playerState.Auras.includes(AuraId.ImprovedSealOfTheCrusader))
       critPercent += 3
     if (playerState.Auras.includes(AuraId.TotemOfWrath))
       critPercent +=

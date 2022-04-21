@@ -756,7 +756,7 @@ export enum AuraId {
   ImprovedScorch = 12873,
   Misery = 33195,
   JudgementOfWisdom = 20354,
-  JudgementOfTheCrusader = 20337,
+  ImprovedSealOfTheCrusader = 20337,
   FaerieFire = 26993,
   SunderArmor = 25225,
   ExposeArmor = 26866,

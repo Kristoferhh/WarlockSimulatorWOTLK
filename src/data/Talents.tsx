@@ -13,7 +13,7 @@ export const Talents: TalentTreeStruct[] = [
         {
           Name: TalentName.ImprovedCurseOfAgony,
           RankIds: [18827, 18829],
-          IconName: '',
+          IconName: 'spell_shadow_curseofsargeras',
         },
       ],
     ],
