@@ -1,132 +1,97 @@
-export enum ItemSlotKey {
-  Head = "head",
-  Neck = "neck",
-  Shoulders = "shoulders",
-  Back = "back",
-  Chest = "chest",
-  Bracer = "bracer",
-  Gloves = "gloves",
-  Belt = "belt",
-  Legs = "legs",
-  Boots = "boots",
-  Ring = "ring",
-  Trinket = "trinket",
-  Mainhand = "mainhand",
-  Offhand = "offhand",
-  Twohand = "twohand",
-  Wand = "wand"
+export enum ItemSlot {
+  Head = 'Head',
+  Neck = 'Neck',
+  Shoulders = 'Shoulders',
+  Back = 'Back',
+  Chest = 'Chest',
+  Wrist = 'Wrist',
+  Hands = 'Hands',
+  Waist = 'Waist',
+  Legs = 'Legs',
+  Feet = 'Feet',
+  Finger = 'Finger',
+  Trinket = 'Trinket',
+  Weapon = 'Weapon',
+  OffHand = 'OffHand',
+  Wand = 'Wand',
 }
 
-export enum ItemSlot {
-  head = 'head',
-  neck = 'neck',
-  shoulders = 'shoulders',
-  back = 'back',
-  chest = 'chest',
-  bracer = 'bracer',
-  gloves = 'gloves',
-  belt = 'belt',
-  legs = 'legs',
-  boots = 'boots',
-  ring1 = 'ring1',
-  ring2 = 'ring2',
-  trinket1 = 'trinket1',
-  trinket2 = 'trinket2',
-  mainhand = 'mainhand',
-  offhand = 'offhand',
-  twohand = 'twohand',
-  wand = 'wand',
+export enum ItemSlotDetailed {
+  Head = 'Head',
+  Neck = 'Neck',
+  Shoulders = 'Shoulders',
+  Back = 'Back',
+  Chest = 'Chest',
+  Wrist = 'Wrist',
+  Hands = 'Hands',
+  Waist = 'Waist',
+  Legs = 'Legs',
+  Feet = 'Feet',
+  Finger1 = 'Finger1',
+  Finger2 = 'Finger2',
+  Trinket1 = 'Trinket1',
+  Trinket2 = 'Trinket2',
+  Weapon = 'Weapon',
+  OffHand = 'OffHand',
+  Wand = 'Wand',
 }
 
 export interface Item {
-  name: string,
-  varName: string,
-  id: number,
-  itemSlot: ItemSlotKey,
-  quality: Quality,
-  iconName: string,
-  stamina?: number,
-  intellect?: number,
-  spirit?: number,
-  sockets?: SocketColor[],
-  socketBonus?: SocketBonus,
-  spellPower?: number,
-  shadowPower?: number,
-  firePower?: number,
-  hasteRating?: number,
-  hitRating?: number,
-  critRating?: number,
-  resilienceRating?: number,
-  spellPenetration?: number,
-  shadowResist?: number,
-  fireResist?: number,
-  mp5?: number,
-  setId?: ItemSet,
-  displayId?: number,
-  unique?: boolean,
-  source: ItemSource
-  phase: Phase,
+  Name: string
+  Id: number
+  ItemSlot: ItemSlot
+  Quality: Quality
+  Stats: StatsCollection
+  IconName: string
+  Sockets?: SocketColor[]
+  SocketBonus?: StatsCollection
+  Set?: ItemSet
+  DisplayId?: number
+  Unique?: boolean
+  Source: ItemSource
+  Phase: Phase
+  IsTwoHand?: boolean
 }
 
 export interface Enchant {
-  name: string,
-  varName: string,
-  itemSlot: ItemSlotKey,
-  quality: Quality,
-  spellPower?: number,
-  hitRating?: number,
-  id: number,
-  source: ItemSource,
-  phase: Phase,
-  mp5?: number,
-  mana?: number,
-  fireResist?: number,
-  shadowResist?: number,
-  arcaneResist?: number,
-  natureResist?: number,
-  frostResist?: number,
-  stamina?: number,
-  critRating?: number,
-  threatReduction?: number,
-  spellPenetration?: number,
-  intellect?: number,
-  resilienceRating?: number,
-  spirit?: number,
-  shadowPower?: number,
-  firePower?: number,
+  Name: string
+  ItemSlot: ItemSlot
+  Quality: Quality
+  Stats: StatsCollection
+  Id: number
+  Source: ItemSource
+  Phase: Phase
 }
 
 export interface Aura {
-  name: string,
-  varName: AuraName,
-  group?: AuraGroup,
-  id: number,
-  iconName: string,
-  stats?: StatsCollection,
-  drums?: boolean,
-  weaponOil?: boolean,
-  foodBuff?: boolean,
-  forPet?: boolean,
-  demonicRune?: boolean,
-  guardianElixir?: boolean,
-  battleElixir?: boolean,
-  potion?: boolean,
-  alcohol?: boolean,
+  Name: string
+  Group?: AuraGroup
+  Id: AuraId
+  IconName: string
+  Stats?: StatsCollection
+  Drums?: boolean
+  WeaponOil?: boolean
+  FoodBuff?: boolean
+  ForPet?: boolean
+  DemonicRune?: boolean
+  GuardianElixir?: boolean
+  BattleElixir?: boolean
+  Potion?: boolean
+  Alcohol?: boolean
 }
 
-export enum PetName {
-  IMP = '0',
-  SUCCUBUS = '2',
-  FELHUNTER = '3',
-  FELGUARD = '4',
+export enum Pet {
+  Imp = 'Imp',
+  Succubus = 'Succubus',
+  Felhunter = 'Felhunter',
+  Felguard = 'Felguard',
 }
 
 export interface Spell {
-  group?: RotationGroup,
-  name: string,
-  varName: string,
-  iconName: string,
-  id: number,
+  Group?: RotationGroup
+  Name: string
+  IconName: string
+  Id: SpellId
 }
 
 export enum RotationGroup {
@@ -138,93 +103,80 @@ export enum RotationGroup {
 }
 
 export interface IRotationGroup {
-  header: RotationGroup,
-  varName: string
+  Header: RotationGroup
 }
 
-export const rotationGroups: IRotationGroup[] = [
-  { header: RotationGroup.Dots, varName: 'dot' },
-  { header: RotationGroup.Filler, varName: 'filler' },
-  { header: RotationGroup.Curse, varName: 'curse' },
-  { header: RotationGroup.Finishers, varName: 'finisher' },
-  { header: RotationGroup.Other, varName: 'other' },
+export const RotationGroups: IRotationGroup[] = [
+  { Header: RotationGroup.Dots },
+  { Header: RotationGroup.Filler },
+  { Header: RotationGroup.Curse },
+  { Header: RotationGroup.Finishers },
+  { Header: RotationGroup.Other },
 ]
 
 export interface IAuraGroup {
-  heading: AuraGroup,
-  varName: string,
-  type: 'spell' | 'item'
+  Heading: AuraGroup
+  Type: 'spell' | 'item'
 }
 
 export enum AuraGroup {
   Buffs = 'Buffs',
   Debuffs = 'Debuffs',
   Consumables = 'Consumables',
-  PetBuffs = 'Pet Buffs (your pet also inherits group-wide auras selected above)'
-}
-
-export interface SocketBonus {
-  spellPower?: number,
-  stamina?: number,
-  spirit?: number,
-  hitRating?: number,
-  resilienceRating?: number,
-  critRating?: number,
-  mp5?: number,
-  intellect?: number,
+  PetBuffs = 'Pet Buffs (your pet also inherits group-wide auras selected above)',
 }
 
 export enum Race {
-  Gnome = 'gnome',
-  Human = 'human',
-  Orc = 'orc',
-  Undead = 'undead',
-  BloodElf = 'bloodElf'
+  Gnome = 'Gnome',
+  Human = 'Human',
+  Orc = 'Orc',
+  Undead = 'Undead',
+  BloodElf = 'BloodElf',
 }
 
 export enum Stat {
-  health = 'health',
-  mana = 'mana',
-  stamina = 'stamina',
-  intellect = 'intellect',
-  spirit = 'spirit',
-  spellPower = 'spellPower',
-  shadowPower = 'shadowPower',
-  firePower = 'firePower',
-  critRating = 'critRating',
-  hitRating = 'hitRating',
-  hasteRating = 'hasteRating',
-  shadowModifier = 'shadowModifier',
-  fireModifier = 'fireModifier',
-  mp5 = 'mp5',
-  enemyArmor = 'enemyArmor',
-  arcaneResist = 'arcaneResist',
-  intellectModifier = 'intellectModifier',
-  spiritModifier = 'spiritModifier',
-  petDamageModifier = 'petDamageModifier',
-  shadowResist = 'shadowResist',
-  fireResist = 'fireResist',
-  frostResist = 'frostResist',
-  natureResist = 'natureResist',
-  staminaModifier = 'staminaModifier',
-  arcaneModifier = 'arcaneModifier',
-  frostModifier = 'frostModifier',
-  natureModifier = 'natureModifier',
-  frostPower = 'frostPower',
-  spellPenetration = 'spellPenetration',
+  Health,
+  Mana,
+  Stamina,
+  Intellect,
+  Spirit,
+  SpellPower,
+  ShadowPower,
+  FirePower,
+  CritRating,
+  HitRating,
+  HasteRating,
+  ShadowModifier,
+  FireModifier,
+  Mp5,
+  EnemyArmor,
+  ArcaneResist,
+  IntellectModifier,
+  SpiritModifier,
+  PetDamageModifier,
+  ShadowResist,
+  FireResist,
+  FrostResist,
+  NatureResist,
+  StaminaModifier,
+  ArcaneModifier,
+  FrostModifier,
+  NatureModifier,
+  FrostPower,
+  SpellPenetration,
 }
 
 export interface CombatLogBreakdownData {
-  name: string,
-  casts: number,
-  crits: number,
-  misses: number,
-  count: number,
-  uptime: number,
-  dodges: number,
-  glancingBlows: number,
-  damage: number,
-  manaGain: number,
+  Name: string
+  Casts: number
+  Crits: number
+  Misses: number
+  Count: number
+  Uptime: number
+  Dodges: number
+  GlancingBlows: number
+  Damage: number
+  ManaGain: number
 }
 
 export type StatsCollection = {
@@ -232,21 +184,22 @@ export type StatsCollection = {
 }
 
 export type PlayerStats = {
-  base: StatsCollection,
-  auras: StatsCollection,
-  items: StatsCollection,
-  gems: StatsCollection,
-  enchants: StatsCollection,
+  Base: StatsCollection
+  Auras: StatsCollection
+  Items: StatsCollection
+  Gems: StatsCollection
+  Enchants: StatsCollection
 }
 
+// TODO change to PascalCase
 export enum Setting {
   race = 'race',
   improvedDivineSpirit = 'improvedDivineSpirit',
   improvedCurseOfTheElements = 'improvedCurseOfTheElements',
   iterations = 'iterations',
-  'min-fight-length' = 'min-fight-length',
-  'max-fight-length' = 'max-fight-length',
-  'target-level' = 'target-level',
+  minFightLength = 'minFightLength',
+  maxFightLength = 'maxFightLength',
+  targetLevel = 'targetLevel',
   petChoice = 'petChoice',
   totemOfWrathAmount = 'totemOfWrathAmount',
   chippedPowerCoreAmount = 'chippedPowerCoreAmount',
@@ -256,8 +209,8 @@ export enum Setting {
   enemyArmor = 'enemyArmor',
   mageAtieshAmount = 'mageAtieshAmount',
   warlockAtieshAmount = 'warlockAtieshAmount',
-  'target-shadow-resistance' = 'target-shadow-resistance',
-  'target-fire-resistance' = 'target-fire-resistance',
+  targetShadowResistance = 'targetShadowResistance',
+  targetFireResistance = 'targetFireResistance',
   improvedExposeArmor = 'improvedExposeArmor',
   battleSquawkAmount = 'battleSquawkAmount',
   improvedFaerieFire = 'improvedFaerieFire',
@@ -268,7 +221,7 @@ export enum Setting {
   lashOfPainUsage = 'lashOfPainUsage',
   shattrathFaction = 'shattrathFaction',
   shattrathFactionReputation = 'shattrathFactionReputation',
-  'automatically-open-sim-details' = 'automatically-open-sim-details',
+  automaticallyOpenSimDetails = 'automaticallyOpenSimDetails',
   customIsbUptime = 'customIsbUptime',
   customIsbUptimeValue = 'customIsbUptimeValue',
   randomizeValues = 'randomizeValues',
@@ -291,191 +244,181 @@ export type Settings = {
 }
 
 export const InitialSettings: { [key in Setting]: string } = {
-  race: Race.Gnome,
-  improvedDivineSpirit: '0',
-  improvedCurseOfTheElements: '0',
-  iterations: '30000',
-  'min-fight-length': '150',
-  'max-fight-length': '210',
-  'target-level': '73',
-  petChoice: '2',
-  totemOfWrathAmount: '1',
-  petMode: '1',
-  sacrificePet: 'yes',
-  enemyArmor: '7700',
-  mageAtieshAmount: '1',
-  warlockAtieshAmount: '1',
-  'target-shadow-resistance': '0',
-  'target-fire-resistance': '0',
-  improvedExposeArmor: '0',
-  battleSquawkAmount: '1',
-  improvedFaerieFire: 'no',
-  bloodlustAmount: '1',
-  shadowPriestDps: '1000',
-  survivalHunterAgility: '1000',
-  exposeWeaknessUptime: '90',
-  lashOfPainUsage: 'noISB',
-  shattrathFaction: 'Aldor',
-  shattrathFactionReputation: 'yes',
-  'automatically-open-sim-details': 'no',
-  customIsbUptime: 'yes',
-  customIsbUptimeValue: '70',
-  randomizeValues: 'no',
-  infinitePlayerMana: 'no',
-  infinitePetMana: 'no',
-  prepopBlackBook: 'no',
-  rotationOption: 'simChooses',
-  fightType: 'singleTarget',
-  enemyAmount: '6',
-  powerInfusionAmount: '1',
-  innervateAmount: '1',
-  ferociousInspirationAmount: '1',
-  improvedImpSetting: '0',
-  improvedWrathOfAirTotem: 'no',
-  maxWebWorkers: '0',
-  chippedPowerCoreAmount: '1',
-  crackedPowerCoreAmount: '1',
+  [Setting.race]: Race.Gnome,
+  [Setting.improvedDivineSpirit]: '0',
+  [Setting.improvedCurseOfTheElements]: '0',
+  [Setting.iterations]: '30000',
+  [Setting.minFightLength]: '150',
+  [Setting.maxFightLength]: '210',
+  [Setting.targetLevel]: '83',
+  [Setting.petChoice]: '2',
+  [Setting.totemOfWrathAmount]: '1',
+  [Setting.petMode]: '1',
+  [Setting.sacrificePet]: 'yes',
+  [Setting.enemyArmor]: '7700',
+  [Setting.mageAtieshAmount]: '1',
+  [Setting.warlockAtieshAmount]: '1',
+  [Setting.targetShadowResistance]: '0',
+  [Setting.targetFireResistance]: '0',
+  [Setting.improvedExposeArmor]: '0',
+  [Setting.battleSquawkAmount]: '1',
+  [Setting.improvedFaerieFire]: 'no',
+  [Setting.bloodlustAmount]: '1',
+  [Setting.shadowPriestDps]: '1000',
+  [Setting.survivalHunterAgility]: '1000',
+  [Setting.exposeWeaknessUptime]: '90',
+  [Setting.lashOfPainUsage]: 'noISB',
+  [Setting.shattrathFaction]: 'Aldor',
+  [Setting.shattrathFactionReputation]: 'yes',
+  [Setting.automaticallyOpenSimDetails]: 'no',
+  [Setting.customIsbUptime]: 'yes',
+  [Setting.customIsbUptimeValue]: '70',
+  [Setting.randomizeValues]: 'no',
+  [Setting.infinitePlayerMana]: 'no',
+  [Setting.infinitePetMana]: 'no',
+  [Setting.prepopBlackBook]: 'no',
+  [Setting.rotationOption]: 'simChooses',
+  [Setting.fightType]: 'singleTarget',
+  [Setting.enemyAmount]: '6',
+  [Setting.powerInfusionAmount]: '1',
+  [Setting.innervateAmount]: '1',
+  [Setting.ferociousInspirationAmount]: '1',
+  [Setting.improvedImpSetting]: '0',
+  [Setting.improvedWrathOfAirTotem]: 'no',
+  [Setting.maxWebWorkers]: '0',
+  [Setting.chippedPowerCoreAmount]: '1',
+  [Setting.crackedPowerCoreAmount]: '1',
 }
 
 export type TalentStore = {
   [key in TalentName]: number
 }
 
-export type ItemAndEnchantStruct = {
-  [key in ItemSlot]: number
+export type ItemSlotDetailedStruct = {
+  [key in ItemSlotDetailed]: number
 }
 
 export type SelectedGemsStruct = {
-  [key in ItemSlotKey]: {
-    [key: string]: [string, number][]
+  [key in ItemSlot]: {
+    [key: string]: number[]
   }
 }
 
+// TODO
 export enum ItemSet {
-  T3 = '529',
-  VengefulGladiatorsFelshroud = '735',
-  VengefulGladiatorsDreadgear = '734',
-  MercilessGladiatorsFelshroud = '704',
-  MercilessGladiatorsDreadgear = '702',
-  Spellfire = '552',
-  FrozenShadoweave = '553',
-  Spellstrike = '559',
-  Oblivion = '644',
-  T4 = '645',
-  T5 = '646',
-  ManaEtchedRegalia = '658',
-  IncantersRegalia = '647',
-  TwinStars = '667',
   T6 = '670',
-  GladiatorsFelshroud = '615',
-  GladiatorsDreadgear = '568',
-  HighWarlordsDreadgear = '592',
+  T7 = '-32',
 }
 
-export const InitialSelectedItemsAndEnchants: ItemAndEnchantStruct = {
-  head: 0,
-  neck: 0,
-  shoulders: 0,
-  back: 0,
-  chest: 0,
-  bracer: 0,
-  gloves: 0,
-  belt: 0,
-  legs: 0,
-  boots: 0,
-  ring1: 0,
-  ring2: 0,
-  trinket1: 0,
-  trinket2: 0,
-  mainhand: 0,
-  offhand: 0,
-  twohand: 0,
-  wand: 0
+export const InitialSelectedItemsAndEnchants: ItemSlotDetailedStruct = {
+  [ItemSlotDetailed.Head]: 0,
+  [ItemSlotDetailed.Neck]: 0,
+  [ItemSlotDetailed.Shoulders]: 0,
+  [ItemSlotDetailed.Back]: 0,
+  [ItemSlotDetailed.Chest]: 0,
+  [ItemSlotDetailed.Wrist]: 0,
+  [ItemSlotDetailed.Hands]: 0,
+  [ItemSlotDetailed.Waist]: 0,
+  [ItemSlotDetailed.Legs]: 0,
+  [ItemSlotDetailed.Feet]: 0,
+  [ItemSlotDetailed.Finger1]: 0,
+  [ItemSlotDetailed.Finger2]: 0,
+  [ItemSlotDetailed.Trinket1]: 0,
+  [ItemSlotDetailed.Trinket2]: 0,
+  [ItemSlotDetailed.Weapon]: 0,
+  [ItemSlotDetailed.OffHand]: 0,
+  [ItemSlotDetailed.Wand]: 0,
 }
 
 export const InitialPlayerStats: StatsCollection = {
-  health: 0,
-  mana: 0,
-  stamina: 0,
-  intellect: 0,
-  spirit: 0,
-  spellPower: 0,
-  shadowPower: 0,
-  firePower: 0,
-  critRating: 0,
-  hitRating: 0,
-  hasteRating: 0,
-  shadowModifier: 1,
-  fireModifier: 1,
-  mp5: 0,
-  enemyArmor: 0,
-  arcaneResist: 0,
-  staminaModifier: 1,
-  intellectModifier: 1,
-  spiritModifier: 1,
-  petDamageModifier: 1,
-  arcaneModifier: 1,
-  frostModifier: 1,
-  natureModifier: 1,
-  shadowResist: 0,
-  fireResist: 0,
-  frostResist: 0,
-  natureResist: 0,
-  frostPower: 0,
-  spellPenetration: 0,
+  [Stat.Health]: 0,
+  [Stat.Mana]: 0,
+  [Stat.Stamina]: 0,
+  [Stat.Intellect]: 0,
+  [Stat.Spirit]: 0,
+  [Stat.SpellPower]: 0,
+  [Stat.ShadowPower]: 0,
+  [Stat.FirePower]: 0,
+  [Stat.CritRating]: 0,
+  [Stat.HitRating]: 0,
+  [Stat.HasteRating]: 0,
+  [Stat.ShadowModifier]: 1,
+  [Stat.FireModifier]: 1,
+  [Stat.Mp5]: 0,
+  [Stat.EnemyArmor]: 0,
+  [Stat.ArcaneResist]: 0,
+  [Stat.StaminaModifier]: 1,
+  [Stat.IntellectModifier]: 1,
+  [Stat.SpiritModifier]: 1,
+  [Stat.PetDamageModifier]: 1,
+  [Stat.ArcaneModifier]: 1,
+  [Stat.FrostModifier]: 1,
+  [Stat.NatureModifier]: 1,
+  [Stat.ShadowResist]: 0,
+  [Stat.FireResist]: 0,
+  [Stat.FrostResist]: 0,
+  [Stat.NatureResist]: 0,
+  [Stat.FrostPower]: 0,
+  [Stat.SpellPenetration]: 0,
 }
 
 export const InitialSelectedGems: SelectedGemsStruct = {
-  head: {},
-  neck: {},
-  shoulders: {},
-  back: {},
-  chest: {},
-  bracer: {},
-  gloves: {},
-  belt: {},
-  legs: {},
-  boots: {},
-  ring: {},
-  trinket: {},
-  mainhand: {},
-  offhand: {},
-  twohand: {},
-  wand: {},
+  [ItemSlot.Head]: {},
+  [ItemSlot.Neck]: {},
+  [ItemSlot.Shoulders]: {},
+  [ItemSlot.Back]: {},
+  [ItemSlot.Chest]: {},
+  [ItemSlot.Wrist]: {},
+  [ItemSlot.Hands]: {},
+  [ItemSlot.Waist]: {},
+  [ItemSlot.Legs]: {},
+  [ItemSlot.Feet]: {},
+  [ItemSlot.Finger]: {},
+  [ItemSlot.Trinket]: {},
+  [ItemSlot.Weapon]: {},
+  [ItemSlot.OffHand]: {},
+  [ItemSlot.Wand]: {},
 }
 
-export interface RotationStruct {
-  [key: string]: {
-    [key: string]: boolean
-  }
+export const InitialRotation: RotationStruct = {
+  [RotationGroup.Curse]: [],
+  [RotationGroup.Dots]: [],
+  [RotationGroup.Filler]: [],
+  [RotationGroup.Finishers]: [],
+  [RotationGroup.Other]: [],
 }
 
-export type AurasStruct = {
-  [key in AuraName]: boolean
+export type RotationStruct = {
+  [key in RotationGroup]: number[]
 }
 
 export interface Profile {
-  auras: AurasStruct,
-  gems: SelectedGemsStruct,
-  items: ItemAndEnchantStruct,
-  talents: TalentStore,
-  rotation: RotationStruct,
-  enchants: ItemAndEnchantStruct,
-  simSettings: Settings,
+  Auras: AuraId[]
+  Gems: SelectedGemsStruct
+  Items: ItemSlotDetailedStruct
+  Talents: TalentStore
+  Rotation: RotationStruct
+  Enchants: ItemSlotDetailedStruct
+  Settings: Settings
+}
+
+export type ProfileContainer = {
+  Name: string,
+  Profile: Profile
 }
 
 export interface PlayerState {
-  talents: TalentStore,
-  talentPointsRemaining: number,
-  selectedItems: ItemAndEnchantStruct,
-  selectedEnchants: ItemAndEnchantStruct,
-  selectedGems: SelectedGemsStruct,
-  auras: AurasStruct,
-  rotation: RotationStruct,
-  stats: PlayerStats,
-  settings: Settings,
-  profiles: { [key: string]: Profile },
-  sets: SetsStruct,
+  Talents: TalentStore
+  TalentPointsRemaining: number
+  SelectedItems: ItemSlotDetailedStruct
+  SelectedEnchants: ItemSlotDetailedStruct
+  SelectedGems: SelectedGemsStruct
+  Auras: AuraId[]
+  Rotation: RotationStruct
+  Stats: PlayerStats
+  Settings: Settings
+  Profiles: ProfileContainer[]
+  Sets: SetsStruct
 }
 
 export type SetsStruct = {
@@ -483,499 +426,367 @@ export type SetsStruct = {
 }
 
 export const InitialSetCounts: SetsStruct = {
-  [ItemSet.T3]: 0,
-  [ItemSet.Spellfire]: 0,
-  [ItemSet.FrozenShadoweave]: 0,
-  [ItemSet.Spellstrike]: 0,
-  [ItemSet.GladiatorsDreadgear]: 0,
-  [ItemSet.HighWarlordsDreadgear]: 0,
-  [ItemSet.GladiatorsFelshroud]: 0,
-  [ItemSet.Oblivion]: 0,
-  [ItemSet.T4]: 0,
-  [ItemSet.T5]: 0,
-  [ItemSet.IncantersRegalia]: 0,
-  [ItemSet.ManaEtchedRegalia]: 0,
-  [ItemSet.TwinStars]: 0,
   [ItemSet.T6]: 0,
-  [ItemSet.MercilessGladiatorsDreadgear]: 0,
-  [ItemSet.MercilessGladiatorsFelshroud]: 0,
-  [ItemSet.VengefulGladiatorsDreadgear]: 0,
-  [ItemSet.VengefulGladiatorsFelshroud]: 0
+  [ItemSet.T7]: 0,
 }
 
 export enum Quality {
-  Legendary = 'legendary',
-  Epic = 'epic',
-  Rare = 'rare',
-  Uncommon = 'uncommon',
-  Common = 'common'
+  Legendary = 'Legendary',
+  Heirloom = 'Heirloom',
+  Epic = 'Epic',
+  Rare = 'Rare',
+  Uncommon = 'Uncommon',
+  Common = 'Common',
 }
 
-export type SourcesStruct = {
-  phase: {
-    [key in Phase]: boolean
-  }
-}
+export type SourcesStruct = Phase[]
 
 export type SavedItemDps = {
-  [key in ItemSlot]: {
+  [key in ItemSlotDetailed]: {
     [key: number]: number
   }
 }
 
 export interface UiState {
-  sources: SourcesStruct,
-  gemSelectionTable: GemSelectionTableStruct,
-  gemPreferences: { hidden: number[], favorites: number[] },
-  selectedProfile: string,
-  importExportWindowVisible: boolean,
-  equippedItemsWindowVisible: boolean,
-  fillItemSocketsWindowVisible: boolean,
-  hiddenItems: number[],
-  selectedItemSlot: ItemSlotKey,
-  selectedItemSubSlot: SubSlotValue,
-  savedItemDps: SavedItemDps,
-  combatLog: { visible: boolean, data: string[] },
-  combatLogBreakdown: CombatLogBreakdown,
-  histogram: { visible: boolean, data?: { [key: string]: number } },
-  simulationInProgress: boolean,
-  statWeights: {
-    visible: boolean,
-    statValues: { [key in Stat]?: number }
-  },
+  Sources: SourcesStruct
+  GemSelectionTable: GemSelectionTableStruct
+  GemPreferences: { hidden: number[]; favorites: number[] }
+  SelectedProfile: string
+  ImportExportWindowVisible: boolean
+  EquippedItemsWindowVisible: boolean
+  FillItemSocketsWindowVisible: boolean
+  HiddenItems: number[]
+  SelectedItemSlot: ItemSlot
+  SelectedItemSubSlot: SubSlotValue
+  SavedItemDps: SavedItemDps
+  CombatLog: { Visible: boolean; Data: string[] }
+  CombatLogBreakdown: CombatLogBreakdown
+  Histogram: { Visible: boolean; Data?: { [key: string]: number } }
+  SimulationInProgress: boolean
+  StatWeights: {
+    Visible: boolean
+    StatValues: { [key in Stat]?: number }
+  }
 }
 
 export interface StatWeightStats {
-  [Stat.stamina]: number,
-  [Stat.intellect]: number,
-  [Stat.spirit]: number,
-  [Stat.spellPower]: number,
-  [Stat.shadowPower]: number,
-  [Stat.firePower]: number,
-  [Stat.hitRating]: number,
-  [Stat.critRating]: number,
-  [Stat.hasteRating]: number,
-  [Stat.mp5]: number,
+  [Stat.Stamina]: number
+  [Stat.Intellect]: number
+  [Stat.Spirit]: number
+  [Stat.SpellPower]: number
+  [Stat.ShadowPower]: number
+  [Stat.FirePower]: number
+  [Stat.HitRating]: number
+  [Stat.CritRating]: number
+  [Stat.HasteRating]: number
+  [Stat.Mp5]: number
 }
 
 export type CombatLogBreakdown = {
-  totalDamageDone: number,
-  totalManaGained: number,
-  totalSimulationFightLength: number,
-  totalIterationAmount: number,
-  spellDamageDict: { [key: string]: number },
-  spellManaGainDict: { [key: string]: number },
-  data: CombatLogBreakdownData[],
+  TotalDamageDone: number
+  TotalManaGained: number
+  TotalSimulationFightLength: number
+  TotalIterationAmount: number
+  SpellDamageDict: { [key: string]: number }
+  SpellManaGainDict: { [key: string]: number }
+  Data: CombatLogBreakdownData[]
 }
 
 export interface WorkerParams {
-  playerSettings: {
-    auras: AurasStruct,
-    items: ItemAndEnchantStruct,
-    enchants: ItemAndEnchantStruct,
-    gems: SelectedGemsStruct,
-    talents: TalentStore,
-    rotation: RotationStruct,
-    stats: StatsCollection,
-    sets: SetsStruct,
-    simSettings: Settings,
-    metaGemId: number,
-  },
-  simulationSettings: {
-    iterations: number,
-    minTime: number,
-    maxTime: number,
-  },
-  randomSeed: number,
-  itemId: number,
-  simulationType: SimulationType,
-  itemSubSlot: SubSlotValue,
-  customStat: string,
-  equippedItemSimulation: boolean,
+  PlayerSettings: {
+    Auras: AuraId[]
+    Items: ItemSlotDetailedStruct
+    Enchants: ItemSlotDetailedStruct
+    Gems: SelectedGemsStruct
+    Talents: TalentStore
+    Rotation: RotationStruct
+    Stats: StatsCollection
+    Sets: SetsStruct
+    Settings: Settings
+    MetaGemId: number
+  }
+  SimulationSettings: {
+    Iterations: number
+    MinTime: number
+    MaxTime: number
+  }
+  RandomSeed: number
+  ItemId: number
+  SimulationType: SimulationType
+  ItemSubSlot: SubSlotValue
+  CustomStat: string
+  EquippedItemSimulation: boolean
 }
 
 export enum SimulationType {
   Normal,
   AllItems,
-  StatWeights
+  StatWeights,
 }
 
 export interface GemSelectionTableStruct {
-  visible: boolean,
-  socketNumber: number,
-  itemSlot: ItemSlotKey,
-  itemId: string,
-  socketColor: SocketColor,
-  itemSubSlot?: string
+  Visible: boolean
+  SocketNumber: number
+  ItemSlot: ItemSlot
+  ItemId: string
+  SocketColor: SocketColor
+  ItemSubSlot?: string
 }
 
 export enum SocketColor {
-  Meta = 'meta',
-  Red = 'red',
-  Yellow = 'yellow',
-  Blue = 'blue'
+  Meta = 'Meta',
+  Red = 'Red',
+  Yellow = 'Yellow',
+  Blue = 'Blue',
 }
 
 export const InitialGemSelectionTableValue = {
-  visible: false,
-  socketNumber: 0,
-  itemSlot: ItemSlotKey.Mainhand,
-  itemId: '0',
-  socketColor: SocketColor.Meta
+  Visible: false,
+  SocketNumber: 0,
+  ItemSlot: ItemSlot.Weapon,
+  ItemId: '0',
+  SocketColor: SocketColor.Meta,
 }
 
 export enum GemColor {
-  Meta = 'meta',
-  Red = 'red',
-  Yellow = 'yellow',
-  Blue = 'blue',
-  Orange = 'orange',
-  Green = 'green',
-  Purple = 'purple',
-  Void = 'void',
+  Meta = 'Meta',
+  Red = 'Red',
+  Yellow = 'Yellow',
+  Blue = 'Blue',
+  Orange = 'Orange',
+  Green = 'Green',
+  Purple = 'Purple',
+  Void = 'Void',
 }
 
-export const Languages: { iso: string, name: string, wowheadPrefix: string }[] = [
-  { iso: 'en', name: 'English', wowheadPrefix: '' },
-  { iso: 'zh', name: '中文', wowheadPrefix: 'cn.' },
-]
+export const Languages: { Iso: string; Name: string; WowheadPrefix: string }[] =
+  [
+    { Iso: 'en', Name: 'English', WowheadPrefix: '' },
+    { Iso: 'zh', Name: '中文', WowheadPrefix: 'cn.' },
+  ]
 
 export interface Gem {
-  name: string,
-  id: number,
-  color: GemColor,
-  iconName: string,
-  phase: Phase,
-  stats?: StatsCollection
+  Name: string
+  Id: number
+  Color: GemColor
+  IconName: string
+  Phase: Phase
+  Stats?: StatsCollection
 }
 
 export interface Talent {
-  name?: string,
-  varName?: TalentName,
-  rankIDs?: number[],
-  iconName?: string,
-  requirement?: TalentRequirement
+  Name?: TalentName
+  RankIds?: number[]
+  IconName?: string
+  Requirement?: TalentRequirement
 }
 
 export interface TalentRequirement {
-  name: string,
-  points: number
+  Name: TalentName
+  Points: number
 }
 
 export enum TalentTree {
-  Affliction = "Affliction",
-  Demonology = "Demonology",
-  Destruction = "Destruction"
+  Affliction = 'Affliction',
+  Demonology = 'Demonology',
+  Destruction = 'Destruction',
 }
 
 export enum ItemSource {
-  Sunwell = "Sunwell Plateau",
-  ZulAman = "Zul'Aman",
-  BlackTemple = "Black Temple",
-  MountHyjal = "Mount Hyjal",
-  BlackTempleAndMountHyjal = "Hyjal Summit & Black Temple",
-  TempestKeep = "Tempest Keep",
-  SerpentshrineCavern = "Serpentshrine Cavern",
-  MagtheridonsLair = "Magtheridon's Lair",
-  GruulsLair = "Gruul's Lair",
-  Karazhan = "Karazhan",
-  Naxxramas = "Naxxramas",
-  AQ40 = "AQ40",
-  BlackwingLair = "Blackwing Lair",
-  ZulGurub = "Zul'Gurub",
-  DoomLordKazzak = "Doom Lord Kazzak",
-  Doomwalker = "Doomwalker",
-  HeroicBloodFurnace = "Heroic Blood Furnace",
-  HeroicUnderbog = "Heroic Underbog",
-  HeroicSlavePens = "Heroic Slave Pens",
-  HeroicBlackMorass = "Heroic Black Morass",
-  HeroicArcatraz = "Heroic Arcatraz",
-  HeroicSethekkHalls = "Heroic Sethekk Halls",
-  HeroicManaTombs = "Heroic Mana-Tombs",
-  HeroicOldHillsbradFoothills = "Heroic Old Hillsbrad Foothills",
-  HeroicBotanica = "Heroic Botanica",
-  HeroicHellfireRamparts = "Heroic Hellfire Ramparts",
-  HeroicAuchenaiCrypts = "Heroic Auchenai Crypts",
-  HeroicMagistersTerrace = "Heroic Magisters' Terrace",
-  HeroicShadowLabyrinth = "Heroic Shadow Labyrinth",
-  Mechanar = "The Mechanar",
-  HellfireRamparts = "Hellfire Ramparts",
-  BlackrockDepths = "Blackrock Depths",
-  BlackMorass = "Black Morass",
-  Steamvaults = "The Steamvaults",
-  OldHillsbradFoothills = "Old Hillsbrad Foothills",
-  AuchenaiCrypts = "Auchenai Crypts",
-  ManaTombs = "Mana-Tombs",
-  SethekkHalls = "Sethekk Halls",
-  Arcatraz = "The Arcatraz",
-  Underbog = "The Underbog",
-  SlavePens = "The Slave Pens",
-  ShadowLabyrinth = "Shadow Labyrinth",
-  Botanica = "The Botanica",
-  BloodFurnace = "The Blood Furnace",
-  ShatteredHalls = "The Shattered Halls",
-  MagistersTerrace = "Magisters' Terrace",
-  StratholmeLive = "Stratholme (Live)",
-  BadgeOfJustice = "Badge of Justice",
-  MarkOfHonorHoldOrThrallmar = "Mark of Honor Hold/Thrallmar",
-  SpiritShard = "Spirit Shard",
-  ApexisShard = "Apexis Shard",
-  Tailoring = "Tailoring",
-  TailoringBoE = "Tailoring BoE",
-  Engineering = "Engineering",
-  Leatherworking = "Leatherworking",
-  Enchanting = "Enchanting",
-  Jewelcrafting = "Jewelcrafting",
-  JewelcraftingBoE = "Jewelcrafting BoE",
-  BlacksmithingBoE = "Blacksmithing BoE",
-  Arena = "Arena",
-  PVP = "PVP",
-  BlessingsDeck = "Blessings Deck",
-  WorldDrop = "World Drop",
-  NetherstormRareSpawn = "Netherstorm Rare Spawn",
-  BladesEdgeMountainsRareSpawn = "BEM Rare Spawn",
-  ShadowmoonValleyRareSpawn = "Shadowmoon Valley Rare Spawn",
-  KaelThasEncounter = "Kael'Thas (only during encounter)",
-  LordAhune = "Lord Ahune",
-  WarlockSpell = "Warlock Spell",
-  LowerCityRevered = "Lower City - Revered",
-  LowerCityHonored = "Lower City - Honored",
-  AldorExalted = "The Aldor - Exalted",
-  AldorRevered = "The Aldor - Revered",
-  AldorHonored = "The Aldor - Honored",
-  ScryersExalted = "The Scryers - Exalted",
-  ScryersRevered = "The Scryers - Revered",
-  ScryersHonored = "The Scryers - Honored",
-  ScaleOfTheSandsExalted = "The Scale of the Sands - Exalted",
-  ScaleOfTheSandsRevered = "The Scale of the Sands - Revered",
-  ScaleOfTheSandsHonored = "The Scale of the Sands - Honored",
-  ScaleOfTheSandsFriendly = "The Scale of the Sands - Friendly",
-  VioletEyeExalted = "The Violet Eye - Exalted",
-  VioletEyeRevered = "The Violet Eye - Revered",
-  VioletEyeHonored = "The Violet Eye - Honored",
-  VioletEyeFriendly = "The Violet Eye - Friendly",
-  CenarionExpeditionExalted = "Cenarion Expedition - Exalted",
-  CenarionExpeditionHonored = "Cenarion Expedition - Honored",
-  KeepersOfTimeRevered = "Keepers of Time - Revered",
-  KeepersOfTimeHonored = "Keepers of Time - Honored",
-  ShatarRevered = "The Sha'tar - Revered",
-  ShatarHonored = "The Sha'tar - Honored",
-  ZandalarTribeExalted = "Zandalar Tribe - Exalted",
-  ShatteredSunOffensiveExalted = "Shattered Sun Offensive - Exalted",
-  ShatteredSunOffensiveRevered = "Shattered Sun Offensive - Revered",
-  HonorHoldExalted = "Honor Hold - Exalted",
-  ThrallmarExalted = "Thrallmar - Exalted",
-  HonorHoldOrThrallmarRevered = "Honor Hold/Thrallmar - Revered",
-  HonorHoldOrThrallmarHonored = "Honor Hold/Thrallmar - Honored",
-  AshtongueDeathswornExalted = "Ashtongue Deathsworn - Exalted",
-  ShadowmoonValleyQuest = "Shadowmoon Valley Quest",
-  SteamvaultsQuest = "Steamvaults Quest",
-  BladesEdgeMountainsQuest = "Blade's Edge Mountains Quest",
-  SethekkHallsQuest = "Sethekk Halls Quest",
-  AuchenaiCryptsQuest = "Auchenai Crypts Quest",
-  NetherstormQuest = "Netherstorm Quest",
-  TempestKeepQuest = "Tempest Keep Quest",
-  CavernsOfTimeQuest = "Caverns of Time Quest",
-  AuchindonQuest = "Auchindon Quest",
-  HellfirePeninsulaQuest = "Hellfire Peninsula Quest",
-  BloodFurnaceQuest = "The Blood Furnace Quest",
-  SilithusQuest = "Silithus Quest",
-  NagrandQuest = "Nagrand Quest",
-  ZangarmarshQuest = "Zangarmarsh Quest",
-  TerokkarForestQuest = "Terokkar Forest Quest",
-  ShatteredHallsQuest = "Shattered Halls Quest",
-  NagrandQuestHordeOnly = 'Nagrand Quest (Horde)',
-  OgrilaBoss = "Ogri'la Boss",
-  EthereumPrisoner = 'Ethereum Prisoner',
+  Naxxramas25Normal = 'Naxxramas 25m',
+  Naxxramas10Normal = 'Naxxramas 10m',
+  KirinTorRevered = 'Kirin Tor - Revered',
+  Sunwell = 'Sunwell Plateau',
+  BlackTemple = 'Black Temple',
 }
 
-export interface Source {
-  phase: { [key in Phase]: boolean }
-}
+export type Phase = 0 | 1 | 2 | 3 | 4 | 5
 
-export type Phase = 0 | 1 | 2 | 3 | 4 | 5;
-
-export type SubSlotValue = '' | '1' | '2';
+export type SubSlotValue = '' | '1' | '2'
 
 export enum TalentName {
-  suppression = 'suppression',
-  improvedCorruption = 'improvedCorruption',
-  improvedCurseOfWeakness = 'improvedCurseOfWeakness',
-  improvedDrainSoul = 'improvedDrainSoul',
-  improvedLifeTap = 'improvedLifeTap',
-  soulSiphon = 'soulSiphon',
-  improvedCurseOfAgony = 'improvedCurseOfAgony',
-  felConcentration = 'felConcentration',
-  amplifyCurse = 'amplifyCurse',
-  grimReach = 'grimReach',
-  nightfall = 'nightfall',
-  empoweredCorruption = 'empoweredCorruption',
-  shadowEmbrace = 'shadowEmbrace',
-  siphonLife = 'siphonLife',
-  curseOfExhaustion = 'curseOfExhaustion',
-  shadowMastery = 'shadowMastery',
-  contagion = 'contagion',
-  darkPact = 'darkPact',
-  improvedHowlOfTerror = 'improvedHowlOfTerror',
-  malediction = 'malediction',
-  unstableAffliction = 'unstableAffliction',
-  improvedHealthstone = 'improvedHealthstone',
-  improvedImp = 'improvedImp',
-  demonicEmbrace = 'demonicEmbrace',
-  improvedHealthFunnel = 'improvedHealthFunnel',
-  improvedVoidwalker = 'improvedVoidwalker',
-  felIntellect = 'felIntellect',
-  improvedSuccubus = 'improvedSuccubus',
-  felDomination = 'felDomination',
-  felStamina = 'felStamina',
-  demonicAegis = 'demonicAegis',
-  masterSummoner = 'masterSummoner',
-  unholyPower = 'unholyPower',
-  improvedEnslaveDemon = 'improvedEnslaveDemon',
-  demonicSacrifice = 'demonicSacrifice',
-  improvedFirestone = 'improvedFirestone',
-  manaFeed = 'manaFeed',
-  masterDemonologist = 'masterDemonologist',
-  demonicResilience = 'demonicResilience',
-  soulLink = 'soulLink',
-  demonicKnowledge = 'demonicKnowledge',
-  demonicTactics = 'demonicTactics',
-  summonFelguard = 'summonFelguard',
-  improvedShadowBolt = 'improvedShadowBolt',
-  cataclysm = 'cataclysm',
-  bane = 'bane',
-  aftermath = 'aftermath',
-  improvedFirebolt = 'improvedFirebolt',
-  improvedLashOfPain = 'improvedLashOfPain',
-  devastation = 'devastation',
-  shadowburn = 'shadowburn',
-  intensity = 'intensity',
-  destructiveReach = 'destructiveReach',
-  improvedSearingPain = 'improvedSearingPain',
-  pyroclasm = 'pyroclasm',
-  improvedImmolate = 'improvedImmolate',
-  ruin = 'ruin',
-  netherProtection = 'netherProtection',
-  emberstorm = 'emberstorm',
-  backlash = 'backlash',
-  conflagrate = 'conflagrate',
-  soulLeech = 'soulLeech',
-  shadowAndFlame = 'shadowAndFlame',
-  shadowfury = 'shadowfury'
+  ImprovedCurseOfAgony = 'Improved Curse of Agony',
+  Suppression = 'Suppression',
+  ImprovedCorruption = 'Improved Corruption',
+  ImprovedCurseOfWeakness = 'Improved Curse of Weakness',
+  ImprovedDrainSoul = 'Improved Drain Soul',
+  ImprovedLifeTap = 'Improved Life Tap',
+  SoulSiphon = 'Soul Siphon',
+  ImprovedFear = 'Improved Fear',
+  FelConcentration = 'Fel Concentration',
+  AmplifyCurse = 'Amplify Curse',
+  GrimReach = 'Grim Reach',
+  Nightfall = 'Nightfall',
+  EmpoweredCorruption = 'Empowered Corruption',
+  ShadowEmbrance = 'Shadow Embrace',
+  SiphonLife = 'Siphon Life',
+  CurseOfExhaustion = 'Curse of Exhaustion',
+  ImprovedFelhunter = 'Improved Felhunter',
+  ShadowMastery = 'Shadow Mastery',
+  Eradication = 'Eradication',
+  Contagion = 'Contagion',
+  DarkPact = 'Dark Pact',
+  ImprovedHowlOfTerror = 'Improved Howl of Terror',
+  Malediction = 'Malediction',
+  DeathsEmbrace = `Death's Embrace`,
+  UnstableAffliction = 'Unstable Affliction',
+  Pandemic = 'Pandemic',
+  EverlastingAffliction = 'Everlasting Affliction',
+  Haunt = 'Haunt',
+  ImprovedHealthstone = 'Improved Healthstone',
+  ImprovedImp = 'Improved Imp',
+  DemonicEmbrace = 'Demonic Embrace',
+  FelSynergy = 'Fel Synergy',
+  ImprovedHealthFunnel = 'Improved Health Funnel',
+  DemonicBrutality = 'Demonic Brutality',
+  FelVitality = 'Fel Vitality',
+  ImprovedSuccubus = 'Improved Succubus',
+  SoulLink = 'Soul Link',
+  FelDomination = 'Fel Domination',
+  DemonicAegis = 'Demonic Aegis',
+  UnholyPower = 'Unholy Power',
+  MasterSummoner = 'Master Summoner',
+  ManaFeed = 'Mana Feed',
+  MasterConjuror = 'Master Conjuror',
+  MasterDemonologist = 'Master Demonologist',
+  MoltenCore = 'Molten Core',
+  DemonicResilience = 'Demonic Resilience',
+  DemonicEmpowerment = 'Demonic Empowerment',
+  DemonicKnowledge = 'Demonic Knowledge',
+  DemonicTactics = 'Demonic Tactics',
+  Decimation = 'Decimation',
+  ImprovedDemonicTactics = 'Improved Demonic Tactics',
+  SummonFelguard = 'Summon Felguard',
+  Nemesis = 'Nemesis',
+  DemonicPact = 'Demonic Pact',
+  Metamorphosis = 'Metamorphosis',
+  ImprovedShadowBolt = 'Improved Shadow Bolt',
+  Bane = 'Bane',
+  Aftermath = 'Aftermath',
+  MoltenSkin = 'Molten Skin',
+  Cataclysm = 'Cataclysm',
+  DemonicPower = 'Demonic Power',
+  Shadowburn = 'Shadowburn',
+  Ruin = 'Ruin',
+  Intensity = 'Intensity',
+  DestructiveReach = 'Destructive Reach',
+  ImprovedSearingPain = 'Improved Searing Pain',
+  Backlash = 'Backlash',
+  ImprovedImmolate = 'Improved Immolate',
+  Devastation = 'Devastation',
+  NetherProtection = 'Nether Protection',
+  Emberstorm = 'Emberstorm',
+  Conflagrate = 'Conflagrate',
+  SoulLeech = 'Soul Leech',
+  Pyroclasm = 'Pyroclasm',
+  ShadowAndFlame = 'Shadow and Flame',
+  ImprovedSoulLeech = 'Improved Soul Leech',
+  Backdraft = 'Backdraft',
+  Shadowfury = 'Shadowfury',
+  EmpoweredImp = 'Empowered Imp',
+  FireAndBrimstone = 'Fire and Brimstone',
+  ChaosBolt = 'Chaos Bolt',
 }
 
 export const StatConstant = {
-  healthPerStamina: 10,
-  manaPerIntellect: 15,
-  hitRatingPerPercent: 12.62,
-  critRatingPerPercent: 22.08,
-  hasteRatingPerPercent: 15.77,
-  critPercentPerIntellect: 1 / 81.95,
-  baseCritChancePercent: 1.701,
-  hitPercentCap: 16,
+  HealthPerStamina: 10,
+  ManaPerIntellect: 15,
+  HitRatingPerPercent: 12.62,
+  CritRatingPerPercent: 22.08,
+  HasteRatingPerPercent: 15.77,
+  CritPercentPerIntellect: 1 / 166.6,
+  BaseCritChancePercent: 1.70458,
+  HitPercentCap: 16,
 }
 
-export enum AuraName {
-  felArmor = 'felArmor',
-  blessingOfKings = 'blessingOfKings',
-  blessingOfWisdom = 'blessingOfWisdom',
-  judgementOfWisdom = 'judgementOfWisdom',
-  manaSpringTotem = 'manaSpringTotem',
-  wrathOfAirTotem = 'wrathOfAirTotem',
-  totemOfWrath = 'totemOfWrath',
-  markOfTheWild = 'markOfTheWild',
-  arcaneIntellect = 'arcaneIntellect',
-  prayerOfFortitude = 'prayerOfFortitude',
-  prayerOfSpirit = 'prayerOfSpirit',
-  bloodPact = 'bloodPact',
-  inspiringPresence = 'inspiringPresence',
-  moonkinAura = 'moonkinAura',
-  powerInfusion = 'powerInfusion',
-  powerOfTheGuardianWarlock = 'powerOfTheGuardianWarlock',
-  powerOfTheGuardianMage = 'powerOfTheGuardianMage',
-  eyeOfTheNight = 'eyeOfTheNight',
-  chainOfTheTwilightOwl = 'chainOfTheTwilightOwl',
-  jadePendantOfBlasting = 'jadePendantOfBlasting',
-  idolOfTheRavenGoddess = 'idolOfTheRavenGoddess',
-  drumsOfBattle = 'drumsOfBattle',
-  drumsOfWar = 'drumsOfWar',
-  drumsOfRestoration = 'drumsOfRestoration',
-  bloodlust = 'bloodlust',
-  ferociousInspiration = 'ferociousInspiration',
-  innervate = 'innervate',
-  manaTideTotem = 'manaTideTotem',
-  airmansRibbonOfGallantry = 'airmansRibbonOfGallantry',
-  curseOfTheElements = 'curseOfTheElements',
-  shadowWeaving = 'shadowWeaving',
-  improvedScorch = 'improvedScorch',
-  misery = 'misery',
-  judgementOfTheCrusader = 'judgementOfTheCrusader',
-  vampiricTouch = 'vampiricTouch',
-  faerieFire = 'faerieFire',
-  sunderArmor = 'sunderArmor',
-  exposeArmor = 'exposeArmor',
-  curseOfRecklessness = 'curseOfRecklessness',
-  bloodFrenzy = 'bloodFrenzy',
-  exposeWeakness = 'exposeWeakness',
-  annihilator = 'annihilator',
-  improvedHuntersMark = 'improvedHuntersMark',
-  flaskOfPureDeath = 'flaskOfPureDeath',
-  elixirOfEmpowerment = 'elixirOfEmpowerment',
-  elixirOfMajorShadowPower = 'elixirOfMajorShadowPower',
-  elixirOfMajorFirepower = 'elixirOfMajorFirepower',
-  greaterArcaneElixir = 'greaterArcaneElixir',
-  adeptsElixir = 'adeptsElixir',
-  elixirOfDraenicWisdom = 'elixirOfDraenicWisdom',
-  elixirOfMajorMageblood = 'elixirOfMajorMageblood',
-  superManaPotion = 'superManaPotion',
-  destructionPotion = 'destructionPotion',
-  brilliantWizardOil = 'brilliantWizardOil',
-  superiorWizardOil = 'superiorWizardOil',
-  blessedWizardOil = 'blessedWizardOil',
-  demonicRune = 'demonicRune',
-  flameCap = 'flameCap',
-  rumseyRumBlackLabel = 'rumseyRumBlackLabel',
-  kreegsStoutBeatdown = 'kreegsStoutBeatdown',
-  blackenedBasilisk = 'blackenedBasilisk',
-  skullfishSoup = 'skullfishSoup',
-  veryBerryCream = 'veryBerryCream',
-  midsummerSausage = 'midsummerSausage',
-  bloodthistle = 'bloodthistle',
-  chippedPowerCore = 'chippedPowerCore',
-  crackedPowerCore = 'crackedPowerCore',
-  crystalOfInsight = 'crystalOfInsight',
-  blessingOfKingsPet = 'blessingOfKingsPet',
-  blessingOfWisdomPet = 'blessingOfWisdomPet',
-  blessingOfMight = 'blessingOfMight',
-  battleSquawk = 'battleSquawk',
-  arcaneIntellectPet = 'arcaneIntellectPet',
-  markOfTheWildPet = 'markOfTheWildPet',
-  prayerOfFortitudePet = 'prayerOfFortitudePet',
-  prayerOfSpiritPet = 'prayerOfSpiritPet',
-  kiblersBits = 'kiblersBits',
-  heroicPresence = 'heroicPresence',
-  strengthOfEarthTotem = 'strengthOfEarthTotem',
-  graceOfAirTotem = 'graceOfAirTotem',
-  battleShout = 'battleShout',
-  trueshotAura = 'trueshotAura',
-  leaderOfThePack = 'leaderOfThePack',
-  unleashedRage = 'unleashedRage',
-  scrollOfStaminaV = 'scrollOfStaminaV',
-  scrollOfIntellectV = 'scrollOfIntellectV',
-  scrollOfStrengthV = 'scrollOfStrengthV',
-  scrollOfAgilityV = 'scrollOfAgilityV',
-  scrollOfSpiritV = 'scrollOfSpiritV',
-  improvedShadowBolt = 'improvedShadowBolt',
-  flameshadow = 'flameshadow',
-  shadowflame = 'shadowflame',
-  nightfall = 'nightfall',
-  spellstrike = 'spellstrike',
-  manaEtched4Set = 'manaEtched4Set',
-  bloodFury = 'bloodFury',
-  shatteredSunPendantOfAcumenAldor = 'shatteredSunPendantOfAcumenAldor',
-  shatteredSunPendantOfAcumenScryers = 'shatteredSunPendantOfAcumenScryers',
-  mysticalSkyfireDiamond = 'mysticalSkyfireDiamond',
-  demonicFrenzy = 'demonicFrenzy',
-  blackBook = 'theBlackBook',
-  felEnergy = 'felEnergy',
+export enum SpellId {
+  ShadowBolt = 47809,
+  Corruption = 47813,
+  CurseOfAgony = 47864,
+  CurseOfDoom = 47867,
+  CurseOfTheElements = 47865,
+  DeathCoil = 47860,
+  DrainSoul = 47855,
+  LifeTap = 57946,
+  SeedOfCorruption = 47836,
+  Hellfire = 47823,
+  Immolate = 47811,
+  Incinerate = 47838,
+  RainOfFire = 47820,
+  SearingPain = 47815,
+  Shadowflame = 61290,
+  SoulFire = 47825,
+}
+
+export enum AuraId {
+  InspiringPresence = 28878,
+  TotemOfWrath = 30706,
+  FelArmor = 47893,
+  BlessingOfKings = 25898,
+  BlessingOfWisdom = 27143,
+  ManaSpringTotem = 25570,
+  WrathOfAirTotem = 3738,
+  MarkOfTheWild = 26990,
+  ArcaneBrilliance = 27127,
+  PrayerOfFortitude = 25392,
+  PrayerOfSpirit = 32999,
+  BloodPact = 27268,
+  MoonkinAura = 24907,
+  PowerInfusion = 10060,
+  Bloodlust = 2825,
+  Innervate = 29166,
+  ManaTideTotem = 16190,
+  FerociousInspiration = 34460,
+  SanctifiedRetribution = 31869,
+  ArcaneEmpowerment = 31583,
+  ImprovedMoonkinForm = 48396,
+  SwiftRetribution = 53648,
+  FelIntelligence = 57567,
+  HuntingParty = 53292,
+  EnduringWinter = 44561,
+  JudgementsOfTheWise = 31878,
+  VampiricTouch = 48160,
+  ImprovedSoulLeech = 54118,
+  ElementalOath = 51470,
+  DemonicPact = 47240,
+  FlametongueTotem = 58656,
+  BlessingOfSanctuary = 20911,
+  CurseOfTheElements = 27228,
+  ShadowWeaving = 15334,
+  ImprovedScorch = 12873,
+  Misery = 33195,
+  JudgementOfWisdom = 20354,
+  JudgementOfTheCrusader = 20337,
+  FaerieFire = 26993,
+  SunderArmor = 25225,
+  ExposeArmor = 26866,
+  CurseOfRecklessness = 27226,
+  BloodFrenzy = 29859,
+  ExposeWeakness = 34503,
+  Annihilator = 16928,
+  ImprovedHuntersMark = 19425,
+  FlaskOfTheNorth = 47499,
+  FlaskOfTheFrostWyrm = 46376,
+  PotionOfSpeed = 40211,
+  PotionOfWildMagic = 40212,
+  GrandSpellstone = 41196,
+}
+
+export enum GemId {
+  ChaoticSkyflareDiamond = 41285,
+  RunedCardinalRuby = 40113,
+  RigidKingsAmber = 40125,
+  QuickKingsAmber = 40128,
+  PurifiedDreadstone = 40133,
+  ShiningEyeOfZul = 40172,
+  VeiledAmetrine = 40153,
+  RecklessAmetrine = 40155,
+}
+
+export enum ItemId {
+  ValorousPlagueheartCirclet = 40421,
+}
+
+export enum EnchantId {
+  ArcanumOfBurningMysteries = 59970,
 }

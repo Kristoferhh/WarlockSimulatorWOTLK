@@ -6,9 +6,9 @@ export default function CombatLog() {
   const uiState = useSelector((state: RootState) => state.ui);
 
   return(
-    <div id="combat-log" style={{display: uiState.combatLog.visible ? '' : 'none'}}>
+    <div id="combat-log" style={{display: uiState.CombatLog.Visible ? '' : 'none'}}>
       {
-        uiState.combatLog.data.map(entry =>
+        uiState.CombatLog.Data.map(entry =>
           <p key={nanoid()}>{entry}</p>
         )
       }

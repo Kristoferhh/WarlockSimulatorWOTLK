@@ -30,41 +30,41 @@ export function FillItemSockets() {
 
   function fillSockets(): void {
     if (selectedGemId === 0) { return; }
-    let newSelectedGems = JSON.parse(JSON.stringify(playerState.selectedGems));
+    let newSelectedGems = JSON.parse(JSON.stringify(playerState.SelectedGems));
 
     Items
       .filter(item =>
-        (item.itemSlot === uiState.selectedItemSlot && itemSlotToFill === 'currentSlot') ||
+        (item.ItemSlot === uiState.SelectedItemSlot && itemSlotToFill === 'currentSlot') ||
         itemSlotToFill === 'allSlots')
       .forEach(item => {
         fillSocketsInItem(item, newSelectedGems);
       });
 
     dispatch(setSelectedGems(newSelectedGems));
-    dispatch(setGemsStats(getGemsStats(playerState.selectedItems, newSelectedGems)));
+    dispatch(setGemsStats(getGemsStats(playerState.SelectedItems, newSelectedGems)));
     dispatch(setFillItemSocketsWindowVisibility(false));
   }
 
   function fillSocketsInItem(item: Item, selectedGemsObj: SelectedGemsStruct): void {
-    if (!item.sockets) { return; }
+    if (!item.Sockets) { return; }
 
     // Create an empty gem array.
     // If the item already has a gem array then replace it with the existing one.
-    let itemGemArray = Array(item.sockets.length).fill(['', 0]);
-    if (playerState.selectedGems[item.itemSlot] && playerState.selectedGems[item.itemSlot][item.id]) {
-      itemGemArray = JSON.parse(JSON.stringify(playerState.selectedGems[item.itemSlot][item.id]));
+    let itemGemArray = Array(item.Sockets.length).fill(['', 0]);
+    if (playerState.SelectedGems[item.ItemSlot] && playerState.SelectedGems[item.ItemSlot][item.Id]) {
+      itemGemArray = JSON.parse(JSON.stringify(playerState.SelectedGems[item.ItemSlot][item.Id]));
     }
 
     // Loop through the sockets in the item and insert the gem if the socket color matches the user's choice or if the user is inserting into all sockets
     // and if the socket is empty or if the user chose to replace existing gems as well
-    for (let i = 0; i < item.sockets.length; i++) {
-      if (item.sockets[i] === socketColor && ([null, 0].includes(itemGemArray[i][1]) || replacingExistingGems)) {
-        itemGemArray[i] = [item.sockets[i], selectedGemId];
+    for (let i = 0; i < item.Sockets.length; i++) {
+      if (item.Sockets[i] === socketColor && ([null, 0].includes(itemGemArray[i][1]) || replacingExistingGems)) {
+        itemGemArray[i] = [item.Sockets[i], selectedGemId];
       }
     }
 
-    selectedGemsObj[item.itemSlot] = selectedGemsObj[item.itemSlot] || {};
-    selectedGemsObj[item.itemSlot][item.id.toString()] = itemGemArray;
+    selectedGemsObj[item.ItemSlot] = selectedGemsObj[item.ItemSlot] || {};
+    selectedGemsObj[item.ItemSlot][item.Id.toString()] = itemGemArray;
   }
 
   function socketColorClickHandler(newColor: SocketColor) {
@@ -76,7 +76,7 @@ export function FillItemSockets() {
   }
 
   return (
-    <div id='gem-options-window' style={{ display: uiState.fillItemSocketsWindowVisible ? '' : 'none' }}>
+    <div id='gem-options-window' style={{ display: uiState.FillItemSocketsWindowVisible ? '' : 'none' }}>
       <div id='gem-options-window-replacement-options'>
         <label htmlFor='emptySockets'>Fill empty sockets</label>
         <input
@@ -125,15 +125,15 @@ export function FillItemSockets() {
       <div id='gem-options-gem-list'>
         <div id='gem-options-gem-list'>
           {
-            Gems.filter(e => canGemColorBeInsertedIntoSocketColor(socketColor, e.color)).map(gem =>
+            Gems.filter(e => canGemColorBeInsertedIntoSocketColor(socketColor, e.Color)).map(gem =>
               <div
                 className='gem-options-gem'
-                key={gem.id}
-                onClick={(e) => { setSelectedGemId(gem.id); e.preventDefault(); }}
-                data-checked={selectedGemId === gem.id}
+                key={gem.Id}
+                onClick={(e) => { setSelectedGemId(gem.Id); e.preventDefault(); }}
+                data-checked={selectedGemId === gem.Id}
               >
-                <img src={`${process.env.PUBLIC_URL}/img/${gem.iconName}.jpg`} alt={t(gem.name)} />
-                <a href={`${getBaseWowheadUrl(i18n.language)}/item=${gem.id}`}>{t(gem.name)}</a>
+                <img src={`${process.env.PUBLIC_URL}/img/${gem.IconName}.jpg`} alt={t(gem.Name)} />
+                <a href={`${getBaseWowheadUrl(i18n.language)}/item=${gem.Id}`}>{t(gem.Name)}</a>
               </div>
             )
           }

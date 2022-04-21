@@ -8,7 +8,7 @@ import { Languages } from "../Types";
 export default function LanguageSelection() {
   const [open, setOpen] = useState(false);
   const [currentLanguage, setCurrentLanguage] =
-    useState(Languages.find(e => e.iso === i18n.language)?.name);
+    useState(Languages.find(e => e.Iso === i18n.language)?.Name);
   const anchorRef = useRef<HTMLButtonElement>(null);
 
   const handleToggle = () => {
@@ -16,7 +16,7 @@ export default function LanguageSelection() {
   };
 
   function languageClickHandler(languageIsoCode: string): void {
-    setCurrentLanguage(Languages.find(e => e.iso === languageIsoCode)?.name);
+    setCurrentLanguage(Languages.find(e => e.Iso === languageIsoCode)?.Name);
     i18n.changeLanguage(languageIsoCode);
     localStorage.setItem('language', languageIsoCode);
     setOpen(false);
@@ -95,8 +95,8 @@ export default function LanguageSelection() {
                         <MenuItem
                           key={nanoid()}
                           className='language-item'
-                          onClick={() => languageClickHandler(language.iso)}
-                        >{language.name}</MenuItem>
+                          onClick={() => languageClickHandler(language.Iso)}
+                        >{language.Name}</MenuItem>
                       )
                     }
                   </MenuList>

@@ -15,33 +15,33 @@ function formatPercentage(num: number) {
 }
 
 function findSpellByName(name: string): { iconName: string, id: number, wowheadType: 'spell' | 'item' } | undefined {
-  const spellObj = Spells.find(e => e.name === name);
+  const spellObj = Spells.find(e => e.Name === name);
   if (spellObj) {
-    return { iconName: spellObj.iconName, id: spellObj.id, wowheadType: 'spell' }
+    return { iconName: spellObj.IconName, id: spellObj.Id, wowheadType: 'spell' }
   }
 
-  const auraObj = Auras.find(e => e.name === name);
+  const auraObj = Auras.find(e => e.Name === name);
   if (auraObj) {
-    return { iconName: auraObj.iconName, id: auraObj.id, wowheadType: AuraGroups.find(e => e.heading === auraObj.group)?.type || 'spell' }
+    return { iconName: auraObj.IconName, id: auraObj.Id, wowheadType: AuraGroups.find(e => e.Heading === auraObj.Group)?.Type || 'spell' }
   }
 
-  const itemObj = Items.find(e => e.name === name);
+  const itemObj = Items.find(e => e.Name === name);
   if (itemObj) {
-    return { iconName: itemObj.iconName, id: itemObj.id, wowheadType: 'item' }
+    return { iconName: itemObj.IconName, id: itemObj.Id, wowheadType: 'item' }
   }
 
-  const gemObj = Gems.find(e => e.name === name);
+  const gemObj = Gems.find(e => e.Name === name);
   if (gemObj) {
-    return { iconName: gemObj.iconName, id: gemObj.id, wowheadType: 'item' }
+    return { iconName: gemObj.IconName, id: gemObj.Id, wowheadType: 'item' }
   }
 }
 
 export default function BreakdownTables() {
-  const breakdownObj = useSelector((state: RootState) => state.ui.combatLogBreakdown);
+  const breakdownObj = useSelector((state: RootState) => state.ui.CombatLogBreakdown);
   const { t } = useTranslation();
 
   return (
-    <div id='breakdown-tables-container' style={{ display: breakdownObj.data.length === 0 ? 'none' : '' }}>
+    <div id='breakdown-tables-container' style={{ display: breakdownObj.Data.length === 0 ? 'none' : '' }}>
       <section className="breakdown-section" id="damage-breakdown-section" style={{ display: 'inline-block' }}>
         <table className="breakdown-table tablesorter" id="damage-breakdown-table" data-sortlist='[[1,1]]'>
           <thead>
@@ -52,17 +52,17 @@ export default function BreakdownTables() {
               <th>{t('Avg Cast')}</th>
               <th>{t('Crit %')}</th>
               <th>{t('Miss %')}</th>
-              <th style={{ display: breakdownObj.spellDamageDict.Melee ? '' : 'none' }}>{t('Dodge %')}</th>
-              <th style={{ display: breakdownObj.spellDamageDict.Melee ? '' : 'none' }}>{t('Glancing %')}</th>
+              <th style={{ display: breakdownObj.SpellDamageDict.Melee ? '' : 'none' }}>{t('Dodge %')}</th>
+              <th style={{ display: breakdownObj.SpellDamageDict.Melee ? '' : 'none' }}>{t('Glancing %')}</th>
               <th>{t('Dps')}</th>
             </tr>
           </thead>
           <tbody>
             {
-              breakdownObj.data
-                .filter(e => (breakdownObj.spellDamageDict[e.name] && breakdownObj.spellDamageDict[e.name] > 0))
+              breakdownObj.Data
+                .filter(e => (breakdownObj.SpellDamageDict[e.Name] && breakdownObj.SpellDamageDict[e.Name] > 0))
                 .map(spell => {
-                  const spellObj = findSpellByName(spell.name);
+                  const spellObj = findSpellByName(spell.Name);
 
                   return (
                     <tr key={nanoid()} className='spell-damage-information'>
@@ -80,43 +80,43 @@ export default function BreakdownTables() {
                           rel='noreferrer'
                           href={spellObj && spellObj.id !== 0 ?
                             `${getBaseWowheadUrl(i18n.language)}/${spellObj.wowheadType}=${spellObj.id}` : ''}
-                        >{t(spell.name)}</a>
+                        >{t(spell.Name)}</a>
                       </td>
                       <td>
                         <meter
-                          value={breakdownObj.spellDamageDict[spell.name] ?
-                            (breakdownObj.spellDamageDict[spell.name] / breakdownObj.totalDamageDone) * 100 : '0'}
+                          value={breakdownObj.SpellDamageDict[spell.Name] ?
+                            (breakdownObj.SpellDamageDict[spell.Name] / breakdownObj.TotalDamageDone) * 100 : '0'}
                           min='0'
                           max='100'
-                        ></meter> {breakdownObj.spellDamageDict[spell.name] ?
-                          formatPercentage(breakdownObj.spellDamageDict[spell.name] / breakdownObj.totalDamageDone) : 0}%
+                        ></meter> {breakdownObj.SpellDamageDict[spell.Name] ?
+                          formatPercentage(breakdownObj.SpellDamageDict[spell.Name] / breakdownObj.TotalDamageDone) : 0}%
                       </td>
-                      <td className='number' title={spell.casts.toString()}>
+                      <td className='number' title={spell.Casts.toString()}>
                         {
-                          spell.casts / breakdownObj.totalIterationAmount < 2 ?
-                            Math.round((spell.casts / breakdownObj.totalIterationAmount) * 10) / 10 :
-                            Math.round(spell.casts / breakdownObj.totalIterationAmount)
+                          spell.Casts / breakdownObj.TotalIterationAmount < 2 ?
+                            Math.round((spell.Casts / breakdownObj.TotalIterationAmount) * 10) / 10 :
+                            Math.round(spell.Casts / breakdownObj.TotalIterationAmount)
                         }
                       </td>
                       <td className='number'>
                         {
-                          breakdownObj.spellDamageDict[spell.name] ?
-                            Math.round(breakdownObj.spellDamageDict[spell.name] / spell.casts) : 0
+                          breakdownObj.SpellDamageDict[spell.Name] ?
+                            Math.round(breakdownObj.SpellDamageDict[spell.Name] / spell.Casts) : 0
                         }
                       </td>
-                      <td className='number'>{formatPercentage(spell.crits / spell.casts)}</td>
-                      <td className='number'>{formatPercentage(spell.misses / spell.casts)}</td>
+                      <td className='number'>{formatPercentage(spell.Crits / spell.Casts)}</td>
+                      <td className='number'>{formatPercentage(spell.Misses / spell.Casts)}</td>
                       {
-                        breakdownObj.spellDamageDict.Melee &&
+                        breakdownObj.SpellDamageDict.Melee &&
                         <>
-                          <td className='number'>{formatPercentage(spell.dodges / spell.casts)}</td>
-                          <td className='number'>{formatPercentage(spell.glancingBlows / spell.casts)}</td>
+                          <td className='number'>{formatPercentage(spell.Dodges / spell.Casts)}</td>
+                          <td className='number'>{formatPercentage(spell.GlancingBlows / spell.Casts)}</td>
                         </>
                       }
                       <td className='number'>
                         {
-                          breakdownObj.spellDamageDict[spell.name] ?
-                            Math.round((breakdownObj.spellDamageDict[spell.name] / breakdownObj.totalSimulationFightLength) * 100) / 100 : 0
+                          breakdownObj.SpellDamageDict[spell.Name] ?
+                            Math.round((breakdownObj.SpellDamageDict[spell.Name] / breakdownObj.TotalSimulationFightLength) * 100) / 100 : 0
                         }
                       </td>
                     </tr>
@@ -138,10 +138,10 @@ export default function BreakdownTables() {
           </thead>
           <tbody>
             {
-              breakdownObj.data
-                .filter(e => breakdownObj.spellManaGainDict[e.name] && breakdownObj.spellManaGainDict[e.name] > 0)
+              breakdownObj.Data
+                .filter(e => breakdownObj.SpellManaGainDict[e.Name] && breakdownObj.SpellManaGainDict[e.Name] > 0)
                 .map(spell => {
-                  const spellObj = findSpellByName(spell.name);
+                  const spellObj = findSpellByName(spell.Name);
 
                   return (
                     <tr key={nanoid()} className='spell-damage-information'>
@@ -159,28 +159,28 @@ export default function BreakdownTables() {
                           rel='noreferrer'
                           href={spellObj && spellObj.id !== 0 ?
                             `${getBaseWowheadUrl(i18n.language)}/${spellObj.wowheadType}=${spellObj.id}` : ''}
-                        >{t(spell.name)}</a>
+                        >{t(spell.Name)}</a>
                       </td>
                       <td>
                         <meter
-                          value={breakdownObj.spellManaGainDict[spell.name] ?
-                            (breakdownObj.spellManaGainDict[spell.name] / breakdownObj.totalManaGained) * 100 : '0'}
+                          value={breakdownObj.SpellManaGainDict[spell.Name] ?
+                            (breakdownObj.SpellManaGainDict[spell.Name] / breakdownObj.TotalManaGained) * 100 : '0'}
                           min='0'
                           max='100'
-                        ></meter> {breakdownObj.spellManaGainDict[spell.name] ?
-                          formatPercentage(breakdownObj.spellManaGainDict[spell.name] / breakdownObj.totalManaGained) : 0}%
+                        ></meter> {breakdownObj.SpellManaGainDict[spell.Name] ?
+                          formatPercentage(breakdownObj.SpellManaGainDict[spell.Name] / breakdownObj.TotalManaGained) : 0}%
                       </td>
                       <td className='number'>
                         {
-                          (spell.casts / breakdownObj.totalIterationAmount) < 2 ?
-                            Math.round((spell.casts / breakdownObj.totalIterationAmount) * 10) / 10 :
-                            Math.round(spell.casts / breakdownObj.totalIterationAmount)
+                          (spell.Casts / breakdownObj.TotalIterationAmount) < 2 ?
+                            Math.round((spell.Casts / breakdownObj.TotalIterationAmount) * 10) / 10 :
+                            Math.round(spell.Casts / breakdownObj.TotalIterationAmount)
                         }
                       </td>
                       <td className='number'>
                         {
-                          breakdownObj.spellManaGainDict[spell.name] ?
-                            Math.round(breakdownObj.spellManaGainDict[spell.name] / spell.casts) : 0
+                          breakdownObj.SpellManaGainDict[spell.Name] ?
+                            Math.round(breakdownObj.SpellManaGainDict[spell.Name] / spell.Casts) : 0
                         }
                       </td>
                     </tr>
@@ -201,10 +201,10 @@ export default function BreakdownTables() {
           </thead>
           <tbody>
             {
-              breakdownObj.data
-                .filter(e => e.uptime > 0)
+              breakdownObj.Data
+                .filter(e => e.Uptime > 0)
                 .map(spell => {
-                  const spellObj = findSpellByName(spell.name);
+                  const spellObj = findSpellByName(spell.Name);
 
                   return (
                     <tr key={nanoid()} className='spell-damage-information'>
@@ -222,22 +222,22 @@ export default function BreakdownTables() {
                           rel='noreferrer'
                           href={spellObj && spellObj.id !== 0 ?
                             `${getBaseWowheadUrl(i18n.language)}/${spellObj.wowheadType}=${spellObj.id}` : ''}
-                        >{t(spell.name)}</a>
+                        >{t(spell.Name)}</a>
                       </td>
                       {/*If the aura's count is less than 2 then show 1 decimal place, otherwise just round the value*/}
                       <td className='number'>
                         {
-                          (spell.count / breakdownObj.totalIterationAmount) < 2 ?
-                            Math.round((spell.count / breakdownObj.totalIterationAmount) * 10) / 10 :
-                            Math.round(spell.count / breakdownObj.totalIterationAmount)
+                          (spell.Count / breakdownObj.TotalIterationAmount) < 2 ?
+                            Math.round((spell.Count / breakdownObj.TotalIterationAmount) * 10) / 10 :
+                            Math.round(spell.Count / breakdownObj.TotalIterationAmount)
                         }
                       </td>
                       <td>
                         <meter
-                          value={(spell.uptime / breakdownObj.totalSimulationFightLength) * 100}
+                          value={(spell.Uptime / breakdownObj.TotalSimulationFightLength) * 100}
                           min='0'
                           max='100'
-                        ></meter> {formatPercentage(spell.uptime / breakdownObj.totalSimulationFightLength)}%
+                        ></meter> {formatPercentage(spell.Uptime / breakdownObj.TotalSimulationFightLength)}%
                       </td>
                     </tr>
                   )

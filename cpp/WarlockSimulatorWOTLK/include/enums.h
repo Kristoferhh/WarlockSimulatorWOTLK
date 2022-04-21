@@ -117,10 +117,10 @@ constexpr double kCritRatingPerPercent = 22.08;
 constexpr double kHasteRatingPerPercent = 15.77;
 constexpr double kManaPerIntellect = 15;
 constexpr double kHealthPerStamina = 10;
-constexpr double kCritChancePerIntellect = 1 / 81.95;
-constexpr double kBaseCritChancePercent = 1.701;
-constexpr double kMeleeCritChanceSuppression = 4.73;
+constexpr double kCritChancePerIntellect = 1 / 166.6;
+constexpr double kBaseCritChancePercent = 1.70458;
 // Source: Fierywind from Warlock discord and maybe Fight Club discord
+constexpr double kMeleeCritChanceSuppression = 4.73;
 constexpr double kBaseEnemyDodgeChance = 6.5;
 } // namespace StatConstant
 

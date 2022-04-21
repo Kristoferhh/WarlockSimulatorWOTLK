@@ -3,16 +3,16 @@ import { useSelector } from "react-redux"
 import { RootState } from "../redux/Store"
 
 export default function DpsHistogram() {
-  const histogramState = useSelector((state: RootState) => state.ui.histogram);
+  const histogramState = useSelector((state: RootState) => state.ui.Histogram);
 
   return(
-    histogramState.data ?
-      <Bar id='dps-histogram' style={{display: histogramState.visible ? '' : 'none'}} data={
+    histogramState.Data ?
+      <Bar id='dps-histogram' style={{display: histogramState.Visible ? '' : 'none'}} data={
         {
-          labels: Object.keys(histogramState.data),
+          labels: Object.keys(histogramState.Data),
           datasets: [{
               label: 'DPS Histogram',
-              data: Object.keys(histogramState.data).map(key => histogramState.data![key]),
+              data: Object.keys(histogramState.Data).map(key => histogramState.Data![key]),
               borderWidth: 1,
               borderColor: '#9482C9'
           }]

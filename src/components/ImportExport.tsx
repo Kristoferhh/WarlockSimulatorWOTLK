@@ -8,19 +8,19 @@ import { Race } from "../Types";
 
 export default function ImportExport() {
   const playerState = useSelector((state: RootState) => state.player);
-  const windowIsVisible = useSelector((state: RootState) => state.ui.importExportWindowVisible);
+  const windowIsVisible = useSelector((state: RootState) => state.ui.ImportExportWindowVisible);
   const dispatch = useDispatch();
   const [contentString, setContentString] = useState('');
 
   function exportProfile() {
     setContentString(JSON.stringify({
-      auras: playerState.auras,
-      selectedGems: playerState.selectedGems,
-      selectedItems: playerState.selectedItems,
-      talents: playerState.talents,
-      rotation: playerState.rotation,
-      selectedEnchants: playerState.selectedEnchants,
-      settings: playerState.settings
+      auras: playerState.Auras,
+      selectedGems: playerState.SelectedGems,
+      selectedItems: playerState.SelectedItems,
+      talents: playerState.Talents,
+      rotation: playerState.Rotation,
+      selectedEnchants: playerState.SelectedEnchants,
+      settings: playerState.Settings
     }));
 
     setInterval(() => (document.getElementById('import-export-textarea') as HTMLInputElement)?.select(), 100);
@@ -41,11 +41,11 @@ export default function ImportExport() {
       }
       if (data.selectedEnchants) {
         dispatch(setSelectedEnchants(data.selectedEnchants));
-        dispatch(setEnchantsStats(getEnchantsStats(data.selectedItems ? data.selectedItems : playerState.selectedItems, data.selectedEnchants)));
+        dispatch(setEnchantsStats(getEnchantsStats(data.selectedItems ? data.selectedItems : playerState.SelectedItems, data.selectedEnchants)));
       }
       if (data.selectedGems) {
         dispatch(setSelectedGems(data.selectedGems));
-        dispatch(setGemsStats(getGemsStats(data.selectedItems ? data.selectedItems : playerState.selectedItems, data.selectedGems)));
+        dispatch(setGemsStats(getGemsStats(data.selectedItems ? data.selectedItems : playerState.SelectedItems, data.selectedGems)));
       }
       if (data.talents) {
         dispatch(setTalentsState(data.talents));

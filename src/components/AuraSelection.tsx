@@ -1,78 +1,106 @@
-import { useDispatch, useSelector } from "react-redux";
-import { Auras } from "../data/Auras";
-import { RootState } from "../redux/Store";
-import { Aura, AuraGroup, AurasStruct } from "../Types";
-import { AuraGroups } from "../data/AuraGroups";
-import { setAurasStats, setSelectedAuras } from "../redux/PlayerSlice";
-import { nanoid } from "nanoid";
-import { getAurasStats, getBaseWowheadUrl, isPetActive } from "../Common";
-import { useTranslation } from "react-i18next";
-import i18n from "../i18n/config";
+import { useDispatch, useSelector } from 'react-redux'
+import { Auras } from '../data/Auras'
+import { RootState } from '../redux/Store'
+import { Aura, AuraGroup, AuraId } from '../Types'
+import { AuraGroups } from '../data/AuraGroups'
+import { setAurasStats, setSelectedAuras } from '../redux/PlayerSlice'
+import { nanoid } from 'nanoid'
+import { getAurasStats, getBaseWowheadUrl, isPetActive } from '../Common'
+import { useTranslation } from 'react-i18next'
+import i18n from '../i18n/config'
 
-function disableAurasWithUniqueProperties(aura: Aura, auraObj: AurasStruct): void {
-  if (aura.potion) Auras.filter((e) => e.potion).forEach((e) => auraObj[e.varName] = false);
-  if (aura.foodBuff) Auras.filter((e) => e.foodBuff).forEach((e) => auraObj[e.varName] = false);
-  if (aura.weaponOil) Auras.filter((e) => e.weaponOil).forEach((e) => auraObj[e.varName] = false);
-  if (aura.battleElixir) Auras.filter((e) => e.battleElixir).forEach((e) => auraObj[e.varName] = false);
-  if (aura.guardianElixir) Auras.filter((e) => e.guardianElixir).forEach((e) => auraObj[e.varName] = false);
-  if (aura.alcohol) Auras.filter((e) => e.alcohol).forEach((e) => auraObj[e.varName] = false);
-  if (aura.demonicRune) Auras.filter((e) => e.demonicRune).forEach((e) => auraObj[e.varName] = false);
-  if (aura.drums) Auras.filter((e) => e.drums).forEach((e) => auraObj[e.varName] = false);
+function disableAurasWithUniqueProperties(aura: Aura, auraObj: AuraId[]): void {
+  if (aura.Potion)
+    Auras.filter((e) => e.Potion).forEach(
+      (x) => (auraObj = auraObj.filter((y) => y !== x.Id))
+    )
+  if (aura.FoodBuff)
+    Auras.filter((e) => e.FoodBuff).forEach(
+      (x) => (auraObj = auraObj.filter((y) => y !== x.Id))
+    )
+  if (aura.WeaponOil)
+    Auras.filter((e) => e.WeaponOil).forEach(
+      (x) => (auraObj = auraObj.filter((y) => y !== x.Id))
+    )
+  if (aura.BattleElixir)
+    Auras.filter((e) => e.BattleElixir).forEach(
+      (x) => (auraObj = auraObj.filter((y) => y !== x.Id))
+    )
+  if (aura.GuardianElixir)
+    Auras.filter((e) => e.GuardianElixir).forEach(
+      (x) => (auraObj = auraObj.filter((y) => y !== x.Id))
+    )
+  if (aura.Alcohol)
+    Auras.filter((e) => e.Alcohol).forEach(
+      (x) => (auraObj = auraObj.filter((y) => y !== x.Id))
+    )
+  if (aura.DemonicRune)
+    Auras.filter((e) => e.DemonicRune).forEach(
+      (x) => (auraObj = auraObj.filter((y) => y !== x.Id))
+    )
+  if (aura.Drums)
+    Auras.filter((e) => e.Drums).forEach(
+      (x) => (auraObj = auraObj.filter((y) => y !== x.Id))
+    )
 }
 
 export default function AuraSelection() {
-  const playerState = useSelector((state: RootState) => state.player);
-  const dispatch = useDispatch();
-  const { t } = useTranslation();
+  const playerState = useSelector((state: RootState) => state.player)
+  const dispatch = useDispatch()
+  const { t } = useTranslation()
 
   function auraClickHandler(aura: Aura): void {
-    let newAuras = JSON.parse(JSON.stringify(playerState.auras));
-    const isAuraDisabled = newAuras[aura.varName] == null || newAuras[aura.varName] === false;
+    let newAuras = JSON.parse(JSON.stringify(playerState.Auras)) as AuraId[]
 
     // If the aura is being toggled on and it's a unique buff like potion/food buff
     // then disable all other auras with that unique property as true.
-    if (isAuraDisabled) { disableAurasWithUniqueProperties(aura, newAuras); }
-    // Toggle the aura's bool property/initialize to true.
-    newAuras[aura.varName] = newAuras[aura.varName] == null ? true : !newAuras[aura.varName];
+    if (!newAuras.includes(aura.Id)) {
+      disableAurasWithUniqueProperties(aura, newAuras)
+      newAuras.push(aura.Id)
+    } else {
+      newAuras = newAuras.filter((x) => x !== aura.Id)
+    }
 
-    dispatch(setSelectedAuras(newAuras));
-    dispatch(setAurasStats(getAurasStats(newAuras)));
+    dispatch(setSelectedAuras(newAuras))
+    dispatch(setAurasStats(getAurasStats(newAuras)))
   }
 
   return (
-    <section id="buffs-and-debuffs-section">
-      {
-        AuraGroups
-          .filter(auraGroup =>
-            auraGroup.heading !== AuraGroup.PetBuffs ||
-            playerState.talents.demonicSacrifice === 0 ||
-            playerState.settings.sacrificePet === 'no')
-          .map(auraGroup =>
-            <div key={nanoid()}>
-              <h3 className='buffs-heading'>{t(auraGroup.heading)}</h3>
-              <ul>
-                {
-                  Auras
-                    .filter(aura => aura.group === auraGroup.heading &&
-                      (!aura.forPet || isPetActive(playerState.talents, playerState.settings, true, true)))
-                    .map(aura =>
-                      <li
-                        key={nanoid()}
-                        id={aura.varName}
-                        className='buffs aura'
-                        data-checked={playerState.auras[aura.varName] === true}
-                        onClick={(e) => { auraClickHandler(aura); e.preventDefault() }}
-                      >
-                        <a href={`${getBaseWowheadUrl(i18n.language)}/${auraGroup.type}=${aura.id}`}>
-                          <img src={`${process.env.PUBLIC_URL}/img/${aura.iconName}.jpg`} alt={t(aura.name)} />
-                        </a>
-                      </li>
-                    )
-                }
-              </ul>
-            </div>
-          )
-      }
+    <section id='buffs-and-debuffs-section'>
+      {AuraGroups.map((auraGroup) => (
+        <div key={nanoid()}>
+          <h3 className='buffs-heading'>{t(auraGroup.Heading)}</h3>
+          <ul>
+            {Auras.filter(
+              (aura) =>
+                aura.Group === auraGroup.Heading &&
+                (!aura.ForPet || isPetActive(playerState.Settings, true, true))
+            ).map((aura) => (
+              <li
+                key={nanoid()}
+                id={aura.Id.toString()}
+                className='buffs aura'
+                data-checked={playerState.Auras.includes(aura.Id)}
+                onClick={(e) => {
+                  auraClickHandler(aura)
+                  e.preventDefault()
+                }}
+              >
+                <a
+                  href={`${getBaseWowheadUrl(i18n.language)}/${
+                    auraGroup.Type
+                  }=${aura.Id}`}
+                >
+                  <img
+                    src={`${process.env.PUBLIC_URL}/img/${aura.IconName}.jpg`}
+                    alt={t(aura.Name)}
+                  />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </section>
   )
 }

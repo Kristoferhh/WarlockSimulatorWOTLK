@@ -21,7 +21,10 @@
 Spell::Spell(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
   : entity(entity_param),
     aura_effect(std::move(aura)),
-    dot_effect(std::move(dot)) {
+    dot_effect(std::move(dot)),
+    spell_school(SpellSchool::kNoSchool),
+    attack_type(AttackType::kNoAttackType),
+    spell_type(SpellType::kNoSpellType) {
 }
 
 void Spell::Setup() {

@@ -1,55 +1,55 @@
-import { nanoid } from "@reduxjs/toolkit";
-import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
-import { getBaseWowheadUrl, ItemSlotToItemSlotKey } from "../Common";
-import { Enchants } from "../data/Enchants";
-import { Items } from "../data/Items";
-import i18n from "../i18n/config";
-import { RootState } from "../redux/Store";
-import { setEquippedItemsWindowVisibility } from "../redux/UiSlice";
-import { Enchant, Item, ItemSlot } from "../Types";
-import ItemSocketDisplay from "./ItemSocketDisplay";
+import { nanoid } from '@reduxjs/toolkit'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
+import { getBaseWowheadUrl, ItemSlotDetailedToItemSlot } from '../Common'
+import { Enchants } from '../data/Enchants'
+import { Items } from '../data/Items'
+import i18n from '../i18n/config'
+import { RootState } from '../redux/Store'
+import { setEquippedItemsWindowVisibility } from '../redux/UiSlice'
+import { Enchant, Item, ItemSlotDetailed, Quality } from '../Types'
+import ItemSocketDisplay from './ItemSocketDisplay'
 
-function formatItemSlotName(itemSlot: ItemSlot): string {
-  let formattedItemSlot = itemSlot as string;
+function formatItemSlotName(itemSlot: ItemSlotDetailed): string {
+  let formattedItemSlot = itemSlot.toString()
 
-  // Check if the last char is '1' or '2', if so then it's an item slot 
+  // Check if the last char is '1' or '2', if so then it's an item slot
   // with sub-item slots so we put a space between the name and the sub-item slot value.
-  const subItemSlotIndex = formattedItemSlot.length - 1;
+  const subItemSlotIndex = formattedItemSlot.length - 1
   if (['1', '2'].includes(formattedItemSlot.charAt(subItemSlotIndex))) {
-    formattedItemSlot = formattedItemSlot.substring(0, subItemSlotIndex) + ' '
-      + formattedItemSlot.substring(subItemSlotIndex);
+    formattedItemSlot = `${formattedItemSlot.substring(
+      0,
+      subItemSlotIndex
+    )} ${formattedItemSlot.substring(subItemSlotIndex)}`
   }
 
-  return formattedItemSlot.charAt(0).toUpperCase() + formattedItemSlot.slice(1);
+  return formattedItemSlot.charAt(0).toUpperCase() + formattedItemSlot.slice(1)
 }
 
 export default function EquippedItemsDisplay() {
-  const uiState = useSelector((state: RootState) => state.ui);
-  const playerState = useSelector((state: RootState) => state.player);
-  const dispatch = useDispatch();
-  const { t } = useTranslation();
+  const uiState = useSelector((state: RootState) => state.ui)
+  const playerState = useSelector((state: RootState) => state.player)
+  const dispatch = useDispatch()
+  const { t } = useTranslation()
 
-  function getEnchantInItemSlot(itemSlot: ItemSlot): Enchant | undefined {
-    let slot = itemSlot;
+  function getEnchantInItemSlot(
+    itemSlot: ItemSlotDetailed
+  ): Enchant | undefined {
+    let slot = itemSlot
 
-    if (slot === ItemSlot.twohand) {
-      slot = ItemSlot.mainhand;
-    }
-
-    return Enchants.find(e => e.id === playerState.selectedEnchants[slot]);
+    return Enchants.find((e) => e.Id === playerState.SelectedEnchants[slot])
   }
 
-  function getItemInItemSlot(itemSlot: ItemSlot): Item | undefined {
-    return Items.find(e => e.id === playerState.selectedItems[itemSlot]);
+  function getItemInItemSlot(itemSlot: ItemSlotDetailed): Item | undefined {
+    return Items.find((e) => e.Id === playerState.SelectedItems[itemSlot])
   }
 
   return (
     <div
-      id="currently-equipped-items-container"
-      style={{ display: uiState.equippedItemsWindowVisible ? '' : 'none' }}
+      id='currently-equipped-items-container'
+      style={{ display: uiState.EquippedItemsWindowVisible ? '' : 'none' }}
     >
-      <div id="currently-equipped-items">
+      <div id='currently-equipped-items'>
         <div onClick={(e) => dispatch(setEquippedItemsWindowVisibility(false))}>
           <p className='close' id='currently-equipped-items-close-button'></p>
         </div>
@@ -69,73 +69,93 @@ export default function EquippedItemsDisplay() {
             </tr>
           </thead>
           <tbody>
-            {
-              Object.values(ItemSlot)
-                // Filter for choosing whether to display mainhand + offhand or twohand.
-                // If a two hand is equipped then it shows two hand, otherwise it shows the mainhand + offhand
-                .filter(slot =>
-                (![ItemSlot.mainhand, ItemSlot.offhand, ItemSlot.twohand].includes(slot) ||
-                  (([ItemSlot.mainhand, ItemSlot.offhand].includes(slot) &&
-                    (!playerState.selectedItems[ItemSlot.twohand] || playerState.selectedItems[ItemSlot.twohand] === 0)) ||
-                    (slot === ItemSlot.twohand && (!playerState.selectedItems[ItemSlot.mainhand] ||
-                      playerState.selectedItems[ItemSlot.mainhand] === 0) && (!playerState.selectedItems[ItemSlot.offhand] ||
-                        playerState.selectedItems[ItemSlot.offhand] === 0)))))
-                .map(slot =>
+            {Object.values(ItemSlotDetailed)
+              // Don't show the offhand slot if a two handed weapon is equipped
+              .filter((slot) => {
+                if (slot === ItemSlotDetailed.OffHand) {
+                  const equippedWeaponId =
+                    playerState.SelectedItems[ItemSlotDetailed.Weapon]
+                  const equippedWeapon = Items.find(
+                    (x) => x.Id === equippedWeaponId
+                  )
+
+                  return !equippedWeapon?.IsTwoHand
+                }
+
+                return true
+              })
+              .map((slot) => {
+                const equippedItem = getItemInItemSlot(slot as ItemSlotDetailed)
+                const equippedEnchant = getEnchantInItemSlot(
+                  slot as ItemSlotDetailed
+                )
+
+                return (
                   <tr key={nanoid()} className='equipped-item-row'>
-                    <td>{t(formatItemSlotName(slot))}</td>
+                    <td>{t(formatItemSlotName(slot as ItemSlotDetailed))}</td>
                     <td
-                      className={'equipped-item-name ' +
-                        (playerState.selectedItems[slot] != null ? getItemInItemSlot(slot)?.quality : '')}
+                      className={
+                        'equipped-item-name ' +
+                        (playerState.SelectedItems[slot as ItemSlotDetailed] !=
+                        null
+                          ? equippedItem?.Quality
+                          : '')
+                      }
                     >
-                      {
-                        getItemInItemSlot(slot) &&
+                      {equippedItem && (
                         <>
                           <a
-                            href={
-                              `${getBaseWowheadUrl(i18n.language)}/item=${(getItemInItemSlot(slot)!.displayId || getItemInItemSlot(slot)!.id)}`
-                            }
+                            href={`${getBaseWowheadUrl(i18n.language)}/item=${
+                              equippedItem!.DisplayId || equippedItem!.Id
+                            }`}
                             onClick={(e) => e.preventDefault()}
                             style={{ fontSize: '0px' }}
-                          >.</a>
-                          {
-                            getItemInItemSlot(slot) &&
-                            <img
-                              src={`${process.env.PUBLIC_URL}/img/${getItemInItemSlot(slot)?.iconName}.jpg`}
-                              className='item-icon'
-                            />
-                          }
-                          {getItemInItemSlot(slot) ? t(getItemInItemSlot(slot)!.name) : ''}
+                          >
+                            .
+                          </a>
+                          <img
+                            alt={equippedItem.Name}
+                            src={`${process.env.PUBLIC_URL}/img/${equippedItem.IconName}.jpg`}
+                            className='item-icon'
+                          />
+                          {t(equippedItem.Name)}
                         </>
-                      }
+                      )}
                     </td>
                     <td>
-                      {
-                        (playerState.selectedItems[slot] && getItemInItemSlot(slot) !== undefined) ?
-                          <ItemSocketDisplay
-                            item={getItemInItemSlot(slot)!}
-                            itemSlot={ItemSlotToItemSlotKey(false, slot)} />
-                          : ''
-                      }
+                      {playerState.SelectedItems[slot as ItemSlotDetailed] &&
+                      equippedItem ? (
+                        <ItemSocketDisplay
+                          item={equippedItem!}
+                          itemSlot={ItemSlotDetailedToItemSlot(
+                            slot as ItemSlotDetailed
+                          )}
+                        />
+                      ) : (
+                        ''
+                      )}
                     </td>
                     <td
-                      className={'equipped-item-enchant-name ' +
-                        (getEnchantInItemSlot(slot) !== undefined ? getEnchantInItemSlot(slot)?.quality : '')}
+                      className={`equipped-item-enchant-name ${equippedEnchant?.Quality}`}
                     >
-                      {
-                        getEnchantInItemSlot(slot) !== undefined &&
+                      {equippedEnchant && (
                         <>
                           <a
-                            href={`${getBaseWowheadUrl(i18n.language)}/spell=${(getEnchantInItemSlot(slot)!.id)}`}
+                            href={`${getBaseWowheadUrl(i18n.language)}/spell=${
+                              equippedEnchant.Id
+                            }`}
                             onClick={(e) => e.preventDefault()}
                             style={{ fontSize: '0px' }}
-                          >.</a>
-                          {t(getEnchantInItemSlot(slot)!.name)}
+                          >
+                            .
+                          </a>
+                          {t(equippedEnchant.Name)}
                         </>
-                      }
+                      )}
                     </td>
                   </tr>
                 )
-            }
+              })}
           </tbody>
         </table>
       </div>

@@ -7,7 +7,7 @@ i18n.use(initReactI18next).init({
   lng: localStorage.getItem('language') ||
     (navigator.languages.length > 0 &&
       navigator.languages[0].split('-').length > 0 &&
-      Languages.find(e => e.iso === navigator.languages[0].split('-')[0]) ?
+      Languages.find(e => e.Iso === navigator.languages[0].split('-')[0]) ?
       navigator.languages[0].split('-')[0] : 'en'),
   resources: {
     zh: {
