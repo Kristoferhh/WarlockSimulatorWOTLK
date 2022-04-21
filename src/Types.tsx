@@ -97,6 +97,7 @@ export interface Spell {
 export enum RotationGroup {
   Dots = 'Dots',
   Filler = 'Filler',
+  Aoe = 'Aoe',
   Curse = 'Curse',
   Finishers = 'Finishers',
   Other = 'Other',
@@ -109,6 +110,7 @@ export interface IRotationGroup {
 export const RotationGroups: IRotationGroup[] = [
   { Header: RotationGroup.Dots },
   { Header: RotationGroup.Filler },
+  { Header: RotationGroup.Aoe },
   { Header: RotationGroup.Curse },
   { Header: RotationGroup.Finishers },
   { Header: RotationGroup.Other },
@@ -384,6 +386,7 @@ export const InitialRotation: RotationStruct = {
   [RotationGroup.Curse]: [],
   [RotationGroup.Dots]: [],
   [RotationGroup.Filler]: [],
+  [RotationGroup.Aoe]: [],
   [RotationGroup.Finishers]: [],
   [RotationGroup.Other]: [],
 }
@@ -403,7 +406,7 @@ export interface Profile {
 }
 
 export type ProfileContainer = {
-  Name: string,
+  Name: string
   Profile: Profile
 }
 
@@ -724,7 +727,9 @@ export enum SpellId {
   Shadowburn = 17877,
   Conflagrate = 17962,
   Shadowfury = 30283,
-  ChaosBolt = 50796
+  ChaosBolt = 50796,
+  DarkPact = 59092,
+  CurseOfRecklessness = 16231
 }
 
 export enum AuraId {

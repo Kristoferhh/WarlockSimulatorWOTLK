@@ -96,11 +96,12 @@ export const PlayerSlice = createSlice({
         (e) => e.Header === action.payload.Group
       )
 
+      // TODO move this logic out of this function
       if (rotationGroup) {
-        // If a filler/curse is being enabled then disable all other curses/fillers
+        // If a filler/curse/aoe is being enabled then disable all other curse/filler/aoe abilities
         if (
           !state.Rotation[rotationGroup.Header].includes(action.payload.Id) &&
-          [RotationGroup.Filler, RotationGroup.Curse].includes(
+          [RotationGroup.Filler, RotationGroup.Curse, RotationGroup.Aoe].includes(
             rotationGroup.Header
           )
         ) {

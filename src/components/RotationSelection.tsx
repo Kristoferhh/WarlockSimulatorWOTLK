@@ -17,7 +17,12 @@ export default function RotationSelection() {
     <section id='rotation-section'>
       <h3>{t('Rotation')}</h3>
       <ul id='rotation-list'>
-        {RotationGroups.map((group) => (
+        {RotationGroups.filter((group) => {
+          // If the fight type is AOE then only show aoe spells, otherwise if it's single target, show everything but the aoe spells
+          return playerStore.Settings[Setting.fightType] === 'aoe'
+            ? group.Header === RotationGroup.Aoe
+            : group.Header !== RotationGroup.Aoe
+        }).map((group) => (
           <li
             key={nanoid()}
             style={{
