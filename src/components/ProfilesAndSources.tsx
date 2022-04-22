@@ -46,7 +46,6 @@ const phases: { title: string; phase: Phase }[] = [
 
 export default function ProfilesAndSources() {
   const playerStore = useSelector((state: RootState) => state.player)
-  console.log(playerStore.Profiles)
   const selectedProfileState = useSelector(
     (state: RootState) => state.ui.SelectedProfile
   )

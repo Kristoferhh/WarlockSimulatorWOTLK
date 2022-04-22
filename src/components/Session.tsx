@@ -7,6 +7,7 @@ import {
   getGemsStats,
   getItemSetCounts,
   getItemsStats,
+  GetTalentsStats,
 } from '../Common'
 import {
   setAurasStats,
@@ -15,6 +16,7 @@ import {
   setGemsStats,
   setItemSetCounts,
   setItemsStats,
+  setTalentsStats,
 } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
 import { Race, Setting } from '../Types'
@@ -45,6 +47,11 @@ export default function Session() {
       )
     )
     dispatch(setItemSetCounts(getItemSetCounts(playerStore.SelectedItems)))
+    dispatch(
+      setTalentsStats(
+        GetTalentsStats(playerStore.Talents, playerStore.Settings)
+      )
+    )
     ;(jQuery('.tablesorter') as any).tablesorter()
   }, [])
 

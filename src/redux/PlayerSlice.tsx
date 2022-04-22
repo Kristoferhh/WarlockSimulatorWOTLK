@@ -50,6 +50,7 @@ const initialPlayerState: PlayerState = {
     Items: InitialPlayerStats,
     Gems: InitialPlayerStats,
     Enchants: InitialPlayerStats,
+    Talents: InitialPlayerStats,
   },
   Settings: JSON.parse(
     localStorage.getItem('settings') || JSON.stringify(InitialSettings)
@@ -62,11 +63,8 @@ export const PlayerSlice = createSlice({
   name: 'player',
   initialState: initialPlayerState,
   reducers: {
-    setTalentPointValue: (
-      state,
-      talent: PayloadAction<{ name: TalentName; points: number }>
-    ) => {
-      state.Talents[talent.payload.name] = talent.payload.points
+    setSelectedTalents: (state, action: PayloadAction<TalentStore>) => {
+      state.Talents = action.payload
       state.TalentPointsRemaining = getRemainingTalentPoints(state.Talents)
       localStorage.setItem('talents', JSON.stringify(state.Talents))
     },
@@ -101,9 +99,11 @@ export const PlayerSlice = createSlice({
         // If a filler/curse/aoe is being enabled then disable all other curse/filler/aoe abilities
         if (
           !state.Rotation[rotationGroup.Header].includes(action.payload.Id) &&
-          [RotationGroup.Filler, RotationGroup.Curse, RotationGroup.Aoe].includes(
-            rotationGroup.Header
-          )
+          [
+            RotationGroup.Filler,
+            RotationGroup.Curse,
+            RotationGroup.Aoe,
+          ].includes(rotationGroup.Header)
         ) {
           state.Rotation[rotationGroup.Header] = []
         }
@@ -127,6 +127,9 @@ export const PlayerSlice = createSlice({
     },
     setItemsStats: (state, action: PayloadAction<StatsCollection>) => {
       state.Stats.Items = action.payload
+    },
+    setTalentsStats: (state, action: PayloadAction<StatsCollection>) => {
+      state.Stats.Talents = action.payload
     },
     setGemsStats: (state, action: PayloadAction<StatsCollection>) => {
       state.Stats.Gems = action.payload
@@ -197,9 +200,10 @@ export const {
   setItemsStats,
   renameProfile,
   deleteProfile,
-  setTalentPointValue,
+  setSelectedTalents,
   toggleRotationSpellSelection,
   modifySettingValue,
   setProfile,
+  setTalentsStats,
 } = PlayerSlice.actions
 export default PlayerSlice.reducer

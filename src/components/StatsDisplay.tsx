@@ -36,8 +36,6 @@ export default function StatsDisplay() {
       stamina += 70 * (0.1 * bloodPactModifier)
     }
 
-    staminaModifier *= 1 + (0.03 * playerState.Talents['Demonic Embrace'] || 0)
-
     return stamina * staminaModifier
   }
 
@@ -63,10 +61,6 @@ export default function StatsDisplay() {
       .map((obj) => obj[Stat.SpiritModifier] || 1)
       .reduce((a, b) => a * b)
 
-    if (playerState.Talents['Demonic Embrace'] > 0) {
-      spiritModifier *= 1 - 0.01 * playerState.Talents['Demonic Embrace']
-    }
-
     return (
       Object.values(playerState.Stats)
         .map((obj) => obj[Stat.Spirit] || 0)
@@ -74,32 +68,36 @@ export default function StatsDisplay() {
     )
   }
 
-  function getHealth(): number {
-    return (
-      (playerState.Stats.Base[Stat.Health]! +
-        getStamina() * StatConstant.HealthPerStamina) *
-      (1 + (0.01 * playerState.Talents['Fel Vitality'] || 0))
-    )
+  function GetHealth(): number {
+    let health =
+      Object.values(playerState.Stats)
+        .map((obj) => obj[Stat.Health] || 0)
+        .reduce((a, b) => a + b) +
+      getStamina() * StatConstant.HealthPerStamina
+    let healthModifier = Object.values(playerState.Stats)
+      .map((obj) => obj[Stat.HealthModifier] || 0)
+      .reduce((a, b) => a * b)
+
+    return health * healthModifier
   }
 
-  function getMana(): number {
-    let mana = Object.values(playerState.Stats)
-      .map((obj) => obj[Stat.Mana] || 0)
-      .reduce((a, b) => a + b)
-    return (
-      (mana + getIntellect() * StatConstant.ManaPerIntellect) *
-      (1 + (0.01 * playerState.Talents['Fel Vitality'] || 0))
-    )
+  function GetMana(): number {
+    let mana =
+      Object.values(playerState.Stats)
+        .map((obj) => obj[Stat.Mana] || 0)
+        .reduce((a, b) => a + b) +
+      getIntellect() * StatConstant.ManaPerIntellect
+    let manaModifier = Object.values(playerState.Stats)
+      .map((obj) => obj[Stat.ManaModifier] || 0)
+      .reduce((a, b) => a * b)
+
+    return mana * manaModifier
   }
 
   function getSpellPower(): number {
     let spellPower = Object.values(playerState.Stats)
       .map((obj) => obj[Stat.SpellPower] || 0)
       .reduce((a, b) => a + b)
-
-    if (playerState.Auras.includes(AuraId.FelArmor)) {
-      spellPower += 100 * (0.1 * playerState.Talents['Demonic Aegis'])
-    }
 
     if (playerState.Auras.includes(AuraId.PrayerOfSpirit)) {
       spellPower +=
@@ -138,22 +136,16 @@ export default function StatsDisplay() {
         .reduce((a, b) => a + b)
     )
     let critPercent =
+      Object.values(playerState.Stats)
+        .map((obj) => obj[Stat.CritChance] || 0)
+        .reduce((a, b) => a + b) +
       Math.round(
         (critRating / StatConstant.CritRatingPerPercent +
           StatConstant.BaseCritChancePercent) *
           100
-      ) / 100
-
-    critPercent += playerState.Talents.Devastation || 0
-    critPercent += playerState.Talents.Backlash || 0
-    critPercent += playerState.Talents['Demonic Tactics'] || 0
-    critPercent += getIntellect() * StatConstant.CritPercentPerIntellect
-    if (playerState.Auras.includes(AuraId.MoonkinAura)) critPercent += 5
-    if (playerState.Auras.includes(AuraId.ImprovedSealOfTheCrusader))
-      critPercent += 3
-    if (playerState.Auras.includes(AuraId.TotemOfWrath))
-      critPercent +=
-        3 * parseInt(playerState.Settings[Setting.totemOfWrathAmount])
+      ) /
+        100 +
+      getIntellect() * StatConstant.CritPercentPerIntellect
 
     return `${critRating} (${critPercent.toFixed(2)}%)`
   }
@@ -186,21 +178,6 @@ export default function StatsDisplay() {
           parseInt(playerState.Settings[Setting.improvedCurseOfTheElements])
     }
 
-    if (playerState.Talents['Master Demonologist'] > 0) {
-      switch (playerState.Settings[Setting.petChoice]) {
-        case Pet.Succubus:
-          modifier *= 1 + 0.02 * playerState.Talents['Master Demonologist']
-          break
-        case Pet.Felguard:
-          modifier *= 1 + 0.01 * playerState.Talents['Master Demonologist']
-          break
-      }
-    }
-
-    if (playerState.Talents['Soul Link'] === 1) {
-      modifier *= 1.05
-    }
-
     if (playerState.Auras.includes(AuraId.FerociousInspiration)) {
       modifier *= Math.pow(
         1.03,
@@ -215,9 +192,7 @@ export default function StatsDisplay() {
     let modifier =
       Object.values(playerState.Stats)
         .map((obj) => obj[Stat.ShadowModifier] || 1)
-        .reduce((a, b) => a * b) *
-      getShadowAndFireModifier() *
-      (1 + (0.02 * playerState.Talents['Shadow Mastery'] || 0))
+        .reduce((a, b) => a * b) * getShadowAndFireModifier()
 
     return `${Math.round(modifier * 100)}%`
   }
@@ -282,8 +257,8 @@ export default function StatsDisplay() {
     value: () => string
     condition?: () => boolean
   }[] = [
-    { name: 'Health', value: () => Math.round(getHealth()).toString() },
-    { name: 'Mana', value: () => Math.round(getMana()).toString() },
+    { name: 'Health', value: () => Math.round(GetHealth()).toString() },
+    { name: 'Mana', value: () => Math.round(GetMana()).toString() },
     { name: 'Stamina', value: () => Math.round(getStamina()).toString() },
     { name: 'Intellect', value: () => Math.round(getIntellect()).toString() },
     { name: 'Spirit', value: () => Math.round(getSpirit()).toString() },

@@ -279,7 +279,7 @@ export function getBaseStats(
 
   if (raceObj && raceObj.Stats) {
     Object.entries(raceObj.Stats).forEach((stat) => {
-      addOrMultiplyStat(statsObj || stats, stat[0] as unknown as Stat, stat[1])
+      AddOrMultiplyStat(statsObj || stats, stat[0] as unknown as Stat, stat[1])
     })
   }
 
@@ -297,7 +297,7 @@ export function getAurasStats(
 
     if (auraObj && auraObj.Stats) {
       Object.entries(auraObj.Stats).forEach((auraStat) => {
-        addOrMultiplyStat(
+        AddOrMultiplyStat(
           statsObj || stats,
           auraStat[0] as unknown as Stat,
           auraStat[1]
@@ -321,7 +321,7 @@ export function getItemsStats(
     if (itemObj?.Stats) {
       Object.entries(itemObj.Stats).forEach((item) => {
         if (item[0] in Stat) {
-          addOrMultiplyStat(
+          AddOrMultiplyStat(
             statsObj || stats,
             item[0] as unknown as Stat,
             item[1]
@@ -355,7 +355,7 @@ export function getGemsStats(
 
             gem?.Stats &&
               Object.entries(gem.Stats).forEach((gemStat) => {
-                addOrMultiplyStat(
+                AddOrMultiplyStat(
                   statsObj || stats,
                   gemStat[0] as unknown as Stat,
                   gemStat[1]
@@ -374,7 +374,7 @@ export function getGemsStats(
 
           if (itemObj?.SocketBonus) {
             Object.entries(itemObj.SocketBonus).forEach((stat) => {
-              addOrMultiplyStat(
+              AddOrMultiplyStat(
                 statsObj || stats,
                 stat[0] as unknown as Stat,
                 stat[1]
@@ -408,7 +408,7 @@ export function getEnchantsStats(
       if (enchantObj?.Stats) {
         Object.entries(enchantObj.Stats).forEach((prop) => {
           if (prop[0] in Stat) {
-            addOrMultiplyStat(
+            AddOrMultiplyStat(
               statsObj || stats,
               prop[0] as unknown as Stat,
               prop[1]
@@ -418,6 +418,101 @@ export function getEnchantsStats(
       }
     }
   })
+
+  return statsObj || stats
+}
+
+export function GetTalentsStats(
+  talents: TalentStore,
+  settings: Settings,
+  statsObj?: StatsCollection
+): StatsCollection {
+  let stats: StatsCollection = JSON.parse(JSON.stringify(InitialPlayerStats))
+  const demonicEmbraceAmount = talents['Demonic Embrace'] || 0
+
+  AddOrMultiplyStat(statsObj || stats, Stat.HitChance, talents.Suppression || 0)
+  AddOrMultiplyStat(
+    statsObj || stats,
+    Stat.ShadowModifier,
+    1 + (0.03 * talents['Shadow Mastery'] || 0)
+  )
+  AddOrMultiplyStat(
+    statsObj || stats,
+    Stat.ShadowModifier,
+    1 + (0.01 * talents.Malediction || 0)
+  )
+  AddOrMultiplyStat(
+    statsObj || stats,
+    Stat.FireModifier,
+    1 + (0.01 * talents.Malediction || 0)
+  )
+  AddOrMultiplyStat(
+    statsObj || stats,
+    Stat.StaminaModifier,
+    demonicEmbraceAmount === 1
+      ? 1.04
+      : demonicEmbraceAmount === 2
+      ? 1.07
+      : demonicEmbraceAmount === 3
+      ? 1.1
+      : 1
+  )
+  AddOrMultiplyStat(
+    statsObj || stats,
+    Stat.HealthModifier,
+    1 + (0.01 * talents['Fel Vitality'] || 0)
+  )
+  AddOrMultiplyStat(
+    statsObj || stats,
+    Stat.ManaModifier,
+    1 + (0.01 * talents['Fel Vitality'] || 0)
+  )
+  AddOrMultiplyStat(
+    statsObj || stats,
+    Stat.SpellPower,
+    Auras.find((x) => x.Id === AuraId.FelArmor)!.Stats![Stat.SpellPower]! *
+      0.1 *
+      talents['Demonic Aegis']
+  )
+
+  if (
+    settings[Setting.petChoice] === Pet.Imp ||
+    settings[Setting.petChoice] === Pet.Felguard
+  ) {
+    AddOrMultiplyStat(
+      statsObj || stats,
+      Stat.FireModifier,
+      1 + (0.01 * talents['Master Demonologist'] || 0)
+    )
+  }
+
+  if (
+    settings[Setting.petChoice] === Pet.Succubus ||
+    settings[Setting.petChoice] === Pet.Felguard
+  ) {
+    AddOrMultiplyStat(
+      statsObj || stats,
+      Stat.ShadowModifier,
+      1 + (0.01 * talents['Master Demonologist'] || 0)
+    )
+  }
+
+  AddOrMultiplyStat(
+    statsObj || stats,
+    Stat.CritChance,
+    2 * talents['Demonic Tactics'] || 0
+  )
+  AddOrMultiplyStat(
+    statsObj || stats,
+    Stat.FireModifier,
+    1 + (0.02 * talents['Demonic Pact'] || 0)
+  )
+  AddOrMultiplyStat(
+    statsObj || stats,
+    Stat.ShadowModifier,
+    1 + (0.02 * talents['Demonic Pact'] || 0)
+  )
+  AddOrMultiplyStat(statsObj || stats, Stat.CritChance, talents.Backlash || 0)
 
   return statsObj || stats
 }
@@ -436,11 +531,12 @@ export function getItemSetCounts(items: ItemSlotDetailedStruct): SetsStruct {
   return sets
 }
 
-export function addOrMultiplyStat(
+export function AddOrMultiplyStat(
   statsCollection: StatsCollection,
   stat: Stat,
   value: number
 ): void {
+  // TODO
   if (Stat[stat].includes('Modifier')) {
     statsCollection[stat]! *= value
   } else {
@@ -471,6 +567,7 @@ export function calculatePlayerStats(
     playerState.SelectedEnchants,
     mainStatsObj
   )
+  GetTalentsStats(playerState.Talents, playerState.Settings, mainStatsObj)
 
   return mainStatsObj
 }
@@ -487,15 +584,10 @@ export function getPlayerHitPercent(
 ): number {
   let hitPercent =
     (hitRating || getPlayerHitRating(playerState)) /
-    StatConstant.HitRatingPerPercent
-
-  if (playerState.Auras.includes(AuraId.InspiringPresence)) {
-    hitPercent++
-  }
-
-  if (playerState.Auras.includes(AuraId.TotemOfWrath)) {
-    hitPercent += 3 * parseInt(playerState.Settings[Setting.totemOfWrathAmount])
-  }
+      StatConstant.HitRatingPerPercent +
+    Object.values(playerState.Stats)
+      .map((obj) => obj[Stat.HitChance] || 0)
+      .reduce((a, b) => a + b)
 
   return hitPercent
 }

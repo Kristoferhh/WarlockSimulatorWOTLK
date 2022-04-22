@@ -138,7 +138,9 @@ export enum Race {
 
 export enum Stat {
   Health,
+  HealthModifier,
   Mana,
+  ManaModifier,
   Stamina,
   Intellect,
   Spirit,
@@ -146,7 +148,9 @@ export enum Stat {
   ShadowPower,
   FirePower,
   CritRating,
+  CritChance,
   HitRating,
+  HitChance,
   HasteRating,
   ShadowModifier,
   FireModifier,
@@ -191,6 +195,7 @@ export type PlayerStats = {
   Items: StatsCollection
   Gems: StatsCollection
   Enchants: StatsCollection
+  Talents: StatsCollection
 }
 
 // TODO change to PascalCase
@@ -334,7 +339,9 @@ export const InitialSelectedItemsAndEnchants: ItemSlotDetailedStruct = {
 
 export const InitialPlayerStats: StatsCollection = {
   [Stat.Health]: 0,
+  [Stat.HealthModifier]: 1,
   [Stat.Mana]: 0,
+  [Stat.ManaModifier]: 1,
   [Stat.Stamina]: 0,
   [Stat.Intellect]: 0,
   [Stat.Spirit]: 0,
@@ -342,7 +349,9 @@ export const InitialPlayerStats: StatsCollection = {
   [Stat.ShadowPower]: 0,
   [Stat.FirePower]: 0,
   [Stat.CritRating]: 0,
+  [Stat.CritChance]: 0,
   [Stat.HitRating]: 0,
+  [Stat.HitChance]: 0,
   [Stat.HasteRating]: 0,
   [Stat.ShadowModifier]: 1,
   [Stat.FireModifier]: 1,
@@ -422,6 +431,11 @@ export interface PlayerState {
   Settings: Settings
   Profiles: ProfileContainer[]
   Sets: SetsStruct
+}
+
+export enum MouseButtonClick {
+  LeftClick = 0,
+  RightClick = 2,
 }
 
 export type SetsStruct = {
