@@ -513,6 +513,11 @@ export function GetTalentsStats(
     1 + (0.02 * talents['Demonic Pact'] || 0)
   )
   AddOrMultiplyStat(statsObj || stats, Stat.CritChance, talents.Backlash || 0)
+  AddOrMultiplyStat(
+    statsObj || stats,
+    Stat.FireModifier,
+    1 + 0.03 * talents.Emberstorm
+  )
 
   return statsObj || stats
 }

@@ -381,27 +381,6 @@ export default function SettingsDisplay() {
             />
           </li>
         )}
-        {playerStore.Auras.includes(AuraId.CurseOfTheElements) && (
-          <li id='improvedCurseOfTheElements'>
-            <label className='settings-left'>{t('Malediction')}?</label>
-            <select
-              className='settings-right'
-              name='improvedCurseOfTheElements'
-              onChange={(e) =>
-                settingModifiedHandler(
-                  Setting.improvedCurseOfTheElements,
-                  e.target.value
-                )
-              }
-              value={playerStore.Settings[Setting.improvedCurseOfTheElements]}
-            >
-              <option value='0'>{t('No')}</option>
-              <option value='1'>1/3</option>
-              <option value='2'>2/3</option>
-              <option value='3'>3/3</option>
-            </select>
-          </li>
-        )}
         {playerStore.Auras.includes(AuraId.PowerInfusion) && (
           <li id='powerInfusionAmount'>
             <label className='settings-left' htmlFor='powerInfusionAmount'>
@@ -465,28 +444,6 @@ export default function SettingsDisplay() {
                   {number}
                 </option>
               ))}
-            </select>
-          </li>
-        )}
-        {playerStore.Auras.includes(AuraId.PrayerOfSpirit) && (
-          <li id='improvedDivineSpirit'>
-            <label className='settings-left' htmlFor='improvedDivineSpirit'>
-              {t('Improved Divine Spirit')}?
-            </label>
-            <select
-              className='settings-right'
-              name='improvedDivineSpirit'
-              onChange={(e) =>
-                settingModifiedHandler(
-                  Setting.improvedDivineSpirit,
-                  e.target.value
-                )
-              }
-              value={playerStore.Settings[Setting.improvedDivineSpirit]}
-            >
-              <option value='0'>{t('No')}</option>
-              <option value='1'>1/2</option>
-              <option value='2'>2/2</option>
             </select>
           </li>
         )}

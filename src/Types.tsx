@@ -201,8 +201,6 @@ export type PlayerStats = {
 // TODO change to PascalCase
 export enum Setting {
   race = 'race',
-  improvedDivineSpirit = 'improvedDivineSpirit',
-  improvedCurseOfTheElements = 'improvedCurseOfTheElements',
   iterations = 'iterations',
   minFightLength = 'minFightLength',
   maxFightLength = 'maxFightLength',
@@ -252,8 +250,6 @@ export type Settings = {
 
 export const InitialSettings: { [key in Setting]: string } = {
   [Setting.race]: Race.Gnome,
-  [Setting.improvedDivineSpirit]: '0',
-  [Setting.improvedCurseOfTheElements]: '0',
   [Setting.iterations]: '30000',
   [Setting.minFightLength]: '150',
   [Setting.maxFightLength]: '210',

@@ -99,13 +99,6 @@ export default function StatsDisplay() {
       .map((obj) => obj[Stat.SpellPower] || 0)
       .reduce((a, b) => a + b)
 
-    if (playerState.Auras.includes(AuraId.PrayerOfSpirit)) {
-      spellPower +=
-        getSpirit() *
-        0.05 *
-        parseInt(playerState.Settings[Setting.improvedDivineSpirit])
-    }
-
     return spellPower
   }
 
@@ -168,42 +161,18 @@ export default function StatsDisplay() {
     return `${hasteRating} (${hastePercent.toFixed(2)}%)`
   }
 
-  function getShadowAndFireModifier(): number {
-    let modifier = 1
-
-    if (playerState.Auras.includes(AuraId.CurseOfTheElements)) {
-      modifier *=
-        1.1 +
-        0.01 *
-          parseInt(playerState.Settings[Setting.improvedCurseOfTheElements])
-    }
-
-    if (playerState.Auras.includes(AuraId.FerociousInspiration)) {
-      modifier *= Math.pow(
-        1.03,
-        parseInt(playerState.Settings[Setting.ferociousInspirationAmount])
-      )
-    }
-
-    return modifier
-  }
-
   function getShadowModifier(): string {
-    let modifier =
-      Object.values(playerState.Stats)
-        .map((obj) => obj[Stat.ShadowModifier] || 1)
-        .reduce((a, b) => a * b) * getShadowAndFireModifier()
+    let modifier = Object.values(playerState.Stats)
+      .map((obj) => obj[Stat.ShadowModifier] || 1)
+      .reduce((a, b) => a * b)
 
     return `${Math.round(modifier * 100)}%`
   }
 
   function getFireModifier(): string {
-    let modifier =
-      Object.values(playerState.Stats)
-        .map((obj) => obj[Stat.FireModifier] || 1)
-        .reduce((a, b) => a * b) * getShadowAndFireModifier()
-
-    modifier *= 1 + (0.02 * playerState.Talents.Emberstorm || 0)
+    let modifier = Object.values(playerState.Stats)
+      .map((obj) => obj[Stat.FireModifier] || 1)
+      .reduce((a, b) => a * b)
 
     return `${Math.round(modifier * 100)}%`
   }
