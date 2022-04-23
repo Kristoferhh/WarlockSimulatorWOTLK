@@ -343,7 +343,6 @@ EMSCRIPTEN_BINDINGS(module) {
       .property("survivalHunterAgility", &PlayerSettings::survival_hunter_agility)
       .property("hasImmolate", &PlayerSettings::has_immolate)
       .property("hasCorruption", &PlayerSettings::has_corruption)
-      .property("hasSiphonLife", &PlayerSettings::has_siphon_life)
       .property("hasUnstableAffliction", &PlayerSettings::has_unstable_affliction)
       .property("hasHaunt", &PlayerSettings::has_haunt)
       .property("hasSearingPain", &PlayerSettings::has_searing_pain)

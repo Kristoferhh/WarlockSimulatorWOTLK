@@ -274,13 +274,6 @@ void Simulation::CastGcdSpells(const double kFightTimeRemaining) const {
       SelectedSpellHandler(player.spells.unstable_affliction, predicted_damage_of_spells, kFightTimeRemaining);
     }
 
-    // Cast Siphon Life if it's not up (todo: add option to only Cast it
-    // while ISB is active if not using custom ISB uptime %)
-    if (player.gcd_remaining <= 0 && player.spells.siphon_life != nullptr && !player.auras.siphon_life->active &&
-        player.spells.siphon_life->CanCast() && kFightTimeRemaining >= player.auras.siphon_life->duration) {
-      SelectedSpellHandler(player.spells.siphon_life, predicted_damage_of_spells, kFightTimeRemaining);
-    }
-
     // Cast Immolate if it's not up or about to expire
     if (player.gcd_remaining <= 0 && player.spells.immolate != nullptr && player.spells.immolate->CanCast() &&
         (!player.auras.immolate->active ||

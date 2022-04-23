@@ -13,7 +13,6 @@ struct Spells {
   std::shared_ptr<Spell> searing_pain;
   std::shared_ptr<Spell> corruption;
   std::shared_ptr<Spell> unstable_affliction;
-  std::shared_ptr<Spell> siphon_life;
   std::shared_ptr<Spell> immolate;
   std::shared_ptr<Spell> haunt;
   std::shared_ptr<Spell> curse_of_agony;

@@ -146,11 +146,6 @@ void Player::Initialize(Simulation* simulation_ptr) {
       auras.unstable_affliction = std::make_shared<UnstableAfflictionDot>(*this);
     }
 
-    if (talents.siphon_life == 1 &&
-        (settings.has_siphon_life || settings.rotation_option == EmbindConstant::kSimChooses)) {
-      auras.siphon_life = std::make_shared<SiphonLifeDot>(*this);
-    }
-
     if (settings.has_immolate || settings.rotation_option == EmbindConstant::kSimChooses) {
       auras.immolate = std::make_shared<ImmolateDot>(*this);
     }
@@ -255,11 +250,6 @@ void Player::Initialize(Simulation* simulation_ptr) {
     if (auras.unstable_affliction != nullptr) {
       spells.unstable_affliction = std::make_shared<UnstableAffliction>(*this, nullptr, auras.unstable_affliction);
       auras.unstable_affliction->parent_spell = spells.unstable_affliction;
-    }
-
-    if (auras.siphon_life != nullptr) {
-      spells.siphon_life = std::make_shared<SiphonLife>(*this, nullptr, auras.siphon_life);
-      auras.siphon_life->parent_spell = spells.siphon_life;
     }
 
     if (auras.immolate != nullptr) {

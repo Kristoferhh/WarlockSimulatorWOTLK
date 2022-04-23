@@ -283,6 +283,7 @@ void Entity::Tick(const double kTime) {
   // TLC needs to tick before other spells because otherwise a spell might proc TLC and then later in the same loop,
   // during the same millisecond of the fight, tick down TLC's cooldown
   // TODO find a better solution for this since this might occur for other spells as well.
+  // Maybe check if the applied_at value is the current fight time
   if (spells.the_lightning_capacitor != nullptr && spells.the_lightning_capacitor->cooldown_remaining > 0) {
     spells.the_lightning_capacitor->Tick(kTime);
   }

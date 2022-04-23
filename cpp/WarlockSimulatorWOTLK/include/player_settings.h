@@ -48,7 +48,6 @@ struct PlayerSettings {
   int survival_hunter_agility = 0;
   bool has_immolate = false;
   bool has_corruption = false;
-  bool has_siphon_life = false;
   bool has_unstable_affliction = false;
   bool has_haunt = false;
   bool has_searing_pain = false;

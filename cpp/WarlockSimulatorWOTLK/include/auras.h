@@ -8,7 +8,6 @@ struct Aura;
 struct Auras {
   std::shared_ptr<DamageOverTime> corruption;
   std::shared_ptr<DamageOverTime> unstable_affliction;
-  std::shared_ptr<DamageOverTime> siphon_life;
   std::shared_ptr<DamageOverTime> immolate;
   std::shared_ptr<DamageOverTime> curse_of_agony;
   std::shared_ptr<DamageOverTime> curse_of_doom;
