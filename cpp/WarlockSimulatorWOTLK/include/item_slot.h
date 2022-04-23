@@ -1,22 +1,21 @@
 #pragma once
 
-struct Items {
+struct ItemSlot {
   int head;
   int neck;
   int shoulders;
   int back;
   int chest;
-  int bracers;
-  int gloves;
-  int belt;
+  int wrist;
+  int hands;
+  int waist;
   int legs;
-  int boots;
-  int ring_1;
-  int ring_2;
+  int feet;
+  int finger_1;
+  int finger_2;
   int trinket_1;
   int trinket_2;
-  int main_hand;
+  int weapon;
   int off_hand;
-  int two_hand;
   int wand;
 };

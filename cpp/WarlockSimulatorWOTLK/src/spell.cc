@@ -1,31 +1,30 @@
-#include <utility>
-
 #include "../include/spell.h"
 
-#include "../include/entity.h"
-#include "../include/combat_log_breakdown.h"
-#include "../include/player.h"
-#include "../include/talents.h"
-#include "../include/common.h"
+#include <utility>
+
 #include "../include/aura.h"
-#include "../include/player_settings.h"
-#include "../include/on_resist_proc.h"
-#include "../include/sets.h"
+#include "../include/aura_selection.h"
+#include "../include/combat_log_breakdown.h"
+#include "../include/common.h"
 #include "../include/damage_over_time.h"
-#include "../include/pet.h"
+#include "../include/entity.h"
 #include "../include/on_crit_proc.h"
 #include "../include/on_damage_proc.h"
 #include "../include/on_hit_proc.h"
-#include "../include/aura_selection.h"
+#include "../include/on_resist_proc.h"
+#include "../include/pet.h"
+#include "../include/player.h"
+#include "../include/player_settings.h"
+#include "../include/sets.h"
+#include "../include/talents.h"
 
 Spell::Spell(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
-  : entity(entity_param),
-    aura_effect(std::move(aura)),
-    dot_effect(std::move(dot)),
-    spell_school(SpellSchool::kNoSchool),
-    attack_type(AttackType::kNoAttackType),
-    spell_type(SpellType::kNoSpellType) {
-}
+    : entity(entity_param),
+      aura_effect(std::move(aura)),
+      dot_effect(std::move(dot)),
+      spell_school(SpellSchool::kNoSchool),
+      attack_type(AttackType::kNoAttackType),
+      spell_type(SpellType::kNoSpellType) {}
 
 void Spell::Setup() {
   if (min_dmg > 0 && max_dmg > 0) {
@@ -40,8 +39,15 @@ void Spell::Setup() {
     entity.combat_log_breakdown.insert({name, std::make_shared<CombatLogBreakdown>(name)});
   }
 
-  if (entity.entity_type == EntityType::kPlayer && spell_type == SpellType::kDestruction) {
-    mana_cost *= 1 - 0.01 * entity.player->talents.cataclysm;
+  if (entity.entity_type == EntityType::kPlayer) {
+    if (spell_type == SpellType::kDestruction) {
+      mana_cost *= 1 - (entity.player->talents.cataclysm == 1   ? 0.04
+                        : entity.player->talents.cataclysm == 2 ? 0.07
+                        : entity.player->talents.cataclysm == 3 ? 0.1
+                                                                : 1);
+    } else if (spell_type == SpellType::kAffliction) {
+      mana_cost *= 1 - 0.02 * entity.player->talents.suppression;
+    }
   }
 
   entity.spell_list.push_back(this);
@@ -132,7 +138,8 @@ void Spell::Cast() {
     ManaGainOnCast();
   }
 
-  const SpellCastResult kSpellCastResult = attack_type == AttackType::kPhysical ? PhysicalSpellCast() : MagicSpellCast();
+  const SpellCastResult kSpellCastResult =
+      attack_type == AttackType::kPhysical ? PhysicalSpellCast() : MagicSpellCast();
 
   if (kSpellCastResult.is_miss || kSpellCastResult.is_dodge) {
     return;
@@ -155,8 +162,8 @@ void Spell::Damage(const bool kIsCrit, const bool kIsGlancing) {
     total_damage *= crit_multiplier;
     OnCritProcs();
   } else if (spell_school == SpellSchool::kShadow && dot_effect == nullptr &&
-             entity.player->auras.improved_shadow_bolt != nullptr && entity.player->auras.improved_shadow_bolt->active &&
-             !entity.player->settings.using_custom_isb_uptime) {
+             entity.player->auras.improved_shadow_bolt != nullptr &&
+             entity.player->auras.improved_shadow_bolt->active && !entity.player->settings.using_custom_isb_uptime) {
     entity.player->auras.improved_shadow_bolt->DecrementStacks();
   }
 
@@ -175,17 +182,6 @@ void Spell::Damage(const bool kIsCrit, const bool kIsGlancing) {
     CombatLogDamage(kIsCrit, kIsGlancing, total_damage, kBaseDamage, kSpellPower, crit_multiplier, kDamageModifier,
                     kPartialResistMultiplier);
   }
-
-  // T5 4pc
-  if (entity.entity_type == EntityType::kPlayer && entity.player->sets.t5 >= 4) {
-    if (name == SpellName::kShadowBolt && entity.player->auras.corruption != nullptr &&
-        entity.player->auras.corruption->active) {
-      entity.player->auras.corruption->t5_bonus_modifier *= 1.1;
-    } else if (name == SpellName::kIncinerate && entity.player->auras.immolate != nullptr &&
-               entity.player->auras.immolate->active) {
-      entity.player->auras.immolate->t5_bonus_modifier *= 1.1;
-    }
-  }
 }
 
 // Returns the non-RNG Damage of the spell (basically just the base Damage +
@@ -193,7 +189,7 @@ void Spell::Damage(const bool kIsCrit, const bool kIsGlancing) {
 std::vector<double> Spell::GetConstantDamage() {
   auto total_damage = GetBaseDamage();
   const double kBaseDamage = total_damage;
-  const double kSpellPower = entity.GetSpellPower(true, spell_school);
+  const double kSpellPower = entity.GetSpellPower(spell_school);
   const double kDamageModifier = entity.GetDamageModifier(*this, false);
   const double kPartialResistMultiplier = entity.GetPartialResistMultiplier(spell_school);
 
@@ -225,6 +221,7 @@ std::vector<double> Spell::GetConstantDamage() {
   return std::vector{kBaseDamage, total_damage, kDamageModifier, kPartialResistMultiplier, kSpellPower};
 }
 
+// TODO this doesn't need to be a function, it's a constant throughout the entire simulation
 double Spell::GetCritMultiplier(const double kEntityCritMultiplier) const {
   auto crit_multiplier = kEntityCritMultiplier;
 
@@ -415,7 +412,8 @@ SpellCastResult Spell::PhysicalSpellCast() const {
   auto is_glancing = false;
   auto is_miss = false;
   auto is_dodge = false;
-  const auto kCritChance = can_crit ? static_cast<int>((entity.GetMeleeCritChance() * entity.kFloatNumberMultiplier)) : 0;
+  const auto kCritChance =
+      can_crit ? static_cast<int>((entity.GetMeleeCritChance() * entity.kFloatNumberMultiplier)) : 0;
   const auto kDodgeChance =
       kCritChance + static_cast<int>(StatConstant::kBaseEnemyDodgeChance * entity.kFloatNumberMultiplier);
   const auto kMissChance =
@@ -491,9 +489,9 @@ void Spell::OnSpellHit(const SpellCastResult& kSpellCastResult) {
   }
 }
 
-void Spell::CombatLogDamage(const bool kIsCrit, const bool kIsGlancing, const double kTotalDamage, const double kSpellBaseDamage,
-                            const double kSpellPower, const double kCritMultiplier, const double kDamageModifier,
-                            const double kPartialResistMultiplier) const {
+void Spell::CombatLogDamage(const bool kIsCrit, const bool kIsGlancing, const double kTotalDamage,
+                            const double kSpellBaseDamage, const double kSpellPower, const double kCritMultiplier,
+                            const double kDamageModifier, const double kPartialResistMultiplier) const {
   auto msg = name + " ";
 
   if (kIsCrit) {
@@ -522,7 +520,7 @@ void Spell::CombatLogDamage(const bool kIsCrit, const bool kIsGlancing, const do
     }
     msg += " - " + DoubleToString(round(entity.pet->GetAttackPower())) + " Attack Power";
     msg += " - " + DoubleToString(round(entity.pet->enemy_damage_reduction_from_armor * 10000) / 100.0, 2) +
-        "% Damage Modifier (Armor)";
+           "% Damage Modifier (Armor)";
   }
 
   if (kIsCrit) {
@@ -550,14 +548,13 @@ void Spell::ManaGainOnCast() const {
   }
 }
 
-ShadowBolt::ShadowBolt(Entity& entity_param)
-  : Spell(entity_param) {
+ShadowBolt::ShadowBolt(Entity& entity_param) : Spell(entity_param) {
   name = SpellName::kShadowBolt;
   cast_time = CalculateCastTime();
-  mana_cost = 420;
+  mana_cost = 0.17;
   coefficient = 3 / 3.5 + 0.04 * entity_param.player->talents.shadow_and_flame;
-  min_dmg = 544;
-  max_dmg = 607;
+  min_dmg = 690;
+  max_dmg = 770;
   does_damage = true;
   can_crit = true;
   spell_school = SpellSchool::kShadow;
@@ -584,69 +581,68 @@ void ShadowBolt::StartCast(double) {
 
 double ShadowBolt::CalculateCastTime() const { return 3 - 0.1 * entity.player->talents.bane; }
 
-Incinerate::Incinerate(Entity& entity_param)
-  : Spell(entity_param) {
+Incinerate::Incinerate(Entity& entity_param) : Spell(entity_param) {
   name = SpellName::kIncinerate;
-  cast_time = 2.5 * (1 - 0.02 * entity_param.player->talents.emberstorm);
-  mana_cost = 355;
+  cast_time = 2.5 - 0.05 * entity_param.player->talents.emberstorm;
+  mana_cost = 0.14;
   coefficient = 2.5 / 3.5 + 0.04 * entity_param.player->talents.shadow_and_flame;
-  min_dmg = 444;
-  max_dmg = 514;
+  min_dmg = 582;
+  max_dmg = 676;
   bonus_damage_from_immolate_min = 111;
   bonus_damage_from_immolate_max = 128;
   bonus_damage_from_immolate = (bonus_damage_from_immolate_min + bonus_damage_from_immolate_max) / 2.0;
   does_damage = true;
   can_crit = true;
+  can_miss = true;
   spell_school = SpellSchool::kFire;
   spell_type = SpellType::kDestruction;
-  can_miss = true;
   attack_type = AttackType::kMagical;
   Spell::Setup();
 }
 
-SearingPain::SearingPain(Entity& entity_param)
-  : Spell(entity_param) {
+SearingPain::SearingPain(Entity& entity_param) : Spell(entity_param) {
   name = SpellName::kSearingPain;
   cast_time = 1.5;
-  mana_cost = 205;
+  mana_cost = 0.08;
   coefficient = 1.5 / 3.5;
-  min_dmg = 270;
-  max_dmg = 320;
+  min_dmg = 343;
+  max_dmg = 405;
+  bonus_crit_chance = entity_param.player->talents.improved_searing_pain == 1   ? 4
+                      : entity_param.player->talents.improved_searing_pain == 2 ? 7
+                      : entity_param.player->talents.improved_searing_pain == 3 ? 10
+                                                                                : 0;
   does_damage = true;
   can_crit = true;
+  can_miss = true;
   spell_school = SpellSchool::kFire;
   spell_type = SpellType::kDestruction;
-  bonus_crit_chance = 4 * entity_param.player->talents.improved_searing_pain;
-  can_miss = true;
   attack_type = AttackType::kMagical;
   Spell::Setup();
 }
 
-SoulFire::SoulFire(Entity& entity_param)
-  : Spell(entity_param) {
+SoulFire::SoulFire(Entity& entity_param) : Spell(entity_param) {
   name = SpellName::kSoulFire;
   cast_time = 6 - 0.4 * entity_param.player->talents.bane;
-  mana_cost = 250;
+  mana_cost = 0.09;
   coefficient = 1.15;
-  min_dmg = 1003;
-  max_dmg = 1257;
+  min_dmg = 1323;
+  max_dmg = 1657;
   does_damage = true;
   can_crit = true;
+  can_miss = true;
   spell_school = SpellSchool::kFire;
   spell_type = SpellType::kDestruction;
-  can_miss = true;
   attack_type = AttackType::kMagical;
   Spell::Setup();
 }
 
-Shadowburn::Shadowburn(Entity& entity_param)
-  : Spell(entity_param) {
+Shadowburn::Shadowburn(Entity& entity_param) : Spell(entity_param) {
   name = SpellName::kShadowburn;
   cooldown = 15;
-  mana_cost = 515;
+  mana_cost = 0.2;
   coefficient = 0.22;
-  min_dmg = 597;
-  max_dmg = 665;
+  min_dmg = 775;
+  max_dmg = 865;
   does_damage = true;
   can_crit = true;
   is_finisher = true;
@@ -657,13 +653,12 @@ Shadowburn::Shadowburn(Entity& entity_param)
   Spell::Setup();
 }
 
-DeathCoil::DeathCoil(Entity& entity_param)
-  : Spell(entity_param) {
+DeathCoil::DeathCoil(Entity& entity_param) : Spell(entity_param) {
   name = SpellName::kDeathCoil;
   cooldown = 120;
-  mana_cost = 600;
-  coefficient = 0.4286;
-  base_damage = 526;
+  mana_cost = 0.23;
+  coefficient = 1.5 / 3.5;
+  base_damage = 790;
   does_damage = true;
   is_finisher = true;
   spell_school = SpellSchool::kShadow;
@@ -673,13 +668,12 @@ DeathCoil::DeathCoil(Entity& entity_param)
   Spell::Setup();
 }
 
-Shadowfury::Shadowfury(Entity& entity_param)
-  : Spell(entity_param) {
+Shadowfury::Shadowfury(Entity& entity_param) : Spell(entity_param) {
   name = SpellName::kShadowfury;
   cast_time = 0.5;
-  mana_cost = 710;
-  min_dmg = 612;
-  max_dmg = 728;
+  mana_cost = 0.27;
+  min_dmg = 968;
+  max_dmg = 1152;
   does_damage = true;
   can_crit = true;
   spell_school = SpellSchool::kShadow;
@@ -692,9 +686,7 @@ Shadowfury::Shadowfury(Entity& entity_param)
   Spell::Setup();
 }
 
-SeedOfCorruption::SeedOfCorruption(Entity& entity_param)
-  : Spell(entity_param),
-    aoe_cap(13580) {
+SeedOfCorruption::SeedOfCorruption(Entity& entity_param) : Spell(entity_param), aoe_cap(13580) {
   name = SpellName::kSeedOfCorruption;
   min_dmg = 1110;
   max_dmg = 1290;
@@ -711,11 +703,11 @@ SeedOfCorruption::SeedOfCorruption(Entity& entity_param)
 
 void SeedOfCorruption::Damage(bool, bool) {
   const double kBaseDamage = entity.player->settings.randomize_values && min_dmg > 0 && max_dmg > 0
-                               ? entity.player->rng.Range(min_dmg, max_dmg)
-                               : base_damage;
+                                 ? entity.player->rng.Range(min_dmg, max_dmg)
+                                 : base_damage;
   const int kEnemyAmount = entity.player->settings.enemy_amount - 1;  // Minus one because the enemy that Seed is
                                                                       // being Cast on doesn't get hit
-  const double kSpellPower = entity.GetSpellPower(true, spell_school);
+  const double kSpellPower = entity.GetSpellPower(spell_school);
   auto resist_amount = 0;
   auto crit_amount = 0;
   auto crit_damage_multiplier = 0.0;
@@ -730,7 +722,7 @@ void SeedOfCorruption::Damage(bool, bool) {
   // Remove debuffs from the modifier since they ignore the AOE cap, so we'll
   // add the debuff % modifiers after the Damage has been calculated.
   if (entity.player->selected_auras.curse_of_the_elements) {
-    const double kModifier = 1.1 + 0.01 * entity.player->settings.improved_curse_of_the_elements;
+    constexpr double kModifier = 1.13;
     internal_modifier /= kModifier;
     external_modifier *= kModifier;
   }
@@ -746,13 +738,12 @@ void SeedOfCorruption::Damage(bool, bool) {
   }
 
   for (int i = 0; i < kEnemyAmount; i++) {
-    // Check for a resist
     if (!entity.IsSpellHit(spell_type)) {
       resist_amount++;
       OnResistProcs();
     } else {
       OnDamageProcs();
-      // Check for a crit
+
       if (entity.IsSpellCrit(spell_type)) {
         crit_amount++;
         OnCritProcs();
@@ -760,14 +751,8 @@ void SeedOfCorruption::Damage(bool, bool) {
     }
   }
 
-  auto individual_seed_damage = kBaseDamage + kSpellPower * coefficient;
-  // Oblivion Raiment (dungeon set) 4pc bonus
-  if (entity.player->sets.oblivion >= 4) {
-    individual_seed_damage += 180;
-  }
-  individual_seed_damage *= internal_modifier;
-
   const int kEnemiesHit = kEnemyAmount - resist_amount;
+  auto individual_seed_damage = (kBaseDamage + kSpellPower * coefficient) * internal_modifier;
   auto total_seed_damage = individual_seed_damage * kEnemiesHit;
   // Because of the Seed bug explained below, we need to use this formula to
   // calculate the actual aoe cap for the amount of mobs that will be hit by the
@@ -808,9 +793,11 @@ void SeedOfCorruption::Damage(bool, bool) {
                " Crits) - " + DoubleToString(kBaseDamage, 1) + " Base Damage - " + DoubleToString(coefficient, 3) +
                " Coefficient - " + DoubleToString(kSpellPower) + " Spell Power - " +
                DoubleToString(round(internal_modifier * external_modifier * 1000) / 10, 1) + "% Modifier - ";
+
     if (crit_amount > 0) {
       msg += DoubleToString(crit_damage_multiplier, 3) + "% Crit Multiplier";
     }
+
     msg += " - " + DoubleToString(round(kPartialResistMultiplier * 1000) / 10) + "% Partial Resist Multiplier)";
     entity.CombatLog(msg);
   }
@@ -825,10 +812,9 @@ void SeedOfCorruption::Damage(bool, bool) {
 }
 
 Corruption::Corruption(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
-  : Spell(entity_param, std::move(aura), std::move(dot)) {
+    : Spell(entity_param, std::move(aura), std::move(dot)) {
   name = SpellName::kCorruption;
-  mana_cost = 370;
-  cast_time = 2 - 0.4 * entity_param.player->talents.improved_corruption;
+  mana_cost = 0.14;
   spell_school = SpellSchool::kShadow;
   spell_type = SpellType::kAffliction;
   can_miss = true;
@@ -836,10 +822,11 @@ Corruption::Corruption(Entity& entity_param, std::shared_ptr<Aura> aura, std::sh
   Spell::Setup();
 }
 
-UnstableAffliction::UnstableAffliction(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
-  : Spell(entity_param, std::move(aura), std::move(dot)) {
+UnstableAffliction::UnstableAffliction(Entity& entity_param, std::shared_ptr<Aura> aura,
+                                       std::shared_ptr<DamageOverTime> dot)
+    : Spell(entity_param, std::move(aura), std::move(dot)) {
   name = SpellName::kUnstableAffliction;
-  mana_cost = 400;
+  mana_cost = 0.15;
   cast_time = 1.5;
   spell_school = SpellSchool::kShadow;
   spell_type = SpellType::kAffliction;
@@ -848,37 +835,26 @@ UnstableAffliction::UnstableAffliction(Entity& entity_param, std::shared_ptr<Aur
   Spell::Setup();
 }
 
-SiphonLife::SiphonLife(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
-  : Spell(entity_param, std::move(aura), std::move(dot)) {
-  name = SpellName::kSiphonLife;
-  mana_cost = 410;
-  spell_school = SpellSchool::kShadow;
-  spell_type = SpellType::kAffliction;
-  can_miss = true;
-  attack_type = AttackType::kMagical;
-  Spell::Setup();
-}
-
 Immolate::Immolate(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
-  : Spell(entity_param, std::move(aura), std::move(dot)) {
+    : Spell(entity_param, std::move(aura), std::move(dot)) {
   name = SpellName::kImmolate;
-  mana_cost = 445;
+  mana_cost = 0.17;
   cast_time = 2 - 0.1 * entity_param.player->talents.bane;
   does_damage = true;
   can_crit = true;
-  base_damage = 331;
+  can_miss = true;
+  base_damage = 460;
   coefficient = 0.2;
   spell_school = SpellSchool::kFire;
   spell_type = SpellType::kDestruction;
-  can_miss = true;
   attack_type = AttackType::kMagical;
   Spell::Setup();
 }
 
 CurseOfAgony::CurseOfAgony(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
-  : Spell(entity_param, std::move(aura), std::move(dot)) {
+    : Spell(entity_param, std::move(aura), std::move(dot)) {
   name = SpellName::kCurseOfAgony;
-  mana_cost = 265;
+  mana_cost = 0.1;
   spell_school = SpellSchool::kShadow;
   spell_type = SpellType::kAffliction;
   can_miss = true;
@@ -887,7 +863,7 @@ CurseOfAgony::CurseOfAgony(Entity& entity_param, std::shared_ptr<Aura> aura, std
 }
 
 CurseOfTheElements::CurseOfTheElements(Entity& entity_param, std::shared_ptr<Aura> aura)
-  : Spell(entity_param, std::move(aura)) {
+    : Spell(entity_param, std::move(aura)) {
   name = SpellName::kCurseOfTheElements;
   mana_cost = 260;
   spell_type = SpellType::kAffliction;
@@ -898,7 +874,7 @@ CurseOfTheElements::CurseOfTheElements(Entity& entity_param, std::shared_ptr<Aur
 }
 
 CurseOfRecklessness::CurseOfRecklessness(Entity& entity_param, std::shared_ptr<Aura> aura)
-  : Spell(entity_param, std::move(aura)) {
+    : Spell(entity_param, std::move(aura)) {
   name = SpellName::kCurseOfRecklessness;
   mana_cost = 160;
   spell_type = SpellType::kAffliction;
@@ -909,9 +885,9 @@ CurseOfRecklessness::CurseOfRecklessness(Entity& entity_param, std::shared_ptr<A
 }
 
 CurseOfDoom::CurseOfDoom(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
-  : Spell(entity_param, std::move(aura), std::move(dot)) {
+    : Spell(entity_param, std::move(aura), std::move(dot)) {
   name = SpellName::kCurseOfDoom;
-  mana_cost = 380;
+  mana_cost = 0.15;
   cooldown = 60;
   spell_school = SpellSchool::kShadow;
   spell_type = SpellType::kAffliction;
@@ -920,20 +896,16 @@ CurseOfDoom::CurseOfDoom(Entity& entity_param, std::shared_ptr<Aura> aura, std::
   Spell::Setup();
 }
 
-Conflagrate::Conflagrate(Entity& entity_param)
-  : Spell(entity_param) {
+Conflagrate::Conflagrate(Entity& entity_param) : Spell(entity_param) {
   name = SpellName::kConflagrate;
-  mana_cost = 305;
+  mana_cost = 0.16;
   cooldown = 10;
-  min_dmg = 579;
-  max_dmg = 721;
   coefficient = 1.5 / 3.5;
   does_damage = true;
-  is_finisher = true;
   can_crit = true;
+  can_miss = true;
   spell_school = SpellSchool::kFire;
   spell_type = SpellType::kDestruction;
-  can_miss = true;
   attack_type = AttackType::kMagical;
   Spell::Setup();
 }
@@ -947,28 +919,15 @@ void Conflagrate::Cast() {
   entity.player->auras.immolate->Fade();
 }
 
-DestructionPotion::DestructionPotion(Entity& entity_param, std::shared_ptr<Aura> aura)
-  : Spell(entity_param, std::move(aura)) {
-  name = SpellName::kDestructionPotion;
-  cooldown = 120;
-  is_item = true;
-  on_gcd = false;
-  Spell::Setup();
-}
-
-FlameCap::FlameCap(Entity& entity_param, std::shared_ptr<Aura> aura)
-  : Spell(entity_param, std::move(aura)) {
+FlameCap::FlameCap(Entity& entity_param, std::shared_ptr<Aura> aura) : Spell(entity_param, std::move(aura)) {
   name = SpellName::kFlameCap;
   cooldown = 180;
   is_item = true;
   on_gcd = false;
-  shared_cooldown_spells.push_back(SpellName::kChippedPowerCore);
-  shared_cooldown_spells.push_back(SpellName::kCrackedPowerCore);
   Spell::Setup();
 }
 
-BloodFury::BloodFury(Entity& entity_param, std::shared_ptr<Aura> aura)
-  : Spell(entity_param, std::move(aura)) {
+BloodFury::BloodFury(Entity& entity_param, std::shared_ptr<Aura> aura) : Spell(entity_param, std::move(aura)) {
   name = SpellName::kBloodFury;
   cooldown = 120;
   on_gcd = false;
@@ -976,8 +935,7 @@ BloodFury::BloodFury(Entity& entity_param, std::shared_ptr<Aura> aura)
   Spell::Setup();
 }
 
-Bloodlust::Bloodlust(Entity& entity_param, std::shared_ptr<Aura> aura)
-  : Spell(entity_param, std::move(aura)) {
+Bloodlust::Bloodlust(Entity& entity_param, std::shared_ptr<Aura> aura) : Spell(entity_param, std::move(aura)) {
   name = SpellName::kBloodlust;
   cooldown = 600;
   is_item = true;
@@ -986,46 +944,14 @@ Bloodlust::Bloodlust(Entity& entity_param, std::shared_ptr<Aura> aura)
   Spell::Setup();
 }
 
-DrumsOfBattle::DrumsOfBattle(Entity& entity_param, std::shared_ptr<Aura> aura)
-  : Spell(entity_param, std::move(aura)) {
-  name = SpellName::kDrumsOfBattle;
-  cooldown = 120;
-  on_gcd = false;
-  is_non_warlock_ability = true;
-  is_item = true;
-  Spell::Setup();
-}
-
-DrumsOfWar::DrumsOfWar(Entity& entity_param, std::shared_ptr<Aura> aura)
-  : Spell(entity_param, std::move(aura)) {
-  name = SpellName::kDrumsOfWar;
-  cooldown = 120;
-  on_gcd = false;
-  is_non_warlock_ability = true;
-  is_item = true;
-  Spell::Setup();
-}
-
-DrumsOfRestoration::DrumsOfRestoration(Entity& entity_param, std::shared_ptr<Aura> aura)
-  : Spell(entity_param, std::move(aura)) {
-  name = SpellName::kDrumsOfRestoration;
-  cooldown = 120;
-  on_gcd = false;
-  is_non_warlock_ability = true;
-  is_item = true;
-  Spell::Setup();
-}
-
-AmplifyCurse::AmplifyCurse(Entity& entity_param, std::shared_ptr<Aura> aura)
-  : Spell(entity_param, std::move(aura)) {
+AmplifyCurse::AmplifyCurse(Entity& entity_param, std::shared_ptr<Aura> aura) : Spell(entity_param, std::move(aura)) {
   name = SpellName::kAmplifyCurse;
   cooldown = 180;
   on_gcd = false;
   Spell::Setup();
 }
 
-PowerInfusion::PowerInfusion(Entity& entity_param, std::shared_ptr<Aura> aura)
-  : Spell(entity_param, std::move(aura)) {
+PowerInfusion::PowerInfusion(Entity& entity_param, std::shared_ptr<Aura> aura) : Spell(entity_param, std::move(aura)) {
   name = SpellName::kPowerInfusion;
   cooldown = 180;
   on_gcd = false;
@@ -1033,8 +959,7 @@ PowerInfusion::PowerInfusion(Entity& entity_param, std::shared_ptr<Aura> aura)
   Spell::Setup();
 }
 
-Innervate::Innervate(Entity& entity_param, std::shared_ptr<Aura> aura)
-  : Spell(entity_param, std::move(aura)) {
+Innervate::Innervate(Entity& entity_param, std::shared_ptr<Aura> aura) : Spell(entity_param, std::move(aura)) {
   name = SpellName::kInnervate;
   cooldown = 360;
   on_gcd = false;
@@ -1042,44 +967,16 @@ Innervate::Innervate(Entity& entity_param, std::shared_ptr<Aura> aura)
   Spell::Setup();
 }
 
-ChippedPowerCore::ChippedPowerCore(Entity& entity_param, std::shared_ptr<Aura> aura)
-  : Spell(entity_param, std::move(aura)) {
-  name = SpellName::kChippedPowerCore;
-  cooldown = 120;
-  on_gcd = false;
-  is_item = true;
-  limited_amount_of_casts = true;
-  amount_of_casts_per_fight = entity_param.player->settings.chipped_power_core_amount;
-  shared_cooldown_spells.insert(shared_cooldown_spells.end(),
-                                {SpellName::kDemonicRune, SpellName::kFlameCap, SpellName::kCrackedPowerCore});
-  Spell::Setup();
-}
-
-CrackedPowerCore::CrackedPowerCore(Entity& entity_param, std::shared_ptr<Aura> aura)
-  : Spell(entity_param, std::move(aura)) {
-  name = SpellName::kCrackedPowerCore;
-  cooldown = 120;
-  on_gcd = false;
-  is_item = true;
-  limited_amount_of_casts = true;
-  amount_of_casts_per_fight = entity_param.player->settings.cracked_power_core_amount;
-  shared_cooldown_spells.insert(shared_cooldown_spells.end(),
-                                {SpellName::kDemonicRune, SpellName::kFlameCap, SpellName::kChippedPowerCore});
-  Spell::Setup();
-}
-
-ManaTideTotem::ManaTideTotem(Entity& entity_param, std::shared_ptr<Aura> aura)
-  : Spell(entity_param, std::move(aura)) {
+ManaTideTotem::ManaTideTotem(Entity& entity_param, std::shared_ptr<Aura> aura) : Spell(entity_param, std::move(aura)) {
   name = SpellName::kManaTideTotem;
   cooldown = 300;
   is_non_warlock_ability = true;
   Spell::Setup();
 }
 
-ImpFirebolt::ImpFirebolt(Entity& entity_param)
-  : Spell(entity_param) {
+ImpFirebolt::ImpFirebolt(Entity& entity_param) : Spell(entity_param) {
   name = SpellName::kFirebolt;
-  cast_time = 2 - 0.25 * entity_param.player->talents.improved_firebolt;
+  cast_time = 2 - 0.25 * entity_param.player->talents.demonic_power;
   mana_cost = 145;
   base_damage = 119.5 * (1 + 0.1 * entity_param.player->talents.improved_imp);
   coefficient = 2 / 3.5;
@@ -1091,8 +988,7 @@ ImpFirebolt::ImpFirebolt(Entity& entity_param)
   Spell::Setup();
 }
 
-PetMelee::PetMelee(Entity& entity_param)
-  : Spell(entity_param) {
+PetMelee::PetMelee(Entity& entity_param) : Spell(entity_param) {
   name = SpellName::kMelee;
   attack_type = AttackType::kPhysical;
   cooldown = 2;
@@ -1107,8 +1003,7 @@ double PetMelee::GetBaseDamage() { return (entity.pet->GetAttackPower() / 14 + 5
 
 double PetMelee::GetCooldown() { return cooldown / entity.GetHastePercent(); }
 
-FelguardCleave::FelguardCleave(Entity& entity_param)
-  : Spell(entity_param) {
+FelguardCleave::FelguardCleave(Entity& entity_param) : Spell(entity_param) {
   name = SpellName::kCleave;
   cooldown = 6;
   mana_cost = 417;
@@ -1121,12 +1016,11 @@ FelguardCleave::FelguardCleave(Entity& entity_param)
 
 double FelguardCleave::GetBaseDamage() { return entity.pet->spells.melee->GetBaseDamage() + 78; }
 
-SuccubusLashOfPain::SuccubusLashOfPain(Entity& entity_param)
-  : Spell(entity_param) {
+SuccubusLashOfPain::SuccubusLashOfPain(Entity& entity_param) : Spell(entity_param) {
   name = SpellName::kLashOfPain;
-  cooldown = 12 - 3 * entity_param.player->talents.improved_lash_of_pain;
+  cooldown = 12 - 3 * entity_param.player->talents.demonic_power;
   mana_cost = 190;
-  base_damage = 123 * (1 + 0.1 * entity_param.player->talents.improved_succubus);
+  base_damage = 123;
   spell_school = SpellSchool::kShadow;
   coefficient = 0.429;
   attack_type = AttackType::kMagical;
@@ -1134,5 +1028,54 @@ SuccubusLashOfPain::SuccubusLashOfPain(Entity& entity_param)
   can_crit = true;
   does_damage = true;
   can_miss = true;
+  Spell::Setup();
+}
+
+ChaosBolt::ChaosBolt(Entity& entity_param) : Spell(entity_param) {
+  name = SpellName::kChaosBolt;
+  cooldown = 12;
+  cast_time = 2.5 - 0.1 * entity_param.player->talents.bane;
+  mana_cost = 0.07;
+  min_dmg = 1429;
+  max_dmg = 1813;
+  spell_school = SpellSchool::kFire;
+  attack_type = AttackType::kMagical;
+  coefficient = 2.5 / 3.5 + 0.04 * entity_param.player->talents.shadow_and_flame;
+  can_crit = true;
+  can_miss = true;
+  does_damage = true;
+  Spell::Setup();
+}
+
+Haunt::Haunt(Entity& entity_param, std::shared_ptr<Aura> aura) : Spell(entity_param, std::move(aura)) {
+  name = SpellName::kHaunt;
+  mana_cost = 0.12;
+  cooldown = 8;
+  cast_time = 1.5;
+  coefficient = 1.5 / 3.5;
+  min_dmg = 645;
+  max_dmg = 753;
+  can_miss = true;
+  does_damage = true;
+  can_crit = true;
+  spell_school = SpellSchool::kShadow;
+  spell_type = SpellType::kAffliction;
+  attack_type = AttackType::kMagical;
+  Spell::Setup();
+}
+
+Shadowflame::Shadowflame(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
+    : Spell(entity_param, std::move(aura), std::move(dot)) {
+  name = SpellName::kShadowflame;
+  mana_cost = 0.25;
+  cooldown = 15;
+  coefficient = 1 / 9.375;
+  min_dmg = 615;
+  max_dmg = 671;
+  can_miss = true;  // TODO confirm
+  can_crit = true;
+  does_damage = true;
+  spell_school = SpellSchool::kShadow;
+  spell_type = SpellType::kDestruction;
   Spell::Setup();
 }

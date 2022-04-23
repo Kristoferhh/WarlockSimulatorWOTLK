@@ -121,19 +121,7 @@ void Simulation::IterationReset(const double kFightLength) {
     player.CombatLog("Fight length: " + DoubleToString(kFightLength) + " seconds");
   }
 
-  if (player.auras.airmans_ribbon_of_gallantry != nullptr) {
-    player.auras.airmans_ribbon_of_gallantry->Apply();
-  }
-
-  if (player.auras.fel_energy != nullptr) {
-    player.auras.fel_energy->Apply();
-  }
-
   if (player.pet != nullptr) {
-    if (player.pet->auras.battle_squawk != nullptr) {
-      player.pet->auras.battle_squawk->Apply();
-    }
-
     if (player.settings.prepop_black_book && player.pet->auras.black_book != nullptr) {
       // If the player only has one on-use trinket equipped or if the first trinket doesn't share cooldowns with other
       // trinkets, then assume that Black Book is equipped in the second trinket slot, otherwise the first slot
@@ -149,26 +137,9 @@ void Simulation::IterationReset(const double kFightLength) {
 }
 
 void Simulation::CastNonPlayerCooldowns(const double kFightTimeRemaining) const {
-  // Use Drums
-  if (player.spells.drums_of_battle != nullptr && !player.auras.drums_of_battle->active &&
-      player.spells.drums_of_battle->Ready()) {
-    player.spells.drums_of_battle->StartCast();
-  } else if (player.spells.drums_of_war != nullptr && !player.auras.drums_of_war->active &&
-             player.spells.drums_of_war->Ready()) {
-    player.spells.drums_of_war->StartCast();
-  } else if (player.spells.drums_of_restoration != nullptr && !player.auras.drums_of_restoration->active &&
-             player.spells.drums_of_restoration->Ready()) {
-    player.spells.drums_of_restoration->StartCast();
-  }
-
   // Use Bloodlust
-  if (!player.spells.bloodlust.empty() && !player.auras.bloodlust->active) {
-    for (const auto& kBloodlust : player.spells.bloodlust) {
-      if (kBloodlust->Ready()) {
-        kBloodlust->StartCast();
-        break;
-      }
-    }
+  if (player.spells.bloodlust != nullptr && !player.auras.bloodlust->active && player.spells.bloodlust->Ready()) {
+    player.spells.bloodlust->StartCast();
   }
 
   // Use Mana Tide Totem if there's <= 12 sec remaining or the player's mana
@@ -184,18 +155,17 @@ void Simulation::CastNonGcdSpells() const {
   // Demonic Rune
   if ((current_fight_time > 5 || player.stats.mp5 == 0.0) && player.spells.demonic_rune != nullptr &&
       player.stats.max_mana - player.stats.mana > player.spells.demonic_rune->max_mana_gain &&
-      player.spells.demonic_rune->Ready() &&
-      (!player.spells.chipped_power_core || !player.spells.chipped_power_core->Ready()) &&
-      (!player.spells.cracked_power_core || !player.spells.cracked_power_core->Ready())) {
+      player.spells.demonic_rune->Ready()) {
     player.spells.demonic_rune->StartCast();
   }
 
   // Super Mana Potion
-  if ((current_fight_time > 5 || player.stats.mp5 == 0.0) && player.spells.super_mana_potion != nullptr &&
+  // TODO
+  /*if ((current_fight_time > 5 || player.stats.mp5 == 0.0) && player.spells.super_mana_potion != nullptr &&
       player.stats.max_mana - player.stats.mana > player.spells.super_mana_potion->max_mana_gain &&
       player.spells.super_mana_potion->Ready()) {
     player.spells.super_mana_potion->StartCast();
-  }
+  }*/
 }
 
 void Simulation::CastGcdSpells(const double kFightTimeRemaining) const {

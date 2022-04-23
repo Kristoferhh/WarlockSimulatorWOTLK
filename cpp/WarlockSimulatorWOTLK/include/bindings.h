@@ -12,8 +12,8 @@
 
 Player AllocPlayer(PlayerSettings& settings);
 PlayerSettings AllocPlayerSettings(AuraSelection& auras, Talents& talents, Sets& sets, CharacterStats& stats,
-                                   Items& items);
-Items AllocItems();
+                                   ItemSlot& items);
+ItemSlot AllocItems();
 AuraSelection AllocAuras();
 Talents AllocTalents();
 Sets AllocSets();

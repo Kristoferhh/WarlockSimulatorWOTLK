@@ -10,7 +10,7 @@ struct Pet final : Entity, std::enable_shared_from_this<Pet> {
   PetType pet_type = PetType::kNoPetType;
   double glancing_blow_multiplier;
   double glancing_blow_chance;
-  double enemy_damage_reduction_from_armor = 0;
+  double enemy_damage_reduction_from_armor = 0;  // TODO move to an enemy struct
 
   Pet(Player& player_param, EmbindConstant kSelectedPet);
   void Initialize(Simulation* simulation_ptr) override;
@@ -26,7 +26,7 @@ struct Pet final : Entity, std::enable_shared_from_this<Pet> {
   double GetAgility() const;
   double GetStrength() const;
   double GetPlayerSpellPower() const;
-  double GetSpellPower(bool dealing_damage, SpellSchool spell_school) override;
+  double GetSpellPower(SpellSchool spell_school = SpellSchool::kNoSchool) override;
   double GetDebuffAttackPower() const;
   double CalculateMaxMana();
   double GetDamageModifier(Spell& spell, bool kIsDot) override;

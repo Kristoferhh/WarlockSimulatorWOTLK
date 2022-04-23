@@ -81,7 +81,7 @@ struct Spell {
   double PredictDamage();
   [[nodiscard]] bool HasEnoughMana() const;
 
-private:
+ private:
   virtual double GetCooldown();
   virtual void Damage(bool kIsCrit = false, bool kIsGlancing = false);
   [[nodiscard]] double GetManaCost() const;
@@ -89,9 +89,8 @@ private:
   SpellCastResult MagicSpellCast();
   [[nodiscard]] SpellCastResult PhysicalSpellCast() const;
   void OnSpellHit(const SpellCastResult& kSpellCastResult);
-  void CombatLogDamage(bool kIsCrit, bool kIsGlancing, double kTotalDamage, double kSpellBaseDamage,
-                       double kSpellPower, double kCritMultiplier, double kDamageModifier,
-                       double kPartialResistMultiplier) const;
+  void CombatLogDamage(bool kIsCrit, bool kIsGlancing, double kTotalDamage, double kSpellBaseDamage, double kSpellPower,
+                       double kCritMultiplier, double kDamageModifier, double kPartialResistMultiplier) const;
   void ManaGainOnCast() const;
 };
 
@@ -139,8 +138,8 @@ struct UnstableAffliction final : Spell {
   explicit UnstableAffliction(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot);
 };
 
-struct SiphonLife final : Spell {
-  explicit SiphonLife(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot);
+struct Haunt final : Spell {
+  explicit Haunt(Entity& entity_param, std::shared_ptr<Aura> aura);
 };
 
 struct Immolate final : Spell {
@@ -169,10 +168,6 @@ struct Conflagrate final : Spell {
   bool CanCast() override;
 };
 
-struct DestructionPotion final : Spell {
-  explicit DestructionPotion(Entity& entity_param, std::shared_ptr<Aura> aura);
-};
-
 struct FlameCap final : Spell {
   explicit FlameCap(Entity& entity_param, std::shared_ptr<Aura> aura);
 };
@@ -185,18 +180,6 @@ struct Bloodlust final : Spell {
   explicit Bloodlust(Entity& entity_param, std::shared_ptr<Aura> aura);
 };
 
-struct DrumsOfBattle final : Spell {
-  explicit DrumsOfBattle(Entity& entity_param, std::shared_ptr<Aura> aura);
-};
-
-struct DrumsOfWar final : Spell {
-  explicit DrumsOfWar(Entity& entity_param, std::shared_ptr<Aura> aura);
-};
-
-struct DrumsOfRestoration final : Spell {
-  explicit DrumsOfRestoration(Entity& entity_param, std::shared_ptr<Aura> aura);
-};
-
 struct AmplifyCurse final : Spell {
   explicit AmplifyCurse(Entity& entity_param, std::shared_ptr<Aura> aura);
 };
@@ -207,14 +190,6 @@ struct PowerInfusion final : Spell {
 
 struct Innervate final : Spell {
   explicit Innervate(Entity& entity_param, std::shared_ptr<Aura> aura);
-};
-
-struct ChippedPowerCore final : Spell {
-  explicit ChippedPowerCore(Entity& entity_param, std::shared_ptr<Aura> aura);
-};
-
-struct CrackedPowerCore final : Spell {
-  explicit CrackedPowerCore(Entity& entity_param, std::shared_ptr<Aura> aura);
 };
 
 struct ManaTideTotem final : Spell {
@@ -238,4 +213,12 @@ struct SuccubusLashOfPain final : Spell {
 struct FelguardCleave final : Spell {
   explicit FelguardCleave(Entity& entity_param);
   double GetBaseDamage() override;
+};
+
+struct ChaosBolt final : Spell {
+  explicit ChaosBolt(Entity& entity_param);
+};
+
+struct Shadowflame final : Spell {
+  explicit Shadowflame(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot);
 };

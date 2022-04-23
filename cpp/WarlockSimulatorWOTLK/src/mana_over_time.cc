@@ -1,12 +1,11 @@
 #include "../include/mana_over_time.h"
 
-#include "../include/entity.h"
-#include "../include/common.h"
 #include "../include/combat_log_breakdown.h"
+#include "../include/common.h"
+#include "../include/entity.h"
 #include "../include/stat.h"
 
-ManaOverTime::ManaOverTime(Entity& entity)
-  : Aura(entity) {}
+ManaOverTime::ManaOverTime(Entity& entity) : Aura(entity) {}
 
 void ManaOverTime::Setup() {
   ticks_total = duration / tick_timer_total;
@@ -47,20 +46,7 @@ void ManaOverTime::Tick(const double kTime) {
     }
   }
 }
-
-DrumsOfRestorationAura::DrumsOfRestorationAura(Entity& entity)
-  : ManaOverTime(entity) {
-  name = SpellName::kDrumsOfRestoration;
-  duration = 15;
-  tick_timer_total = 3;
-  group_wide = true;
-  ManaOverTime::Setup();
-}
-
-double DrumsOfRestorationAura::GetManaGain() { return 600.0 / ticks_total; }
-
-ManaTideTotemAura::ManaTideTotemAura(Entity& entity)
-  : ManaOverTime(entity) {
+ManaTideTotemAura::ManaTideTotemAura(Entity& entity) : ManaOverTime(entity) {
   name = SpellName::kManaTideTotem;
   duration = 12;
   tick_timer_total = 3;
@@ -69,13 +55,3 @@ ManaTideTotemAura::ManaTideTotemAura(Entity& entity)
 }
 
 double ManaTideTotemAura::GetManaGain() { return entity.stats.max_mana * 0.06; }
-
-FelEnergyAura::FelEnergyAura(Entity& entity)
-  : ManaOverTime(entity) {
-  name = SpellName::kFelEnergy;
-  duration = 9999;
-  tick_timer_total = 4;
-  ManaOverTime::Setup();
-}
-
-double FelEnergyAura::GetManaGain() { return entity.stats.max_mana * 0.03; }

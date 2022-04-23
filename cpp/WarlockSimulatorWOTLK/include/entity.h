@@ -28,9 +28,9 @@ struct Simulation;
 
 struct Entity {
   virtual ~Entity() = default;
-  const int kFloatNumberMultiplier = 1000; // Multiply doubles such as hit and crit chance with this since we need an
+  const int kFloatNumberMultiplier = 1000;  // Multiply doubles such as hit and crit chance with this since we need an
   // integer when calling player.rng.range()
-  const int kLevel = 70;
+  const int kLevel = 80;
   const double kGcdValue = 1.5;
   const double kMinimumGcdValue = 1;
   const double kCritDamageMultiplier = 1.5;
@@ -59,11 +59,11 @@ struct Entity {
   bool recording_combat_log_breakdown;
   bool equipped_item_simulation;
   bool infinite_mana;
-  int enemy_shadow_resist; // TODO move these to an Enemy struct
+  int enemy_shadow_resist;  // TODO move these to an Enemy struct
   int enemy_fire_resist;
   int enemy_level_difference_resistance;
 
-  Entity(Player* player, PlayerSettings& player_settings, EntityType entity_type);
+  Entity(Player* player, PlayerSettings& player_settings, EntityType kEntityType);
   virtual double GetIntellect();
   virtual double GetStamina();
   virtual double GetHastePercent() = 0;
@@ -72,7 +72,7 @@ struct Entity {
   virtual void EndAuras();
   virtual void Reset();
   virtual void Initialize(Simulation* simulation_ptr);
-  virtual double GetSpellPower(bool dealing_damage, SpellSchool spell_school) = 0;
+  virtual double GetSpellPower(SpellSchool spell_school) = 0;
   virtual double GetSpellCritChance(SpellType spell_type = SpellType::kNoSpellType) = 0;
   virtual double GetDamageModifier(Spell& spell, bool is_dot) = 0;
   virtual bool IsSpellCrit(SpellType kSpellType, double kExtraCrit = 0);

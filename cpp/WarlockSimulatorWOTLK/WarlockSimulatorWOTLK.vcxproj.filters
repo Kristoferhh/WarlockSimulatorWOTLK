@@ -109,7 +109,7 @@
     <ClInclude Include="include\enums.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\items.h">
+    <ClInclude Include="include\item_slot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\pet.h">

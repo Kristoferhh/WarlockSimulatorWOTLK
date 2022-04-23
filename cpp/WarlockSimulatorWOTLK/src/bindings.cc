@@ -2,15 +2,15 @@
 
 #include <iostream>
 
-#include "../include/common.h"
-#include "../include/items.h"
-#include "../include/talents.h"
-#include "../include/player_settings.h"
-#include "../include/simulation.h"
 #include "../include/aura_selection.h"
+#include "../include/common.h"
+#include "../include/item_slot.h"
+#include "../include/player_settings.h"
 #include "../include/sets.h"
-#include "../include/trinket.h"
+#include "../include/simulation.h"
 #include "../include/stat.h"
+#include "../include/talents.h"
+#include "../include/trinket.h"
 
 #pragma warning(disable : 4100)
 void DpsUpdate(double dps) {
@@ -93,9 +93,9 @@ void SendSimulationResults(double median_dps, double min_dps, double max_dps, in
          median_dps, min_dps, max_dps, item_id, iteration_amount, total_fight_duration, custom_stat);
 #else
   std::cout << "Median DPS: " << std::to_string(median_dps) << ". Min DPS: " << std::to_string(min_dps)
-      << ". Max DPS: " << std::to_string(max_dps) << std::endl;
+            << ". Max DPS: " << std::to_string(max_dps) << std::endl;
   std::cout << std::to_string(iteration_amount) << " iterations in "
-      << DoubleToString(round(simulation_duration / 1000) / 1000, 3) << " seconds" << std::endl;
+            << DoubleToString(round(simulation_duration / 1000) / 1000, 3) << " seconds" << std::endl;
 #endif
 }
 
@@ -110,7 +110,7 @@ std::vector<uint32_t> AllocRandomSeeds(const int kAmountOfSeeds, const uint32_t 
   return seeds;
 }
 
-Items AllocItems() { return {}; }
+ItemSlot AllocItems() { return {}; }
 
 AuraSelection AllocAuras() { return {}; }
 
@@ -121,7 +121,7 @@ Sets AllocSets() { return {}; }
 CharacterStats AllocStats() { return {}; }
 
 PlayerSettings AllocPlayerSettings(AuraSelection& auras, Talents& talents, Sets& sets, CharacterStats& stats,
-                                   Items& items) {
+                                   ItemSlot& items) {
   return {auras, talents, sets, stats, items};
 }
 
@@ -129,9 +129,7 @@ Player AllocPlayer(PlayerSettings& settings) { return Player(settings); }
 
 SimulationSettings AllocSimSettings() { return {}; }
 
-Simulation AllocSim(Player& player, SimulationSettings& simulation_settings) {
-  return {player, simulation_settings};
-}
+Simulation AllocSim(Player& player, SimulationSettings& simulation_settings) { return {player, simulation_settings}; }
 
 std::string GetExceptionMessage(const intptr_t kExceptionPtr) {
   return {reinterpret_cast<std::exception*>(kExceptionPtr)->what()};
@@ -145,25 +143,24 @@ EMSCRIPTEN_BINDINGS(module) {
       .constructor<Player&, SimulationSettings&>()
       .function("start", &Simulation::Start);
 
-  emscripten::class_<Items>("Items")
-      .property("head", &Items::head)
-      .property("neck", &Items::neck)
-      .property("shoulders", &Items::shoulders)
-      .property("back", &Items::back)
-      .property("chest", &Items::chest)
-      .property("bracer", &Items::bracers)
-      .property("gloves", &Items::gloves)
-      .property("belt", &Items::belt)
-      .property("legs", &Items::legs)
-      .property("boots", &Items::boots)
-      .property("ring1", &Items::ring_1)
-      .property("ring2", &Items::ring_2)
-      .property("trinket1", &Items::trinket_1)
-      .property("trinket2", &Items::trinket_2)
-      .property("mainhand", &Items::main_hand)
-      .property("offhand", &Items::off_hand)
-      .property("twohand", &Items::two_hand)
-      .property("wand", &Items::wand);
+  emscripten::class_<ItemSlot>("ItemSlot")
+      .property("head", &ItemSlot::head)
+      .property("neck", &ItemSlot::neck)
+      .property("shoulders", &ItemSlot::shoulders)
+      .property("back", &ItemSlot::back)
+      .property("chest", &ItemSlot::chest)
+      .property("wrist", &ItemSlot::wrist)
+      .property("hands", &ItemSlot::hands)
+      .property("waist", &ItemSlot::waist)
+      .property("legs", &ItemSlot::legs)
+      .property("feet", &ItemSlot::feet)
+      .property("finger1", &ItemSlot::finger_1)
+      .property("finger2", &ItemSlot::finger_2)
+      .property("trinket1", &ItemSlot::trinket_1)
+      .property("trinket2", &ItemSlot::trinket_2)
+      .property("weapon", &ItemSlot::weapon)
+      .property("offhand", &ItemSlot::off_hand)
+      .property("wand", &ItemSlot::wand);
 
   emscripten::class_<AuraSelection>("Auras")
       .constructor<>()
@@ -178,24 +175,14 @@ EMSCRIPTEN_BINDINGS(module) {
       .property("inspiringPresence", &AuraSelection::inspiring_presence)
       .property("moonkinAura", &AuraSelection::moonkin_aura)
       .property("powerInfusion", &AuraSelection::power_infusion)
-      .property("powerOfTheGuardianWarlock", &AuraSelection::atiesh_warlock)
-      .property("powerOfTheGuardianMage", &AuraSelection::atiesh_mage)
-      .property("eyeOfTheNight", &AuraSelection::eye_of_the_night)
-      .property("chainOfTheTwilightOwl", &AuraSelection::chain_of_the_twilight_owl)
-      .property("jadePendantOfBlasting", &AuraSelection::jade_pendant_of_blasting)
-      .property("drumsOfBattle", &AuraSelection::drums_of_battle)
-      .property("drumsOfWar", &AuraSelection::drums_of_war)
-      .property("drumsOfRestoration", &AuraSelection::drums_of_restoration)
       .property("bloodlust", &AuraSelection::bloodlust)
       .property("ferociousInspiration", &AuraSelection::ferocious_inspiration)
       .property("innervate", &AuraSelection::innervate)
       .property("manaTideTotem", &AuraSelection::mana_tide_totem)
-      .property("airmansRibbonOfGallantry", &AuraSelection::airmans_ribbon_of_gallantry)
       .property("curseOfTheElements", &AuraSelection::curse_of_the_elements)
       .property("shadowWeaving", &AuraSelection::shadow_weaving)
       .property("improvedScorch", &AuraSelection::improved_scorch)
       .property("misery", &AuraSelection::misery)
-      .property("judgementOfTheCrusader", &AuraSelection::judgement_of_the_crusader)
       .property("vampiricTouch", &AuraSelection::vampiric_touch)
       .property("faerieFire", &AuraSelection::faerie_fire)
       .property("sunderArmor", &AuraSelection::sunder_armor)
@@ -205,12 +192,8 @@ EMSCRIPTEN_BINDINGS(module) {
       .property("exposeWeakness", &AuraSelection::expose_weakness)
       .property("annihilator", &AuraSelection::annihilator)
       .property("improvedHuntersMark", &AuraSelection::improved_hunters_mark)
-      .property("superManaPotion", &AuraSelection::super_mana_potion)
-      .property("destructionPotion", &AuraSelection::destruction_potion)
       .property("demonicRune", &AuraSelection::demonic_rune)
       .property("flameCap", &AuraSelection::flame_cap)
-      .property("chippedPowerCore", &AuraSelection::chipped_power_core)
-      .property("crackedPowerCore", &AuraSelection::cracked_power_core)
       .property("petBlessingOfKings", &AuraSelection::pet_blessing_of_kings)
       .property("petBlessingOfWisdom", &AuraSelection::pet_blessing_of_wisdom)
       .property("petBlessingOfMight", &AuraSelection::pet_blessing_of_might)
@@ -259,93 +242,93 @@ EMSCRIPTEN_BINDINGS(module) {
 
   emscripten::class_<Talents>("Talents")
       .constructor<>()
-      .property("suppression", &Talents::suppression)
-      .property("improvedCorruption", &Talents::improved_corruption)
-      .property("improvedLifeTap", &Talents::improved_life_tap)
       .property("improvedCurseOfAgony", &Talents::improved_curse_of_agony)
-      .property("amplifyCurse", &Talents::amplify_curse)
-      .property("nightfall", &Talents::nightfall)
-      .property("empoweredCorruption", &Talents::empowered_corruption)
-      .property("siphonLife", &Talents::siphon_life)
-      .property("shadowMastery", &Talents::shadow_mastery)
-      .property("contagion", &Talents::contagion)
-      .property("darkPact", &Talents::dark_pact)
-      .property("unstableAffliction", &Talents::unstable_affliction)
-      .property("improvedImp", &Talents::improved_imp)
-      .property("demonicEmbrace", &Talents::demonic_embrace)
-      .property("felIntellect", &Talents::fel_intellect)
-      .property("felStamina", &Talents::fel_stamina)
-      .property("improvedSuccubus", &Talents::improved_succubus)
-      .property("demonicAegis", &Talents::demonic_aegis)
-      .property("unholyPower", &Talents::unholy_power)
-      .property("demonicSacrifice", &Talents::demonic_sacrifice)
-      .property("manaFeed", &Talents::mana_feed)
-      .property("masterDemonologist", &Talents::master_demonologist)
-      .property("soulLink", &Talents::soul_link)
-      .property("demonicKnowledge", &Talents::demonic_knowledge)
-      .property("demonicTactics", &Talents::demonic_tactics)
-      .property("felguard", &Talents::felguard)
-      .property("improvedShadowBolt", &Talents::improved_shadow_bolt)
-      .property("cataclysm", &Talents::cataclysm)
-      .property("bane", &Talents::bane)
-      .property("improvedFirebolt", &Talents::improved_firebolt)
-      .property("improvedLashOfPain", &Talents::improved_lash_of_pain)
-      .property("devastation", &Talents::devastation)
-      .property("shadowburn", &Talents::shadowburn)
-      .property("improvedSearingPain", &Talents::improved_searing_pain)
-      .property("improvedImmolate", &Talents::improved_immolate)
-      .property("ruin", &Talents::ruin)
-      .property("emberstorm", &Talents::emberstorm)
-      .property("backlash", &Talents::backlash)
-      .property("conflagrate", &Talents::conflagrate)
-      .property("shadowAndFlame", &Talents::shadow_and_flame)
-      .property("shadowfury", &Talents::shadowfury);
+      .property("suppression", &Talents::suppression
+      .property("improvedCorruption", &Talents::improved_corruption
+      .property("improvedLifeTap", &Talents::improved_life_tap
+      .property("amplifyCurse", &Talents::amplify_curse
+      .property("nightfall", &Talents::nightfall
+      .property("empoweredCorruption", &Talents::empowered_corruption
+      .property("shadowEmbrace", &Talents::shadow_embrace
+      .property("siphonLife", &Talents::siphon_life
+      .property("improvedFelhunter", &Talents::improved_felhunter
+      .property("shadowMastery", &Talents::shadow_mastery
+      .property("eradication", &Talents::eradication
+      .property("contagion", &Talents::contagion
+      .property("darkPact", &Talents::dark_pact
+      .property("malediction", &Talents::malediction
+      .property("deathsEmbrace", &Talents::deaths_embrace
+      .property("unstableAffliction", &Talents::unstable_affliction
+      .property("pandemic", &Talents::pandemic
+      .property("everlastingAffliction", &Talents::everlasting_affliction
+      .property("haunt", &Talents::haunt
+      .property("improvedImp", &Talents::improved_imp
+      .property("demonicEmbrace", &Talents::demonic_embrace
+      .property("demonicBrutality", &Talents::demonic_brutality
+      .property("felVitality", &Talents::fel_vitality
+      .property("demonicAegis", &Talents::demonic_aegis
+      .property("unholyPower", &Talents::unholy_power
+      .property("manaFeed", &Talents::mana_feed
+      .property("masterConjuror", &Talents::master_conjuror
+      .property("masterDemonologist", &Talents::master_demonologist
+      .property("moltenCore", &Talents::molten_core
+      .property("demonicEmpowerment", &Talents::demonic_empowerment
+      .property("demonicKnowledge", &Talents::demonic_knowledge
+      .property("demonicTactics", &Talents::demonic_tactics
+      .property("decimation", &Talents::decimation
+      .property("improvedDemonicTactics", &Talents::improved_demonic_tactics
+      .property("summonFelguard", &Talents::summon_felguard
+      .property("nemesis", &Talents::nemesis
+      .property("demonicPact", &Talents::demonic_pact
+      .property("metamorphosis", &Talents::metamorphosis
+      .property("improvedShadowBolt", &Talents::improved_shadow_bolt
+      .property("bane", &Talents::bane
+      .property("aftermath", &Talents::aftermath
+      .property("cataclysm", &Talents::cataclysm
+      .property("demonicPower", &Talents::demonic_power
+      .property("shadowburn", &Talents::shadowburn
+      .property("ruin", &Talents::ruin
+      .property("improvedSearingPain", &Talents::improved_searing_pain
+      .property("backlash", &Talents::backlash
+      .property("improvedImmolate", &Talents::improved_immolate
+      .property("devastation", &Talents::devastation
+      .property("emberstorm", &Talents::emberstorm
+      .property("conflagrate", &Talents::conflagrate
+      .property("pyroclasm", &Talents::pyroclasm
+      .property("shadowAndFlame", &Talents::shadow_and_flame
+      .property("improvedSoulLeech", &Talents::improved_soul_leech
+      .property("backdraft", &Talents::backdraft
+      .property("shadowfury", &Talents::shadowfury
+      .property("empoweredImp", &Talents::empowered_imp
+      .property("fireAndBrimstone", &Talents::fire_and_brimstone
+      .property("chaosBolt", &Talents::chaos_bolt;
 
   emscripten::class_<Sets>("Sets")
       .constructor<>()
-      .property("plagueheart", &Sets::t3)
-      .property("spellfire", &Sets::spellfire)
-      .property("spellstrike", &Sets::spellstrike)
-      .property("oblivion", &Sets::oblivion)
-      .property("manaEtched", &Sets::mana_etched)
-      .property("twinStars", &Sets::twin_stars)
-      .property("t4", &Sets::t4)
-      .property("t5", &Sets::t5)
       .property("t6", &Sets::t6);
 
   emscripten::class_<PlayerSettings>("PlayerSettings")
-      .constructor<AuraSelection&, Talents&, Sets&, CharacterStats&, Items&>()
+      .constructor<AuraSelection&, Talents&, Sets&, CharacterStats&, ItemSlot&>()
       .property("randomSeeds", &PlayerSettings::random_seeds)
       .property("itemId", &PlayerSettings::item_id)
       .property("metaGemId", &PlayerSettings::meta_gem_id)
       .property("equippedItemSimulation", &PlayerSettings::equipped_item_simulation)
       .property("recordingCombatLogBreakdown", &PlayerSettings::recording_combat_log_breakdown)
       .property("customStat", &PlayerSettings::custom_stat)
-      .property("shattrathFaction", &PlayerSettings::shattrath_faction)
       .property("enemyLevel", &PlayerSettings::enemy_level)
       .property("enemyShadowResist", &PlayerSettings::enemy_shadow_resist)
       .property("enemyFireResist", &PlayerSettings::enemy_fire_resist)
-      .property("mageAtieshAmount", &PlayerSettings::mage_atiesh_amount)
       .property("totemOfWrathAmount", &PlayerSettings::totem_of_wrath_amount)
-      .property("chippedPowerCoreAmount", &PlayerSettings::chipped_power_core_amount)
-      .property("crackedPowerCoreAmount", &PlayerSettings::cracked_power_core_amount)
-      .property("sacrificingPet", &PlayerSettings::sacrificing_pet)
       .property("selectedPet", &PlayerSettings::selected_pet)
       .property("ferociousInspirationAmount", &PlayerSettings::ferocious_inspiration_amount)
-      .property("improvedCurseOfTheElements", &PlayerSettings::improved_curse_of_the_elements)
       .property("usingCustomIsbUptime", &PlayerSettings::using_custom_isb_uptime)
       .property("customIsbUptimeValue", &PlayerSettings::custom_isb_uptime_value)
-      .property("improvedDivineSpirit", &PlayerSettings::improved_divine_spirit)
       .property("improvedImp", &PlayerSettings::improved_imp)
-      .property("shadowPriestDps", &PlayerSettings::shadow_priest_dps)
-      .property("warlockAtieshAmount", &PlayerSettings::warlock_atiesh_amount)
       .property("improvedExposeArmor", &PlayerSettings::improved_expose_armor)
-      .property("battleSquawkAmount", &PlayerSettings::battle_squawk_amount)
       .property("fightType", &PlayerSettings::fight_type)
       .property("enemyAmount", &PlayerSettings::enemy_amount)
       .property("race", &PlayerSettings::race)
       .property("powerInfusionAmount", &PlayerSettings::power_infusion_amount)
-      .property("bloodlustAmount", &PlayerSettings::bloodlust_amount)
       .property("innervateAmount", &PlayerSettings::innervate_amount)
       .property("enemyArmor", &PlayerSettings::enemy_armor)
       .property("exposeWeaknessUptime", &PlayerSettings::expose_weakness_uptime)
@@ -357,15 +340,18 @@ EMSCRIPTEN_BINDINGS(module) {
       .property("prepopBlackBook", &PlayerSettings::prepop_black_book)
       .property("randomizeValues", &PlayerSettings::randomize_values)
       .property("rotationOption", &PlayerSettings::rotation_option)
-      .property("exaltedWithShattrathFaction", &PlayerSettings::exalted_with_shattrath_faction)
       .property("survivalHunterAgility", &PlayerSettings::survival_hunter_agility)
       .property("hasImmolate", &PlayerSettings::has_immolate)
       .property("hasCorruption", &PlayerSettings::has_corruption)
       .property("hasSiphonLife", &PlayerSettings::has_siphon_life)
       .property("hasUnstableAffliction", &PlayerSettings::has_unstable_affliction)
+      .property("hasHaunt", &PlayerSettings::has_haunt)
       .property("hasSearingPain", &PlayerSettings::has_searing_pain)
       .property("hasShadowBolt", &PlayerSettings::has_shadow_bolt)
       .property("hasIncinerate", &PlayerSettings::has_incinerate)
+      .property("hasSeedOfCorruption", &PlayerSettings::has_seed_of_corruption)
+      .property("hasHellfire", &PlayerSettings::has_hellfire)
+      .property("hasRainOfFire", &PlayerSettings::has_rain_of_fire)
       .property("hasCurseOfRecklessness", &PlayerSettings::has_curse_of_recklessness)
       .property("hasCurseOfTheElements", &PlayerSettings::has_curse_of_the_elements)
       .property("hasCurseOfAgony", &PlayerSettings::has_curse_of_agony)
@@ -376,7 +362,6 @@ EMSCRIPTEN_BINDINGS(module) {
       .property("hasShadowfury", &PlayerSettings::has_shadowfury)
       .property("hasAmplifyCurse", &PlayerSettings::has_amplify_curse)
       .property("hasDarkPact", &PlayerSettings::has_dark_pact)
-      .property("hasElementalShamanT4Bonus", &PlayerSettings::has_elemental_shaman_t4_bonus);
 
   emscripten::class_<SimulationSettings>("SimulationSettings")
       .constructor<>()

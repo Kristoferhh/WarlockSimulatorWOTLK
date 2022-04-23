@@ -7,9 +7,7 @@
 #include "../include/simulation.h"
 #include "../include/stat.h"
 
-Trinket::Trinket(Player& player)
-  : player(player) {
-}
+Trinket::Trinket(Player& player) : player(player) {}
 
 bool Trinket::Ready() const { return cooldown_remaining <= 0; }
 
@@ -68,17 +66,7 @@ void Trinket::Tick(const double kTime) {
   }
 }
 
-RestrainedEssenceOfSapphiron::RestrainedEssenceOfSapphiron(Player& player)
-  : Trinket(player) {
-  name = "The Restrained Essence of Sapphiron";
-  cooldown = 120;
-  duration = 20;
-  stats.push_back(SpellPower(player, 130));
-  Setup();
-}
-
-ShiftingNaaruSliver::ShiftingNaaruSliver(Player& player)
-  : Trinket(player) {
+ShiftingNaaruSliver::ShiftingNaaruSliver(Player& player) : Trinket(player) {
   name = "Shifting Naaru Sliver";
   cooldown = 90;
   duration = 15;
@@ -86,129 +74,10 @@ ShiftingNaaruSliver::ShiftingNaaruSliver(Player& player)
   Setup();
 }
 
-SkullOfGuldan::SkullOfGuldan(Player& player)
-  : Trinket(player) {
+SkullOfGuldan::SkullOfGuldan(Player& player) : Trinket(player) {
   name = "The Skull of Gul'dan";
   cooldown = 120;
   duration = 20;
   stats.push_back(SpellHasteRating(player, 175));
-  Setup();
-}
-
-HexShrunkenHead::HexShrunkenHead(Player& player)
-  : Trinket(player) {
-  name = "Hex Shrunken Head";
-  cooldown = 120;
-  duration = 20;
-  stats.push_back(SpellPower(player, 211));
-  Setup();
-}
-
-IconOfTheSilverCrescent::IconOfTheSilverCrescent(Player& player)
-  : Trinket(player) {
-  name = "Icon of the Silver Crescent";
-  cooldown = 120;
-  duration = 20;
-  stats.push_back(SpellPower(player, 155));
-  Setup();
-}
-
-ScryersBloodgem::ScryersBloodgem(Player& player)
-  : Trinket(player) {
-  name = "Scryer's Bloodgem";
-  cooldown = 90;
-  duration = 15;
-  stats.push_back(SpellPower(player, 150));
-  Setup();
-}
-
-AncientCrystalTalisman::AncientCrystalTalisman(Player& player)
-  : Trinket(player) {
-  name = "Ancient Crystal Talisman";
-  cooldown = 120;
-  duration = 20;
-  stats.push_back(SpellPower(player, 104));
-  Setup();
-}
-
-ArcanistsStone::ArcanistsStone(Player& player)
-  : Trinket(player) {
-  name = "Arcanist's Stone";
-  cooldown = 120;
-  duration = 20;
-  stats.push_back(SpellPower(player, 167));
-  Setup();
-}
-
-TerokkarTabletOfVim::TerokkarTabletOfVim(Player& player)
-  : Trinket(player) {
-  name = "Terokkar Table of Vim";
-  cooldown = 90;
-  duration = 15;
-  stats.push_back(SpellPower(player, 84));
-  Setup();
-}
-
-XirisGift::XirisGift(Player& player)
-  : Trinket(player) {
-  name = "Xi'ri's Gift";
-  cooldown = 90;
-  duration = 15;
-  stats.push_back(SpellPower(player, 150));
-  Setup();
-}
-
-VengeanceOfTheIllidari::VengeanceOfTheIllidari(Player& player)
-  : Trinket(player) {
-  name = "Vengeance of the Illidari";
-  cooldown = 90;
-  duration = 15;
-  stats.push_back(SpellPower(player, 120));
-  Setup();
-}
-
-FigurineLivingRubySerpent::FigurineLivingRubySerpent(Player& player)
-  : Trinket(player) {
-  name = "Figurine: Living Ruby Serpent";
-  cooldown = 300;
-  duration = 20;
-  stats.push_back(SpellPower(player, 150));
-  Setup();
-}
-
-EssenceOfTheMartyr::EssenceOfTheMartyr(Player& player)
-  : Trinket(player) {
-  name = "Essence of the Martyr";
-  cooldown = 120;
-  duration = 20;
-  shares_cooldown = false;
-  stats.push_back(SpellPower(player, 99));
-  Setup();
-}
-
-StarkillersBauble::StarkillersBauble(Player& player)
-  : Trinket(player) {
-  name = "Starkiller's Bauble";
-  cooldown = 90;
-  duration = 15;
-  stats.push_back(SpellPower(player, 125));
-  Setup();
-}
-
-DarkIronSmokingPipe::DarkIronSmokingPipe(Player& player)
-  : Trinket(player) {
-  name = "Dark Iron Smoking Pipe";
-  cooldown = 120;
-  duration = 20;
-  stats.push_back(SpellPower(player, 155));
-  Setup();
-}
-
-HazzarahsCharmOfDestruction::HazzarahsCharmOfDestruction(Player& player)
-  : Trinket(player) {
-  name = "Hazza'rah's Charm of Destruction";
-  cooldown = 180;
-  duration = 20;
-  stats.push_back(SpellCritRating(player, 140));
   Setup();
 }

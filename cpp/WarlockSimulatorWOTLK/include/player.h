@@ -13,7 +13,7 @@ struct Aura;
 struct Spell;
 struct Trinket;
 struct PlayerSettings;
-struct Items;
+struct ItemSlot;
 struct Sets;
 struct Talents;
 
@@ -21,8 +21,7 @@ struct Player final : Entity {
   AuraSelection& selected_auras;
   Talents& talents;
   Sets& sets;
-  Items& items;
-  PlayerSettings& settings;
+  ItemSlot& items;
   std::vector<Trinket> trinkets;
   std::shared_ptr<Spell> filler;
   std::shared_ptr<Spell> curse_spell;
@@ -44,7 +43,7 @@ struct Player final : Entity {
   void SendCombatLogEntries() const;
   void SendPlayerInfoToCombatLog();
   void Tick(double kTime) override;
-  double GetSpellPower(bool kDealingDamage, SpellSchool kSchool = SpellSchool::kNoSchool) override;
+  double GetSpellPower(SpellSchool kSchool = SpellSchool::kNoSchool) override;
   double GetHastePercent() override;
   double GetSpellCritChance(SpellType kSpellType) override;
   double FindTimeUntilNextAction() override;

@@ -16,21 +16,9 @@ export const Spells: Spell[] = [
   },
   {
     Group: RotationGroup.Dots,
-    Name: 'Siphon Life',
-    IconName: 'spell_shadow_requiem',
-    Id: SpellId.SiphonLife,
-  },
-  {
-    Group: RotationGroup.Dots,
     Name: 'Unstable Affliction',
     IconName: 'spell_shadow_unstableaffliction_3',
     Id: SpellId.UnstableAffliction,
-  },
-  {
-    Group: RotationGroup.Dots,
-    Name: 'Haunt',
-    IconName: 'ability_warlock_haunt',
-    Id: SpellId.Haunt,
   },
 
   // Fillers
@@ -137,5 +125,11 @@ export const Spells: Spell[] = [
     Name: 'Dark Pact',
     IconName: 'spell_shadow_darkritual',
     Id: SpellId.DarkPact,
+  },
+  {
+    Group: RotationGroup.Other,
+    Name: 'Haunt',
+    IconName: 'ability_warlock_haunt',
+    Id: SpellId.Haunt,
   },
 ]

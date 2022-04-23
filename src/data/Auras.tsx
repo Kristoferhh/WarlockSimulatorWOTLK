@@ -218,7 +218,11 @@ export const Auras: Aura[] = [
     Group: AuraGroup.Debuffs,
     IconName: 'spell_shadow_chilltouch',
     Id: AuraId.CurseOfTheElements,
-    Stats: { [Stat.SpellPenetration]: 88 },
+    Stats: {
+      [Stat.SpellPenetration]: 165,
+      [Stat.ShadowModifier]: 1.13,
+      [Stat.FireModifier]: 1.13,
+    },
   },
   {
     Name: 'Shadow Weaving',
@@ -240,11 +244,7 @@ export const Auras: Aura[] = [
     IconName: 'Spell_shadow_misery',
     Id: AuraId.Misery,
     Stats: {
-      [Stat.ShadowModifier]: 1.05,
-      [Stat.FireModifier]: 1.05,
-      [Stat.ArcaneModifier]: 1.05,
-      [Stat.FrostModifier]: 1.05,
-      [Stat.NatureModifier]: 1.05,
+      [Stat.HitChance]: 3,
     },
   },
   {
@@ -252,12 +252,6 @@ export const Auras: Aura[] = [
     Group: AuraGroup.Debuffs,
     IconName: 'ability_paladin_judgementblue',
     Id: AuraId.JudgementOfWisdom,
-  },
-  {
-    Name: 'Improved Seal of the Crusader',
-    Group: AuraGroup.Debuffs,
-    IconName: 'spell_holy_holysmite',
-    Id: AuraId.ImprovedSealOfTheCrusader,
   },
   {
     Name: 'Vampiric Touch',

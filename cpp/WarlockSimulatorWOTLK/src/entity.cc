@@ -1,122 +1,86 @@
 #include "../include/entity.h"
 
-#include "../include/player_settings.h"
-#include "../include/combat_log_breakdown.h"
 #include "../include/aura.h"
-#include "../include/spell.h"
-#include "../include/player.h"
-#include "../include/simulation.h"
-#include "../include/talents.h"
-#include "../include/pet.h"
-#include "../include/damage_over_time.h"
-#include "../include/common.h"
-#include "../include/bindings.h"
 #include "../include/aura_selection.h"
+#include "../include/bindings.h"
+#include "../include/combat_log_breakdown.h"
+#include "../include/common.h"
+#include "../include/damage_over_time.h"
+#include "../include/pet.h"
+#include "../include/player.h"
+#include "../include/player_settings.h"
 #include "../include/sets.h"
+#include "../include/simulation.h"
+#include "../include/spell.h"
+#include "../include/talents.h"
 
-Entity::Entity(Player* player, PlayerSettings& player_settings, EntityType entity_type)
-  : player(player),
-    settings(player_settings),
-    stats(entity_type == EntityType::kPlayer ? player_settings.stats : CharacterStats()),
-    entity_type(entity_type),
-    recording_combat_log_breakdown(player_settings.recording_combat_log_breakdown &&
-                                   player_settings.equipped_item_simulation),
-    equipped_item_simulation(player_settings.equipped_item_simulation),
-    enemy_shadow_resist(player_settings.enemy_shadow_resist),
-    enemy_fire_resist(player_settings.enemy_fire_resist),
-    // I don't know if this formula only works for bosses or not, so for the
-    // moment I'm only using it for targets 3+ levels above.
-    enemy_level_difference_resistance(player_settings.enemy_level >= kLevel + 3 ? 6 * kLevel * 5 / 75 : 0) {
+Entity::Entity(Player* player, PlayerSettings& player_settings, const EntityType kEntityType)
+    : player(player),
+      settings(player_settings),
+      stats(kEntityType == EntityType::kPlayer ? player_settings.stats : CharacterStats()),
+      entity_type(kEntityType),
+      recording_combat_log_breakdown(player_settings.recording_combat_log_breakdown &&
+                                     player_settings.equipped_item_simulation),
+      equipped_item_simulation(player_settings.equipped_item_simulation),
+      enemy_shadow_resist(player_settings.enemy_shadow_resist),
+      enemy_fire_resist(player_settings.enemy_fire_resist),
+      // I don't know if this formula only works for bosses or not, so for the
+      // moment I'm only using it for targets 3+ levels above.
+      // TODO
+      enemy_level_difference_resistance(player_settings.enemy_level >= kLevel + 3 ? 6 * kLevel * 5 / 75 : 0) {
   // Crit chance
-  if (entity_type == EntityType::kPlayer) {
-    if (player_settings.auras.atiesh_mage) {
-      stats.spell_crit_rating += 28 * settings.mage_atiesh_amount;
-    }
-
-    stats.spell_crit_chance = StatConstant::kBaseCritChancePercent + player_settings.talents.devastation +
-                              player_settings.talents.backlash + player_settings.talents.demonic_tactics;
+  if (kEntityType == EntityType::kPlayer) {
+    stats.spell_crit_chance = StatConstant::kBaseCritChancePercent + 5 * player_settings.talents.devastation +
+                              player_settings.talents.backlash + 2 * player_settings.talents.demonic_tactics;
   }
+
   if (player_settings.auras.moonkin_aura) {
     stats.spell_crit_chance += 5;
   }
-  if (player_settings.auras.judgement_of_the_crusader) {
-    constexpr int kCritChance = 3;
 
-    stats.spell_crit_chance += kCritChance;
-    stats.melee_crit_chance += kCritChance;
-  }
+  // TODO does totem of wrath still stack?
   if (player_settings.auras.totem_of_wrath) {
     stats.spell_crit_chance += 3 * settings.totem_of_wrath_amount;
   }
-  if (player_settings.auras.chain_of_the_twilight_owl) {
-    stats.spell_crit_chance += 2;
-  }
 
   // Hit chance
-  if (entity_type == EntityType::kPlayer) {
-    if (player_settings.sets.mana_etched >= 2) {
-      stats.spell_hit_rating += 35;
-    }
-
+  if (kEntityType == EntityType::kPlayer) {
     stats.extra_spell_hit_chance = stats.spell_hit_rating / StatConstant::kHitRatingPerPercent;
   }
+
+  // TODO does totem of wrath still stack?
   if (player_settings.auras.totem_of_wrath) {
     stats.extra_spell_hit_chance += 3 * settings.totem_of_wrath_amount;
   }
+
   if (player_settings.auras.inspiring_presence) {
     stats.extra_spell_hit_chance++;
   }
+
   stats.spell_hit_chance = GetBaseSpellHitChance(kLevel, settings.enemy_level);
 
-  if (player_settings.auras.curse_of_the_elements) {
-    const double kDamageModifier = 1.1 + 0.01 * settings.improved_curse_of_the_elements;
-
-    stats.shadow_modifier *= kDamageModifier;
-    stats.fire_modifier *= kDamageModifier;
-  }
-
+  // TODO does this still stack
   if (player_settings.auras.ferocious_inspiration) {
     stats.damage_modifier *= std::pow(1.03, settings.ferocious_inspiration_amount);
-  }
-
-  if ((player_settings.talents.demonic_sacrifice == 0 || !settings.sacrificing_pet) &&
-      player_settings.talents.soul_link == 1) {
-    stats.damage_modifier *= 1.05;
   }
 
   if (settings.using_custom_isb_uptime) {
     stats.shadow_modifier *= GetCustomImprovedShadowBoltDamageModifier();
   }
 
-  if (player_settings.auras.wrath_of_air_totem && settings.has_elemental_shaman_t4_bonus) {
-    stats.spell_power += 20;
-  }
-
   if (player_settings.auras.blood_pact) {
-    if (entity_type == EntityType::kPet) {
+    if (kEntityType == EntityType::kPet) {
       // Only add 70 stam if it's a pet since it's added to the player's stats in the client.
       stats.stamina += 70;
     }
 
     auto improved_imp_points = settings.improved_imp;
 
-    if (settings.selected_pet == EmbindConstant::kImp &&
-        (!settings.sacrificing_pet || player_settings.talents.demonic_sacrifice == 0) &&
-        player_settings.talents.improved_imp > improved_imp_points) {
+    if (settings.selected_pet == EmbindConstant::kImp && player_settings.talents.improved_imp > improved_imp_points) {
       improved_imp_points = player_settings.talents.improved_imp;
     }
 
     stats.stamina += 70 * 0.1 * improved_imp_points;
-  }
-
-  // Add mp5 from Vampiric Touch (add 25% instead of 5% since we're adding it to
-  // the mana per 5 seconds variable)
-  if (player_settings.auras.vampiric_touch) {
-    stats.mp5 += settings.shadow_priest_dps * 0.25;
-  }
-
-  if (player_settings.auras.atiesh_warlock) {
-    stats.spell_power += 33 * settings.warlock_atiesh_amount;
   }
 }
 
@@ -154,9 +118,8 @@ void Entity::SendCombatLogBreakdown() const {
       PostIterationDamageAndMana(kSpellName);
     }
 
-    PostCombatLogBreakdown(kSpell->name.c_str(), kSpell->casts, kSpell->crits,
-                           kSpell->misses, kSpell->count, kSpell->uptime,
-                           kSpell->dodge, kSpell->glancing_blows);
+    PostCombatLogBreakdown(kSpell->name.c_str(), kSpell->casts, kSpell->crits, kSpell->misses, kSpell->count,
+                           kSpell->uptime, kSpell->dodge, kSpell->glancing_blows);
   }
 }
 
@@ -178,7 +141,8 @@ double Entity::GetMultiplicativeDamageModifier(const Spell& kSpell, bool) const 
   if (kSpell.spell_school == SpellSchool::kShadow) {
     damage_modifier *= stats.shadow_modifier;
 
-    if (!settings.using_custom_isb_uptime && auras.improved_shadow_bolt != nullptr && auras.improved_shadow_bolt->active) {
+    if (!settings.using_custom_isb_uptime && auras.improved_shadow_bolt != nullptr &&
+        auras.improved_shadow_bolt->active) {
       damage_modifier *= auras.improved_shadow_bolt->modifier;
     }
   } else if (kSpell.spell_school == SpellSchool::kFire) {
@@ -265,7 +229,6 @@ double Entity::GetSpellHitChance(const SpellType kSpellType) const {
 // https://web.archive.org/web/20161015101615/https://dwarfpriest.wordpress.com/2008/01/07/spell-hit-spell-penetration-and-resistances/
 // && https://royalgiraffe.github.io/resist-guide
 double Entity::GetBaseSpellHitChance(const int kEntityLevel, const int kEnemyLevel) const {
-
   if (const int kLevelDifference = kEnemyLevel - kEntityLevel; kLevelDifference <= 2) {
     return std::min(99, 100 - kLevelDifference - 4);
   } else {

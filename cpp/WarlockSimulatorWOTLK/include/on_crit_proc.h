@@ -17,11 +17,3 @@ struct TheLightningCapacitor final : OnCritProc {
   explicit TheLightningCapacitor(Player& player);
   void StartCast(double predicted_damage = 0) override;
 };
-
-struct ShiffarsNexusHorn final : OnCritProc {
-  ShiffarsNexusHorn(Player& player, std::shared_ptr<Aura> aura);
-};
-
-struct SextantOfUnstableCurrents final : OnCritProc {
-  SextantOfUnstableCurrents(Player& player, std::shared_ptr<Aura> aura);
-};

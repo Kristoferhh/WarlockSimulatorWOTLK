@@ -8,12 +8,3 @@ struct OnDotTickProc : SpellProc {
   void Setup() override;
   virtual bool ShouldProc(DamageOverTime* spell);
 };
-
-struct AshtongueTalismanOfShadows final : OnDotTickProc {
-  AshtongueTalismanOfShadows(Player& player, const std::shared_ptr<Aura>& kAura);
-  bool ShouldProc(DamageOverTime* spell) override;
-};
-
-struct TimbalsFocusingCrystal final : OnDotTickProc {
-  explicit TimbalsFocusingCrystal(Player& player);
-};

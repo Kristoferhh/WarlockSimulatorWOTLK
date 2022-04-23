@@ -178,15 +178,9 @@ export default function StatsDisplay() {
   }
 
   function getMp5(): number {
-    let mp5 = Object.values(playerState.Stats)
+    return Object.values(playerState.Stats)
       .map((obj) => obj[Stat.Mp5] || 0)
       .reduce((a, b) => a + b)
-
-    if (playerState.Auras.includes(AuraId.VampiricTouch)) {
-      mp5 += parseInt(playerState.Settings[Setting.shadowPriestDps]) * 0.25
-    }
-
-    return mp5
   }
 
   function getEnemyArmor(): number {

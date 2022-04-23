@@ -405,27 +405,6 @@ export default function SettingsDisplay() {
             </select>
           </li>
         )}
-        {playerStore.Auras.includes(AuraId.PowerInfusion) && (
-          <li id='bloodlustAmount'>
-            <label className='settings-left' htmlFor='bloodlustAmount'>
-              {t('Bloodlust amount')}
-            </label>
-            <select
-              className='settings-right'
-              name='bloodlustAmount'
-              onChange={(e) =>
-                settingModifiedHandler(Setting.bloodlustAmount, e.target.value)
-              }
-              value={playerStore.Settings[Setting.bloodlustAmount]}
-            >
-              {Array.from(Array(15), (e, i) => i + 1).map((number) => (
-                <option value={number} key={nanoid()}>
-                  {number}
-                </option>
-              ))}
-            </select>
-          </li>
-        )}
         {playerStore.Auras.includes(AuraId.Innervate) && (
           <li id='innervateAmount'>
             <label className='settings-left' htmlFor='innervateAmount'>
@@ -494,44 +473,6 @@ export default function SettingsDisplay() {
               <option value='3'>3</option>
               <option value='4'>4</option>
             </select>
-          </li>
-        )}
-        {playerStore.Auras.includes(AuraId.WrathOfAirTotem) && (
-          <li id='improvedWrathOfAirTotem'>
-            <label className='settings-left' htmlFor='improvedWrathOfAirTotem'>
-              {t('Elemental Shaman T4 2pc bonus')}?
-            </label>
-            <select
-              className='settings-right'
-              name='improvedWrathOfAirTotem'
-              onChange={(e) =>
-                settingModifiedHandler(
-                  Setting.improvedWrathOfAirTotem,
-                  e.target.value
-                )
-              }
-              value={playerStore.Settings[Setting.improvedWrathOfAirTotem]}
-            >
-              <option value='no'>{t('No')}</option>
-              <option value='yes'>{t('Yes')}</option>
-            </select>
-          </li>
-        )}
-        {playerStore.Auras.includes(AuraId.VampiricTouch) && (
-          <li id='shadowPriestDps'>
-            <label className='settings-left' htmlFor='shadowPriestDps'>
-              {t('Shadow Priest Dps')}
-            </label>
-            <input
-              className='settings-right'
-              onChange={(e) =>
-                settingModifiedHandler(Setting.shadowPriestDps, e.target.value)
-              }
-              value={playerStore.Settings[Setting.shadowPriestDps]}
-              type='number'
-              min='0'
-              name='shadowPriestDps'
-            />
           </li>
         )}
         {playerStore.Auras.includes(AuraId.BloodPact) && (

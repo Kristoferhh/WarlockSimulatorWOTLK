@@ -1,27 +1,22 @@
 #include "../include/life_tap.h"
 
+#include "../include/combat_log_breakdown.h"
+#include "../include/common.h"
 #include "../include/entity.h"
+#include "../include/pet.h"
 #include "../include/player.h"
 #include "../include/talents.h"
-#include "../include/common.h"
-#include "../include/combat_log_breakdown.h"
-#include "../include/pet.h"
 
+// TODO make a class a parent to life tap and dark pact instead of life tap being a parent to dark pact
 LifeTap::LifeTap(Entity& entity)
-  : Spell(entity),
-    mana_return(582),
-    modifier(1 * (1 + 0.1 * entity.player->talents.improved_life_tap)) {
+    : Spell(entity), mana_return(582), modifier(1 * (1 + 0.1 * entity.player->talents.improved_life_tap)) {
   name = SpellName::kLifeTap;
-
-  coefficient = 0.8;
-
+  coefficient = 0.5;
   spell_school = SpellSchool::kShadow;
   Spell::Setup();
 }
 
-double LifeTap::ManaGain() const {
-  return (mana_return + entity.GetSpellPower(false, spell_school) * coefficient) * modifier;
-}
+double LifeTap::ManaGain() const { return (mana_return + entity.GetSpellPower(spell_school) * coefficient) * modifier; }
 
 void LifeTap::Cast() {
   const double kCurrentPlayerMana = entity.stats.mana;
@@ -34,9 +29,10 @@ void LifeTap::Cast() {
     entity.combat_log_breakdown.at(name)->casts++;
     entity.combat_log_breakdown.at(name)->iteration_mana_gain += kManaGained;
   }
+
   if (entity.ShouldWriteToCombatLog()) {
     entity.CombatLog(name + " " + DoubleToString(kManaGained) + " (" +
-                     DoubleToString(entity.GetSpellPower(false, spell_school)) + " Spell Power - " +
+                     DoubleToString(entity.GetSpellPower(spell_school)) + " Spell Power - " +
                      DoubleToString(coefficient, 3) + " Coefficient - " + DoubleToString(modifier * 100, 2) +
                      "% Modifier)");
 
@@ -62,10 +58,9 @@ void LifeTap::Cast() {
   }
 }
 
-DarkPact::DarkPact(Entity& entity)
-  : LifeTap(entity) {
+DarkPact::DarkPact(Entity& entity) : LifeTap(entity) {
   name = SpellName::kDarkPact;
-  mana_return = 700;
+  mana_return = 1200;
   coefficient = 0.96;
   modifier = 1;
   spell_school = SpellSchool::kShadow;

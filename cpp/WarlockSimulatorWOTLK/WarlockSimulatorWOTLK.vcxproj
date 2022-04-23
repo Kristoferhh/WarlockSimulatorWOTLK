@@ -176,7 +176,7 @@
     <ClInclude Include="include\embind_constant.h" />
     <ClInclude Include="include\entity.h" />
     <ClInclude Include="include\enums.h" />
-    <ClInclude Include="include\items.h" />
+    <ClInclude Include="include\item_slot.h" />
     <ClInclude Include="include\pet.h" />
     <ClInclude Include="include\player.h" />
     <ClInclude Include="include\player_settings.h" />

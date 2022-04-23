@@ -139,75 +139,11 @@ ShadowTranceAura::ShadowTranceAura(Entity& entity_param) : Aura(entity_param) {
   Aura::Setup();
 }
 
-FlameshadowAura::FlameshadowAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kFlameshadow;
-  duration = 15;
-  stats.push_back(ShadowPower(entity_param, 135));
-  Aura::Setup();
-}
-
-ShadowflameAura::ShadowflameAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kShadowflame;
-  duration = 15;
-  stats.push_back(FirePower(entity_param, 135));
-  Aura::Setup();
-}
-
-SpellstrikeAura::SpellstrikeAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kSpellstrike;
-  duration = 10;
-  stats.push_back(SpellPower(entity_param, 92));
-  Aura::Setup();
-}
-
 PowerInfusionAura::PowerInfusionAura(Entity& entity_param) : Aura(entity_param) {
   name = SpellName::kPowerInfusion;
   duration = 15;
   stats.push_back(SpellHastePercent(entity_param, 1.2));
   stats.push_back(ManaCostModifier(entity_param, 0.8));
-  Aura::Setup();
-}
-
-EyeOfMagtheridonAura::EyeOfMagtheridonAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kEyeOfMagtheridon;
-  duration = 10;
-  stats.push_back(SpellPower(entity_param, 170));
-  Aura::Setup();
-}
-
-SextantOfUnstableCurrentsAura::SextantOfUnstableCurrentsAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kSextantOfUnstableCurrents;
-  duration = 15;
-  stats.push_back(SpellPower(entity_param, 190));
-  Aura::Setup();
-}
-
-QuagmirransEyeAura::QuagmirransEyeAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kQuagmirransEye;
-  duration = 6;
-  stats.push_back(SpellHasteRating(entity_param, 320));
-  Aura::Setup();
-}
-
-ShiffarsNexusHornAura::ShiffarsNexusHornAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kShiffarsNexusHorn;
-  duration = 10;
-  stats.push_back(SpellPower(entity_param, 225));
-  Aura::Setup();
-}
-
-ManaEtched4SetAura::ManaEtched4SetAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kManaEtched4Set;
-  duration = 15;
-  stats.push_back(SpellPower(entity_param, 110));
-  Aura::Setup();
-}
-
-DestructionPotionAura::DestructionPotionAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kDestructionPotion;
-  duration = 15;
-  stats.push_back(SpellPower(entity_param, 120));
-  stats.push_back(SpellCritChance(entity_param, 2));
   Aura::Setup();
 }
 
@@ -237,76 +173,10 @@ BloodlustAura::BloodlustAura(Entity& entity_param) : Aura(entity_param) {
   Aura::Setup();
 }
 
-DrumsOfBattleAura::DrumsOfBattleAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kDrumsOfBattle;
-  duration = 30;
-  group_wide = true;
-  stats.push_back(SpellHasteRating(entity_param, 80));
-  Aura::Setup();
-}
-
-DrumsOfWarAura::DrumsOfWarAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kDrumsOfWar;
-  duration = 30;
-  group_wide = true;
-  stats.push_back(SpellPower(entity_param, 30));
-  Aura::Setup();
-}
-
-AshtongueTalismanOfShadowsAura::AshtongueTalismanOfShadowsAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kAshtongueTalismanOfShadows;
-  duration = 5;
-  stats.push_back(SpellPower(entity_param, 220));
-  Aura::Setup();
-}
-
-DarkmoonCardCrusadeAura::DarkmoonCardCrusadeAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kDarkmoonCardCrusade;
-  duration = 10;
-  max_stacks = 10;
-  stats_per_stack.push_back(SpellPower(entity_param, 8));
-  Aura::Setup();
-}
-
 TheLightningCapacitorAura::TheLightningCapacitorAura(Entity& entity_param) : Aura(entity_param) {
   name = SpellName::kTheLightningCapacitor;
   has_duration = false;
   max_stacks = 3;
-  Aura::Setup();
-}
-
-BandOfTheEternalSageAura::BandOfTheEternalSageAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kBandOfTheEternalSage;
-  duration = 10;
-  stats.push_back(SpellPower(entity_param, 95));
-  Aura::Setup();
-}
-
-BladeOfWizardryAura::BladeOfWizardryAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kBladeOfWizardry;
-  duration = 6;
-  stats.push_back(SpellHasteRating(entity_param, 280));
-  Aura::Setup();
-}
-
-ShatteredSunPendantOfAcumenAldorAura::ShatteredSunPendantOfAcumenAldorAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kShatteredSunPendantOfAcumenAldor;
-  duration = 10;
-  stats.push_back(SpellPower(entity_param, 120));
-  Aura::Setup();
-}
-
-RobeOfTheElderScribesAura::RobeOfTheElderScribesAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kRobeOfTheElderScribes;
-  duration = 10;
-  stats.push_back(SpellPower(entity_param, 130));
-  Aura::Setup();
-}
-
-MysticalSkyfireDiamondAura::MysticalSkyfireDiamondAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kMysticalSkyfireDiamond;
-  duration = 4;
-  stats.push_back(SpellHasteRating(entity_param, 320));
   Aura::Setup();
 }
 
@@ -316,37 +186,9 @@ AmplifyCurseAura::AmplifyCurseAura(Entity& entity_param) : Aura(entity_param) {
   Aura::Setup();
 }
 
-WrathOfCenariusAura::WrathOfCenariusAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kWrathOfCenarius;
-  duration = 10;
-  stats.push_back(SpellPower(entity_param, 132));
-  Aura::Setup();
-}
-
 InnervateAura::InnervateAura(Entity& entity_param) : Aura(entity_param) {
   name = SpellName::kInnervate;
   duration = 20;
-  Aura::Setup();
-}
-
-ChippedPowerCoreAura::ChippedPowerCoreAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kChippedPowerCore;
-  duration = 30;
-  stats.push_back(SpellPower(entity_param, 25));
-  Aura::Setup();
-}
-
-CrackedPowerCoreAura::CrackedPowerCoreAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kCrackedPowerCore;
-  duration = 30;
-  stats.push_back(SpellPower(entity_param, 15));
-  Aura::Setup();
-}
-
-AirmansRibbonOfGallantryAura::AirmansRibbonOfGallantryAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kAirmansRibbonOfGallantry;
-  duration = 30;  // should maybe lower this to 25 or so for more realism
-  stats.push_back(SpellPower(entity_param, 80));
   Aura::Setup();
 }
 
@@ -365,9 +207,8 @@ BlackBookAura::BlackBookAura(Entity& entity_param) : Aura(entity_param) {
   Aura::Setup();
 }
 
-BattleSquawkAura::BattleSquawkAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kBattleSquawk;
-  duration = 300;
-  stats.push_back(MeleeHastePercent(entity_param, std::pow(1.05, entity_param.player->settings.battle_squawk_amount)));
+HauntAura::HauntAura(Entity& entity_param) : Aura(entity_param) {
+  name = SpellName::kHaunt;
+  duration = 12;
   Aura::Setup();
 }
