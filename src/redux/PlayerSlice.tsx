@@ -8,7 +8,6 @@ import {
   InitialSelectedItemsAndEnchants,
   InitialSettings,
   InitialSelectedGems,
-  TalentName,
   Setting,
   StatsCollection,
   InitialSetCounts,
@@ -23,26 +22,28 @@ import {
   InitialRotation,
   ProfileContainer,
 } from '../Types'
+const ldb = require('localdata')
 
 const initialPlayerState: PlayerState = {
-  Talents: JSON.parse(localStorage.getItem('talents') || '{}'),
+  Talents: JSON.parse(localStorage.getItem('wotlk_talents') || '{}'),
   TalentPointsRemaining: getRemainingTalentPoints(
-    JSON.parse(localStorage.getItem('talents') || '{}')
+    JSON.parse(localStorage.getItem('wotlk_talents') || '{}')
   ),
   SelectedItems: JSON.parse(
-    localStorage.getItem('selectedItems') ||
+    localStorage.getItem('wotlk_selectedItems') ||
       JSON.stringify(InitialSelectedItemsAndEnchants)
   ),
   SelectedEnchants: JSON.parse(
-    localStorage.getItem('selectedEnchants') ||
+    localStorage.getItem('wotlk_selectedEnchants') ||
       JSON.stringify(InitialSelectedItemsAndEnchants)
   ),
   SelectedGems: JSON.parse(
-    localStorage.getItem('selectedGems') || JSON.stringify(InitialSelectedGems)
+    localStorage.getItem('wotlk_selectedGems') ||
+      JSON.stringify(InitialSelectedGems)
   ),
-  Auras: JSON.parse(localStorage.getItem('auras') || '[]'),
+  Auras: JSON.parse(localStorage.getItem('wotlk_auras') || '[]'),
   Rotation: JSON.parse(
-    localStorage.getItem('rotation') || JSON.stringify(InitialRotation)
+    localStorage.getItem('wotlk_rotation') || JSON.stringify(InitialRotation)
   ),
   Stats: {
     Base: InitialPlayerStats,
@@ -53,9 +54,9 @@ const initialPlayerState: PlayerState = {
     Talents: InitialPlayerStats,
   },
   Settings: JSON.parse(
-    localStorage.getItem('settings') || JSON.stringify(InitialSettings)
+    localStorage.getItem('wotlk_settings') || JSON.stringify(InitialSettings)
   ),
-  Profiles: JSON.parse(localStorage.getItem('profiles') || '[]'),
+  Profiles: JSON.parse(localStorage.getItem('wotlk_profiles') || '[]'),
   Sets: InitialSetCounts,
 }
 
@@ -66,14 +67,17 @@ export const PlayerSlice = createSlice({
     setSelectedTalents: (state, action: PayloadAction<TalentStore>) => {
       state.Talents = action.payload
       state.TalentPointsRemaining = getRemainingTalentPoints(state.Talents)
-      localStorage.setItem('talents', JSON.stringify(state.Talents))
+      localStorage.setItem('wotlk_talents', JSON.stringify(state.Talents))
     },
     setSelectedItems: (
       state,
       action: PayloadAction<ItemSlotDetailedStruct>
     ) => {
       state.SelectedItems = action.payload
-      localStorage.setItem('selectedItems', JSON.stringify(state.SelectedItems))
+      localStorage.setItem(
+        'wotlk_selectedItems',
+        JSON.stringify(state.SelectedItems)
+      )
     },
     setSelectedEnchants: (
       state,
@@ -81,13 +85,13 @@ export const PlayerSlice = createSlice({
     ) => {
       state.SelectedEnchants = action.payload
       localStorage.setItem(
-        'selectedEnchants',
+        'wotlk_selectedEnchants',
         JSON.stringify(state.SelectedEnchants)
       )
     },
     setSelectedAuras: (state, action: PayloadAction<AuraId[]>) => {
       state.Auras = action.payload
-      localStorage.setItem('auras', JSON.stringify(state.Auras))
+      localStorage.setItem('wotlk_auras', JSON.stringify(state.Auras))
     },
     toggleRotationSpellSelection: (state, action: PayloadAction<Spell>) => {
       const rotationGroup = RotationGroups.find(
@@ -116,7 +120,7 @@ export const PlayerSlice = createSlice({
           state.Rotation[rotationGroup.Header].push(action.payload.Id)
         }
 
-        localStorage.setItem('rotation', JSON.stringify(state.Rotation))
+        localStorage.setItem('wotlk_rotation', JSON.stringify(state.Rotation))
       }
     },
     setBaseStats: (state, action: PayloadAction<StatsCollection>) => {
@@ -145,20 +149,23 @@ export const PlayerSlice = createSlice({
       action: PayloadAction<{ setting: Setting; value: string }>
     ) => {
       state.Settings[action.payload.setting] = action.payload.value
-      localStorage.setItem('settings', JSON.stringify(state.Settings))
+      localStorage.setItem('wotlk_settings', JSON.stringify(state.Settings))
     },
     setProfile: (state, action: PayloadAction<ProfileContainer>) => {
       state.Profiles.push(action.payload)
-      localStorage.setItem('profiles', JSON.stringify(state.Profiles))
+      localStorage.setItem('wotlk_profiles', JSON.stringify(state.Profiles))
     },
     setSelectedGems: (state, action: PayloadAction<SelectedGemsStruct>) => {
       state.SelectedGems = action.payload
-      localStorage.setItem('selectedGems', JSON.stringify(state.SelectedGems))
+      localStorage.setItem(
+        'wotlk_selectedGems',
+        JSON.stringify(state.SelectedGems)
+      )
     },
     deleteProfile: (state, action: PayloadAction<string>) => {
       state.Profiles = state.Profiles.filter((x) => x.Name !== action.payload)
-      localStorage.setItem('profiles', JSON.stringify(state.Profiles))
-      localStorage.removeItem('selectedProfile')
+      localStorage.setItem('wotlk_profiles', JSON.stringify(state.Profiles))
+      localStorage.removeItem('wotlk_selectedProfile')
     },
     renameProfile: (
       state,
@@ -166,20 +173,20 @@ export const PlayerSlice = createSlice({
     ) => {
       state.Profiles.find((x) => x.Name === action.payload.oldName)!.Name =
         action.payload.newName
-      localStorage.setItem('profiles', JSON.stringify(state.Profiles))
-      localStorage.setItem('selectedProfile', action.payload.newName)
+      localStorage.setItem('wotlk_profiles', JSON.stringify(state.Profiles))
+      localStorage.setItem('wotlk_selectedProfile', action.payload.newName)
     },
     setTalentsState: (state, action: PayloadAction<TalentStore>) => {
       state.Talents = action.payload
-      localStorage.setItem('talents', JSON.stringify(action.payload))
+      localStorage.setItem('wotlk_talents', JSON.stringify(action.payload))
     },
     setRotationState: (state, action: PayloadAction<RotationStruct>) => {
       state.Rotation = action.payload
-      localStorage.setItem('rotation', JSON.stringify(action.payload))
+      localStorage.setItem('wotlk_rotation', JSON.stringify(action.payload))
     },
     setSettingsState: (state, action: PayloadAction<Settings>) => {
       state.Settings = action.payload
-      localStorage.setItem('settings', JSON.stringify(action.payload))
+      localStorage.setItem('wotlk_settings', JSON.stringify(action.payload))
     },
   },
 })

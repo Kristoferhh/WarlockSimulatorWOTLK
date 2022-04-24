@@ -14,25 +14,26 @@ import {
 
 const initialUiState: UiState = {
   Sources: JSON.parse(
-    localStorage.getItem('sources') || JSON.stringify([0, 1, 2, 3, 4, 5])
+    localStorage.getItem('wotlk_sources') || JSON.stringify([0, 1, 2, 3, 4, 5])
   ),
   GemSelectionTable: InitialGemSelectionTableValue,
   GemPreferences: JSON.parse(
-    localStorage.getItem('gemPreferences') ||
+    localStorage.getItem('wotlk_gemPreferences') ||
       JSON.stringify({ hidden: [], favorites: [] })
   ),
-  SelectedProfile: localStorage.getItem('selectedProfile') || '',
+  SelectedProfile: localStorage.getItem('wotlk_selectedProfile') || '',
   ImportExportWindowVisible: false,
   EquippedItemsWindowVisible: false,
   FillItemSocketsWindowVisible: false,
   HiddenItems: JSON.parse(
-    localStorage.getItem('hiddenItems') || JSON.stringify([])
+    localStorage.getItem('wotlk_hiddenItems') || JSON.stringify([])
   ),
   SelectedItemSlot:
-    (localStorage.getItem('selectedItemSlot') as ItemSlot) || ItemSlot.Weapon,
+    (localStorage.getItem('wotlk_selectedItemSlot') as ItemSlot) ||
+    ItemSlot.Weapon,
   SelectedItemSubSlot:
-    (localStorage.getItem('selectedItemSubSlot') as SubSlotValue) || '1',
-  SavedItemDps: JSON.parse(localStorage.getItem('savedItemDps') || '{}'),
+    (localStorage.getItem('wotlk_selectedItemSubSlot') as SubSlotValue) || '1',
+  SavedItemDps: JSON.parse(localStorage.getItem('wotlk_savedItemDps') || '{}'),
   CombatLog: { Visible: false, Data: [] },
   CombatLogBreakdown: {
     TotalDamageDone: 0,
@@ -73,7 +74,7 @@ export const UiSlice = createSlice({
         state.Sources.push(action.payload)
       }
 
-      localStorage.setItem('sources', JSON.stringify(state.Sources))
+      localStorage.setItem('wotlk_sources', JSON.stringify(state.Sources))
     },
     setGemSelectionTable: (
       state,
@@ -91,7 +92,7 @@ export const UiSlice = createSlice({
       }
 
       localStorage.setItem(
-        'gemPreferences',
+        'wotlk_gemPreferences',
         JSON.stringify(state.GemPreferences)
       )
     },
@@ -105,13 +106,13 @@ export const UiSlice = createSlice({
       }
 
       localStorage.setItem(
-        'gemPreferences',
+        'wotlk_gemPreferences',
         JSON.stringify(state.GemPreferences)
       )
     },
     setSelectedProfile: (state, action: PayloadAction<string>) => {
       state.SelectedProfile = action.payload
-      localStorage.setItem('selectedProfile', action.payload)
+      localStorage.setItem('wotlk_selectedProfile', action.payload)
     },
     setImportExportWindowVisibility: (
       state,
@@ -140,15 +141,21 @@ export const UiSlice = createSlice({
         state.HiddenItems.push(action.payload)
       }
 
-      localStorage.setItem('hiddenItems', JSON.stringify(state.HiddenItems))
+      localStorage.setItem(
+        'wotlk_hiddenItems',
+        JSON.stringify(state.HiddenItems)
+      )
     },
     setSelectedItemSlot: (state, action: PayloadAction<ItemSlot>) => {
       state.SelectedItemSlot = action.payload
-      localStorage.setItem('selectedItemSlot', state.SelectedItemSlot)
+      localStorage.setItem('wotlk_selectedItemSlot', state.SelectedItemSlot)
     },
     setSelectedItemSubSlot: (state, action: PayloadAction<SubSlotValue>) => {
       state.SelectedItemSubSlot = action.payload
-      localStorage.setItem('selectedItemSubSlot', state.SelectedItemSubSlot)
+      localStorage.setItem(
+        'wotlk_selectedItemSubSlot',
+        state.SelectedItemSubSlot
+      )
     },
     setSavedItemDps: (
       state,
@@ -166,7 +173,10 @@ export const UiSlice = createSlice({
       state.SavedItemDps[action.payload.itemSlot][action.payload.itemId] =
         action.payload.dps
       if (action.payload.saveLocalStorage) {
-        localStorage.setItem('savedItemDps', JSON.stringify(state.SavedItemDps))
+        localStorage.setItem(
+          'wotlk_savedItemDps',
+          JSON.stringify(state.SavedItemDps)
+        )
       }
     },
     setCombatLogVisibility: (state, action: PayloadAction<boolean>) => {
