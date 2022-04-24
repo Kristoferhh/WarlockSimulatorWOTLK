@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { Auras } from '../data/Auras'
 import { RootState } from '../redux/Store'
-import { Aura, AuraGroup, AuraId } from '../Types'
+import { Aura, AuraId } from '../Types'
 import { AuraGroups } from '../data/AuraGroups'
 import { setAurasStats, setSelectedAuras } from '../redux/PlayerSlice'
 import { nanoid } from 'nanoid'
@@ -9,39 +9,27 @@ import { getAurasStats, getBaseWowheadUrl, isPetActive } from '../Common'
 import { useTranslation } from 'react-i18next'
 import i18n from '../i18n/config'
 
-function disableAurasWithUniqueProperties(aura: Aura, auraObj: AuraId[]): void {
-  if (aura.Potion)
-    Auras.filter((e) => e.Potion).forEach(
-      (x) => (auraObj = auraObj.filter((y) => y !== x.Id))
-    )
-  if (aura.FoodBuff)
-    Auras.filter((e) => e.FoodBuff).forEach(
-      (x) => (auraObj = auraObj.filter((y) => y !== x.Id))
-    )
-  if (aura.WeaponOil)
-    Auras.filter((e) => e.WeaponOil).forEach(
-      (x) => (auraObj = auraObj.filter((y) => y !== x.Id))
-    )
-  if (aura.BattleElixir)
-    Auras.filter((e) => e.BattleElixir).forEach(
-      (x) => (auraObj = auraObj.filter((y) => y !== x.Id))
-    )
-  if (aura.GuardianElixir)
-    Auras.filter((e) => e.GuardianElixir).forEach(
-      (x) => (auraObj = auraObj.filter((y) => y !== x.Id))
-    )
-  if (aura.Alcohol)
-    Auras.filter((e) => e.Alcohol).forEach(
-      (x) => (auraObj = auraObj.filter((y) => y !== x.Id))
-    )
-  if (aura.DemonicRune)
-    Auras.filter((e) => e.DemonicRune).forEach(
-      (x) => (auraObj = auraObj.filter((y) => y !== x.Id))
-    )
-  if (aura.Drums)
-    Auras.filter((e) => e.Drums).forEach(
-      (x) => (auraObj = auraObj.filter((y) => y !== x.Id))
-    )
+function DisableAurasWithUniqueProperties(
+  aura: Aura,
+  auraIds: AuraId[]
+): AuraId[] {
+  for (var auraId of auraIds) {
+    var auraObj = Auras.find((x) => x.Id === auraId)
+
+    if (
+      (auraObj?.Potion && aura.Potion) ||
+      (auraObj?.FoodBuff && aura.FoodBuff) ||
+      (auraObj?.WeaponOil && aura.WeaponOil) ||
+      (auraObj?.BattleElixir && aura.BattleElixir) ||
+      (auraObj?.GuardianElixir && aura.GuardianElixir) ||
+      (auraObj?.Alcohol && aura.Alcohol) ||
+      (auraObj?.DemonicRune && aura.DemonicRune)
+    ) {
+      auraIds = auraIds.filter((x) => x !== auraObj?.Id)
+    }
+  }
+
+  return auraIds
 }
 
 export default function AuraSelection() {
@@ -49,13 +37,13 @@ export default function AuraSelection() {
   const dispatch = useDispatch()
   const { t } = useTranslation()
 
-  function auraClickHandler(aura: Aura): void {
+  function AuraClickHandler(aura: Aura): void {
     let newAuras = JSON.parse(JSON.stringify(playerState.Auras)) as AuraId[]
 
     // If the aura is being toggled on and it's a unique buff like potion/food buff
     // then disable all other auras with that unique property as true.
     if (!newAuras.includes(aura.Id)) {
-      disableAurasWithUniqueProperties(aura, newAuras)
+      newAuras = DisableAurasWithUniqueProperties(aura, newAuras)
       newAuras.push(aura.Id)
     } else {
       newAuras = newAuras.filter((x) => x !== aura.Id)
@@ -82,7 +70,7 @@ export default function AuraSelection() {
                 className='buffs aura'
                 data-checked={playerState.Auras.includes(aura.Id)}
                 onClick={(e) => {
-                  auraClickHandler(aura)
+                  AuraClickHandler(aura)
                   e.preventDefault()
                 }}
               >
