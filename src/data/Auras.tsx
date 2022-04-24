@@ -58,6 +58,7 @@ export const Auras: Aura[] = [
     IconName: 'spell_fire_totemofwrath',
     Id: AuraId.TotemOfWrath,
     SpellPower: true,
+    Crit: true,
   },
   {
     Name: 'Demonic Pact',
@@ -248,6 +249,7 @@ export const Auras: Aura[] = [
       [Stat.ShadowModifier]: 1.13,
       [Stat.FireModifier]: 1.13,
     },
+    SpellDamagePercent: true,
   },
   {
     Name: 'Shadow Weaving',
@@ -262,6 +264,7 @@ export const Auras: Aura[] = [
     IconName: 'spell_fire_soulburn',
     Id: AuraId.ImprovedScorch,
     Stats: { [Stat.FireModifier]: 1.15 },
+    SpellCritDebuff: true,
   },
   {
     Name: 'Misery',
@@ -271,12 +274,14 @@ export const Auras: Aura[] = [
     Stats: {
       [Stat.HitChance]: 3,
     },
+    SpellHit: true,
   },
   {
     Name: 'Judgement of Wisdom',
     Group: AuraGroup.Debuffs,
     IconName: 'ability_paladin_judgementblue',
     Id: AuraId.JudgementOfWisdom,
+    ManaRestore: true,
   },
   {
     Name: 'Faerie Fire',
@@ -284,6 +289,7 @@ export const Auras: Aura[] = [
     IconName: 'spell_nature_faeriefire',
     ForPet: true,
     Id: AuraId.FaerieFire,
+    ArmorMinor: true,
   },
   {
     Name: 'Sunder Armor',
@@ -291,6 +297,7 @@ export const Auras: Aura[] = [
     IconName: 'ability_warrior_sunder',
     ForPet: true,
     Id: AuraId.SunderArmor,
+    ArmorMajor: true,
   },
   {
     Name: 'Expose Armor',
@@ -298,6 +305,7 @@ export const Auras: Aura[] = [
     IconName: 'ability_warrior_riposte',
     ForPet: true,
     Id: AuraId.ExposeArmor,
+    ArmorMajor: true,
   },
   {
     Name: 'Curse of Recklessness',
@@ -312,6 +320,7 @@ export const Auras: Aura[] = [
     IconName: 'ability_warrior_bloodfrenzy',
     ForPet: true,
     Id: AuraId.BloodFrenzy,
+    PhysicalVulnerability: true,
   },
   {
     Name: 'Expose Weakness',

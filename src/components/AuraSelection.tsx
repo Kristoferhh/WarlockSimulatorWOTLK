@@ -39,7 +39,15 @@ function DisableAurasWithUniqueProperties(
       (auraObj?.SpellHaste && aura.SpellHaste) ||
       (auraObj?.SpellPower && aura.SpellPower) ||
       (auraObj?.Spirit && aura.Spirit) ||
-      (auraObj?.StatPercent && aura.StatPercent)
+      (auraObj?.StatPercent && aura.StatPercent) ||
+      (auraObj?.ArmorMajor && aura.ArmorMajor) ||
+      (auraObj?.ArmorMinor && aura.ArmorMinor) ||
+      (auraObj?.AttackPowerReduction && aura.AttackPowerReduction) ||
+      (auraObj?.ManaRestore && aura.ManaRestore) ||
+      (auraObj?.PhysicalVulnerability && aura.PhysicalVulnerability) ||
+      (auraObj?.SpellCritDebuff && aura.SpellCritDebuff) ||
+      (auraObj?.SpellDamagePercent && aura.SpellDamagePercent) ||
+      (auraObj?.SpellHit && aura.SpellHit)
     ) {
       auraIds = auraIds.filter((x) => x !== auraObj?.Id)
     }

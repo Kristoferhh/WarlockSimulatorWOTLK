@@ -86,6 +86,7 @@ export interface Aura {
   Health?: boolean
   Intellect?: boolean
   Mp5?: boolean
+  Crit?: boolean,
   MeleeCrit?: boolean
   MeleeHaste?: boolean
   Replenishment?: boolean
@@ -93,7 +94,15 @@ export interface Aura {
   SpellHaste?: boolean
   SpellPower?: boolean
   Spirit?: boolean
-  StatPercent?: boolean
+  StatPercent?: boolean,
+  ArmorMajor?: boolean,
+  ArmorMinor?: boolean,
+  AttackPowerReduction?: boolean,
+  ManaRestore?: boolean,
+  PhysicalVulnerability?: boolean,
+  SpellCritDebuff?: boolean,
+  SpellDamagePercent?: boolean,
+  SpellHit?: boolean
 }
 
 export enum Pet {
