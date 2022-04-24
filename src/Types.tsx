@@ -78,6 +78,22 @@ export interface Aura {
   BattleElixir?: boolean
   Potion?: boolean
   Alcohol?: boolean
+  AgilityAndStrength?: boolean
+  AttackPower?: boolean
+  AttackPowerPercent?: boolean
+  DamagePercent?: boolean
+  HastePercent?: boolean
+  Health?: boolean
+  Intellect?: boolean
+  Mp5?: boolean
+  MeleeCrit?: boolean
+  MeleeHaste?: boolean
+  Replenishment?: boolean
+  SpellCrit?: boolean
+  SpellHaste?: boolean
+  SpellPower?: boolean
+  Spirit?: boolean
+  StatPercent?: boolean
 }
 
 export enum Pet {

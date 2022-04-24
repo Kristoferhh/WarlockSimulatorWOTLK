@@ -23,7 +23,23 @@ function DisableAurasWithUniqueProperties(
       (auraObj?.BattleElixir && aura.BattleElixir) ||
       (auraObj?.GuardianElixir && aura.GuardianElixir) ||
       (auraObj?.Alcohol && aura.Alcohol) ||
-      (auraObj?.DemonicRune && aura.DemonicRune)
+      (auraObj?.DemonicRune && aura.DemonicRune) ||
+      (auraObj?.AgilityAndStrength && aura.AgilityAndStrength) ||
+      (auraObj?.AttackPower && aura.AttackPower) ||
+      (auraObj?.AttackPowerPercent && aura.AttackPowerPercent) ||
+      (auraObj?.DamagePercent && aura.DamagePercent) ||
+      (auraObj?.HastePercent && aura.HastePercent) ||
+      (auraObj?.Health && aura.Health) ||
+      (auraObj?.Intellect && aura.Intellect) ||
+      (auraObj?.Mp5 && aura.Mp5) ||
+      (auraObj?.MeleeCrit && aura.MeleeCrit) ||
+      (auraObj?.MeleeHaste && aura.MeleeHaste) ||
+      (auraObj?.Replenishment && aura.Replenishment) ||
+      (auraObj?.SpellCrit && aura.SpellCrit) ||
+      (auraObj?.SpellHaste && aura.SpellHaste) ||
+      (auraObj?.SpellPower && aura.SpellPower) ||
+      (auraObj?.Spirit && aura.Spirit) ||
+      (auraObj?.StatPercent && aura.StatPercent)
     ) {
       auraIds = auraIds.filter((x) => x !== auraObj?.Id)
     }
