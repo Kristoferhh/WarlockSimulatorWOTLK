@@ -12,16 +12,16 @@ struct DamageOverTime {
   Player& player;
   std::shared_ptr<Spell> parent_spell;
   SpellSchool school;
-  int duration = 0;          // Total duration of the dot
+  int duration         = 0;  // Total duration of the dot
   int tick_timer_total = 3;  // Total duration of each tick (default is 3 seconds
   // between ticks)
-  double tick_timer_remaining = 0;  // Time until next tick
-  int ticks_remaining = 0;          // Amount of ticks remaining before the dot expires
-  int ticks_total = 0;
-  double spell_power = 0;  // Spell Power amount when dot was applied
-  double base_damage = 0;
-  double coefficient = 0;
-  bool active = false;
+  double tick_timer_remaining     = 0;  // Time until next tick
+  int ticks_remaining             = 0;  // Amount of ticks remaining before the dot expires
+  int ticks_total                 = 0;
+  double spell_power              = 0;  // Spell Power amount when dot was applied
+  double base_damage              = 0;
+  double coefficient              = 0;
+  bool active                     = false;
   bool applied_with_amplify_curse = false;
   std::string name;
 

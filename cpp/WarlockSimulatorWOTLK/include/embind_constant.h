@@ -2,8 +2,6 @@
 
 enum class EmbindConstant : int {
   kUnused,
-  kScryers,
-  kAldor,
   kOnCooldown,
   kSingleTarget,
   kAoe,

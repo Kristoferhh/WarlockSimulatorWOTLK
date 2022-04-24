@@ -24,6 +24,7 @@ void Aura::Setup() {
 void Aura::Tick(const double kTime) {
   if (has_duration) {
     duration_remaining -= kTime;
+
     if (duration_remaining <= 0) {
       Fade();
     }

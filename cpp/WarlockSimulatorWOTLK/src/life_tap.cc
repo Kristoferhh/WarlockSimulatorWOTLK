@@ -9,20 +9,22 @@
 
 // TODO make a class a parent to life tap and dark pact instead of life tap being a parent to dark pact
 LifeTap::LifeTap(Entity& entity)
-    : Spell(entity), mana_return(582), modifier(1 * (1 + 0.1 * entity.player->talents.improved_life_tap)) {
-  name = SpellName::kLifeTap;
-  coefficient = 0.5;
+    : Spell(entity), mana_return(2400), modifier(1 * (1 + 0.1 * entity.player->talents.improved_life_tap)) {
+  name         = SpellName::kLifeTap;
+  coefficient  = 0.6;
   spell_school = SpellSchool::kShadow;
   Spell::Setup();
 }
 
-double LifeTap::ManaGain() const { return (mana_return + entity.GetSpellPower(spell_school) * coefficient) * modifier; }
+double LifeTap::ManaGain() const {
+  return (mana_return + entity.GetSpellPower(spell_school) * coefficient) * modifier;
+}
 
 void LifeTap::Cast() {
   const double kCurrentPlayerMana = entity.stats.mana;
-  const double kManaGain = this->ManaGain();
+  const double kManaGain          = this->ManaGain();
 
-  entity.stats.mana = std::min(entity.stats.max_mana, entity.stats.mana + kManaGain);
+  entity.stats.mana        = std::min(entity.stats.max_mana, entity.stats.mana + kManaGain);
   const double kManaGained = entity.stats.mana - kCurrentPlayerMana;
 
   if (entity.recording_combat_log_breakdown) {
@@ -59,12 +61,14 @@ void LifeTap::Cast() {
 }
 
 DarkPact::DarkPact(Entity& entity) : LifeTap(entity) {
-  name = SpellName::kDarkPact;
-  mana_return = 1200;
-  coefficient = 0.96;
-  modifier = 1;
+  name         = SpellName::kDarkPact;
+  mana_return  = 1200;
+  coefficient  = 0.96;
+  modifier     = 1;
   spell_school = SpellSchool::kShadow;
   Spell::Setup();
 }
 
-bool DarkPact::Ready() { return Spell::Ready() && entity.pet->stats.mana >= ManaGain(); }
+bool DarkPact::Ready() {
+  return Spell::Ready() && entity.pet->stats.mana >= ManaGain();
+}

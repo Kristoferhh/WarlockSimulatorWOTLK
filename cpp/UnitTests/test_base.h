@@ -10,6 +10,7 @@ struct Sets;
 struct CharacterStats;
 struct ItemSlot;
 struct SimulationSettings;
+struct Spell;
 
 struct TestBase {
   static Player SetUpPlayer(std::shared_ptr<PlayerSettings> player_settings = nullptr);
@@ -26,4 +27,5 @@ struct TestBase {
   static Sets GetDefaultSets();
   static CharacterStats GetDefaultStats();
   static ItemSlot GetDefaultItems();
+  static std::unique_ptr<Spell> CreateSpell();
 };

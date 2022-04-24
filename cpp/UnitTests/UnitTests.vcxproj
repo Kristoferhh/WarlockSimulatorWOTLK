@@ -37,10 +37,12 @@
     <ClInclude Include="test_base.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="aura_tests.cc" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="player_tests.cc" />
     <ClCompile Include="spell_tests.cc" />
     <ClCompile Include="test_base.cc" />
   </ItemGroup>

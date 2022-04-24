@@ -35,6 +35,10 @@ void Spell::Setup() {
     mana_gain = (min_mana_gain + max_mana_gain) / 2.0;
   }
 
+  if (mana_cost > 0) {
+    mana_cost *= entity.kBaseMana;
+  }
+
   if (entity.recording_combat_log_breakdown && !entity.combat_log_breakdown.contains(name)) {
     entity.combat_log_breakdown.insert({name, std::make_shared<CombatLogBreakdown>(name)});
   }

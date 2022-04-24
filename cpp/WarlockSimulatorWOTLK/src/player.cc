@@ -31,7 +31,7 @@ Player::Player(PlayerSettings& settings)
       talents(settings.talents),
       sets(settings.sets),
       items(settings.items) {
-  name = "Player";
+  name          = "Player";
   infinite_mana = settings.infinite_player_mana;
 
   if (recording_combat_log_breakdown) {
@@ -118,7 +118,7 @@ void Player::Initialize(Simulation* simulation_ptr) {
 
   Entity::Initialize(simulation_ptr);
   player = this;
-  pet = std::make_shared<Pet>(*this, settings.selected_pet);
+  pet    = std::make_shared<Pet>(*this, settings.selected_pet);
   pet->Initialize(simulation_ptr);
 
   for (const auto& kTrinketId : equipped_trinket_ids) {
@@ -243,7 +243,7 @@ void Player::Initialize(Simulation* simulation_ptr) {
     }
 
     if (auras.corruption != nullptr) {
-      spells.corruption = std::make_shared<Corruption>(*this, nullptr, auras.corruption);
+      spells.corruption              = std::make_shared<Corruption>(*this, nullptr, auras.corruption);
       auras.corruption->parent_spell = spells.corruption;
     }
 
@@ -253,12 +253,12 @@ void Player::Initialize(Simulation* simulation_ptr) {
     }
 
     if (auras.immolate != nullptr) {
-      spells.immolate = std::make_shared<Immolate>(*this, nullptr, auras.immolate);
+      spells.immolate              = std::make_shared<Immolate>(*this, nullptr, auras.immolate);
       auras.immolate->parent_spell = spells.immolate;
     }
 
     if (auras.curse_of_agony != nullptr || auras.curse_of_doom != nullptr) {
-      spells.curse_of_agony = std::make_shared<CurseOfAgony>(*this, nullptr, auras.curse_of_agony);
+      spells.curse_of_agony              = std::make_shared<CurseOfAgony>(*this, nullptr, auras.curse_of_agony);
       auras.curse_of_agony->parent_spell = spells.curse_of_agony;
     }
 
@@ -271,7 +271,7 @@ void Player::Initialize(Simulation* simulation_ptr) {
     }
 
     if (auras.curse_of_doom != nullptr) {
-      spells.curse_of_doom = std::make_shared<CurseOfDoom>(*this, nullptr, auras.curse_of_doom);
+      spells.curse_of_doom              = std::make_shared<CurseOfDoom>(*this, nullptr, auras.curse_of_doom);
       auras.curse_of_doom->parent_spell = spells.curse_of_doom;
     }
 
@@ -340,10 +340,10 @@ void Player::Initialize(Simulation* simulation_ptr) {
   // Set the curseSpell and curseAura properties
   if (spells.curse_of_the_elements != nullptr) {
     curse_spell = spells.curse_of_the_elements;
-    curse_aura = auras.curse_of_the_elements;
+    curse_aura  = auras.curse_of_the_elements;
   } else if (spells.curse_of_recklessness != nullptr) {
     curse_spell = spells.curse_of_recklessness;
-    curse_aura = auras.curse_of_recklessness;
+    curse_aura  = auras.curse_of_recklessness;
   } else if (spells.curse_of_doom != nullptr) {
     curse_spell = spells.curse_of_doom;
   } else if (spells.curse_of_agony != nullptr) {
@@ -355,8 +355,8 @@ void Player::Initialize(Simulation* simulation_ptr) {
 
 void Player::Reset() {
   Entity::Reset();
-  stats.mana = stats.max_mana;
-  iteration_damage = 0;
+  stats.mana            = stats.max_mana;
+  iteration_damage      = 0;
   power_infusions_ready = settings.power_infusion_amount;
 
   for (auto& trinket : trinkets) {
@@ -373,9 +373,9 @@ void Player::EndAuras() {
     }
   }
 
-  for (const auto& dot : dot_list) {
-    if (dot->active) {
-      dot->Fade();
+  for (const auto& kDot : dot_list) {
+    if (kDot->active) {
+      kDot->Fade();
     }
   }
 }
@@ -424,9 +424,13 @@ double Player::GetSpellCritChance(const SpellType kSpellType) {
   return crit_chance;
 }
 
-int Player::GetRand() { return rng.Range(0, 100 * kFloatNumberMultiplier); }
+int Player::GetRand() {
+  return rng.Range(0, 100 * kFloatNumberMultiplier);
+}
 
-bool Player::RollRng(const double kChance) { return GetRand() <= kChance * kFloatNumberMultiplier; }
+bool Player::RollRng(const double kChance) {
+  return GetRand() <= kChance * kFloatNumberMultiplier;
+}
 
 void Player::UseCooldowns(const double kFightTimeRemaining) {
   // Only use PI if Bloodlust isn't selected or if Bloodlust isn't active since they don't stack, or if there are enough
@@ -434,18 +438,18 @@ void Player::UseCooldowns(const double kFightTimeRemaining) {
   if (!spells.power_infusion.empty() && !auras.power_infusion->active &&
       (spells.bloodlust == nullptr || !auras.bloodlust->active ||
        power_infusions_ready * auras.power_infusion->duration >= kFightTimeRemaining)) {
-    for (const auto& pi : spells.power_infusion) {
-      if (pi->Ready()) {
-        pi->StartCast();
+    for (const auto& kPi : spells.power_infusion) {
+      if (kPi->Ready()) {
+        kPi->StartCast();
         break;
       }
     }
   }
 
   if (stats.mana / stats.max_mana <= 0.5 && !spells.innervate.empty() && !auras.innervate->active) {
-    for (const auto& innervate : spells.innervate) {
-      if (innervate->Ready()) {
-        innervate->StartCast();
+    for (const auto& kInnervate : spells.innervate) {
+      if (kInnervate->Ready()) {
+        kInnervate->StartCast();
         break;
       }
     }
@@ -476,7 +480,7 @@ void Player::UseCooldowns(const double kFightTimeRemaining) {
 
 // TODO remove this is_dot parameter
 double Player::GetDamageModifier(Spell& spell, const bool kIsDot) {
-  auto additive_modifier = 1.0;
+  auto additive_modifier             = 1.0;
   const auto kMultiplicativeModifier = GetMultiplicativeDamageModifier(spell, kIsDot);
 
   if (sets.t6 >= 4 && (spell.name == SpellName::kShadowBolt || spell.name == SpellName::kIncinerate)) {
@@ -537,13 +541,13 @@ double Player::FindTimeUntilNextAction() {
     }
   }
 
-  for (const auto& trinket : trinkets) {
-    if (trinket.active && trinket.duration_remaining < time) {
-      time = trinket.duration_remaining;
+  for (const auto& kTrinket : trinkets) {
+    if (kTrinket.active && kTrinket.duration_remaining < time) {
+      time = kTrinket.duration_remaining;
     }
 
-    if (trinket.cooldown_remaining > 0 && trinket.cooldown_remaining < time) {
-      time = trinket.cooldown_remaining;
+    if (kTrinket.cooldown_remaining > 0 && kTrinket.cooldown_remaining < time) {
+      time = kTrinket.cooldown_remaining;
     }
   }
 
@@ -562,7 +566,7 @@ void Player::Tick(const double kTime) {
 
     if (stats.mp5 > 0 || five_second_rule_timer_remaining <= 0 ||
         auras.innervate != nullptr && auras.innervate->active) {
-      const bool kInnervateIsActive = auras.innervate != nullptr && auras.innervate->active;
+      const bool kInnervateIsActive   = auras.innervate != nullptr && auras.innervate->active;
       const double kCurrentPlayerMana = stats.mana;
 
       // MP5
@@ -600,7 +604,7 @@ void Player::Tick(const double kTime) {
 }
 
 void Player::SendPlayerInfoToCombatLog() {
-  combat_log_entries.push_back("---------------- Player stats ----------------");
+  combat_log_entries.emplace_back("---------------- Player stats ----------------");
   combat_log_entries.push_back("Health: " + DoubleToString(round(stats.health)));
   combat_log_entries.push_back("Mana: " + DoubleToString(round(stats.max_mana)));
   combat_log_entries.push_back("Stamina: " + DoubleToString(round(GetStamina())));
@@ -622,7 +626,7 @@ void Player::SendPlayerInfoToCombatLog() {
   combat_log_entries.push_back("MP5: " + DoubleToString(stats.mp5));
   combat_log_entries.push_back("Spell Penetration: " + DoubleToString(stats.spell_penetration));
   if (pet != nullptr) {
-    combat_log_entries.push_back("---------------- Pet stats ----------------");
+    combat_log_entries.emplace_back("---------------- Pet stats ----------------");
     combat_log_entries.push_back("Stamina: " + DoubleToString(pet->GetStamina()));
     combat_log_entries.push_back("Intellect: " + DoubleToString(pet->GetIntellect()));
     combat_log_entries.push_back("Strength: " + DoubleToString(pet->GetStrength()));
@@ -660,7 +664,7 @@ void Player::SendPlayerInfoToCombatLog() {
                        2) +
         "%");
   }
-  combat_log_entries.push_back("---------------- Enemy stats ----------------");
+  combat_log_entries.emplace_back("---------------- Enemy stats ----------------");
   combat_log_entries.push_back("Level: " + std::to_string(settings.enemy_level));
   combat_log_entries.push_back("Shadow Resistance: " + std::to_string(std::max(settings.enemy_shadow_resist,
                                                                                enemy_level_difference_resistance)));
@@ -673,5 +677,5 @@ void Player::SendPlayerInfoToCombatLog() {
         "Damage Reduction From Armor: " +
         DoubleToString(round((1 - pet->enemy_damage_reduction_from_armor) * 10000) / 100.0, 2) + "%");
   }
-  combat_log_entries.push_back("---------------------------------------------");
+  combat_log_entries.emplace_back("---------------------------------------------");
 }
