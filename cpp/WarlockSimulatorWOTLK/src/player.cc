@@ -413,15 +413,9 @@ double Player::GetSpellPower(const SpellSchool kSchool) {
   return spell_power;
 }
 
-double Player::GetSpellCritChance(const SpellType kSpellType) {
-  auto crit_chance = stats.spell_crit_chance + GetIntellect() * StatConstant::kCritChancePerIntellect +
-                     stats.spell_crit_rating / StatConstant::kCritRatingPerPercent;
-
-  if (kSpellType != SpellType::kDestruction) {
-    crit_chance -= talents.devastation;
-  }
-
-  return crit_chance;
+double Player::GetSpellCritChance() {
+  return stats.spell_crit_chance + GetIntellect() * StatConstant::kCritChancePerIntellect +
+         stats.spell_crit_rating / StatConstant::kCritRatingPerPercent;
 }
 
 int Player::GetRand() {
@@ -476,39 +470,6 @@ void Player::UseCooldowns(const double kFightTimeRemaining) {
       }
     }
   }
-}
-
-// TODO remove this is_dot parameter
-double Player::GetDamageModifier(Spell& spell, const bool kIsDot) {
-  auto additive_modifier             = 1.0;
-  const auto kMultiplicativeModifier = GetMultiplicativeDamageModifier(spell, kIsDot);
-
-  if (sets.t6 >= 4 && (spell.name == SpellName::kShadowBolt || spell.name == SpellName::kIncinerate)) {
-    additive_modifier += 0.06;
-  }
-
-  if (spell.spell_school == SpellSchool::kShadow && spell.name != SpellName::kCurseOfDoom) {
-    additive_modifier += 0.02 * talents.shadow_mastery;
-  }
-
-  if (spell.name == SpellName::kCurseOfAgony) {
-    additive_modifier += 0.05 * talents.improved_curse_of_agony;
-  }
-
-  if (spell.name == SpellName::kCurseOfAgony || spell.name == SpellName::kCorruption ||
-      spell.name == SpellName::kSeedOfCorruption) {
-    additive_modifier += 0.01 * talents.contagion;
-  }
-
-  if (spell.spell_school == SpellSchool::kFire) {
-    additive_modifier += 0.02 * talents.emberstorm;
-
-    if (spell.name == SpellName::kImmolate && !kIsDot) {
-      additive_modifier += 0.05 * talents.improved_immolate;
-    }
-  }
-
-  return additive_modifier * kMultiplicativeModifier;
 }
 
 void Player::CastLifeTapOrDarkPact() const {
@@ -573,6 +534,7 @@ void Player::Tick(const double kTime) {
       if (stats.mp5 > 0) {
         stats.mana += stats.mp5;
       }
+
       // Spirit mana regen
       if (kInnervateIsActive || five_second_rule_timer_remaining <= 0) {
         // Formula from https://wowwiki-archive.fandom.com/wiki/Spirit?oldid=1572910
@@ -613,7 +575,7 @@ void Player::SendPlayerInfoToCombatLog() {
   combat_log_entries.push_back("Shadow Power: " + DoubleToString(stats.shadow_power));
   combat_log_entries.push_back("Fire Power: " + DoubleToString(stats.fire_power));
   combat_log_entries.push_back(
-      "Crit Chance: " + DoubleToString(round(GetSpellCritChance(SpellType::kDestruction) * 100) / 100, 2) + "%");
+      "Crit Chance: " + DoubleToString(round((GetSpellCritChance() + 5 * talents.devastation) * 100) / 100, 2) + "%");
   combat_log_entries.push_back(
       "Hit Chance: " + DoubleToString(std::min(16.0, round(stats.extra_spell_hit_chance * 100) / 100), 2) + "%");
   combat_log_entries.push_back(
@@ -649,17 +611,14 @@ void Player::SendPlayerInfoToCombatLog() {
 
     if (pet->pet_name == PetName::kImp || pet->pet_name == PetName::kSuccubus) {
       combat_log_entries.push_back(
-          "Spell Hit Chance: " +
-          DoubleToString(round(pet->GetSpellHitChance(SpellType::kNoSpellType) * 100) / 100.0, 2) + "%");
+          "Spell Hit Chance: " + DoubleToString(round(pet->GetSpellCritChance() * 100) / 100.0, 2) + "%");
       combat_log_entries.push_back(
-          "Spell Crit Chance: " +
-          DoubleToString(round(pet->GetSpellCritChance(SpellType::kNoSpellType) * 100) / 100.0, 2) + "%");
+          "Spell Crit Chance: " + DoubleToString(round(pet->GetSpellCritChance() * 100) / 100.0, 2) + "%");
     }
     combat_log_entries.push_back(
         "Damage Modifier: " +
-        DoubleToString(round(pet->GetDamageModifier(
-                                 *(pet->pet_name == PetName::kImp ? pet->spells.firebolt : pet->spells.melee), false) *
-                             10000) /
+        DoubleToString(round(pet->pet_name == PetName::kImp ? pet->spells.firebolt->GetDamageModifier()
+                                                            : pet->spells.melee->GetDamageModifier() * 10000) /
                            100,
                        2) +
         "%");

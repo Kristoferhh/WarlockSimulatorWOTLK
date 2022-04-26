@@ -9,10 +9,6 @@ import {
   ItemId,
 } from '../Types'
 
-const FakeItemIds = {
-  lurkersCordOfShadowWrath: -1,
-}
-
 export const Items: Item[] = [
   // Head
   {

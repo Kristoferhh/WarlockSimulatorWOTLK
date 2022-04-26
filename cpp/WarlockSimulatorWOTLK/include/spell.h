@@ -46,6 +46,10 @@ struct Spell {
   int bonus_damage_from_immolate_max = 0;
   double bonus_damage_from_immolate  = 0;
   double bonus_crit_chance           = 0;
+  double additive_modifier           = 1.0;
+  double multiplicative_modifier     = 1.0;
+  double bonus_hit_chance            = 0;
+  double crit_damage_multiplier      = 1.5;
   bool does_damage                   = false;
   bool is_item                       = false;
   bool can_miss                      = false;
@@ -77,9 +81,16 @@ struct Spell {
   void OnDamageProcs();
   void OnHitProcs();
   void Tick(double kTime);
-  [[nodiscard]] double GetCritMultiplier(double kEntityCritMultiplier) const;
   double PredictDamage();
   [[nodiscard]] bool HasEnoughMana() const;
+  [[nodiscard]] double GetCritChance() const;
+  [[nodiscard]] double GetHitChance() const;
+  [[nodiscard]] double GetDamageModifier() const;
+  [[nodiscard]] double GetPartialResistMultiplier() const;
+
+ protected:
+  [[nodiscard]] bool IsCrit() const;
+  [[nodiscard]] bool IsHit() const;
 
  private:
   virtual double GetCooldown();

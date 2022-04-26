@@ -30,11 +30,10 @@ struct Entity {
   virtual ~Entity()                = default;
   const int kFloatNumberMultiplier = 1000;  // Multiply doubles such as hit and crit chance with this since we need an
   // integer when calling player.rng.range()
-  const int kLevel                   = 80;
-  const double kGcdValue             = 1.5;
-  const double kMinimumGcdValue      = 1;
-  const double kCritDamageMultiplier = 1.5;
-  const double kBaseMana             = 3856;
+  const int kLevel              = 80;
+  const double kGcdValue        = 1.5;
+  const double kMinimumGcdValue = 1;
+  const double kBaseMana        = 3856;
   Simulation* simulation;
   Player* player;
   PlayerSettings& settings;
@@ -73,17 +72,9 @@ struct Entity {
   virtual void EndAuras();
   virtual void Reset();
   virtual void Initialize(Simulation* simulation_ptr);
-  virtual double GetSpellPower(SpellSchool spell_school)                            = 0;
-  virtual double GetSpellCritChance(SpellType spell_type = SpellType::kNoSpellType) = 0;
-  virtual double GetDamageModifier(Spell& spell, bool is_dot)                       = 0;
-  virtual bool IsSpellCrit(SpellType kSpellType, double kExtraCrit = 0);
-  virtual bool IsMeleeCrit();
-  virtual bool IsSpellHit(SpellType kSpellType);
-  virtual bool IsMeleeHit();
-  [[nodiscard]] double GetMultiplicativeDamageModifier(const Spell& kSpell, bool is_dot) const;
-  [[nodiscard]] double GetPartialResistMultiplier(SpellSchool kSchool) const;
+  virtual double GetSpellPower(SpellSchool spell_school) = 0;
+  virtual double GetSpellCritChance()                    = 0;
   [[nodiscard]] double GetSpirit() const;
-  [[nodiscard]] double GetSpellHitChance(SpellType kSpellType) const;
   [[nodiscard]] double GetMeleeCritChance() const;
   [[nodiscard]] double GetCustomImprovedShadowBoltDamageModifier() const;
   double GetGcdValue();

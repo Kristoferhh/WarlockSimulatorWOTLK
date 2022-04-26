@@ -27,30 +27,38 @@ void ErrorCallback(const char* error_msg) {
 
 void PostCombatLogBreakdownVector(const char* name, double mana_gain, double damage) {
 #ifdef EMSCRIPTEN
-  EM_ASM({postMessage({event : "combatLogVector", data : {name : UTF8ToString($0), manaGain : $1, damage : $2}})}, name,
-         mana_gain, damage);
+  EM_ASM(
+      {
+          postMessage({event : "combatLogVector", data : {name : UTF8ToString($0), manaGain : $1, damage : $2}}
+          )
+  },
+      name, mana_gain, damage);
 #endif
 }
 
 void PostCombatLogBreakdown(const char* name, uint32_t casts, uint32_t crits, uint32_t misses, uint32_t count,
                             double uptime, uint32_t dodges, uint32_t glancing_blows) {
 #ifdef EMSCRIPTEN
-  EM_ASM({postMessage({
-           event : "combatLogBreakdown",
-           data : {
-             name : UTF8ToString($0),
-             casts : $1,
-             crits : $2,
-             misses : $3,
-             count : $4,
-             uptime : $5,
-             dodges : $6,
-             glancingBlows : $7,
-             damage : 0,
-             manaGain : 0
-           }
-         })},
-         name, casts, crits, misses, count, uptime, dodges, glancing_blows);
+  EM_ASM(
+      {
+          postMessage({
+                       event : "combatLogBreakdown",
+                       data : {
+              name : UTF8ToString($0),
+              casts : $1,
+              crits : $2,
+              misses : $3,
+              count : $4,
+              uptime : $5,
+              dodges : $6,
+              glancingBlows : $7,
+              damage : 0,
+              manaGain : 0
+            }
+          }
+          )
+  },
+      name, casts, crits, misses, count, uptime, dodges, glancing_blows);
 #endif
 }
 
@@ -64,11 +72,15 @@ void CombatLogUpdate(const char* combat_log_entry) {
 
 void SimulationUpdate(int iteration, int iteration_amount, double median_dps, int item_id, const char* custom_stat) {
 #ifdef EMSCRIPTEN
-  EM_ASM({postMessage({
-           event : "update",
-           data : {medianDps : $0, iteration : $1, iterationAmount : $2, itemId : $3, customStat : UTF8ToString($4)}
-         })},
-         median_dps, iteration, iteration_amount, item_id, custom_stat);
+  EM_ASM(
+      {
+          postMessage({
+                       event : "update",
+                       data : {medianDps : $0, iteration : $1, iterationAmount : $2, itemId : $3, customStat : UTF8ToString($4)}
+          }
+          )
+  },
+      median_dps, iteration, iteration_amount, item_id, custom_stat);
 #else
   /*std::cout << "Iteration: " << std::to_string(iteration) << "/" << std::to_string(iteration_amount)
             << ". Median DPS: " << std::to_string(median_dps) << std::endl;*/
@@ -78,19 +90,23 @@ void SimulationUpdate(int iteration, int iteration_amount, double median_dps, in
 void SendSimulationResults(double median_dps, double min_dps, double max_dps, int item_id, int iteration_amount,
                            int total_fight_duration, const char* custom_stat, long long simulation_duration) {
 #ifdef EMSCRIPTEN
-  EM_ASM({postMessage({
-           event : "end",
-           data : {
-             medianDps : $0,
-             minDps : $1,
-             maxDps : $2,
-             itemId : $3,
-             iterationAmount : $4,
-             totalDuration : $5,
-             customStat : UTF8ToString($6)
-           }
-         })},
-         median_dps, min_dps, max_dps, item_id, iteration_amount, total_fight_duration, custom_stat);
+  EM_ASM(
+      {
+          postMessage({
+                       event : "end",
+                       data : {
+              medianDps : $0,
+              minDps : $1,
+              maxDps : $2,
+              itemId : $3,
+              iterationAmount : $4,
+              totalDuration : $5,
+              customStat : UTF8ToString($6)
+            }
+          }
+          )
+  },
+      median_dps, min_dps, max_dps, item_id, iteration_amount, total_fight_duration, custom_stat);
 #else
   std::cout << "Median DPS: " << std::to_string(median_dps) << ". Min DPS: " << std::to_string(min_dps)
             << ". Max DPS: " << std::to_string(max_dps) << std::endl;
@@ -110,26 +126,42 @@ std::vector<uint32_t> AllocRandomSeeds(const int kAmountOfSeeds, const uint32_t 
   return seeds;
 }
 
-ItemSlot AllocItems() { return {}; }
+ItemSlot AllocItems() {
+  return {};
+}
 
-AuraSelection AllocAuras() { return {}; }
+AuraSelection AllocAuras() {
+  return {};
+}
 
-Talents AllocTalents() { return {}; }
+Talents AllocTalents() {
+  return {};
+}
 
-Sets AllocSets() { return {}; }
+Sets AllocSets() {
+  return {};
+}
 
-CharacterStats AllocStats() { return {}; }
+CharacterStats AllocStats() {
+  return {};
+}
 
 PlayerSettings AllocPlayerSettings(AuraSelection& auras, Talents& talents, Sets& sets, CharacterStats& stats,
                                    ItemSlot& items) {
   return {auras, talents, sets, stats, items};
 }
 
-Player AllocPlayer(PlayerSettings& settings) { return Player(settings); }
+Player AllocPlayer(PlayerSettings& settings) {
+  return Player(settings);
+}
 
-SimulationSettings AllocSimSettings() { return {}; }
+SimulationSettings AllocSimSettings() {
+  return {};
+}
 
-Simulation AllocSim(Player& player, SimulationSettings& simulation_settings) { return {player, simulation_settings}; }
+Simulation AllocSim(Player& player, SimulationSettings& simulation_settings) {
+  return {player, simulation_settings};
+}
 
 std::string GetExceptionMessage(const intptr_t kExceptionPtr) {
   return {reinterpret_cast<std::exception*>(kExceptionPtr)->what()};
@@ -197,7 +229,6 @@ EMSCRIPTEN_BINDINGS(module) {
       .property("petBlessingOfKings", &AuraSelection::pet_blessing_of_kings)
       .property("petBlessingOfWisdom", &AuraSelection::pet_blessing_of_wisdom)
       .property("petBlessingOfMight", &AuraSelection::pet_blessing_of_might)
-      .property("petBattleSquawk", &AuraSelection::pet_battle_squawk)
       .property("petArcaneIntellect", &AuraSelection::pet_arcane_intellect)
       .property("petMarkOfTheWild", &AuraSelection::pet_mark_of_the_wild)
       .property("petPrayerOfFortitude", &AuraSelection::pet_prayer_of_fortitude)
@@ -205,7 +236,6 @@ EMSCRIPTEN_BINDINGS(module) {
       .property("petKiblersBits", &AuraSelection::pet_kiblers_bits)
       .property("petHeroicPresence", &AuraSelection::pet_heroic_presence)
       .property("petStrengthOfEarthTotem", &AuraSelection::pet_strength_of_earth_totem)
-      .property("petGraceOfAirTotem", &AuraSelection::pet_grace_of_air_totem)
       .property("petBattleShout", &AuraSelection::pet_battle_shout)
       .property("petTrueshotAura", &AuraSelection::pet_trueshot_aura)
       .property("petLeaderOfThePack", &AuraSelection::pet_leader_of_the_pack)
@@ -243,69 +273,67 @@ EMSCRIPTEN_BINDINGS(module) {
   emscripten::class_<Talents>("Talents")
       .constructor<>()
       .property("improvedCurseOfAgony", &Talents::improved_curse_of_agony)
-      .property("suppression", &Talents::suppression
-      .property("improvedCorruption", &Talents::improved_corruption
-      .property("improvedLifeTap", &Talents::improved_life_tap
-      .property("amplifyCurse", &Talents::amplify_curse
-      .property("nightfall", &Talents::nightfall
-      .property("empoweredCorruption", &Talents::empowered_corruption
-      .property("shadowEmbrace", &Talents::shadow_embrace
-      .property("siphonLife", &Talents::siphon_life
-      .property("improvedFelhunter", &Talents::improved_felhunter
-      .property("shadowMastery", &Talents::shadow_mastery
-      .property("eradication", &Talents::eradication
-      .property("contagion", &Talents::contagion
-      .property("darkPact", &Talents::dark_pact
-      .property("malediction", &Talents::malediction
-      .property("deathsEmbrace", &Talents::deaths_embrace
-      .property("unstableAffliction", &Talents::unstable_affliction
-      .property("pandemic", &Talents::pandemic
-      .property("everlastingAffliction", &Talents::everlasting_affliction
-      .property("haunt", &Talents::haunt
-      .property("improvedImp", &Talents::improved_imp
-      .property("demonicEmbrace", &Talents::demonic_embrace
-      .property("demonicBrutality", &Talents::demonic_brutality
-      .property("felVitality", &Talents::fel_vitality
-      .property("demonicAegis", &Talents::demonic_aegis
-      .property("unholyPower", &Talents::unholy_power
-      .property("manaFeed", &Talents::mana_feed
-      .property("masterConjuror", &Talents::master_conjuror
-      .property("masterDemonologist", &Talents::master_demonologist
-      .property("moltenCore", &Talents::molten_core
-      .property("demonicEmpowerment", &Talents::demonic_empowerment
-      .property("demonicKnowledge", &Talents::demonic_knowledge
-      .property("demonicTactics", &Talents::demonic_tactics
-      .property("decimation", &Talents::decimation
-      .property("improvedDemonicTactics", &Talents::improved_demonic_tactics
-      .property("summonFelguard", &Talents::summon_felguard
-      .property("nemesis", &Talents::nemesis
-      .property("demonicPact", &Talents::demonic_pact
-      .property("metamorphosis", &Talents::metamorphosis
-      .property("improvedShadowBolt", &Talents::improved_shadow_bolt
-      .property("bane", &Talents::bane
-      .property("aftermath", &Talents::aftermath
-      .property("cataclysm", &Talents::cataclysm
-      .property("demonicPower", &Talents::demonic_power
-      .property("shadowburn", &Talents::shadowburn
-      .property("ruin", &Talents::ruin
-      .property("improvedSearingPain", &Talents::improved_searing_pain
-      .property("backlash", &Talents::backlash
-      .property("improvedImmolate", &Talents::improved_immolate
-      .property("devastation", &Talents::devastation
-      .property("emberstorm", &Talents::emberstorm
-      .property("conflagrate", &Talents::conflagrate
-      .property("pyroclasm", &Talents::pyroclasm
-      .property("shadowAndFlame", &Talents::shadow_and_flame
-      .property("improvedSoulLeech", &Talents::improved_soul_leech
-      .property("backdraft", &Talents::backdraft
-      .property("shadowfury", &Talents::shadowfury
-      .property("empoweredImp", &Talents::empowered_imp
-      .property("fireAndBrimstone", &Talents::fire_and_brimstone
-      .property("chaosBolt", &Talents::chaos_bolt;
+      .property("suppression", &Talents::suppression)
+      .property("improvedCorruption", &Talents::improved_corruption)
+      .property("improvedLifeTap", &Talents::improved_life_tap)
+      .property("amplifyCurse", &Talents::amplify_curse)
+      .property("nightfall", &Talents::nightfall)
+      .property("empoweredCorruption", &Talents::empowered_corruption)
+      .property("shadowEmbrace", &Talents::shadow_embrace)
+      .property("siphonLife", &Talents::siphon_life)
+      .property("improvedFelhunter", &Talents::improved_felhunter)
+      .property("shadowMastery", &Talents::shadow_mastery)
+      .property("eradication", &Talents::eradication)
+      .property("contagion", &Talents::contagion)
+      .property("darkPact", &Talents::dark_pact)
+      .property("malediction", &Talents::malediction)
+      .property("deathsEmbrace", &Talents::deaths_embrace)
+      .property("unstableAffliction", &Talents::unstable_affliction)
+      .property("pandemic", &Talents::pandemic)
+      .property("everlastingAffliction", &Talents::everlasting_affliction)
+      .property("haunt", &Talents::haunt)
+      .property("improvedImp", &Talents::improved_imp)
+      .property("demonicEmbrace", &Talents::demonic_embrace)
+      .property("demonicBrutality", &Talents::demonic_brutality)
+      .property("felVitality", &Talents::fel_vitality)
+      .property("demonicAegis", &Talents::demonic_aegis)
+      .property("unholyPower", &Talents::unholy_power)
+      .property("manaFeed", &Talents::mana_feed)
+      .property("masterConjuror", &Talents::master_conjuror)
+      .property("masterDemonologist", &Talents::master_demonologist)
+      .property("moltenCore", &Talents::molten_core)
+      .property("demonicEmpowerment", &Talents::demonic_empowerment)
+      .property("demonicKnowledge", &Talents::demonic_knowledge)
+      .property("demonicTactics", &Talents::demonic_tactics)
+      .property("decimation", &Talents::decimation)
+      .property("improvedDemonicTactics", &Talents::improved_demonic_tactics)
+      .property("summonFelguard", &Talents::summon_felguard)
+      .property("nemesis", &Talents::nemesis)
+      .property("demonicPact", &Talents::demonic_pact)
+      .property("metamorphosis", &Talents::metamorphosis)
+      .property("improvedShadowBolt", &Talents::improved_shadow_bolt)
+      .property("bane", &Talents::bane)
+      .property("aftermath", &Talents::aftermath)
+      .property("cataclysm", &Talents::cataclysm)
+      .property("demonicPower", &Talents::demonic_power)
+      .property("shadowburn", &Talents::shadowburn)
+      .property("ruin", &Talents::ruin)
+      .property("improvedSearingPain", &Talents::improved_searing_pain)
+      .property("backlash", &Talents::backlash)
+      .property("improvedImmolate", &Talents::improved_immolate)
+      .property("devastation", &Talents::devastation)
+      .property("emberstorm", &Talents::emberstorm)
+      .property("conflagrate", &Talents::conflagrate)
+      .property("pyroclasm", &Talents::pyroclasm)
+      .property("shadowAndFlame", &Talents::shadow_and_flame)
+      .property("improvedSoulLeech", &Talents::improved_soul_leech)
+      .property("backdraft", &Talents::backdraft)
+      .property("shadowfury", &Talents::shadowfury)
+      .property("empoweredImp", &Talents::empowered_imp)
+      .property("fireAndBrimstone", &Talents::fire_and_brimstone)
+      .property("chaosBolt", &Talents::chaos_bolt);
 
-  emscripten::class_<Sets>("Sets")
-      .constructor<>()
-      .property("t6", &Sets::t6);
+  emscripten::class_<Sets>("Sets").constructor<>().property("t6", &Sets::t6);
 
   emscripten::class_<PlayerSettings>("PlayerSettings")
       .constructor<AuraSelection&, Talents&, Sets&, CharacterStats&, ItemSlot&>()
@@ -360,7 +388,7 @@ EMSCRIPTEN_BINDINGS(module) {
       .property("hasConflagrate", &PlayerSettings::has_conflagrate)
       .property("hasShadowfury", &PlayerSettings::has_shadowfury)
       .property("hasAmplifyCurse", &PlayerSettings::has_amplify_curse)
-      .property("hasDarkPact", &PlayerSettings::has_dark_pact)
+      .property("hasDarkPact", &PlayerSettings::has_dark_pact);
 
   emscripten::class_<SimulationSettings>("SimulationSettings")
       .constructor<>()
@@ -375,8 +403,6 @@ EMSCRIPTEN_BINDINGS(module) {
       .value("statWeights", SimulationType::kStatWeights);
 
   emscripten::enum_<EmbindConstant>("EmbindConstant")
-      .value("aldor", EmbindConstant::kAldor)
-      .value("scryers", EmbindConstant::kScryers)
       .value("onCooldown", EmbindConstant::kOnCooldown)
       .value("singleTarget", EmbindConstant::kSingleTarget)
       .value("aoe", EmbindConstant::kAoe)

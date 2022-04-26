@@ -34,7 +34,7 @@ import {
   setSelectedProfile,
   togglePhase,
 } from '../redux/UiSlice'
-import { Phase, Profile, ProfileContainer, Race, Setting } from '../Types'
+import { Phase, ProfileContainer, Race, Setting } from '../Types'
 
 const phases: { title: string; phase: Phase }[] = [
   { title: 'TBC', phase: 0 },

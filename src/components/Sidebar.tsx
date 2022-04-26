@@ -6,7 +6,7 @@ import { Races } from '../data/Races'
 import { Sets } from '../data/Sets'
 import i18n from '../i18n/config'
 import { RootState } from '../redux/Store'
-import { Quality, Race, Setting } from '../Types'
+import { Setting } from '../Types'
 import { SimulationButtons } from './SimulationButtons'
 import StatsDisplay from './StatsDisplay'
 

@@ -7,7 +7,6 @@ import {
   SocketColor,
   SubSlotValue,
   Stat,
-  Quality,
   SelectedGemsStruct,
 } from '../Types'
 import { useState } from 'react'

@@ -110,19 +110,6 @@ TEST_F(PlayerTest, GetSpellPower) {
   EXPECT_EQ(_player->GetSpellPower(SpellSchool::kFire), kExpectedFirePower);
 }
 
-TEST_F(PlayerTest, GetSpellCritChance) {
-  _player->stats.spell_crit_chance = 30;
-  _player->stats.spell_crit_rating = 100;
-  _player->stats.intellect         = 400;
-  _player->talents.devastation     = 5;
-  const auto kExpectedCritChance   = _player->stats.spell_crit_chance +
-                                   _player->GetIntellect() * StatConstant::kCritChancePerIntellect +
-                                   _player->stats.spell_crit_rating / StatConstant::kCritRatingPerPercent;
-
-  EXPECT_EQ(_player->GetSpellCritChance(SpellType::kAffliction), kExpectedCritChance - 5);
-  EXPECT_EQ(_player->GetSpellCritChance(SpellType::kDestruction), kExpectedCritChance);
-}
-
 TEST_F(PlayerTest, UseCooldowns) {
   ASSERT_NE(_player->auras.flame_cap, nullptr);
   ASSERT_NE(_player->auras.blood_fury, nullptr);
@@ -215,8 +202,8 @@ TEST_F(PlayerTest, GetDamageModifier_T6_4PC) {
   auto incinerate  = Incinerate(*_player);
   _player->sets.t6 = 4;
 
-  EXPECT_EQ(_player->GetDamageModifier(shadow_bolt, false), 1.06);
-  EXPECT_EQ(_player->GetDamageModifier(incinerate, false), 1.06);
+  EXPECT_EQ(_player->spells.shadow_bolt->GetDamageModifier(), 1.06);
+  EXPECT_EQ(_player->spells.incinerate->GetDamageModifier(), 1.06);
 }
 
 TEST_F(PlayerTest, GetDamageModifier_ShadowMastery) {
@@ -224,7 +211,7 @@ TEST_F(PlayerTest, GetDamageModifier_ShadowMastery) {
 
   _player->talents.shadow_mastery = 5;
 
-  EXPECT_EQ(_player->GetDamageModifier(shadow_bolt, false), 1.1);
+  EXPECT_EQ(_player->spells.shadow_bolt->GetDamageModifier(), 1.1);
 }
 
 TEST_F(PlayerTest, GetDamageModifier_ShadowMastery_CurseOfDoom_ShouldNotApply) {
@@ -233,27 +220,27 @@ TEST_F(PlayerTest, GetDamageModifier_ShadowMastery_CurseOfDoom_ShouldNotApply) {
 
   _player->talents.shadow_mastery = 5;
 
-  EXPECT_EQ(_player->GetDamageModifier(curse_of_doom, false), 1.0);
+  EXPECT_EQ(_player->spells.curse_of_doom->GetDamageModifier(), 1.0);
 }
 
 TEST_F(PlayerTest, GetDamageModifier_ImprovedCurseOfAgony) {
   auto curse_of_agony_dot      = std::make_shared<CurseOfAgonyDot>(*_player);
   auto curse_of_agony          = CurseOfAgony(*_player, nullptr, curse_of_agony_dot);
-  auto current_damage_modifier = _player->GetDamageModifier(curse_of_agony, false);
+  auto current_damage_modifier = _player->spells.curse_of_agony->GetDamageModifier();
 
   _player->talents.improved_curse_of_agony = 2;
 
-  EXPECT_EQ(_player->GetDamageModifier(curse_of_agony, false), current_damage_modifier + 0.1);
+  EXPECT_EQ(_player->spells.curse_of_agony->GetDamageModifier(), current_damage_modifier + 0.1);
 }
 
 TEST_F(PlayerTest, GetDamageModifier_Emberstorm) {
   auto fire_spell              = Spell(*_player);
   fire_spell.spell_school      = SpellSchool::kFire;
-  auto current_damage_modifier = _player->GetDamageModifier(fire_spell, false);
+  auto current_damage_modifier = fire_spell.GetDamageModifier();
 
   _player->talents.emberstorm = 5;
 
-  EXPECT_EQ(_player->GetDamageModifier(fire_spell, false), current_damage_modifier + 0.1);
+  EXPECT_EQ(fire_spell.GetDamageModifier(), current_damage_modifier + 0.1);
 }
 
 TEST_F(PlayerTest, GetDamageModifier_Contagion) {
@@ -262,28 +249,28 @@ TEST_F(PlayerTest, GetDamageModifier_Contagion) {
   auto corruption_dot                     = std::make_shared<CorruptionDot>(*_player);
   auto corruption                         = Corruption(*_player, nullptr, corruption_dot);
   auto seed_of_corruption                 = SeedOfCorruption(*_player);
-  auto agony_current_damage_modifier      = _player->GetDamageModifier(curse_of_agony, false);
-  auto corruption_current_damage_modifier = _player->GetDamageModifier(curse_of_agony, false);
-  auto seed_current_damage_modifier       = _player->GetDamageModifier(curse_of_agony, false);
+  auto agony_current_damage_modifier      = _player->spells.curse_of_agony->GetDamageModifier();
+  auto corruption_current_damage_modifier = _player->spells.curse_of_agony->GetDamageModifier();
+  auto seed_current_damage_modifier       = _player->spells.curse_of_agony->GetDamageModifier();
 
   _player->talents.contagion = 5;
 
-  EXPECT_EQ(_player->GetDamageModifier(curse_of_agony, false), agony_current_damage_modifier + 0.05);
-  EXPECT_EQ(_player->GetDamageModifier(corruption, false), corruption_current_damage_modifier + 0.05);
-  EXPECT_EQ(_player->GetDamageModifier(seed_of_corruption, false), seed_current_damage_modifier + 0.05);
+  EXPECT_EQ(_player->spells.curse_of_agony->GetDamageModifier(), agony_current_damage_modifier + 0.05);
+  EXPECT_EQ(_player->spells.corruption->GetDamageModifier(), corruption_current_damage_modifier + 0.05);
+  EXPECT_EQ(_player->spells.seed_of_corruption->GetDamageModifier(), seed_current_damage_modifier + 0.05);
 }
 
 TEST_F(PlayerTest, GetDamageModifier_ImprovedImmolate) {
   auto immolate_dot                  = std::make_shared<ImmolateDot>(*_player);
   auto immolate                      = Immolate(*_player, nullptr, immolate_dot);
-  auto dot_current_damage_modifier   = _player->GetDamageModifier(immolate, true);
-  auto spell_current_damage_modifier = _player->GetDamageModifier(immolate, false);
+  auto dot_current_damage_modifier   = _player->spells.immolate->GetDamageModifier();
+  auto spell_current_damage_modifier = _player->spells.immolate->GetDamageModifier();
 
   _player->talents.emberstorm        = 5;
   _player->talents.improved_immolate = 5;
 
-  EXPECT_EQ(_player->GetDamageModifier(immolate, true), dot_current_damage_modifier + 0.1);
-  EXPECT_EQ(_player->GetDamageModifier(immolate, false), spell_current_damage_modifier + 0.35);
+  EXPECT_EQ(_player->spells.immolate->GetDamageModifier(), dot_current_damage_modifier + 0.1);
+  EXPECT_EQ(_player->spells.immolate->GetDamageModifier(), spell_current_damage_modifier + 0.35);
 }
 
 TEST_F(PlayerTest, Tick_Trinkets) {
@@ -301,4 +288,30 @@ TEST_F(PlayerTest, Tick_Trinkets) {
   }
 }
 
-TEST_F(PlayerTest, Tick_MP5) {}
+TEST_F(PlayerTest, Tick_MP5) {
+  _player->stats.mp5  = 30;
+  _player->stats.mana = 0;
+  ASSERT_TRUE(_player->stats.max_mana > 30);
+  ASSERT_EQ(_player->mp5_timer_remaining, 5);
+
+  _player->Tick(1);
+  EXPECT_EQ(_player->mp5_timer_remaining, 4);
+  _player->Tick(4);
+
+  EXPECT_EQ(_player->mp5_timer_remaining, 5);
+  EXPECT_EQ(static_cast<int>(_player->stats.mana), 30);
+  EXPECT_EQ(_player->combat_log_breakdown.at(StatName::kMp5)->casts, 1);
+  EXPECT_EQ(static_cast<int>(_player->combat_log_breakdown.at(StatName::kMp5)->iteration_mana_gain), 30);
+}
+
+TEST_F(PlayerTest, Tick_MP5_ManaOvercapping) {
+  _player->stats.mp5  = 30;
+  _player->stats.mana = _player->stats.max_mana - 10;
+
+  _player->Tick(5);
+
+  EXPECT_EQ(_player->stats.mana, _player->stats.max_mana);
+  EXPECT_EQ(_player->combat_log_breakdown.at(StatName::kMp5)->iteration_mana_gain, 10);
+}
+
+TEST_F(PlayerTest, Tick_MP5_Innervate) {}

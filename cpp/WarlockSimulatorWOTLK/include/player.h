@@ -45,9 +45,8 @@ struct Player final : Entity {
   void Tick(double kTime) override;
   double GetSpellPower(SpellSchool kSchool = SpellSchool::kNoSchool) override;
   double GetHastePercent() override;
-  double GetSpellCritChance(SpellType kSpellType) override;
+  double GetSpellCritChance() override;
   double FindTimeUntilNextAction() override;
-  double GetDamageModifier(Spell& spell, bool kIsDot) override;
   int GetRand();
   bool RollRng(double kChance);
 };

@@ -20,8 +20,8 @@ Simulation::Simulation(Player& player, const SimulationSettings& kSimulationSett
 void Simulation::Start() {
   player.total_fight_duration = 0;
   player.Initialize(this);
-  min_dps = std::numeric_limits<double>::max();
-  max_dps = 0;
+  min_dps           = std::numeric_limits<double>::max();
+  max_dps           = 0;
   const auto kStart = std::chrono::high_resolution_clock::now();
 
   for (iteration = 0; iteration < kSettings.iterations; iteration++) {
@@ -58,7 +58,7 @@ void Simulation::Start() {
     IterationEnd(kFightLength, player.iteration_damage / static_cast<double>(kFightLength));
   }
 
-  const auto kEnd = std::chrono::high_resolution_clock::now();
+  const auto kEnd          = std::chrono::high_resolution_clock::now();
   const auto kMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(kEnd - kStart).count();
 
   SimulationEnd(kMicroseconds);
@@ -212,7 +212,7 @@ void Simulation::CastGcdSpells(const double kFightTimeRemaining) const {
 
     // Cast Curse of the Elements or Curse of Recklessness if they're
     // the selected curse and they're not active
-    if (kFightTimeRemaining >= 10 && player.gcd_remaining <= 0 && player.curse_spell != nullptr &&
+    if (kFightTimeRemaining >= 5 && player.gcd_remaining <= 0 && player.curse_spell != nullptr &&
         (player.curse_spell->name == SpellName::kCurseOfRecklessness ||
          player.curse_spell->name == SpellName::kCurseOfTheElements) &&
         !player.curse_aura->active && player.curse_spell->CanCast()) {
@@ -221,6 +221,34 @@ void Simulation::CastGcdSpells(const double kFightTimeRemaining) const {
       } else {
         player.CastLifeTapOrDarkPact();
       }
+    }
+
+    // Cast Haunt
+    if (player.gcd_remaining <= 0 && player.spells.haunt != nullptr && player.spells.haunt->CanCast()) {
+      SelectedSpellHandler(player.spells.haunt, predicted_damage_of_spells, kFightTimeRemaining);
+    }
+
+    // Cast Corruption if Corruption isn't up or if it will expire
+    // before the Cast finishes (if no instant Corruption)
+    if (player.gcd_remaining <= 0 && player.spells.corruption != nullptr &&
+        (!player.auras.corruption->active ||
+         player.auras.corruption->ticks_remaining == 1 &&
+             player.auras.corruption->tick_timer_remaining < player.spells.corruption->GetCastTime()) &&
+        player.spells.corruption->CanCast() &&
+        kFightTimeRemaining - player.spells.corruption->GetCastTime() >= player.auras.corruption->duration) {
+      SelectedSpellHandler(player.spells.corruption, predicted_damage_of_spells, kFightTimeRemaining);
+    }
+
+    // Cast Unstable Affliction if it's not up or if it's about to
+    // expire
+    if (player.gcd_remaining <= 0 && player.spells.unstable_affliction != nullptr &&
+        player.spells.unstable_affliction->CanCast() &&
+        (!player.auras.unstable_affliction->active || player.auras.unstable_affliction->ticks_remaining == 1 &&
+                                                          player.auras.unstable_affliction->tick_timer_remaining <
+                                                              player.spells.unstable_affliction->GetCastTime()) &&
+        kFightTimeRemaining - player.spells.unstable_affliction->GetCastTime() >=
+            player.auras.unstable_affliction->duration) {
+      SelectedSpellHandler(player.spells.unstable_affliction, predicted_damage_of_spells, kFightTimeRemaining);
     }
 
     // Cast Curse of Doom if it's the selected curse and there's more
@@ -243,35 +271,12 @@ void Simulation::CastGcdSpells(const double kFightTimeRemaining) const {
       SelectedSpellHandler(player.spells.curse_of_agony, predicted_damage_of_spells, kFightTimeRemaining);
     }
 
-    // Cast Corruption if Corruption isn't up or if it will expire
-    // before the Cast finishes (if no instant Corruption)
-    if (player.gcd_remaining <= 0 && player.spells.corruption != nullptr &&
-        (!player.auras.corruption->active ||
-         player.auras.corruption->ticks_remaining == 1 &&
-             player.auras.corruption->tick_timer_remaining < player.spells.corruption->GetCastTime()) &&
-        player.spells.corruption->CanCast() &&
-        kFightTimeRemaining - player.spells.corruption->GetCastTime() >= player.auras.corruption->duration) {
-      SelectedSpellHandler(player.spells.corruption, predicted_damage_of_spells, kFightTimeRemaining);
-    }
-
     // Cast Shadow Bolt if Shadow Trance (Nightfall) is active and
     // Corruption is active as well to avoid potentially wasting another
     // Nightfall proc
     if (player.gcd_remaining <= 0 && player.spells.shadow_bolt != nullptr && player.auras.shadow_trance != nullptr &&
         player.auras.shadow_trance->active && player.auras.corruption->active && player.spells.shadow_bolt->CanCast()) {
       SelectedSpellHandler(player.spells.shadow_bolt, predicted_damage_of_spells, kFightTimeRemaining);
-    }
-
-    // Cast Unstable Affliction if it's not up or if it's about to
-    // expire
-    if (player.gcd_remaining <= 0 && player.spells.unstable_affliction != nullptr &&
-        player.spells.unstable_affliction->CanCast() &&
-        (!player.auras.unstable_affliction->active || player.auras.unstable_affliction->ticks_remaining == 1 &&
-                                                          player.auras.unstable_affliction->tick_timer_remaining <
-                                                              player.spells.unstable_affliction->GetCastTime()) &&
-        kFightTimeRemaining - player.spells.unstable_affliction->GetCastTime() >=
-            player.auras.unstable_affliction->duration) {
-      SelectedSpellHandler(player.spells.unstable_affliction, predicted_damage_of_spells, kFightTimeRemaining);
     }
 
     // Cast Immolate if it's not up or about to expire
@@ -312,7 +317,7 @@ void Simulation::CastGcdSpells(const double kFightTimeRemaining) const {
       for (const auto& [kSpell, kDamage] : predicted_damage_of_spells) {
         if (kDamage > max_damage_spell_value &&
             (kFightTimeRemaining > player.GetGcdValue() || kSpell->HasEnoughMana())) {
-          max_damage_spell = kSpell;
+          max_damage_spell       = kSpell;
           max_damage_spell_value = kDamage;
         }
       }

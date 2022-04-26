@@ -30,8 +30,8 @@ Entity::Entity(Player* player, PlayerSettings& player_settings, const EntityType
       enemy_level_difference_resistance(player_settings.enemy_level >= kLevel + 3 ? 6 * kLevel * 5 / 75 : 0) {
   // Crit chance
   if (kEntityType == EntityType::kPlayer) {
-    stats.spell_crit_chance = StatConstant::kBaseCritChancePercent + 5 * player_settings.talents.devastation +
-                              player_settings.talents.backlash + 2 * player_settings.talents.demonic_tactics;
+    stats.spell_crit_chance = StatConstant::kBaseCritChancePercent + player_settings.talents.backlash +
+                              2 * player_settings.talents.demonic_tactics;
   }
 
   if (player_settings.auras.moonkin_aura) {
@@ -87,7 +87,7 @@ Entity::Entity(Player* player, PlayerSettings& player_settings, const EntityType
 void Entity::PostIterationDamageAndMana(const std::string& kSpellName) const {
   PostCombatLogBreakdownVector(kSpellName.c_str(), combat_log_breakdown.at(kSpellName)->iteration_mana_gain,
                                combat_log_breakdown.at(kSpellName)->iteration_damage);
-  combat_log_breakdown.at(kSpellName)->iteration_damage = 0;
+  combat_log_breakdown.at(kSpellName)->iteration_damage    = 0;
   combat_log_breakdown.at(kSpellName)->iteration_mana_gain = 0;
 }
 
@@ -100,9 +100,9 @@ void Entity::EndAuras() {
 }
 
 void Entity::Reset() {
-  cast_time_remaining = 0;
-  gcd_remaining = 0;
-  mp5_timer_remaining = 5;
+  cast_time_remaining              = 0;
+  gcd_remaining                    = 0;
+  mp5_timer_remaining              = 5;
   five_second_rule_timer_remaining = 5;
 
   for (const auto& kSpell : spell_list) {
@@ -110,7 +110,9 @@ void Entity::Reset() {
   }
 }
 
-void Entity::Initialize(Simulation* simulation_ptr) { simulation = simulation_ptr; }
+void Entity::Initialize(Simulation* simulation_ptr) {
+  simulation = simulation_ptr;
+}
 
 void Entity::SendCombatLogBreakdown() const {
   for (const auto& [kSpellName, kSpell] : combat_log_breakdown) {
@@ -123,33 +125,24 @@ void Entity::SendCombatLogBreakdown() const {
   }
 }
 
-double Entity::GetStamina() { return stats.stamina * stats.stamina_modifier; }
+double Entity::GetStamina() {
+  return stats.stamina * stats.stamina_modifier;
+}
 
-double Entity::GetIntellect() { return stats.intellect * stats.intellect_modifier; }
+double Entity::GetIntellect() {
+  return stats.intellect * stats.intellect_modifier;
+}
 
-double Entity::GetSpirit() const { return stats.spirit * stats.spirit_modifier; }
+double Entity::GetSpirit() const {
+  return stats.spirit * stats.spirit_modifier;
+}
 
-bool Entity::ShouldWriteToCombatLog() const { return simulation->iteration == 10 && equipped_item_simulation; }
+bool Entity::ShouldWriteToCombatLog() const {
+  return simulation->iteration == 10 && equipped_item_simulation;
+}
 
 void Entity::CombatLog(const std::string& kEntry) const {
   player->combat_log_entries.push_back("|" + DoubleToString(simulation->current_fight_time, 4) + "| " + kEntry);
-}
-
-double Entity::GetMultiplicativeDamageModifier(const Spell& kSpell, bool) const {
-  auto damage_modifier = stats.damage_modifier;
-
-  if (kSpell.spell_school == SpellSchool::kShadow) {
-    damage_modifier *= stats.shadow_modifier;
-
-    if (!settings.using_custom_isb_uptime && auras.improved_shadow_bolt != nullptr &&
-        auras.improved_shadow_bolt->active) {
-      damage_modifier *= auras.improved_shadow_bolt->modifier;
-    }
-  } else if (kSpell.spell_school == SpellSchool::kFire) {
-    damage_modifier *= stats.fire_modifier;
-  }
-
-  return damage_modifier;
 }
 
 double Entity::FindTimeUntilNextAction() {
@@ -195,34 +188,8 @@ double Entity::FindTimeUntilNextAction() {
   return time;
 }
 
-double Entity::GetPartialResistMultiplier(const SpellSchool kSchool) const {
-  auto enemy_resist = 0;
-
-  if (kSchool == SpellSchool::kShadow) {
-    enemy_resist = settings.enemy_shadow_resist;
-  } else if (kSchool == SpellSchool::kFire) {
-    enemy_resist = settings.enemy_fire_resist;
-  }
-
-  enemy_resist = std::max(enemy_resist - static_cast<int>(stats.spell_penetration), enemy_level_difference_resistance);
-
-  if (enemy_resist <= 0) {
-    return 1;
-  }
-
-  return 1.0 - 75.0 * enemy_resist / (kLevel * 5) / 100.0;
-}
-
-double Entity::GetGcdValue() { return std::max(kMinimumGcdValue, kGcdValue / GetHastePercent()); }
-
-double Entity::GetSpellHitChance(const SpellType kSpellType) const {
-  auto spell_hit_chance = stats.spell_hit_chance + stats.extra_spell_hit_chance;
-
-  if (entity_type == EntityType::kPlayer && kSpellType == SpellType::kAffliction) {
-    spell_hit_chance += player->talents.suppression * 2;
-  }
-
-  return std::min(99.0, spell_hit_chance);
+double Entity::GetGcdValue() {
+  return std::max(kMinimumGcdValue, kGcdValue / GetHastePercent());
 }
 
 // formula from
@@ -239,16 +206,6 @@ double Entity::GetBaseSpellHitChance(const int kEntityLevel, const int kEnemyLev
     return 83 - 11 * kLevelDifference;
   }
 }
-
-bool Entity::IsSpellCrit(const SpellType kSpellType, const double kExtraCrit) {
-  return player->RollRng(GetSpellCritChance(kSpellType) + kExtraCrit);
-}
-
-bool Entity::IsMeleeCrit() { return player->RollRng(GetMeleeCritChance()); }
-
-bool Entity::IsMeleeHit() { return player->RollRng(stats.melee_hit_chance); }
-
-bool Entity::IsSpellHit(const SpellType kSpellType) { return player->RollRng(GetSpellHitChance(kSpellType)); }
 
 double Entity::GetMeleeCritChance() const {
   return pet->GetAgility() * 0.04 + 0.65 + stats.melee_crit_chance - StatConstant::kMeleeCritChanceSuppression;

@@ -86,7 +86,7 @@ export interface Aura {
   Health?: boolean
   Intellect?: boolean
   Mp5?: boolean
-  Crit?: boolean,
+  Crit?: boolean
   MeleeCrit?: boolean
   MeleeHaste?: boolean
   Replenishment?: boolean
@@ -94,14 +94,14 @@ export interface Aura {
   SpellHaste?: boolean
   SpellPower?: boolean
   Spirit?: boolean
-  StatPercent?: boolean,
-  ArmorMajor?: boolean,
-  ArmorMinor?: boolean,
-  AttackPowerReduction?: boolean,
-  ManaRestore?: boolean,
-  PhysicalVulnerability?: boolean,
-  SpellCritDebuff?: boolean,
-  SpellDamagePercent?: boolean,
+  StatPercent?: boolean
+  ArmorMajor?: boolean
+  ArmorMinor?: boolean
+  AttackPowerReduction?: boolean
+  ManaRestore?: boolean
+  PhysicalVulnerability?: boolean
+  SpellCritDebuff?: boolean
+  SpellDamagePercent?: boolean
   SpellHit?: boolean
 }
 
@@ -162,39 +162,39 @@ export enum Race {
 }
 
 export enum Stat {
-  Health,
-  HealthModifier,
-  Mana,
-  ManaModifier,
-  Stamina,
-  Intellect,
-  Spirit,
-  SpellPower,
-  ShadowPower,
-  FirePower,
-  CritRating,
-  CritChance,
-  HitRating,
-  HitChance,
-  HasteRating,
-  ShadowModifier,
-  FireModifier,
-  Mp5,
-  EnemyArmor,
-  ArcaneResist,
-  IntellectModifier,
-  SpiritModifier,
-  PetDamageModifier,
-  ShadowResist,
-  FireResist,
-  FrostResist,
-  NatureResist,
-  StaminaModifier,
-  ArcaneModifier,
-  FrostModifier,
-  NatureModifier,
-  FrostPower,
-  SpellPenetration,
+  Health = 'Health',
+  HealthModifier = 'HealthModifier',
+  Mana = 'Mana',
+  ManaModifier = 'ManaModifier',
+  Stamina = 'Stamina',
+  Intellect = 'Intellect',
+  Spirit = 'Spirit',
+  SpellPower = 'SpellPower',
+  ShadowPower = 'ShadowPower',
+  FirePower = 'FirePower',
+  CritRating = 'CritRating',
+  CritChance = 'CritChance',
+  HitRating = 'HitRating',
+  HitChance = 'HitChance',
+  HasteRating = 'HasteRating',
+  ShadowModifier = 'ShadowModifier',
+  FireModifier = 'FireModifier',
+  Mp5 = 'Mp5',
+  EnemyArmor = 'EnemyArmor',
+  ArcaneResist = 'ArcaneResist',
+  IntellectModifier = 'IntellectModifier',
+  SpiritModifier = 'SpiritModifier',
+  PetDamageModifier = 'PetDamageModifier',
+  ShadowResist = 'ShadowResist',
+  FireResist = 'FireResist',
+  FrostResist = 'FrostResist',
+  NatureResist = 'NatureResist',
+  StaminaModifier = 'StaminaModifier',
+  ArcaneModifier = 'ArcaneModifier',
+  FrostModifier = 'FrostModifier',
+  NatureModifier = 'NatureModifier',
+  FrostPower = 'FrostPower',
+  SpellPenetration = 'SpellPenetration',
 }
 
 export interface CombatLogBreakdownData {
@@ -746,6 +746,16 @@ export enum SpellId {
 }
 
 export enum AuraId {
+  ScrollOfStamina = 33081,
+  ScrollOfIntellect = 33078,
+  UnleashedRage = 30811,
+  LeaderOfThePack = 17007,
+  TrueshotAura = 31519,
+  BattleShout = 2048,
+  StrengthOfEarthTotem = 25528,
+  HeroicPresence = 6562,
+  KiblersBits = 43771,
+  DemonicRune = 12662,
   InspiringPresence = 28878,
   TotemOfWrath = 30706,
   FelArmor = 47893,
@@ -758,7 +768,10 @@ export enum AuraId {
   PrayerOfFortitude = 25392,
   PrayerOfSpirit = 32999,
   BloodPact = 27268,
+  ScrollOfAgility = 33077,
+  ScrollOfSpirit = 33080,
   MoonkinAura = 24907,
+  ScrollOfStrength = 33082,
   PowerInfusion = 10060,
   Bloodlust = 2825,
   Innervate = 29166,
@@ -774,6 +787,8 @@ export enum AuraId {
   JudgementsOfTheWise = 31878,
   VampiricTouch = 48160,
   ImprovedSoulLeech = 54118,
+  FlameCap = 22788,
+  BlessingOfMight = 27141,
   ElementalOath = 51470,
   DemonicPact = 47240,
   FlametongueTotem = 58656,

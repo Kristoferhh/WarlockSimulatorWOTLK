@@ -43,21 +43,21 @@ import {
 } from '../Types'
 
 interface SimulationUpdate {
-  MedianDps: number
-  Iteration: number
-  IterationAmount: number
-  ItemId: number
-  CustomStat: string
+  medianDps: number
+  iteration: number
+  iterationAmount: number
+  itemId: number
+  customStat: string
 }
 
 interface SimulationEnd {
-  CustomStat: string
-  ItemId: number
-  IterationAmount: number
-  TotalDuration: number
-  MaxDps: number
-  MinDps: number
-  MedianDps: number
+  customStat: string
+  itemId: number
+  iterationAmount: number
+  totalDuration: number
+  maxDps: number
+  minDps: number
+  medianDps: number
 }
 
 interface IGetWorkerParams {
@@ -331,22 +331,23 @@ export function SimulationButtons() {
               combatLogBreakdownArr.push(combatLogBreakdown)
             },
             (params: SimulationEnd) => {
-              const newMedianDps = params.MedianDps
+              debugger
+              const newMedianDps = params.medianDps
               simulationsFinished++
               findSimulationProgressPercentObject({
                 simulationProgressPercentages: simulationProgressPercentages,
                 simType: simulationParams.type,
-                itemId: params.ItemId,
-                stat: params.CustomStat,
+                itemId: params.itemId,
+                stat: params.customStat,
               }).ProgressPercent = 100
 
               if (
                 simulationParams.type !== SimulationType.StatWeights ||
-                params.CustomStat === 'normal'
+                params.customStat === 'normal'
               ) {
                 setSavedItemDpsValue(
                   itemSlot,
-                  params.ItemId,
+                  params.itemId,
                   newMedianDps,
                   true
                 )
@@ -356,19 +357,19 @@ export function SimulationButtons() {
               if (
                 simulationParams.type === SimulationType.Normal ||
                 (simulationParams.type === SimulationType.AllItems &&
-                  params.ItemId === equippedItemId) ||
+                  params.itemId === equippedItemId) ||
                 (simulationParams.type === SimulationType.StatWeights &&
-                  params.CustomStat === 'normal')
+                  params.customStat === 'normal')
               ) {
-                const newMinDps = Math.round(params.MinDps * 100) / 100
-                const newMaxDps = Math.round(params.MaxDps * 100) / 100
+                const newMinDps = Math.round(params.minDps * 100) / 100
+                const newMaxDps = Math.round(params.maxDps * 100) / 100
                 setNewMedianDps(newMedianDps.toString(), true)
                 setNewMinDps(newMinDps.toString(), true)
                 setNewMaxDps(newMaxDps.toString(), true)
               }
 
               if (simulationParams.type === SimulationType.StatWeights) {
-                updateStatWeightValue(params.CustomStat, newMedianDps, true)
+                updateStatWeightValue(params.customStat, newMedianDps, true)
               }
 
               if (simulationsFinished === simWorkerParameters.length) {
@@ -402,8 +403,8 @@ export function SimulationButtons() {
                       setCombatLogBreakdownValue({
                         TotalDamageDone: totalDamageDone,
                         TotalManaGained: totalManaRegenerated,
-                        TotalSimulationFightLength: params.TotalDuration,
-                        TotalIterationAmount: params.IterationAmount,
+                        TotalSimulationFightLength: params.totalDuration,
+                        TotalIterationAmount: params.iterationAmount,
                         SpellDamageDict: spellDamageDict,
                         SpellManaGainDict: spellManaGainDict,
                         Data: combatLogBreakdownArr,
@@ -423,15 +424,16 @@ export function SimulationButtons() {
               }
             },
             (params: SimulationUpdate) => {
-              let newMedianDps = params.MedianDps
+              let newMedianDps = params.medianDps
               const simProgressPercent = Math.ceil(
-                (params.Iteration / params.IterationAmount) * 100
+                (params.iteration / params.iterationAmount) * 100
               )
+
               findSimulationProgressPercentObject({
                 simulationProgressPercentages: simulationProgressPercentages,
                 simType: simulationParams.type,
-                itemId: params.ItemId,
-                stat: params.CustomStat,
+                itemId: params.itemId,
+                stat: params.customStat,
               }).ProgressPercent = simProgressPercent
               setSimulationProgressPercent(
                 Math.round(
@@ -448,8 +450,9 @@ export function SimulationButtons() {
                   simProgressPercent % 10 === 0)
               ) {
                 const domElement = document.getElementById(
-                  params.ItemId.toString()
+                  params.itemId.toString()
                 )
+
                 if (domElement) {
                   domElement.innerHTML = (
                     Math.round(newMedianDps * 100) / 100
@@ -460,24 +463,24 @@ export function SimulationButtons() {
               if (
                 simulationParams.type === SimulationType.Normal ||
                 (simulationParams.type === SimulationType.AllItems &&
-                  params.ItemId === equippedItemId) ||
+                  params.itemId === equippedItemId) ||
                 (simulationParams.type === SimulationType.StatWeights &&
-                  params.CustomStat === 'normal')
+                  params.customStat === 'normal')
               ) {
                 setNewMedianDps(newMedianDps.toString(), false)
               } else if (simulationParams.type === SimulationType.StatWeights) {
                 // Limit the updates to once every 5 seconds
                 const dateNow = Date.now()
                 if (
-                  !lastStatWeightUpdateTime[params.CustomStat] ||
-                  dateNow - lastStatWeightUpdateTime[params.CustomStat] > 5000
+                  !lastStatWeightUpdateTime[params.customStat] ||
+                  dateNow - lastStatWeightUpdateTime[params.customStat] > 5000
                 ) {
                   updateStatWeightValue(
-                    params.CustomStat,
-                    params.MedianDps,
+                    params.customStat,
+                    params.medianDps,
                     false
                   )
-                  lastStatWeightUpdateTime[params.CustomStat] = dateNow
+                  lastStatWeightUpdateTime[params.customStat] = dateNow
                 }
               }
             },

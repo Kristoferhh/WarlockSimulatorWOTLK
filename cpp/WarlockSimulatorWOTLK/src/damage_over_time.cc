@@ -31,10 +31,10 @@ void DamageOverTime::Apply() {
     player.combat_log_breakdown.at(name)->applied_at = player.simulation->current_fight_time;
   }
 
-  spell_power = player.GetSpellPower(school);
-  active = true;
+  spell_power          = player.GetSpellPower(school);
+  active               = true;
   tick_timer_remaining = tick_timer_total;
-  ticks_remaining = ticks_total;
+  ticks_remaining      = ticks_total;
 
   if (player.recording_combat_log_breakdown) {
     player.combat_log_breakdown.at(name)->count++;
@@ -56,9 +56,9 @@ void DamageOverTime::Apply() {
 }
 
 void DamageOverTime::Fade() {
-  active = false;
+  active               = false;
   tick_timer_remaining = 0;
-  ticks_remaining = 0;
+  ticks_remaining      = 0;
 
   if (player.recording_combat_log_breakdown) {
     player.combat_log_breakdown.at(name)->uptime +=
@@ -71,10 +71,10 @@ void DamageOverTime::Fade() {
 }
 
 std::vector<double> DamageOverTime::GetConstantDamage() const {
-  const auto kCurrentSpellPower = active ? spell_power : player.GetSpellPower(school);
-  const auto kModifier = player.GetDamageModifier(*parent_spell, true);
-  const auto kPartialResistMultiplier = player.GetPartialResistMultiplier(school);
-  auto dmg = base_damage;
+  const auto kCurrentSpellPower       = active ? spell_power : player.GetSpellPower(school);
+  const auto kModifier                = parent_spell->GetDamageModifier();
+  const auto kPartialResistMultiplier = parent_spell->GetPartialResistMultiplier();
+  auto dmg                            = base_damage;
 
   if (applied_with_amplify_curse) {
     dmg *= 1.5;
@@ -87,18 +87,20 @@ std::vector<double> DamageOverTime::GetConstantDamage() const {
   return std::vector{dmg, total_damage, kCurrentSpellPower, kModifier, kPartialResistMultiplier};
 }
 
-double DamageOverTime::PredictDamage() const { return GetConstantDamage()[1]; }
+double DamageOverTime::PredictDamage() const {
+  return GetConstantDamage()[1];
+}
 
 void DamageOverTime::Tick(const double kTime) {
   tick_timer_remaining -= kTime;
 
   if (tick_timer_remaining <= 0) {
     const std::vector<double> kConstantDamage = GetConstantDamage();
-    const double kBaseDamage = kConstantDamage[0];
-    const double kDamage = kConstantDamage[1] / (static_cast<double>(duration) / tick_timer_total);
-    const double kSpellPower = kConstantDamage[2];
-    const double kModifier = kConstantDamage[3];
-    const double kPartialResistMultiplier = kConstantDamage[4];
+    const double kBaseDamage                  = kConstantDamage[0];
+    const double kDamage                      = kConstantDamage[1] / (static_cast<double>(duration) / tick_timer_total);
+    const double kSpellPower                  = kConstantDamage[2];
+    const double kModifier                    = kConstantDamage[3];
+    const double kPartialResistMultiplier     = kConstantDamage[4];
 
     // Check for Nightfall proc
     if (name == SpellName::kCorruption && player.talents.nightfall > 0) {
@@ -136,68 +138,68 @@ void DamageOverTime::Tick(const double kTime) {
 }
 
 CorruptionDot::CorruptionDot(Player& player_param) : DamageOverTime(player_param) {
-  name = SpellName::kCorruption;
-  duration = 18;
+  name             = SpellName::kCorruption;
+  duration         = 18;
   tick_timer_total = 3;
-  base_damage = 1080;
-  school = SpellSchool::kShadow;
-  coefficient = 3.0 / 15.0 + 0.12 * player_param.talents.empowered_corruption +
+  base_damage      = 1080;
+  school           = SpellSchool::kShadow;
+  coefficient      = 3.0 / 15.0 + 0.12 * player_param.talents.empowered_corruption +
                 0.01 * player_param.talents.everlasting_affliction + 0.05 * player_param.talents.siphon_life;
   Setup();
 }
 
 UnstableAfflictionDot::UnstableAfflictionDot(Player& player_param) : DamageOverTime(player_param) {
-  name = SpellName::kUnstableAffliction;
-  duration = 15;
+  name             = SpellName::kUnstableAffliction;
+  duration         = 15;
   tick_timer_total = 3;
-  base_damage = 1380;
-  school = SpellSchool::kShadow;
-  coefficient = 1.2 + 0.01 * player_param.talents.everlasting_affliction + 0.05 * player_param.talents.siphon_life;
+  base_damage      = 1380;
+  school           = SpellSchool::kShadow;
+  coefficient      = 1.2 + 0.01 * player_param.talents.everlasting_affliction + 0.05 * player_param.talents.siphon_life;
   Setup();
 }
 
 ImmolateDot::ImmolateDot(Player& player_param) : DamageOverTime(player_param) {
-  name = SpellName::kImmolate;
-  duration = 15 + 3 * player_param.talents.molten_core;
+  name             = SpellName::kImmolate;
+  duration         = 15 + 3 * player_param.talents.molten_core;
   tick_timer_total = 3;
-  base_damage = 785;
-  school = SpellSchool::kFire;
-  coefficient = 0.2;
+  base_damage      = 785;
+  school           = SpellSchool::kFire;
+  coefficient      = 0.2;
   Setup();
 }
 
 CurseOfAgonyDot::CurseOfAgonyDot(Player& player_param) : DamageOverTime(player_param) {
-  name = SpellName::kCurseOfAgony;
-  duration = 24;
+  name             = SpellName::kCurseOfAgony;
+  duration         = 24;
   tick_timer_total = 3;
-  base_damage = 1740;
-  school = SpellSchool::kShadow;
-  coefficient = 1.2;
+  base_damage      = 1740;
+  school           = SpellSchool::kShadow;
+  coefficient      = 1.2;
   Setup();
 }
 
 CurseOfDoomDot::CurseOfDoomDot(Player& player_param) : DamageOverTime(player_param) {
-  name = SpellName::kCurseOfDoom;
-  duration = 60;
+  name             = SpellName::kCurseOfDoom;
+  duration         = 60;
   tick_timer_total = 60;
-  base_damage = 7300;
-  school = SpellSchool::kShadow;
-  coefficient = 2;
+  base_damage      = 7300;
+  school           = SpellSchool::kShadow;
+  coefficient      = 2;
   Setup();
 }
 
 ShadowflameDot::ShadowflameDot(Player& player_param) : DamageOverTime(player_param) {
-  name = SpellName::kShadowflame;
-  duration = 8;
+  name             = SpellName::kShadowflame;
+  duration         = 8;
   tick_timer_total = 2;
-  base_damage = 512;
-  school = SpellSchool::kFire;
-  coefficient = 1.0 / 15.0;
+  base_damage      = 512;
+  school           = SpellSchool::kFire;
+  coefficient      = 1.0 / 15.0;
 }
 
 ConflagrateDot::ConflagrateDot(Player& player_param) : DamageOverTime(player_param) {
-  name = SpellName::kConflagrate;
-  duration = 6;
+  name             = SpellName::kConflagrate;
+  duration         = 6;
   tick_timer_total = 2;
-  school = SpellSchool::kFire;
+  school           = SpellSchool::kFire;
 }
