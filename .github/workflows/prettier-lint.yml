@@ -24,6 +24,6 @@ jobs:
       - name: Prettier Action
         uses: creyD/prettier_action@v4.2
         with:
-          prettier_options: "--write **/*.{js,jsx,ts,tsx} --config .prettierrc"
+          prettier_options: "--write **/*.{js,jsx,ts,tsx} '!public/WarlockSim.js' --config .prettierrc"
           commit_message: "Prettier Fixes"
           github_token: ${{ secrets.GITHUB_TOKEN }}
