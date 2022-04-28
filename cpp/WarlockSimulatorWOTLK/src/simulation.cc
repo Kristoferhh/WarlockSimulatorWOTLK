@@ -37,14 +37,10 @@ void Simulation::Start() {
       if (player.cast_time_remaining <= 0) {
         CastNonGcdSpells();
 
-        if (player.gcd_remaining <= 0) {
-          CastGcdSpells(kFightTimeRemaining);
-        }
+        if (player.gcd_remaining <= 0) { CastGcdSpells(kFightTimeRemaining); }
       }
 
-      if (player.pet != nullptr && player.settings.pet_mode == EmbindConstant::kAggressive) {
-        CastPetSpells();
-      }
+      if (player.pet != nullptr && player.settings.pet_mode == EmbindConstant::kAggressive) { CastPetSpells(); }
 
       if (PassTime(kFightTimeRemaining) <= 0) {
         std::cout << "Iteration " << std::to_string(iteration) << " fightTime: " << std::to_string(current_fight_time)
@@ -58,7 +54,7 @@ void Simulation::Start() {
     IterationEnd(kFightLength, player.iteration_damage / static_cast<double>(kFightLength));
   }
 
-  const auto kEnd = std::chrono::high_resolution_clock::now();
+  const auto kEnd          = std::chrono::high_resolution_clock::now();
   const auto kMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(kEnd - kStart).count();
 
   SimulationEnd(kMicroseconds);
@@ -74,7 +70,9 @@ double Simulation::PassTime(const double kFightTimeRemaining) {
   return time_until_next_action;
 }
 
-void Simulation::SelectedSpellHandler(const std::shared_ptr<Spell>& kSpell, std::map<std::shared_ptr<Spell>, double>& predicted_damage_of_spells, const double kFightTimeRemaining) const {
+void Simulation::SelectedSpellHandler(const std::shared_ptr<Spell>& kSpell,
+                                      std::map<std::shared_ptr<Spell>, double>& predicted_damage_of_spells,
+                                      const double kFightTimeRemaining) const {
   if ((player.settings.rotation_option == EmbindConstant::kSimChooses || kSpell->is_finisher) &&
       !predicted_damage_of_spells.contains(kSpell)) {
     predicted_damage_of_spells.insert({kSpell, kSpell->PredictDamage()});
@@ -100,18 +98,14 @@ void Simulation::CastSelectedSpell(const std::shared_ptr<Spell>& kSpell, const d
 void Simulation::Tick(const double kTime) {
   current_fight_time += kTime;
   player.Tick(kTime);
-  if (player.pet != nullptr) {
-    player.pet->Tick(kTime);
-  }
+  if (player.pet != nullptr) { player.pet->Tick(kTime); }
 }
 
 void Simulation::IterationReset(const double kFightLength) {
   current_fight_time = 0;
 
   player.Reset();
-  if (player.pet != nullptr) {
-    player.pet->Reset();
-  }
+  if (player.pet != nullptr) { player.pet->Reset(); }
 
   player.rng.Seed(player.settings.random_seeds[iteration]);
 
@@ -367,31 +361,21 @@ void Simulation::CastPetSpells() const {
 
 void Simulation::IterationEnd(const double kFightLength, const double kDps) {
   player.EndAuras();
-  if (player.pet != nullptr) {
-    player.pet->EndAuras();
-  }
+  if (player.pet != nullptr) { player.pet->EndAuras(); }
 
-  if (player.ShouldWriteToCombatLog()) {
-    player.CombatLog("Fight end");
-  }
+  if (player.ShouldWriteToCombatLog()) { player.CombatLog("Fight end"); }
 
   player.total_fight_duration += kFightLength;
 
-  if (kDps > max_dps) {
-    max_dps = kDps;
-  }
+  if (kDps > max_dps) { max_dps = kDps; }
 
-  if (kDps < min_dps) {
-    min_dps = kDps;
-  }
+  if (kDps < min_dps) { min_dps = kDps; }
 
   dps_vector.push_back(kDps);
 
   // Only send the iteration's dps to the web worker if we're doing a normal
   // simulation (this is just for the dps histogram)
-  if (kSettings.simulation_type == SimulationType::kNormal && player.custom_stat == "normal") {
-    DpsUpdate(kDps);
-  }
+  if (kSettings.simulation_type == SimulationType::kNormal && player.custom_stat == "normal") { DpsUpdate(kDps); }
 
   if (iteration % static_cast<int>(std::floor(kSettings.iterations / 100.0)) == 0) {
     SimulationUpdate(iteration, kSettings.iterations, Median(dps_vector), player.settings.item_id,
@@ -401,17 +385,13 @@ void Simulation::IterationEnd(const double kFightLength, const double kDps) {
 
 void Simulation::SimulationEnd(const long long kSimulationDuration) const {
   // Send the contents of the combat log to the web worker
-  if (player.equipped_item_simulation) {
-    player.SendCombatLogEntries();
-  }
+  if (player.equipped_item_simulation) { player.SendCombatLogEntries(); }
 
   // Send the combat log breakdown info
   if (player.recording_combat_log_breakdown) {
     player.SendCombatLogBreakdown();
 
-    if (player.pet != nullptr) {
-      player.pet->SendCombatLogBreakdown();
-    }
+    if (player.pet != nullptr) { player.pet->SendCombatLogBreakdown(); }
   }
 
   SendSimulationResults(Median(dps_vector), min_dps, max_dps, player.settings.item_id, kSettings.iterations,

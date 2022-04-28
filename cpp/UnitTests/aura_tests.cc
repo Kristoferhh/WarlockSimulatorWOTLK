@@ -83,9 +83,7 @@ TEST_F(AuraTest, Apply) {
   EXPECT_EQ(_aura->entity.combat_log_breakdown.at(_aura->name)->count, 1);
   EXPECT_EQ(_aura->duration_remaining, 20);
 
-  for (int i = 0; i < 5; i++) {
-    _aura->Apply();
-  }
+  for (int i = 0; i < 5; i++) { _aura->Apply(); }
 
   EXPECT_EQ(_aura->entity.combat_log_breakdown.at(_aura->name)->count, 6);
   EXPECT_EQ(_aura->entity.stats.spell_power, 3000);

@@ -36,9 +36,7 @@ void DamageOverTime::Apply() {
   tick_timer_remaining = tick_timer_total;
   ticks_remaining      = ticks_total;
 
-  if (player.recording_combat_log_breakdown) {
-    player.combat_log_breakdown.at(name)->count++;
-  }
+  if (player.recording_combat_log_breakdown) { player.combat_log_breakdown.at(name)->count++; }
 
   if (player.ShouldWriteToCombatLog()) {
     player.CombatLog(name + " " + (kIsAlreadyActive ? "refreshed" : "applied") + " (" + DoubleToString(spell_power) +
@@ -65,9 +63,7 @@ void DamageOverTime::Fade() {
         player.simulation->current_fight_time - player.combat_log_breakdown.at(name)->applied_at;
   }
 
-  if (player.ShouldWriteToCombatLog()) {
-    player.CombatLog(name + " faded");
-  }
+  if (player.ShouldWriteToCombatLog()) { player.CombatLog(name + " faded"); }
 }
 
 std::vector<double> DamageOverTime::GetConstantDamage() const {
@@ -76,9 +72,7 @@ std::vector<double> DamageOverTime::GetConstantDamage() const {
   const auto kPartialResistMultiplier = parent_spell->GetPartialResistMultiplier();
   auto dmg                            = base_damage;
 
-  if (applied_with_amplify_curse) {
-    dmg *= 1.5;
-  }
+  if (applied_with_amplify_curse) { dmg *= 1.5; }
 
   auto total_damage = dmg;
   total_damage += kCurrentSpellPower * coefficient;
@@ -104,18 +98,14 @@ void DamageOverTime::Tick(const double kTime) {
 
     // Check for Nightfall proc
     if (name == SpellName::kCorruption && player.talents.nightfall > 0) {
-      if (player.RollRng(player.talents.nightfall * 2)) {
-        player.auras.shadow_trance->Apply();
-      }
+      if (player.RollRng(player.talents.nightfall * 2)) { player.auras.shadow_trance->Apply(); }
     }
 
     player.iteration_damage += kDamage;
     ticks_remaining--;
     tick_timer_remaining = tick_timer_total;
 
-    if (player.recording_combat_log_breakdown) {
-      player.combat_log_breakdown.at(name)->iteration_damage += kDamage;
-    }
+    if (player.recording_combat_log_breakdown) { player.combat_log_breakdown.at(name)->iteration_damage += kDamage; }
 
     if (player.ShouldWriteToCombatLog()) {
       player.CombatLog(name + " Tick " + DoubleToString(round(kDamage)) + " (" + DoubleToString(kBaseDamage) +
@@ -126,14 +116,10 @@ void DamageOverTime::Tick(const double kTime) {
     }
 
     for (const auto& kProc : player.on_dot_tick_procs) {
-      if (kProc->Ready() && kProc->ShouldProc(this) && player.RollRng(kProc->proc_chance)) {
-        kProc->StartCast();
-      }
+      if (kProc->Ready() && kProc->ShouldProc(this) && player.RollRng(kProc->proc_chance)) { kProc->StartCast(); }
     }
 
-    if (ticks_remaining <= 0) {
-      Fade();
-    }
+    if (ticks_remaining <= 0) { Fade(); }
   }
 }
 

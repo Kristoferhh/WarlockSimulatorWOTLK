@@ -15,30 +15,30 @@ OnCritProc::OnCritProc(Player& player, std::shared_ptr<Aura> aura) : SpellProc(p
 void OnCritProc::Setup() {
   SpellProc::Setup();
 
-  if (procs_on_crit && on_crit_procs_enabled) {
-    entity.on_crit_procs.push_back(this);
-  }
+  if (procs_on_crit && on_crit_procs_enabled) { entity.on_crit_procs.push_back(this); }
 }
 
 ImprovedShadowBolt::ImprovedShadowBolt(Player& player, std::shared_ptr<Aura> aura)
     : OnCritProc(player, std::move(aura)) {
-  name = SpellName::kImprovedShadowBolt;
-  proc_chance = 100;
+  name                  = SpellName::kImprovedShadowBolt;
+  proc_chance           = 100;
   on_crit_procs_enabled = !player.settings.using_custom_isb_uptime && player.talents.improved_shadow_bolt > 0;
   OnCritProc::Setup();
 }
 
-bool ImprovedShadowBolt::ShouldProc(Spell* spell) { return spell->name == SpellName::kShadowBolt; }
+bool ImprovedShadowBolt::ShouldProc(Spell* spell) {
+  return spell->name == SpellName::kShadowBolt;
+}
 
 TheLightningCapacitor::TheLightningCapacitor(Player& player) : OnCritProc(player) {
-  name = SpellName::kTheLightningCapacitor;
-  cooldown = 2.5;
-  min_dmg = 694;
-  max_dmg = 806;
+  name        = SpellName::kTheLightningCapacitor;
+  cooldown    = 2.5;
+  min_dmg     = 694;
+  max_dmg     = 806;
   proc_chance = 100;
   does_damage = true;
-  can_crit = true;
-  can_miss = true;
+  can_crit    = true;
+  can_miss    = true;
   OnCritProc::Setup();
 }
 

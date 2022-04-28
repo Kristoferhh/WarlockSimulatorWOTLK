@@ -27,17 +27,11 @@ Spell::Spell(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<D
       spell_type(SpellType::kNoSpellType) {}
 
 void Spell::Setup() {
-  if (min_dmg > 0 && max_dmg > 0) {
-    base_damage = (min_dmg + max_dmg) / 2.0;
-  }
+  if (min_dmg > 0 && max_dmg > 0) { base_damage = (min_dmg + max_dmg) / 2.0; }
 
-  if (min_mana_gain > 0 && max_mana_gain > 0) {
-    mana_gain = (min_mana_gain + max_mana_gain) / 2.0;
-  }
+  if (min_mana_gain > 0 && max_mana_gain > 0) { mana_gain = (min_mana_gain + max_mana_gain) / 2.0; }
 
-  if (mana_cost > 0) {
-    mana_cost *= entity.kBaseMana;
-  }
+  if (mana_cost > 0) { mana_cost *= entity.kBaseMana; }
 
   if (entity.recording_combat_log_breakdown && !entity.combat_log_breakdown.contains(name)) {
     entity.combat_log_breakdown.insert({name, std::make_shared<CombatLogBreakdown>(name)});
@@ -70,13 +64,9 @@ void Spell::Setup() {
 
     additive_modifier += 0.03 * entity.player->talents.emberstorm;
 
-    if (name == SpellName::kImmolate) {
-      additive_modifier += 0.1 * entity.player->talents.improved_immolate;
-    }
+    if (name == SpellName::kImmolate) { additive_modifier += 0.1 * entity.player->talents.improved_immolate; }
 
-    if (entity.player->settings.meta_gem_id == 34220) {
-      crit_damage_multiplier *= 1.03;
-    }
+    if (entity.player->settings.meta_gem_id == 34220) { crit_damage_multiplier *= 1.03; }
 
     if (spell_type == SpellType::kDestruction && entity.player->talents.ruin > 0) {
       // Ruin doubles the *bonus* of your crits, not the Damage of the crit itself
@@ -124,20 +114,14 @@ double Spell::GetCastTime() {
 
 void Spell::Tick(const double kTime) {
   if (cooldown_remaining > 0 && cooldown_remaining - kTime <= 0) {
-    if (name == SpellName::kPowerInfusion) {
-      entity.player->power_infusions_ready++;
-    }
+    if (name == SpellName::kPowerInfusion) { entity.player->power_infusions_ready++; }
 
-    if (entity.ShouldWriteToCombatLog()) {
-      entity.CombatLog(entity.name + "'s " + name + " off cooldown");
-    }
+    if (entity.ShouldWriteToCombatLog()) { entity.CombatLog(entity.name + "'s " + name + " off cooldown"); }
   }
 
   cooldown_remaining -= kTime;
 
-  if (casting && entity.cast_time_remaining <= 0) {
-    Cast();
-  }
+  if (casting && entity.cast_time_remaining <= 0) { Cast(); }
 }
 
 double Spell::GetCooldown() {
@@ -153,15 +137,11 @@ void Spell::Cast() {
 
   for (auto& spell_name : shared_cooldown_spells) {
     for (const auto& kPlayerSpell : entity.spell_list) {
-      if (kPlayerSpell->name == spell_name) {
-        kPlayerSpell->cooldown_remaining = cooldown;
-      }
+      if (kPlayerSpell->name == spell_name) { kPlayerSpell->cooldown_remaining = cooldown; }
     }
   }
 
-  if (name == SpellName::kPowerInfusion) {
-    entity.player->power_infusions_ready--;
-  }
+  if (name == SpellName::kPowerInfusion) { entity.player->power_infusions_ready--; }
 
   if (aura_effect == nullptr && entity.recording_combat_log_breakdown) {
     entity.combat_log_breakdown.at(name)->casts++;
@@ -184,16 +164,12 @@ void Spell::Cast() {
     entity.CombatLog(msg);
   }
 
-  if (gain_mana_on_cast) {
-    ManaGainOnCast();
-  }
+  if (gain_mana_on_cast) { ManaGainOnCast(); }
 
   const SpellCastResult kSpellCastResult =
       attack_type == AttackType::kPhysical ? PhysicalSpellCast() : MagicSpellCast();
 
-  if (kSpellCastResult.is_miss || kSpellCastResult.is_dodge) {
-    return;
-  }
+  if (kSpellCastResult.is_miss || kSpellCastResult.is_dodge) { return; }
 
   OnSpellHit(kSpellCastResult);
 }
@@ -215,16 +191,12 @@ void Spell::Damage(const bool kIsCrit, const bool kIsGlancing) {
     entity.player->auras.improved_shadow_bolt->DecrementStacks();
   }
 
-  if (kIsGlancing) {
-    total_damage *= entity.pet->glancing_blow_multiplier;
-  }
+  if (kIsGlancing) { total_damage *= entity.pet->glancing_blow_multiplier; }
 
   OnDamageProcs();
   entity.player->iteration_damage += total_damage;
 
-  if (entity.recording_combat_log_breakdown) {
-    entity.combat_log_breakdown.at(name)->iteration_damage += total_damage;
-  }
+  if (entity.recording_combat_log_breakdown) { entity.combat_log_breakdown.at(name)->iteration_damage += total_damage; }
 
   if (entity.ShouldWriteToCombatLog()) {
     CombatLogDamage(kIsCrit, kIsGlancing, total_damage, kBaseDamage, kSpellPower, crit_damage_multiplier,
@@ -252,19 +224,13 @@ std::vector<double> Spell::GetConstantDamage() {
     }
   }
 
-  if (attack_type == AttackType::kMagical) {
-    total_damage += kSpellPower * coefficient;
-  }
+  if (attack_type == AttackType::kMagical) { total_damage += kSpellPower * coefficient; }
 
   total_damage *= kDamageModifier;
 
-  if (attack_type == AttackType::kMagical) {
-    total_damage *= kPartialResistMultiplier;
-  }
+  if (attack_type == AttackType::kMagical) { total_damage *= kPartialResistMultiplier; }
 
-  if (attack_type == AttackType::kPhysical) {
-    total_damage *= entity.pet->enemy_damage_reduction_from_armor;
-  }
+  if (attack_type == AttackType::kPhysical) { total_damage *= entity.pet->enemy_damage_reduction_from_armor; }
 
   return std::vector{kBaseDamage, total_damage, kDamageModifier, kPartialResistMultiplier, kSpellPower};
 }
@@ -300,9 +266,7 @@ double Spell::PredictDamage() {
   auto estimated_damage = can_crit ? kNormalDamage * chance_to_not_crit + crit_damage * crit_chance : kNormalDamage;
 
   // Add the predicted Damage of the DoT over its full duration
-  if (dot_effect != nullptr) {
-    estimated_damage += dot_effect->PredictDamage();
-  }
+  if (dot_effect != nullptr) { estimated_damage += dot_effect->PredictDamage(); }
 
   // If the player is not using a custom ISB uptime, they have the ISB talent
   // selected, but the ISB aura is not active, then give some % modifier as an
@@ -318,33 +282,25 @@ double Spell::PredictDamage() {
 
 void Spell::OnCritProcs() {
   for (const auto& kProc : entity.on_crit_procs) {
-    if (kProc->Ready() && kProc->ShouldProc(this) && entity.player->RollRng(kProc->proc_chance)) {
-      kProc->StartCast();
-    }
+    if (kProc->Ready() && kProc->ShouldProc(this) && entity.player->RollRng(kProc->proc_chance)) { kProc->StartCast(); }
   }
 }
 
 void Spell::OnResistProcs() {
   for (const auto& kProc : entity.on_resist_procs) {
-    if (kProc->Ready() && kProc->ShouldProc(this) && entity.player->RollRng(kProc->proc_chance)) {
-      kProc->StartCast();
-    }
+    if (kProc->Ready() && kProc->ShouldProc(this) && entity.player->RollRng(kProc->proc_chance)) { kProc->StartCast(); }
   }
 }
 
 void Spell::OnDamageProcs() {
   for (const auto& kProc : entity.on_damage_procs) {
-    if (kProc->Ready() && kProc->ShouldProc(this) && entity.player->RollRng(kProc->proc_chance)) {
-      kProc->StartCast();
-    }
+    if (kProc->Ready() && kProc->ShouldProc(this) && entity.player->RollRng(kProc->proc_chance)) { kProc->StartCast(); }
   }
 }
 
 void Spell::OnHitProcs() {
   for (const auto& kProc : entity.on_hit_procs) {
-    if (kProc->Ready() && kProc->ShouldProc(this) && entity.player->RollRng(kProc->proc_chance)) {
-      kProc->StartCast();
-    }
+    if (kProc->Ready() && kProc->ShouldProc(this) && entity.player->RollRng(kProc->proc_chance)) { kProc->StartCast(); }
   }
 }
 
@@ -404,9 +360,7 @@ void Spell::StartCast(const double kPredictedDamage) {
     combat_log_message.append(" - Estimated Damage / Cast time: " + DoubleToString(round(kPredictedDamage)));
   }
 
-  if (combat_log_message.length() > 0) {
-    entity.CombatLog(combat_log_message);
-  }
+  if (combat_log_message.length() > 0) { entity.CombatLog(combat_log_message); }
 }
 
 bool Spell::IsCrit() const {
@@ -422,9 +376,7 @@ double Spell::GetHitChance() const {
     return std::min(99.0, entity.stats.spell_hit_chance + entity.stats.extra_spell_hit_chance);
   }
 
-  if (attack_type == AttackType::kPhysical) {
-    return entity.stats.melee_hit_chance;
-  }
+  if (attack_type == AttackType::kPhysical) { return entity.stats.melee_hit_chance; }
 
   return 0;
 }
@@ -445,13 +397,9 @@ SpellCastResult Spell::MagicSpellCast() {
   }
 
   if (kIsResist) {
-    if (entity.ShouldWriteToCombatLog()) {
-      entity.CombatLog(name + " *resist*");
-    }
+    if (entity.ShouldWriteToCombatLog()) { entity.CombatLog(name + " *resist*"); }
 
-    if (entity.recording_combat_log_breakdown) {
-      entity.combat_log_breakdown.at(name)->misses++;
-    }
+    if (entity.recording_combat_log_breakdown) { entity.combat_log_breakdown.at(name)->misses++; }
 
     OnResistProcs();
   }
@@ -467,9 +415,7 @@ double Spell::GetPartialResistMultiplier() const {
   enemy_resist = std::max(enemy_resist - static_cast<int>(entity.stats.spell_penetration),
                           entity.enemy_level_difference_resistance);
 
-  if (enemy_resist <= 0) {
-    return 1;
-  }
+  if (enemy_resist <= 0) { return 1; }
 
   return 1.0 - 75.0 * enemy_resist / (entity.kLevel * 5) / 100.0;
 }
@@ -488,9 +434,7 @@ double Spell::GetDamageModifier() const {
     damage_modifier *= entity.stats.fire_modifier;
   }
 
-  if (attack_type == AttackType::kPhysical) {
-    damage_modifier *= entity.stats.physical_modifier;
-  }
+  if (attack_type == AttackType::kPhysical) { damage_modifier *= entity.stats.physical_modifier; }
 
   return additive_modifier * damage_modifier;
 }
@@ -519,62 +463,42 @@ SpellCastResult Spell::PhysicalSpellCast() const {
   if (const auto kAttackRoll = entity.player->GetRand(); can_crit && kAttackRoll <= kCritChance) {
     is_crit = true;
 
-    if (entity.recording_combat_log_breakdown) {
-      entity.combat_log_breakdown.at(name)->crits++;
-    }
+    if (entity.recording_combat_log_breakdown) { entity.combat_log_breakdown.at(name)->crits++; }
   }
   // Dodge
   else if (kAttackRoll <= kDodgeChance) {
     is_dodge = true;
 
-    if (entity.recording_combat_log_breakdown) {
-      entity.combat_log_breakdown.at(name)->dodge++;
-    }
+    if (entity.recording_combat_log_breakdown) { entity.combat_log_breakdown.at(name)->dodge++; }
 
-    if (entity.ShouldWriteToCombatLog()) {
-      entity.CombatLog(entity.name + " " + name + " *dodge*");
-    }
+    if (entity.ShouldWriteToCombatLog()) { entity.CombatLog(entity.name + " " + name + " *dodge*"); }
   }
   // Miss
   else if (kAttackRoll <= kMissChance) {
     is_miss = true;
 
-    if (entity.recording_combat_log_breakdown) {
-      entity.combat_log_breakdown.at(name)->misses++;
-    }
+    if (entity.recording_combat_log_breakdown) { entity.combat_log_breakdown.at(name)->misses++; }
 
-    if (entity.ShouldWriteToCombatLog()) {
-      entity.CombatLog(entity.name + " " + name + " *miss*");
-    }
+    if (entity.ShouldWriteToCombatLog()) { entity.CombatLog(entity.name + " " + name + " *miss*"); }
   }
   // Glancing Blow
   else if (kAttackRoll <= glancing_chance && name == SpellName::kMelee) {
     is_glancing = true;
 
-    if (entity.recording_combat_log_breakdown) {
-      entity.combat_log_breakdown.at(name)->glancing_blows++;
-    }
+    if (entity.recording_combat_log_breakdown) { entity.combat_log_breakdown.at(name)->glancing_blows++; }
   }
 
   return {is_miss, is_crit, is_glancing, is_dodge};
 }
 
 void Spell::OnSpellHit(const SpellCastResult& kSpellCastResult) {
-  if (aura_effect != nullptr) {
-    aura_effect->Apply();
-  }
+  if (aura_effect != nullptr) { aura_effect->Apply(); }
 
-  if (dot_effect != nullptr) {
-    dot_effect->Apply();
-  }
+  if (dot_effect != nullptr) { dot_effect->Apply(); }
 
-  if (does_damage) {
-    Damage(kSpellCastResult.is_crit, kSpellCastResult.is_glancing);
-  }
+  if (does_damage) { Damage(kSpellCastResult.is_crit, kSpellCastResult.is_glancing); }
 
-  if (!is_item && !is_proc && !is_non_warlock_ability && name != SpellName::kAmplifyCurse) {
-    OnHitProcs();
-  }
+  if (!is_item && !is_proc && !is_non_warlock_ability && name != SpellName::kAmplifyCurse) { OnHitProcs(); }
 }
 
 void Spell::CombatLogDamage(const bool kIsCrit, const bool kIsGlancing, const double kTotalDamage,
@@ -582,19 +506,13 @@ void Spell::CombatLogDamage(const bool kIsCrit, const bool kIsGlancing, const do
                             const double kDamageModifier, const double kPartialResistMultiplier) const {
   auto msg = name + " ";
 
-  if (kIsCrit) {
-    msg += "*";
-  }
+  if (kIsCrit) { msg += "*"; }
 
   msg += DoubleToString(round(kTotalDamage));
 
-  if (kIsCrit) {
-    msg += "*";
-  }
+  if (kIsCrit) { msg += "*"; }
 
-  if (kIsGlancing) {
-    msg += " Glancing";
-  }
+  if (kIsGlancing) { msg += " Glancing"; }
 
   msg += " (" + DoubleToString(kSpellBaseDamage, 1) + " Base Damage";
 
@@ -611,9 +529,7 @@ void Spell::CombatLogDamage(const bool kIsCrit, const bool kIsGlancing, const do
            "% Damage Modifier (Armor)";
   }
 
-  if (kIsCrit) {
-    msg += " - " + DoubleToString(kCritMultiplier * 100, 3) + "% Crit Multiplier";
-  }
+  if (kIsCrit) { msg += " - " + DoubleToString(kCritMultiplier * 100, 3) + "% Crit Multiplier"; }
 
   msg += " - " + DoubleToString(round(kDamageModifier * 10000) / 100, 2) + "% Damage Modifier";
 
@@ -655,9 +571,7 @@ ShadowBolt::ShadowBolt(Entity& entity_param) : Spell(entity_param) {
 void ShadowBolt::StartCast(double) {
   const bool kHasShadowTrance = entity.player->auras.shadow_trance != nullptr;
 
-  if (kHasShadowTrance && entity.player->auras.shadow_trance->active) {
-    cast_time = 0;
-  }
+  if (kHasShadowTrance && entity.player->auras.shadow_trance->active) { cast_time = 0; }
 
   Spell::StartCast();
 
@@ -884,9 +798,7 @@ void SeedOfCorruption::Damage(bool, bool) {
                " Coefficient - " + DoubleToString(kSpellPower) + " Spell Power - " +
                DoubleToString(round(internal_modifier * external_modifier * 1000) / 10, 1) + "% Modifier - ";
 
-    if (crit_amount > 0) {
-      msg += DoubleToString(crit_damage_multiplier, 3) + "% Crit Multiplier";
-    }
+    if (crit_amount > 0) { msg += DoubleToString(crit_damage_multiplier, 3) + "% Crit Multiplier"; }
 
     msg += " - " + DoubleToString(round(kPartialResistMultiplier * 1000) / 10) + "% Partial Resist Multiplier)";
     entity.CombatLog(msg);
