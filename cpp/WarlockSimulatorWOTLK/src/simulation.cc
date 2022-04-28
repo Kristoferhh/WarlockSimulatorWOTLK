@@ -58,7 +58,7 @@ void Simulation::Start() {
     IterationEnd(kFightLength, player.iteration_damage / static_cast<double>(kFightLength));
   }
 
-  const auto kEnd          = std::chrono::high_resolution_clock::now();
+  const auto kEnd = std::chrono::high_resolution_clock::now();
   const auto kMicroseconds = std::chrono::duration_cast<std::chrono::microseconds>(kEnd - kStart).count();
 
   SimulationEnd(kMicroseconds);
@@ -74,9 +74,7 @@ double Simulation::PassTime(const double kFightTimeRemaining) {
   return time_until_next_action;
 }
 
-void Simulation::SelectedSpellHandler(const std::shared_ptr<Spell>& kSpell,
-                                      std::map<std::shared_ptr<Spell>, double>& predicted_damage_of_spells,
-                                      const double kFightTimeRemaining) const {
+void Simulation::SelectedSpellHandler(const std::shared_ptr<Spell>& kSpell, std::map<std::shared_ptr<Spell>, double>& predicted_damage_of_spells, const double kFightTimeRemaining) const {
   if ((player.settings.rotation_option == EmbindConstant::kSimChooses || kSpell->is_finisher) &&
       !predicted_damage_of_spells.contains(kSpell)) {
     predicted_damage_of_spells.insert({kSpell, kSpell->PredictDamage()});
@@ -118,7 +116,7 @@ void Simulation::IterationReset(const double kFightLength) {
   player.rng.Seed(player.settings.random_seeds[iteration]);
 
   if (player.ShouldWriteToCombatLog()) {
-    player.CombatLog("Fight length: " + DoubleToString(kFightLength) + " seconds");
+    // player.CombatLog("Fight length: " + DoubleToString(kFightLength) + " seconds");
   }
 
   if (player.pet != nullptr) {
