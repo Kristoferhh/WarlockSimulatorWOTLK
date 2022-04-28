@@ -7,7 +7,7 @@ import { Items } from '../data/Items'
 import i18n from '../i18n/config'
 import { RootState } from '../redux/Store'
 import { setEquippedItemsWindowVisibility } from '../redux/UiSlice'
-import { Enchant, Item, ItemSlotDetailed, Quality } from '../Types'
+import { Enchant, Item, ItemSlotDetailed } from '../Types'
 import ItemSocketDisplay from './ItemSocketDisplay'
 
 function formatItemSlotName(itemSlot: ItemSlotDetailed): string {
@@ -50,7 +50,7 @@ export default function EquippedItemsDisplay() {
       style={{ display: uiState.EquippedItemsWindowVisible ? '' : 'none' }}
     >
       <div id='currently-equipped-items'>
-        <div onClick={(e) => dispatch(setEquippedItemsWindowVisibility(false))}>
+        <div onClick={() => dispatch(setEquippedItemsWindowVisibility(false))}>
           <p className='close' id='currently-equipped-items-close-button'></p>
         </div>
         <table>

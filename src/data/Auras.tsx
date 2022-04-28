@@ -269,7 +269,7 @@ export const Auras: Aura[] = [
   {
     Name: 'Misery',
     Group: AuraGroup.Debuffs,
-    IconName: 'Spell_shadow_misery',
+    IconName: 'spell_shadow_misery',
     Id: AuraId.Misery,
     Stats: {
       [Stat.HitChance]: 3,

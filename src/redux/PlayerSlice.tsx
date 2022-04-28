@@ -1,28 +1,28 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { getRemainingTalentPoints } from '../Common'
 import {
-  RotationGroup,
-  Spell,
-  PlayerState,
-  InitialPlayerStats,
-  InitialSelectedItemsAndEnchants,
-  InitialSettings,
-  InitialSelectedGems,
-  Setting,
-  StatsCollection,
-  InitialSetCounts,
-  SetsStruct,
-  ItemSlotDetailedStruct,
-  SelectedGemsStruct,
-  TalentStore,
-  RotationStruct,
-  Settings,
-  RotationGroups,
   AuraId,
+  InitialPlayerStats,
   InitialRotation,
+  InitialSelectedGems,
+  InitialSelectedItemsAndEnchants,
+  InitialSetCounts,
+  InitialSettings,
+  ItemSlotDetailedStruct,
+  PlayerState,
   ProfileContainer,
+  RotationGroup,
+  RotationGroups,
+  RotationStruct,
+  SelectedGemsStruct,
+  SetsStruct,
+  Setting,
+  Settings,
+  Spell,
+  StatsCollection,
+  TalentStore,
 } from '../Types'
-const ldb = require('localdata')
+//const ldb = require('localdata')
 
 const initialPlayerState: PlayerState = {
   Talents: JSON.parse(localStorage.getItem('wotlk_talents') || '{}'),

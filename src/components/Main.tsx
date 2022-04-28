@@ -21,7 +21,7 @@ export default function Main() {
   const dispatch = useDispatch();
 
   return (
-    <div id="main" onClick={(e) => dispatch(setGemSelectionTable(InitialGemSelectionTableValue))}>
+    <div id="main" onClick={() => dispatch(setGemSelectionTable(InitialGemSelectionTableValue))}>
       <div id='header'>
         <LanguageSelection />
         <p style={{ marginRight: 'auto' }}>

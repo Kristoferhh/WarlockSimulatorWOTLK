@@ -152,7 +152,7 @@ export default function ProfilesAndSources() {
         <button
           className='btn btn-primary btn-sm'
           id='save-new-profile-button'
-          onClick={(e) => callSetProfile(true)}
+          onClick={() => callSetProfile(true)}
           disabled={profileName.length === 0}
         >
           {t('Save New Profile')}
@@ -164,7 +164,7 @@ export default function ProfilesAndSources() {
               display: selectedProfileExists ? '' : 'none',
             }}
             id='save-profile-button'
-            onClick={(e) => callSetProfile(false)}
+            onClick={() => callSetProfile(false)}
           >
             {t('Save')}
           </button>{' '}
@@ -174,7 +174,7 @@ export default function ProfilesAndSources() {
               display: selectedProfileExists ? '' : 'none',
             }}
             id='delete-profile-button'
-            onClick={(e) => deleteProfileHandler()}
+            onClick={() => deleteProfileHandler()}
           >
             {t('Delete')}
           </button>{' '}
@@ -184,14 +184,14 @@ export default function ProfilesAndSources() {
               display: selectedProfileExists ? '' : 'none',
             }}
             id='rename-profile-button'
-            onClick={(e) => renameProfileHandler()}
+            onClick={() => renameProfileHandler()}
           >
             {t('Rename')}
           </button>{' '}
           <button
             id='import-export-button'
             className='btn btn-primary btn-sm'
-            onClick={(e) => dispatch(setImportExportWindowVisibility(true))}
+            onClick={() => dispatch(setImportExportWindowVisibility(true))}
           >
             {t('Import/Export')}
           </button>

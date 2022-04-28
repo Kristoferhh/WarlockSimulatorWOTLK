@@ -53,6 +53,7 @@ export default function Session() {
       )
     )
     ;(jQuery('.tablesorter') as any).tablesorter()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return <div></div>

@@ -83,14 +83,14 @@ export function FillItemSockets() {
           type="radio"
           name='gem-replacement-option'
           id='emptySockets'
-          onChange={(e) => setReplacingExistingGems(false)} checked={replacingExistingGems === false}
+          onChange={() => setReplacingExistingGems(false)} checked={replacingExistingGems === false}
         />
         <label htmlFor='allSockets'>Fill all sockets (replaces equipped gems)</label>
         <input
           type="radio"
           name='gem-replacement-option'
           id='allSockets'
-          onChange={(e) => setReplacingExistingGems(true)} checked={replacingExistingGems === true}
+          onChange={() => setReplacingExistingGems(true)} checked={replacingExistingGems === true}
         />
       </div>
       <div id='gem-options-window-item-slot'>
@@ -99,14 +99,14 @@ export function FillItemSockets() {
           type='radio'
           name='item-slot'
           id='currentSlot'
-          onChange={(e) => setItemSlotToFill('currentSlot')} checked={itemSlotToFill === 'currentSlot'}
+          onChange={() => setItemSlotToFill('currentSlot')} checked={itemSlotToFill === 'currentSlot'}
         />
         <label htmlFor='allSlots'>All item slots</label>
         <input
           type='radio'
           name='item-slot'
           id='allSlots'
-          onChange={(e) => setItemSlotToFill('allSlots')} checked={itemSlotToFill === 'allSlots'}
+          onChange={() => setItemSlotToFill('allSlots')} checked={itemSlotToFill === 'allSlots'}
         />
       </div>
       <div id='gem-options-window-socket-selection'>
@@ -116,7 +116,7 @@ export function FillItemSockets() {
               <input
                 type='radio'
                 name='socket-selection'
-                onChange={(e) => socketColorClickHandler(socket.color)} checked={socketColor === socket.color}
+                onChange={() => socketColorClickHandler(socket.color)} checked={socketColor === socket.color}
               ></input>
             </label>
           )
@@ -142,12 +142,12 @@ export function FillItemSockets() {
       <button
         className='btn btn-primary btn-sm'
         id='gem-options-apply-button'
-        onClick={(e) => fillSockets()} disabled={selectedGemId === 0}
+        onClick={() => fillSockets()} disabled={selectedGemId === 0}
       >Apply</button>
       {' '}
       <button
         className='btn btn-primary btn-sm'
-        onClick={(e) => dispatch(setFillItemSocketsWindowVisibility(false))}
+        onClick={() => dispatch(setFillItemSocketsWindowVisibility(false))}
       >Close</button>
     </div>
   )

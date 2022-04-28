@@ -397,7 +397,7 @@ export default function SettingsDisplay() {
               }
               value={playerStore.Settings[Setting.powerInfusionAmount]}
             >
-              {Array.from(Array(12), (e, i) => i + 1).map((number) => (
+              {Array.from(Array(12), (_e, i) => i + 1).map((number) => (
                 <option value={number} key={nanoid()}>
                   {number}
                 </option>
@@ -418,7 +418,7 @@ export default function SettingsDisplay() {
               }
               value={playerStore.Settings[Setting.innervateAmount]}
             >
-              {Array.from(Array(18), (e, i) => i + 1).map((number) => (
+              {Array.from(Array(18), (_e, i) => i + 1).map((number) => (
                 <option value={number} key={nanoid()}>
                   {number}
                 </option>

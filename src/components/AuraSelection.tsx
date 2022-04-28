@@ -1,20 +1,20 @@
+import { nanoid } from 'nanoid'
+import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
+import { getAurasStats, getBaseWowheadUrl, isPetActive } from '../Common'
+import { AuraGroups } from '../data/AuraGroups'
 import { Auras } from '../data/Auras'
+import i18n from '../i18n/config'
+import { setAurasStats, setSelectedAuras } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
 import { Aura, AuraId } from '../Types'
-import { AuraGroups } from '../data/AuraGroups'
-import { setAurasStats, setSelectedAuras } from '../redux/PlayerSlice'
-import { nanoid } from 'nanoid'
-import { getAurasStats, getBaseWowheadUrl, isPetActive } from '../Common'
-import { useTranslation } from 'react-i18next'
-import i18n from '../i18n/config'
 
 function DisableAurasWithUniqueProperties(
   aura: Aura,
   auraIds: AuraId[]
 ): AuraId[] {
   for (var auraId of auraIds) {
-    var auraObj = Auras.find((x) => x.Id === auraId)
+    var auraObj = Auras.find((x) => IsCorrectAura(x))
 
     if (
       (auraObj?.Potion && aura.Potion) ||
@@ -49,11 +49,19 @@ function DisableAurasWithUniqueProperties(
       (auraObj?.SpellDamagePercent && aura.SpellDamagePercent) ||
       (auraObj?.SpellHit && aura.SpellHit)
     ) {
-      auraIds = auraIds.filter((x) => x !== auraObj?.Id)
+      auraIds = auraIds.filter((x) => AuraIsNotCorrect(x))
     }
   }
 
   return auraIds
+
+  function IsCorrectAura(auraParam: Aura): unknown {
+    return auraParam.Id === auraId
+  }
+
+  function AuraIsNotCorrect(auraIdParam: AuraId): boolean {
+    return auraIdParam !== auraObj?.Id
+  }
 }
 
 export default function AuraSelection() {
