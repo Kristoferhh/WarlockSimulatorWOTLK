@@ -25,6 +25,7 @@ jobs:
         with:
           clangFormatVersion: 13
           inplace: True
+          style: file
 
       - name: Commit Changes to Git
         uses: stefanzweifel/git-auto-commit-action@v4
