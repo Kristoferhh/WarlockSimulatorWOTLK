@@ -1,64 +1,64 @@
-import { nanoid } from '@reduxjs/toolkit'
-import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
-import { getBaseWowheadUrl, ItemSlotDetailedToItemSlot } from '../Common'
-import { Enchants } from '../data/Enchants'
-import { Items } from '../data/Items'
-import i18n from '../i18n/config'
-import { RootState } from '../redux/Store'
-import { setEquippedItemsWindowVisibility } from '../redux/UiSlice'
-import { Enchant, Item, ItemSlotDetailed } from '../Types'
-import ItemSocketDisplay from './ItemSocketDisplay'
+import { nanoid } from "@reduxjs/toolkit";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { getBaseWowheadUrl, ItemSlotDetailedToItemSlot } from "../Common";
+import { Enchants } from "../data/Enchants";
+import { Items } from "../data/Items";
+import i18n from "../i18n/config";
+import { RootState } from "../redux/Store";
+import { setEquippedItemsWindowVisibility } from "../redux/UiSlice";
+import { Enchant, Item, ItemSlotDetailed } from "../Types";
+import ItemSocketDisplay from "./ItemSocketDisplay";
 
 function formatItemSlotName(itemSlot: ItemSlotDetailed): string {
-  let formattedItemSlot = itemSlot.toString()
+  let formattedItemSlot = itemSlot.toString();
 
   // Check if the last char is '1' or '2', if so then it's an item slot
   // with sub-item slots so we put a space between the name and the sub-item slot value.
-  const subItemSlotIndex = formattedItemSlot.length - 1
-  if (['1', '2'].includes(formattedItemSlot.charAt(subItemSlotIndex))) {
+  const subItemSlotIndex = formattedItemSlot.length - 1;
+  if (["1", "2"].includes(formattedItemSlot.charAt(subItemSlotIndex))) {
     formattedItemSlot = `${formattedItemSlot.substring(
       0,
       subItemSlotIndex
-    )} ${formattedItemSlot.substring(subItemSlotIndex)}`
+    )} ${formattedItemSlot.substring(subItemSlotIndex)}`;
   }
 
-  return formattedItemSlot.charAt(0).toUpperCase() + formattedItemSlot.slice(1)
+  return formattedItemSlot.charAt(0).toUpperCase() + formattedItemSlot.slice(1);
 }
 
 export default function EquippedItemsDisplay() {
-  const uiState = useSelector((state: RootState) => state.ui)
-  const playerState = useSelector((state: RootState) => state.player)
-  const dispatch = useDispatch()
-  const { t } = useTranslation()
+  const uiState = useSelector((state: RootState) => state.ui);
+  const playerState = useSelector((state: RootState) => state.player);
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   function getEnchantInItemSlot(
     itemSlot: ItemSlotDetailed
   ): Enchant | undefined {
-    let slot = itemSlot
+    let slot = itemSlot;
 
-    return Enchants.find((e) => e.Id === playerState.SelectedEnchants[slot])
+    return Enchants.find((e) => e.Id === playerState.SelectedEnchants[slot]);
   }
 
   function getItemInItemSlot(itemSlot: ItemSlotDetailed): Item | undefined {
-    return Items.find((e) => e.Id === playerState.SelectedItems[itemSlot])
+    return Items.find((e) => e.Id === playerState.SelectedItems[itemSlot]);
   }
 
   return (
     <div
-      id='currently-equipped-items-container'
-      style={{ display: uiState.EquippedItemsWindowVisible ? '' : 'none' }}
+      id="currently-equipped-items-container"
+      style={{ display: uiState.EquippedItemsWindowVisible ? "" : "none" }}
     >
-      <div id='currently-equipped-items'>
+      <div id="currently-equipped-items">
         <div onClick={() => dispatch(setEquippedItemsWindowVisibility(false))}>
-          <p className='close' id='currently-equipped-items-close-button'></p>
+          <p className="close" id="currently-equipped-items-close-button"></p>
         </div>
         <table>
           <colgroup>
-            <col style={{ width: '13%' }} />
-            <col style={{ width: '45%' }} />
-            <col style={{ width: '10%' }} />
-            <col style={{ width: '32%' }} />
+            <col style={{ width: "13%" }} />
+            <col style={{ width: "45%" }} />
+            <col style={{ width: "10%" }} />
+            <col style={{ width: "32%" }} />
           </colgroup>
           <thead>
             <tr>
@@ -74,32 +74,34 @@ export default function EquippedItemsDisplay() {
               .filter((slot) => {
                 if (slot === ItemSlotDetailed.OffHand) {
                   const equippedWeaponId =
-                    playerState.SelectedItems[ItemSlotDetailed.Weapon]
+                    playerState.SelectedItems[ItemSlotDetailed.Weapon];
                   const equippedWeapon = Items.find(
                     (x) => x.Id === equippedWeaponId
-                  )
+                  );
 
-                  return !equippedWeapon?.IsTwoHand
+                  return !equippedWeapon?.IsTwoHand;
                 }
 
-                return true
+                return true;
               })
               .map((slot) => {
-                const equippedItem = getItemInItemSlot(slot as ItemSlotDetailed)
+                const equippedItem = getItemInItemSlot(
+                  slot as ItemSlotDetailed
+                );
                 const equippedEnchant = getEnchantInItemSlot(
                   slot as ItemSlotDetailed
-                )
+                );
 
                 return (
-                  <tr key={nanoid()} className='equipped-item-row'>
+                  <tr key={nanoid()} className="equipped-item-row">
                     <td>{t(formatItemSlotName(slot as ItemSlotDetailed))}</td>
                     <td
                       className={
-                        'equipped-item-name ' +
+                        "equipped-item-name " +
                         (playerState.SelectedItems[slot as ItemSlotDetailed] !=
                         null
                           ? equippedItem?.Quality
-                          : '')
+                          : "")
                       }
                     >
                       {equippedItem && (
@@ -109,14 +111,14 @@ export default function EquippedItemsDisplay() {
                               equippedItem!.DisplayId || equippedItem!.Id
                             }`}
                             onClick={(e) => e.preventDefault()}
-                            style={{ fontSize: '0px' }}
+                            style={{ fontSize: "0px" }}
                           >
                             .
                           </a>
                           <img
                             alt={equippedItem.Name}
                             src={`${process.env.PUBLIC_URL}/img/${equippedItem.IconName}.jpg`}
-                            className='item-icon'
+                            className="item-icon"
                           />
                           {t(equippedItem.Name)}
                         </>
@@ -132,7 +134,7 @@ export default function EquippedItemsDisplay() {
                           )}
                         />
                       ) : (
-                        ''
+                        ""
                       )}
                     </td>
                     <td
@@ -145,7 +147,7 @@ export default function EquippedItemsDisplay() {
                               equippedEnchant.Id
                             }`}
                             onClick={(e) => e.preventDefault()}
-                            style={{ fontSize: '0px' }}
+                            style={{ fontSize: "0px" }}
                           >
                             .
                           </a>
@@ -154,11 +156,11 @@ export default function EquippedItemsDisplay() {
                       )}
                     </td>
                   </tr>
-                )
+                );
               })}
           </tbody>
         </table>
       </div>
     </div>
-  )
+  );
 }
