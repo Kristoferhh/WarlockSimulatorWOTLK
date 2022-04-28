@@ -1,8 +1,8 @@
-import { Race, Stat, StatsCollection } from '../Types'
+import { Race, Stat, StatsCollection } from "../Types";
 
 export const Races: { Name: string; Race: Race; Stats: StatsCollection }[] = [
   {
-    Name: 'Gnome',
+    Name: "Gnome",
     Race: Race.Gnome,
     Stats: {
       [Stat.Health]: 7164,
@@ -14,7 +14,7 @@ export const Races: { Name: string; Race: Race; Stats: StatsCollection }[] = [
     },
   },
   {
-    Name: 'Human',
+    Name: "Human",
     Race: Race.Human,
     Stats: {
       [Stat.Health]: 7164,
@@ -26,7 +26,7 @@ export const Races: { Name: string; Race: Race; Stats: StatsCollection }[] = [
     },
   },
   {
-    Name: 'Orc',
+    Name: "Orc",
     Race: Race.Orc,
     Stats: {
       [Stat.Health]: 7164,
@@ -38,7 +38,7 @@ export const Races: { Name: string; Race: Race; Stats: StatsCollection }[] = [
     },
   },
   {
-    Name: 'Undead',
+    Name: "Undead",
     Race: Race.Undead,
     Stats: {
       [Stat.Health]: 7164,
@@ -49,7 +49,7 @@ export const Races: { Name: string; Race: Race; Stats: StatsCollection }[] = [
     },
   },
   {
-    Name: 'Blood Elf',
+    Name: "Blood Elf",
     Race: Race.BloodElf,
     Stats: {
       [Stat.Health]: 7164,
@@ -59,4 +59,4 @@ export const Races: { Name: string; Race: Race; Stats: StatsCollection }[] = [
       [Stat.Spirit]: 164,
     },
   },
-]
+];

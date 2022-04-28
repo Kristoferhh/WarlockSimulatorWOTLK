@@ -7,7 +7,7 @@ import {
   ItemSet,
   Stat,
   ItemId,
-} from '../Types'
+} from "../Types";
 
 export const Items: Item[] = [
   // Head
@@ -15,7 +15,7 @@ export const Items: Item[] = [
     Phase: 1,
     Id: ItemId.ValorousPlagueheartCirclet,
     ItemSlot: ItemSlot.Head,
-    Name: 'Valorous Plagueheart Circlet',
+    Name: "Valorous Plagueheart Circlet",
     Set: ItemSet.T7,
     Sockets: [SocketColor.Meta, SocketColor.Yellow],
     SocketBonus: { [Stat.HasteRating]: 8 },
@@ -28,6 +28,6 @@ export const Items: Item[] = [
     },
     Quality: Quality.Epic,
     Source: ItemSource.Naxxramas25Normal,
-    IconName: 'inv_crown_01',
+    IconName: "inv_crown_01",
   },
-]
+];
