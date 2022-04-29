@@ -13,21 +13,19 @@ OnHitProc::OnHitProc(Entity& entity, std::shared_ptr<Aura> aura) : SpellProc(ent
 void OnHitProc::Setup() {
   SpellProc::Setup();
 
-  if (procs_on_hit && on_hit_procs_enabled) {
-    entity.on_hit_procs.push_back(this);
-  }
+  if (procs_on_hit && on_hit_procs_enabled) { entity.on_hit_procs.push_back(this); }
 }
 
 JudgementOfWisdom::JudgementOfWisdom(Entity& entity) : OnHitProc(entity) {
-  name = SpellName::kJudgementOfWisdom;
-  mana_gain = 74;
+  name              = SpellName::kJudgementOfWisdom;
+  mana_gain         = 74;
   gain_mana_on_cast = true;
-  proc_chance = 50;
+  proc_chance       = 50;
   OnHitProc::Setup();
 }
 
 DemonicFrenzy::DemonicFrenzy(Entity& entity, std::shared_ptr<Aura> aura) : OnHitProc(entity, std::move(aura)) {
-  name = SpellName::kDemonicFrenzy;
+  name        = SpellName::kDemonicFrenzy;
   proc_chance = 100;
   OnHitProc::Setup();
 }
