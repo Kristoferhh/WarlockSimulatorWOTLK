@@ -25,9 +25,7 @@ void Aura::Tick(const double kTime) {
   if (has_duration) {
     duration_remaining -= kTime;
 
-    if (duration_remaining <= 0) {
-      Fade();
-    }
+    if (duration_remaining <= 0) { Fade(); }
   }
 }
 
@@ -39,13 +37,9 @@ void Aura::Apply() {
       entity.combat_log_breakdown.at(name)->applied_at = entity.simulation->current_fight_time;
     }
 
-    for (auto& stat : stats) {
-      stat.AddStat();
-    }
+    for (auto& stat : stats) { stat.AddStat(); }
 
-    if (entity.ShouldWriteToCombatLog()) {
-      entity.CombatLog(name + " applied");
-    }
+    if (entity.ShouldWriteToCombatLog()) { entity.CombatLog(name + " applied"); }
 
     active = true;
   }
@@ -53,34 +47,22 @@ void Aura::Apply() {
   if (stacks < max_stacks) {
     stacks++;
 
-    if (entity.ShouldWriteToCombatLog()) {
-      entity.CombatLog(name + " (" + std::to_string(stacks) + ")");
-    }
+    if (entity.ShouldWriteToCombatLog()) { entity.CombatLog(name + " (" + std::to_string(stacks) + ")"); }
 
-    for (auto& stat : stats_per_stack) {
-      stat.AddStat();
-    }
+    for (auto& stat : stats_per_stack) { stat.AddStat(); }
   }
 
-  if (entity.recording_combat_log_breakdown) {
-    entity.combat_log_breakdown.at(name)->count++;
-  }
+  if (entity.recording_combat_log_breakdown) { entity.combat_log_breakdown.at(name)->count++; }
 
   duration_remaining = duration;
 }
 
 void Aura::Fade() {
-  if (!active) {
-    entity.player->ThrowError("Attempting to fade " + name + " when it isn't active");
-  }
+  if (!active) { entity.player->ThrowError("Attempting to fade " + name + " when it isn't active"); }
 
-  for (auto& stat : stats) {
-    stat.RemoveStat();
-  }
+  for (auto& stat : stats) { stat.RemoveStat(); }
 
-  if (entity.ShouldWriteToCombatLog()) {
-    entity.CombatLog(name + " faded");
-  }
+  if (entity.ShouldWriteToCombatLog()) { entity.CombatLog(name + " faded"); }
 
   if (entity.recording_combat_log_breakdown) {
     entity.combat_log_breakdown.at(name)->uptime +=
@@ -88,9 +70,7 @@ void Aura::Fade() {
   }
 
   if (stacks > 0) {
-    for (auto& stat : stats_per_stack) {
-      stat.RemoveStat(stacks);
-    }
+    for (auto& stat : stats_per_stack) { stat.RemoveStat(stacks); }
   }
 
   active = false;

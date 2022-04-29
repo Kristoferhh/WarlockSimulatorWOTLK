@@ -11,7 +11,5 @@ OnDamageProc::OnDamageProc(Player& player, const std::shared_ptr<Aura>& kAura) :
 void OnDamageProc::Setup() {
   SpellProc::Setup();
 
-  if (procs_on_damage && on_damage_procs_enabled) {
-    entity.on_damage_procs.push_back(this);
-  }
+  if (procs_on_damage && on_damage_procs_enabled) { entity.on_damage_procs.push_back(this); }
 }
