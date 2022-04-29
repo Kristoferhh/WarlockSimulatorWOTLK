@@ -7,18 +7,18 @@
 
 ManaPotion::ManaPotion(Player& player) : Spell(player) {
   cooldown = 120;
-  is_item = true;
-  on_gcd = false;
+  is_item  = true;
+  on_gcd   = false;
 }
 
 void ManaPotion::Cast() {
   Spell::Cast();
   const double kCurrentPlayerMana = entity.stats.mana;
-  const double kManaGain = entity.player->settings.randomize_values && min_mana_gain > 0 && max_mana_gain > 0
-                               ? entity.player->rng.Range(min_mana_gain, max_mana_gain)
-                               : mana_gain;
+  const double kManaGain          = entity.player->settings.randomize_values && min_mana_gain > 0 && max_mana_gain > 0
+                                        ? entity.player->rng.Range(min_mana_gain, max_mana_gain)
+                                        : mana_gain;
 
-  entity.stats.mana = std::min(entity.stats.max_mana, kCurrentPlayerMana + kManaGain);
+  entity.stats.mana        = std::min(entity.stats.max_mana, kCurrentPlayerMana + kManaGain);
   const double kManaGained = entity.stats.mana - kCurrentPlayerMana;
 
   if (entity.recording_combat_log_breakdown) {
@@ -33,7 +33,7 @@ void ManaPotion::Cast() {
 }
 
 DemonicRune::DemonicRune(Player& player) : ManaPotion(player) {
-  name = SpellName::kDemonicRune;
+  name          = SpellName::kDemonicRune;
   min_mana_gain = 900;
   max_mana_gain = 1500;
   Spell::Setup();

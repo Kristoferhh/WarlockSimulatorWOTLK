@@ -8,12 +8,12 @@ OnDotTickProc::OnDotTickProc(Player& player, const std::shared_ptr<Aura>& kAura)
   procs_on_dot_ticks = true;
 }
 
-bool OnDotTickProc::ShouldProc(DamageOverTime*) { return true; }
+bool OnDotTickProc::ShouldProc(DamageOverTime*) {
+  return true;
+}
 
 void OnDotTickProc::Setup() {
   SpellProc::Setup();
 
-  if (procs_on_dot_ticks && on_dot_tick_procs_enabled) {
-    entity.on_dot_tick_procs.push_back(this);
-  }
+  if (procs_on_dot_ticks && on_dot_tick_procs_enabled) { entity.on_dot_tick_procs.push_back(this); }
 }

@@ -25,9 +25,7 @@ void Aura::Tick(const double kTime) {
   if (has_duration) {
     duration_remaining -= kTime;
 
-    if (duration_remaining <= 0) {
-      Fade();
-    }
+    if (duration_remaining <= 0) { Fade(); }
   }
 }
 
@@ -39,13 +37,9 @@ void Aura::Apply() {
       entity.combat_log_breakdown.at(name)->applied_at = entity.simulation->current_fight_time;
     }
 
-    for (auto& stat : stats) {
-      stat.AddStat();
-    }
+    for (auto& stat : stats) { stat.AddStat(); }
 
-    if (entity.ShouldWriteToCombatLog()) {
-      entity.CombatLog(name + " applied");
-    }
+    if (entity.ShouldWriteToCombatLog()) { entity.CombatLog(name + " applied"); }
 
     active = true;
   }
@@ -53,34 +47,22 @@ void Aura::Apply() {
   if (stacks < max_stacks) {
     stacks++;
 
-    if (entity.ShouldWriteToCombatLog()) {
-      entity.CombatLog(name + " (" + std::to_string(stacks) + ")");
-    }
+    if (entity.ShouldWriteToCombatLog()) { entity.CombatLog(name + " (" + std::to_string(stacks) + ")"); }
 
-    for (auto& stat : stats_per_stack) {
-      stat.AddStat();
-    }
+    for (auto& stat : stats_per_stack) { stat.AddStat(); }
   }
 
-  if (entity.recording_combat_log_breakdown) {
-    entity.combat_log_breakdown.at(name)->count++;
-  }
+  if (entity.recording_combat_log_breakdown) { entity.combat_log_breakdown.at(name)->count++; }
 
   duration_remaining = duration;
 }
 
 void Aura::Fade() {
-  if (!active) {
-    entity.player->ThrowError("Attempting to fade " + name + " when it isn't active");
-  }
+  if (!active) { entity.player->ThrowError("Attempting to fade " + name + " when it isn't active"); }
 
-  for (auto& stat : stats) {
-    stat.RemoveStat();
-  }
+  for (auto& stat : stats) { stat.RemoveStat(); }
 
-  if (entity.ShouldWriteToCombatLog()) {
-    entity.CombatLog(name + " faded");
-  }
+  if (entity.ShouldWriteToCombatLog()) { entity.CombatLog(name + " faded"); }
 
   if (entity.recording_combat_log_breakdown) {
     entity.combat_log_breakdown.at(name)->uptime +=
@@ -88,9 +70,7 @@ void Aura::Fade() {
   }
 
   if (stacks > 0) {
-    for (auto& stat : stats_per_stack) {
-      stat.RemoveStat(stacks);
-    }
+    for (auto& stat : stats_per_stack) { stat.RemoveStat(stacks); }
   }
 
   active = false;
@@ -100,10 +80,10 @@ void Aura::Fade() {
 void Aura::DecrementStacks() {}
 
 ImprovedShadowBoltAura::ImprovedShadowBoltAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kImprovedShadowBolt;
-  duration = 12;
+  name       = SpellName::kImprovedShadowBolt;
+  duration   = 12;
   max_stacks = 4;
-  modifier = 1 + entity_param.player->talents.improved_shadow_bolt * 0.04;
+  modifier   = 1 + entity_param.player->talents.improved_shadow_bolt * 0.04;
   Aura::Setup();
 }
 
@@ -123,25 +103,25 @@ void ImprovedShadowBoltAura::DecrementStacks() {
 }
 
 CurseOfTheElementsAura::CurseOfTheElementsAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kCurseOfTheElements;
+  name     = SpellName::kCurseOfTheElements;
   duration = 300;
   Aura::Setup();
 }
 
 CurseOfRecklessnessAura::CurseOfRecklessnessAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kCurseOfRecklessness;
+  name     = SpellName::kCurseOfRecklessness;
   duration = 120;
   Aura::Setup();
 }
 
 ShadowTranceAura::ShadowTranceAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kNightfall;
+  name     = SpellName::kNightfall;
   duration = 10;
   Aura::Setup();
 }
 
 PowerInfusionAura::PowerInfusionAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kPowerInfusion;
+  name     = SpellName::kPowerInfusion;
   duration = 15;
   stats.push_back(SpellHastePercent(entity_param, 1.2));
   stats.push_back(ManaCostModifier(entity_param, 0.8));
@@ -149,22 +129,22 @@ PowerInfusionAura::PowerInfusionAura(Entity& entity_param) : Aura(entity_param) 
 }
 
 FlameCapAura::FlameCapAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kFlameCap;
+  name     = SpellName::kFlameCap;
   duration = 60;
   stats.push_back(FirePower(entity_param, 80));
   Aura::Setup();
 }
 
 BloodFuryAura::BloodFuryAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kBloodFury;
+  name     = SpellName::kBloodFury;
   duration = 15;
   stats.push_back(SpellPower(entity_param, 163));
   Aura::Setup();
 }
 
 BloodlustAura::BloodlustAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kBloodlust;
-  duration = 40;
+  name       = SpellName::kBloodlust;
+  duration   = 40;
   group_wide = true;
   stats.push_back(SpellHastePercent(entity_param, 1.3));
   if (entity_param.pet != nullptr) {
@@ -175,33 +155,33 @@ BloodlustAura::BloodlustAura(Entity& entity_param) : Aura(entity_param) {
 }
 
 TheLightningCapacitorAura::TheLightningCapacitorAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kTheLightningCapacitor;
+  name         = SpellName::kTheLightningCapacitor;
   has_duration = false;
-  max_stacks = 3;
+  max_stacks   = 3;
   Aura::Setup();
 }
 
 AmplifyCurseAura::AmplifyCurseAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kAmplifyCurse;
+  name     = SpellName::kAmplifyCurse;
   duration = 30;
   Aura::Setup();
 }
 
 InnervateAura::InnervateAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kInnervate;
+  name     = SpellName::kInnervate;
   duration = 20;
   Aura::Setup();
 }
 
 DemonicFrenzyAura::DemonicFrenzyAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kDemonicFrenzy;
-  duration = 10;
+  name       = SpellName::kDemonicFrenzy;
+  duration   = 10;
   max_stacks = 10;
   Aura::Setup();
 }
 
 BlackBookAura::BlackBookAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kBlackBook;
+  name     = SpellName::kBlackBook;
   duration = 30;
   stats.push_back(SpellPower(entity_param, 200));
   stats.push_back(AttackPower(entity_param, 325));
@@ -209,7 +189,7 @@ BlackBookAura::BlackBookAura(Entity& entity_param) : Aura(entity_param) {
 }
 
 HauntAura::HauntAura(Entity& entity_param) : Aura(entity_param) {
-  name = SpellName::kHaunt;
+  name     = SpellName::kHaunt;
   duration = 12;
   Aura::Setup();
 }

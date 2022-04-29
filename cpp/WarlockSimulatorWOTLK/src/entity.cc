@@ -34,14 +34,10 @@ Entity::Entity(Player* player, PlayerSettings& player_settings, const EntityType
                               2 * player_settings.talents.demonic_tactics;
   }
 
-  if (player_settings.auras.moonkin_aura) {
-    stats.spell_crit_chance += 5;
-  }
+  if (player_settings.auras.moonkin_aura) { stats.spell_crit_chance += 5; }
 
   // TODO does totem of wrath still stack?
-  if (player_settings.auras.totem_of_wrath) {
-    stats.spell_crit_chance += 3 * settings.totem_of_wrath_amount;
-  }
+  if (player_settings.auras.totem_of_wrath) { stats.spell_crit_chance += 3 * settings.totem_of_wrath_amount; }
 
   // Hit chance
   if (kEntityType == EntityType::kPlayer) {
@@ -49,13 +45,9 @@ Entity::Entity(Player* player, PlayerSettings& player_settings, const EntityType
   }
 
   // TODO does totem of wrath still stack?
-  if (player_settings.auras.totem_of_wrath) {
-    stats.extra_spell_hit_chance += 3 * settings.totem_of_wrath_amount;
-  }
+  if (player_settings.auras.totem_of_wrath) { stats.extra_spell_hit_chance += 3 * settings.totem_of_wrath_amount; }
 
-  if (player_settings.auras.inspiring_presence) {
-    stats.extra_spell_hit_chance++;
-  }
+  if (player_settings.auras.inspiring_presence) { stats.extra_spell_hit_chance++; }
 
   stats.spell_hit_chance = GetBaseSpellHitChance(kLevel, settings.enemy_level);
 
@@ -64,9 +56,7 @@ Entity::Entity(Player* player, PlayerSettings& player_settings, const EntityType
     stats.damage_modifier *= std::pow(1.03, settings.ferocious_inspiration_amount);
   }
 
-  if (settings.using_custom_isb_uptime) {
-    stats.shadow_modifier *= GetCustomImprovedShadowBoltDamageModifier();
-  }
+  if (settings.using_custom_isb_uptime) { stats.shadow_modifier *= GetCustomImprovedShadowBoltDamageModifier(); }
 
   if (player_settings.auras.blood_pact) {
     if (kEntityType == EntityType::kPet) {
@@ -93,9 +83,7 @@ void Entity::PostIterationDamageAndMana(const std::string& kSpellName) const {
 
 void Entity::EndAuras() {
   for (const auto& kAura : aura_list) {
-    if (kAura->active) {
-      kAura->Fade();
-    }
+    if (kAura->active) { kAura->Fade(); }
   }
 }
 
@@ -105,9 +93,7 @@ void Entity::Reset() {
   mp5_timer_remaining              = 5;
   five_second_rule_timer_remaining = 5;
 
-  for (const auto& kSpell : spell_list) {
-    kSpell->Reset();
-  }
+  for (const auto& kSpell : spell_list) { kSpell->Reset(); }
 }
 
 void Entity::Initialize(Simulation* simulation_ptr) {
@@ -116,9 +102,7 @@ void Entity::Initialize(Simulation* simulation_ptr) {
 
 void Entity::SendCombatLogBreakdown() const {
   for (const auto& [kSpellName, kSpell] : combat_log_breakdown) {
-    if (kSpell->iteration_damage > 0 || kSpell->iteration_mana_gain > 0) {
-      PostIterationDamageAndMana(kSpellName);
-    }
+    if (kSpell->iteration_damage > 0 || kSpell->iteration_mana_gain > 0) { PostIterationDamageAndMana(kSpellName); }
 
     PostCombatLogBreakdown(kSpell->name.c_str(), kSpell->casts, kSpell->crits, kSpell->misses, kSpell->count,
                            kSpell->uptime, kSpell->dodge, kSpell->glancing_blows);
@@ -148,41 +132,29 @@ void Entity::CombatLog(const std::string& kEntry) const {
 double Entity::FindTimeUntilNextAction() {
   auto time = cast_time_remaining;
 
-  if (time <= 0) {
-    time = gcd_remaining;
-  }
+  if (time <= 0) { time = gcd_remaining; }
 
-  if (time <= 0 || mp5_timer_remaining < time && mp5_timer_remaining > 0) {
-    time = mp5_timer_remaining;
-  }
+  if (time <= 0 || mp5_timer_remaining < time && mp5_timer_remaining > 0) { time = mp5_timer_remaining; }
 
   if (five_second_rule_timer_remaining > 0 && five_second_rule_timer_remaining < time) {
     time = five_second_rule_timer_remaining;
   }
 
   for (const auto& kSpell : spell_list) {
-    if (kSpell->cooldown_remaining < time && kSpell->cooldown_remaining > 0) {
-      time = kSpell->cooldown_remaining;
-    }
+    if (kSpell->cooldown_remaining < time && kSpell->cooldown_remaining > 0) { time = kSpell->cooldown_remaining; }
   }
 
   for (const auto& kAura : aura_list) {
     if (kAura->active && kAura->has_duration) {
-      if (kAura->duration_remaining < time) {
-        time = kAura->duration_remaining;
-      }
+      if (kAura->duration_remaining < time) { time = kAura->duration_remaining; }
 
-      if (kAura->tick_timer_remaining > 0 && kAura->tick_timer_remaining < time) {
-        time = kAura->tick_timer_remaining;
-      }
+      if (kAura->tick_timer_remaining > 0 && kAura->tick_timer_remaining < time) { time = kAura->tick_timer_remaining; }
     }
   }
 
   // TODO make DamageOverTime inherit from Aura and combine dot_list and aura_list
   for (const auto& kDot : dot_list) {
-    if (kDot->active && kDot->tick_timer_remaining < time) {
-      time = kDot->tick_timer_remaining;
-    }
+    if (kDot->active && kDot->tick_timer_remaining < time) { time = kDot->tick_timer_remaining; }
   }
 
   return time;
@@ -199,9 +171,7 @@ double Entity::GetBaseSpellHitChance(const int kEntityLevel, const int kEnemyLev
   if (const int kLevelDifference = kEnemyLevel - kEntityLevel; kLevelDifference <= 2) {
     return std::min(99, 100 - kLevelDifference - 4);
   } else {
-    if (kLevelDifference == 3) {
-      return 83;
-    }
+    if (kLevelDifference == 3) { return 83; }
 
     return 83 - 11 * kLevelDifference;
   }
@@ -226,15 +196,11 @@ void Entity::Tick(const double kTime) {
   // millisecond, immediately tick down the aura This was also causing buffs like
   // e.g. the t4 4pc buffs to expire sooner than they should.
   for (const auto& kAura : aura_list) {
-    if (kAura->active && kAura->duration_remaining > 0) {
-      kAura->Tick(kTime);
-    }
+    if (kAura->active && kAura->duration_remaining > 0) { kAura->Tick(kTime); }
   }
 
   for (const auto& kDot : dot_list) {
-    if (kDot->active && kDot->tick_timer_remaining > 0) {
-      kDot->Tick(kTime);
-    }
+    if (kDot->active && kDot->tick_timer_remaining > 0) { kDot->Tick(kTime); }
   }
 
   // TLC needs to tick before other spells because otherwise a spell might proc TLC and then later in the same loop,
