@@ -60,7 +60,11 @@ export default function ItemSocketDisplay(props: Props) {
               width={16}
               height={16}
               data-color={socket}
-              src={`${process.env.PUBLIC_URL}/img/${equippedGemId && equippedGemId > 0 ? Gems.find((e) => e.Id === equippedGemId)?.IconName : Sockets.find((s) => s.Color === socket)?.IconName}.jpg`}
+              src={`${process.env.PUBLIC_URL}/img/${
+                equippedGemId && equippedGemId > 0
+                  ? Gems.find((e) => e.Id === equippedGemId)?.IconName
+                  : Sockets.find((s) => s.Color === socket)?.IconName
+              }.jpg`}
               alt={`${socket} socket`}
             />
           </a>
