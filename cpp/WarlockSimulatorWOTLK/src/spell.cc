@@ -19,12 +19,7 @@
 #include "../include/talents.h"
 
 Spell::Spell(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
-    : entity(entity_param),
-      aura_effect(std::move(aura)),
-      dot_effect(std::move(dot)),
-      spell_school(SpellSchool::kNoSchool),
-      attack_type(AttackType::kNoAttackType),
-      spell_type(SpellType::kNoSpellType) {}
+    : entity(entity_param), aura_effect(std::move(aura)), dot_effect(std::move(dot)), spell_school(SpellSchool::kNoSchool), attack_type(AttackType::kNoAttackType), spell_type(SpellType::kNoSpellType) {}
 
 void Spell::Setup() {
   if (min_dmg > 0 && max_dmg > 0) { base_damage = (min_dmg + max_dmg) / 2.0; }
@@ -38,11 +33,7 @@ void Spell::Setup() {
   }
 
   if (entity.entity_type == EntityType::kPlayer) {
-    if (spell_type == SpellType::kDestruction) {
-      mana_cost *= 1 - (entity.player->talents.cataclysm == 1   ? 0.04
-                        : entity.player->talents.cataclysm == 2 ? 0.07
-                        : entity.player->talents.cataclysm == 3 ? 0.1
-                                                                : 1);
+    if (spell_type == SpellType::kDestruction) { mana_cost *= 1 - (entity.player->talents.cataclysm == 1 ? 0.04 : entity.player->talents.cataclysm == 2 ? 0.07 : entity.player->talents.cataclysm == 3 ? 0.1 : 1);
       bonus_crit_chance += 5 * entity.player->talents.devastation;
     } else if (spell_type == SpellType::kAffliction) {
       mana_cost *= 1 - 0.02 * entity.player->talents.suppression;

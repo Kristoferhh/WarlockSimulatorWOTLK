@@ -27,9 +27,6 @@ struct Simulation {
   void SimulationEnd(long long kSimulationDuration) const;
   double PassTime(double kFightTimeRemaining);
   void Tick(double kTime);
-  void SelectedSpellHandler(const std::shared_ptr<Spell>& kSpell,
-                            std::map<std::shared_ptr<Spell>, double>& predicted_damage_of_spells,
-                            double kFightTimeRemaining) const;
-  void CastSelectedSpell(const std::shared_ptr<Spell>& kSpell, double kFightTimeRemaining,
-                         double kPredictedDamage = 0) const;
+  void SelectedSpellHandler(const std::shared_ptr<Spell>& kSpell, std::map<std::shared_ptr<Spell>, double>& predicted_damage_of_spells, double kFightTimeRemaining) const;
+  void CastSelectedSpell(const std::shared_ptr<Spell>& kSpell, double kFightTimeRemaining, double kPredictedDamage = 0) const;
 };
