@@ -17,7 +17,11 @@
 Simulation::Simulation(Player& player, const SimulationSettings& kSimulationSettings)
     : player(player), kSettings(kSimulationSettings) {}
 
-void Simulation::Start() {player.total_fight_duration = 0; player.Initialize(this); min_dps = std::numeric_limits<double>::max(); max_dps = 0;
+void Simulation::Start() {
+  player.total_fight_duration = 0;
+  player.Initialize(this);
+  min_dps           = std::numeric_limits<double>::max();
+  max_dps           = 0;
   const auto kStart = std::chrono::high_resolution_clock::now();
 
   for (iteration = 0; iteration < kSettings.iterations; iteration++) {
@@ -66,7 +70,9 @@ double Simulation::PassTime(const double kFightTimeRemaining) {
   return time_until_next_action;
 }
 
-void Simulation::SelectedSpellHandler(const std::shared_ptr<Spell>& kSpell, std::map<std::shared_ptr<Spell>, double>& predicted_damage_of_spells, const double kFightTimeRemaining) const {
+void Simulation::SelectedSpellHandler(const std::shared_ptr<Spell>& kSpell,
+                                      std::map<std::shared_ptr<Spell>, double>& predicted_damage_of_spells,
+                                      const double kFightTimeRemaining) const {
   if ((player.settings.rotation_option == EmbindConstant::kSimChooses || kSpell->is_finisher) &&
       !predicted_damage_of_spells.contains(kSpell)) {
     predicted_damage_of_spells.insert({kSpell, kSpell->PredictDamage()});
@@ -77,7 +83,8 @@ void Simulation::SelectedSpellHandler(const std::shared_ptr<Spell>& kSpell, std:
   }
 }
 
-void Simulation::CastSelectedSpell(const std::shared_ptr<Spell>& kSpell, const double kFightTimeRemaining, const double kPredictedDamage) const {
+void Simulation::CastSelectedSpell(const std::shared_ptr<Spell>& kSpell, const double kFightTimeRemaining,
+                                   const double kPredictedDamage) const {
   player.UseCooldowns(kFightTimeRemaining);
 
   if (player.spells.amplify_curse != nullptr && player.spells.amplify_curse->Ready() &&
@@ -387,6 +394,6 @@ void Simulation::SimulationEnd(const long long kSimulationDuration) const {
     if (player.pet != nullptr) { player.pet->SendCombatLogBreakdown(); }
   }
 
-                        SendSimulationResults(Median(dps_vector), min_dps, max_dps, player.settings.item_id, kSettings.iterations,
+  SendSimulationResults(Median(dps_vector), min_dps, max_dps, player.settings.item_id, kSettings.iterations,
                         static_cast<int>(player.total_fight_duration), player.custom_stat.c_str(), kSimulationDuration);
 }
