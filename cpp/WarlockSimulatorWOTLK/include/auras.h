@@ -14,7 +14,6 @@ struct Auras {
   std::shared_ptr<DamageOverTime> haunt;
   std::shared_ptr<Aura> improved_shadow_bolt;
   std::shared_ptr<Aura> curse_of_the_elements;
-  std::shared_ptr<Aura> curse_of_recklessness;
   std::shared_ptr<Aura> shadow_trance;
   std::shared_ptr<Aura> amplify_curse;
   std::shared_ptr<Aura> power_infusion;

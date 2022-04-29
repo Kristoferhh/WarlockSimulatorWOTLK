@@ -17,7 +17,6 @@ struct Spells {
   std::shared_ptr<Spell> haunt;
   std::shared_ptr<Spell> curse_of_agony;
   std::shared_ptr<Spell> curse_of_the_elements;
-  std::shared_ptr<Spell> curse_of_recklessness;
   std::shared_ptr<Spell> curse_of_doom;
   std::shared_ptr<Spell> conflagrate;
   std::shared_ptr<Spell> shadowburn;

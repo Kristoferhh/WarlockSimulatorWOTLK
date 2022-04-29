@@ -165,10 +165,6 @@ struct CurseOfTheElements final : Spell {
   explicit CurseOfTheElements(Entity& entity_param, std::shared_ptr<Aura> aura);
 };
 
-struct CurseOfRecklessness final : Spell {
-  explicit CurseOfRecklessness(Entity& entity_param, std::shared_ptr<Aura> aura);
-};
-
 struct CurseOfDoom final : Spell {
   explicit CurseOfDoom(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot);
 };

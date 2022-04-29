@@ -780,7 +780,7 @@ SeedOfCorruption::SeedOfCorruption(Entity& entity_param) : Spell(entity_param), 
   name         = SpellName::kSeedOfCorruption;
   min_dmg      = 1110;
   max_dmg      = 1290;
-  mana_cost    = 882;
+  mana_cost    = 0.34;
   cast_time    = 2;
   does_damage  = true;
   spell_school = SpellSchool::kShadow;
@@ -956,18 +956,7 @@ CurseOfAgony::CurseOfAgony(Entity& entity_param, std::shared_ptr<Aura> aura, std
 CurseOfTheElements::CurseOfTheElements(Entity& entity_param, std::shared_ptr<Aura> aura)
     : Spell(entity_param, std::move(aura)) {
   name         = SpellName::kCurseOfTheElements;
-  mana_cost    = 260;
-  spell_type   = SpellType::kAffliction;
-  spell_school = SpellSchool::kShadow;
-  can_miss     = true;
-  attack_type  = AttackType::kMagical;
-  Spell::Setup();
-}
-
-CurseOfRecklessness::CurseOfRecklessness(Entity& entity_param, std::shared_ptr<Aura> aura)
-    : Spell(entity_param, std::move(aura)) {
-  name         = SpellName::kCurseOfRecklessness;
-  mana_cost    = 160;
+  mana_cost    = 0.1;
   spell_type   = SpellType::kAffliction;
   spell_school = SpellSchool::kShadow;
   can_miss     = true;
@@ -1067,9 +1056,9 @@ ManaTideTotem::ManaTideTotem(Entity& entity_param, std::shared_ptr<Aura> aura) :
 
 ImpFirebolt::ImpFirebolt(Entity& entity_param) : Spell(entity_param) {
   name         = SpellName::kFirebolt;
-  cast_time    = 2 - 0.25 * entity_param.player->talents.demonic_power;
-  mana_cost    = 145;
-  base_damage  = 119.5 * (1 + 0.1 * entity_param.player->talents.improved_imp);
+  cast_time    = 2.5 - 0.25 * entity_param.player->talents.demonic_power;
+  mana_cost    = 180;
+  base_damage  = 211 * (1 + 0.1 * entity_param.player->talents.improved_imp);
   coefficient  = 2 / 3.5;
   spell_school = SpellSchool::kFire;
   attack_type  = AttackType::kMagical;
@@ -1101,7 +1090,7 @@ double PetMelee::GetCooldown() {
 FelguardCleave::FelguardCleave(Entity& entity_param) : Spell(entity_param) {
   name        = SpellName::kCleave;
   cooldown    = 6;
-  mana_cost   = 417;
+  mana_cost   = 0.1;
   attack_type = AttackType::kPhysical;
   can_crit    = true;
   does_damage = true;
@@ -1116,7 +1105,7 @@ double FelguardCleave::GetBaseDamage() {
 SuccubusLashOfPain::SuccubusLashOfPain(Entity& entity_param) : Spell(entity_param) {
   name         = SpellName::kLashOfPain;
   cooldown     = 12 - 3 * entity_param.player->talents.demonic_power;
-  mana_cost    = 190;
+  mana_cost    = 250;
   base_damage  = 123;
   spell_school = SpellSchool::kShadow;
   coefficient  = 0.429;

@@ -426,29 +426,6 @@ export default function SettingsDisplay() {
             </select>
           </li>
         )}
-        {playerStore.Auras.includes(AuraId.TotemOfWrath) && (
-          <li id="totemOfWrathAmount">
-            <label className="settings-left" htmlFor="totemOfWrathAmount">
-              {t("Totem of Wrath amount")}
-            </label>
-            <select
-              className="settings-right"
-              name="totemOfWrathAmount"
-              onChange={(e) =>
-                settingModifiedHandler(
-                  Setting.totemOfWrathAmount,
-                  e.target.value
-                )
-              }
-              value={playerStore.Settings[Setting.totemOfWrathAmount]}
-            >
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-            </select>
-          </li>
-        )}
         {playerStore.Auras.includes(AuraId.FerociousInspiration) && (
           <li id="ferociousInspirationAmount">
             <label

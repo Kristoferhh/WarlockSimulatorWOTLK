@@ -333,9 +333,8 @@ export function SimulationButtons() {
               combatLogBreakdownArr.push(combatLogBreakdown);
             },
             (params: SimulationEnd) => {
-              debugger;
-              const newMedianDps = params.medianDps;
-              simulationsFinished++;
+              const newMedianDps = params.medianDps
+              simulationsFinished++
               findSimulationProgressPercentObject({
                 simulationProgressPercentages: simulationProgressPercentages,
                 simType: simulationParams.type,

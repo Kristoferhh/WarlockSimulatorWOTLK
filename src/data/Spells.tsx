@@ -64,14 +64,8 @@ export const Spells: Spell[] = [
   // Curses
   {
     Group: RotationGroup.Curse,
-    Name: "Curse of Recklessness",
-    IconName: "spell_shadow_unholystrength",
-    Id: SpellId.CurseOfRecklessness,
-  },
-  {
-    Group: RotationGroup.Curse,
-    Name: "Curse of the Elements",
-    IconName: "spell_shadow_chilltouch",
+    Name: 'Curse of the Elements',
+    IconName: 'spell_shadow_chilltouch',
     Id: SpellId.CurseOfTheElements,
   },
   {

@@ -28,7 +28,6 @@ struct PlayerSettings {
   int enemy_level                     = 0;
   int enemy_shadow_resist             = 0;
   int enemy_fire_resist               = 0;
-  int totem_of_wrath_amount           = 0;
   int ferocious_inspiration_amount    = 0;
   bool using_custom_isb_uptime        = false;
   int custom_isb_uptime_value         = 0;
@@ -55,7 +54,6 @@ struct PlayerSettings {
   bool has_seed_of_corruption         = false;
   bool has_hellfire                   = false;
   bool has_rain_of_fire               = false;
-  bool has_curse_of_recklessness      = false;
   bool has_curse_of_the_elements      = false;
   bool has_curse_of_agony             = false;
   bool has_curse_of_doom              = false;

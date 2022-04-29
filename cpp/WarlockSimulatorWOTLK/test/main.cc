@@ -94,7 +94,6 @@ int main() {
   player_settings.meta_gem_id                    = 34220;
   player_settings.recording_combat_log_breakdown = true;
   player_settings.enemy_level                    = 73;
-  player_settings.totem_of_wrath_amount          = 1;
   player_settings.using_custom_isb_uptime        = true;
   player_settings.custom_isb_uptime_value        = 70;
   player_settings.infinite_player_mana           = false;

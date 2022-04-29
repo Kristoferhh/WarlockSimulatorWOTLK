@@ -476,8 +476,8 @@ export function GetTalentsStats(
     Stat.SpellPower,
     Auras.find((x) => x.Id === AuraId.FelArmor)!.Stats![Stat.SpellPower]! *
       0.1 *
-      talents["Demonic Aegis"]
-  );
+      talents['Demonic Aegis'] || 0
+  )
 
   if (
     settings[Setting.petChoice] === Pet.Imp ||
@@ -520,8 +520,8 @@ export function GetTalentsStats(
   AddOrMultiplyStat(
     statsObj || stats,
     Stat.FireModifier,
-    1 + 0.03 * talents.Emberstorm
-  );
+    1 + 0.03 * talents.Emberstorm || 0
+  )
 
   return statsObj || stats;
 }

@@ -96,10 +96,6 @@ Player::Player(PlayerSettings& settings)
     settings.enemy_armor -= 520 * 5;
   }
 
-  if (selected_auras.curse_of_recklessness) {
-    settings.enemy_armor -= 800;
-  }
-
   if (selected_auras.annihilator) {
     settings.enemy_armor -= 600;
   }
@@ -156,10 +152,6 @@ void Player::Initialize(Simulation* simulation_ptr) {
 
     if (settings.has_curse_of_the_elements) {
       auras.curse_of_the_elements = std::make_shared<CurseOfTheElementsAura>(*this);
-    }
-
-    if (settings.has_curse_of_recklessness) {
-      auras.curse_of_recklessness = std::make_shared<CurseOfRecklessnessAura>(*this);
     }
 
     if (settings.has_curse_of_doom) {
@@ -266,10 +258,6 @@ void Player::Initialize(Simulation* simulation_ptr) {
       spells.curse_of_the_elements = std::make_shared<CurseOfTheElements>(*this, auras.curse_of_the_elements);
     }
 
-    if (auras.curse_of_recklessness != nullptr) {
-      spells.curse_of_recklessness = std::make_shared<CurseOfRecklessness>(*this, auras.curse_of_recklessness);
-    }
-
     if (auras.curse_of_doom != nullptr) {
       spells.curse_of_doom              = std::make_shared<CurseOfDoom>(*this, nullptr, auras.curse_of_doom);
       auras.curse_of_doom->parent_spell = spells.curse_of_doom;
@@ -341,9 +329,6 @@ void Player::Initialize(Simulation* simulation_ptr) {
   if (spells.curse_of_the_elements != nullptr) {
     curse_spell = spells.curse_of_the_elements;
     curse_aura  = auras.curse_of_the_elements;
-  } else if (spells.curse_of_recklessness != nullptr) {
-    curse_spell = spells.curse_of_recklessness;
-    curse_aura  = auras.curse_of_recklessness;
   } else if (spells.curse_of_doom != nullptr) {
     curse_spell = spells.curse_of_doom;
   } else if (spells.curse_of_agony != nullptr) {

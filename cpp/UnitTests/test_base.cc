@@ -68,7 +68,6 @@ PlayerSettings TestBase::GetDefaultPlayerSettings(std::shared_ptr<AuraSelection>
   player_settings.has_corruption                 = true;
   player_settings.has_curse_of_agony             = true;
   player_settings.has_curse_of_doom              = true;
-  player_settings.has_curse_of_recklessness      = true;
   player_settings.has_curse_of_the_elements      = true;
   player_settings.has_dark_pact                  = true;
   player_settings.has_death_coil                 = true;

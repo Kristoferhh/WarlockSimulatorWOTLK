@@ -3,8 +3,8 @@ import {
   CombatLogBreakdown,
   GemSelectionTableStruct,
   InitialGemSelectionTableValue,
-  ItemSlotDetailed,
   ItemSlot,
+  ItemSlotDetailed,
   Phase,
   Stat,
   StatWeightStats,
@@ -69,7 +69,7 @@ export const UiSlice = createSlice({
   reducers: {
     togglePhase: (state, action: PayloadAction<Phase>) => {
       if (state.Sources.includes(action.payload)) {
-        state.Sources = state.Sources.filter((e) => e !== action.payload);
+        state.Sources = state.Sources.filter((e: number) => e !== action.payload);
       } else {
         state.Sources.push(action.payload);
       }
@@ -85,7 +85,7 @@ export const UiSlice = createSlice({
     favoriteGem: (state, action: PayloadAction<number>) => {
       if (state.GemPreferences.favorites.includes(action.payload)) {
         state.GemPreferences.favorites = state.GemPreferences.favorites.filter(
-          (e) => e !== action.payload
+          (e: number) => e !== action.payload
         );
       } else {
         state.GemPreferences.favorites.push(action.payload);
@@ -99,7 +99,7 @@ export const UiSlice = createSlice({
     hideGem: (state, action: PayloadAction<number>) => {
       if (state.GemPreferences.hidden.includes(action.payload)) {
         state.GemPreferences.hidden = state.GemPreferences.hidden.filter(
-          (e) => e !== action.payload
+          (e: number) => e !== action.payload
         );
       } else {
         state.GemPreferences.hidden.push(action.payload);
@@ -135,7 +135,7 @@ export const UiSlice = createSlice({
     toggleHiddenItemId: (state, action: PayloadAction<number>) => {
       if (state.HiddenItems.includes(action.payload)) {
         state.HiddenItems = state.HiddenItems.filter(
-          (e) => e !== action.payload
+          (e: number) => e !== action.payload
         );
       } else {
         state.HiddenItems.push(action.payload);

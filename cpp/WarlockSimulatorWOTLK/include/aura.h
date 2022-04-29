@@ -47,10 +47,6 @@ struct CurseOfTheElementsAura final : Aura {
   explicit CurseOfTheElementsAura(Entity& entity_param);
 };
 
-struct CurseOfRecklessnessAura final : Aura {
-  explicit CurseOfRecklessnessAura(Entity& entity_param);
-};
-
 struct ShadowTranceAura final : Aura {
   explicit ShadowTranceAura(Entity& entity_param);
 };

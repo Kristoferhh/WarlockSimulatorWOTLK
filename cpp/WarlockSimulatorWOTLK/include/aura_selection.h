@@ -25,7 +25,6 @@ struct AuraSelection {
   bool faerie_fire;
   bool sunder_armor;
   bool expose_armor;
-  bool curse_of_recklessness;
   bool blood_frenzy;
   bool expose_weakness;
   bool annihilator;

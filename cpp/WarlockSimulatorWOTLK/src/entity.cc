@@ -38,9 +38,8 @@ Entity::Entity(Player* player, PlayerSettings& player_settings, const EntityType
     stats.spell_crit_chance += 5;
   }
 
-  // TODO does totem of wrath still stack?
   if (player_settings.auras.totem_of_wrath) {
-    stats.spell_crit_chance += 3 * settings.totem_of_wrath_amount;
+    stats.spell_crit_chance += 3;
   }
 
   // Hit chance
@@ -48,9 +47,8 @@ Entity::Entity(Player* player, PlayerSettings& player_settings, const EntityType
     stats.extra_spell_hit_chance = stats.spell_hit_rating / StatConstant::kHitRatingPerPercent;
   }
 
-  // TODO does totem of wrath still stack?
   if (player_settings.auras.totem_of_wrath) {
-    stats.extra_spell_hit_chance += 3 * settings.totem_of_wrath_amount;
+    stats.extra_spell_hit_chance += 3;
   }
 
   if (player_settings.auras.inspiring_presence) {

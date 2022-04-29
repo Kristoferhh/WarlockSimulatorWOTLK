@@ -1,6 +1,9 @@
+import { Chart, registerables } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/Store";
+
+Chart.register(...registerables);
 
 export default function DpsHistogram() {
   const histogramState = useSelector((state: RootState) => state.ui.Histogram);

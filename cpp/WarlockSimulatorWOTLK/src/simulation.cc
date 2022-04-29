@@ -213,9 +213,8 @@ void Simulation::CastGcdSpells(const double kFightTimeRemaining) const {
     // Cast Curse of the Elements or Curse of Recklessness if they're
     // the selected curse and they're not active
     if (kFightTimeRemaining >= 5 && player.gcd_remaining <= 0 && player.curse_spell != nullptr &&
-        (player.curse_spell->name == SpellName::kCurseOfRecklessness ||
-         player.curse_spell->name == SpellName::kCurseOfTheElements) &&
-        !player.curse_aura->active && player.curse_spell->CanCast()) {
+        player.curse_spell->name == SpellName::kCurseOfTheElements && !player.curse_aura->active &&
+        player.curse_spell->CanCast()) {
       if (player.curse_spell->HasEnoughMana()) {
         player.curse_spell->StartCast();
       } else {

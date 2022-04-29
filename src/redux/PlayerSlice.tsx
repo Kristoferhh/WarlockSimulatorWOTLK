@@ -19,6 +19,7 @@ import {
   Setting,
   Settings,
   Spell,
+  SpellId,
   StatsCollection,
   TalentStore,
 } from "../Types";
@@ -115,7 +116,7 @@ export const PlayerSlice = createSlice({
         if (state.Rotation[rotationGroup.Header].includes(action.payload.Id)) {
           state.Rotation[rotationGroup.Header] = state.Rotation[
             rotationGroup.Header
-          ].filter((e) => e !== action.payload.Id);
+          ].filter((e: SpellId) => e !== action.payload.Id);
         } else {
           state.Rotation[rotationGroup.Header].push(action.payload.Id);
         }
@@ -163,7 +164,9 @@ export const PlayerSlice = createSlice({
       );
     },
     deleteProfile: (state, action: PayloadAction<string>) => {
-      state.Profiles = state.Profiles.filter((x) => x.Name !== action.payload);
+      state.Profiles = state.Profiles.filter(
+        (x: ProfileContainer) => x.Name !== action.payload
+      );
       localStorage.setItem("wotlk_profiles", JSON.stringify(state.Profiles));
       localStorage.removeItem("wotlk_selectedProfile");
     },
@@ -171,8 +174,9 @@ export const PlayerSlice = createSlice({
       state,
       action: PayloadAction<{ oldName: string; newName: string }>
     ) => {
-      state.Profiles.find((x) => x.Name === action.payload.oldName)!.Name =
-        action.payload.newName;
+      state.Profiles.find(
+        (x: ProfileContainer) => x.Name === action.payload.oldName
+      )!.Name = action.payload.newName;
       localStorage.setItem("wotlk_profiles", JSON.stringify(state.Profiles));
       localStorage.setItem("wotlk_selectedProfile", action.payload.newName);
     },
