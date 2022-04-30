@@ -7,7 +7,6 @@ on:
     paths:
       - "cpp/**"
       - ".clang-format"
-  pull_request:
 
 jobs:
   format:
