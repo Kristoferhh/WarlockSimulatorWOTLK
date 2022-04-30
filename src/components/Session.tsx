@@ -52,7 +52,8 @@ export default function Session() {
         GetTalentsStats(playerStore.Talents, playerStore.Settings)
       )
     );
-    (jQuery(".tablesorter") as any).tablesorter();
+    // TODO
+    //(jQuery(".tablesorter") as any).tablesorter();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

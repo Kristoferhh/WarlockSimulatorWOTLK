@@ -92,9 +92,7 @@ Player::Player(PlayerSettings& settings)
     settings.enemy_armor -= 520 * 5;
   }
 
-  if (selected_auras.annihilator) {
-    settings.enemy_armor -= 600;
-  }
+  if (selected_auras.annihilator) { settings.enemy_armor -= 600; }
   settings.enemy_armor = std::max(0, settings.enemy_armor);
 
   // Health & Mana
@@ -146,9 +144,7 @@ void Player::Initialize(Simulation* simulation_ptr) {
       auras.curse_of_the_elements = std::make_shared<CurseOfTheElementsAura>(*this);
     }
 
-    if (settings.has_curse_of_doom) {
-      auras.curse_of_doom = std::make_shared<CurseOfDoomDot>(*this);
-    }
+    if (settings.has_curse_of_doom) { auras.curse_of_doom = std::make_shared<CurseOfDoomDot>(*this); }
 
     if (talents.nightfall > 0) { auras.shadow_trance = std::make_shared<ShadowTranceAura>(*this); }
 

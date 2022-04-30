@@ -1,27 +1,7 @@
-import { Items } from "../data/Items";
-import {
-  Enchant,
-  Item,
-  ItemSlotDetailed,
-  ItemSlot,
-  SocketColor,
-  SubSlotValue,
-  Stat,
-  SelectedGemsStruct,
-} from "../Types";
+import { nanoid } from "nanoid";
 import { useState } from "react";
-import { Enchants } from "../data/Enchants";
+import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/Store";
-import {
-  setEnchantsStats,
-  setGemsStats,
-  setItemSetCounts,
-  setItemsStats,
-  setSelectedEnchants,
-  setSelectedGems,
-  setSelectedItems,
-} from "../redux/PlayerSlice";
 import {
   getBaseWowheadUrl,
   getEnchantsStats,
@@ -31,6 +11,19 @@ import {
   getItemTableItems,
   ItemSlotToItemSlotDetailed,
 } from "../Common";
+import { Enchants } from "../data/Enchants";
+import { Items } from "../data/Items";
+import i18n from "../i18n/config";
+import {
+  setEnchantsStats,
+  setGemsStats,
+  setItemSetCounts,
+  setItemsStats,
+  setSelectedEnchants,
+  setSelectedGems,
+  setSelectedItems,
+} from "../redux/PlayerSlice";
+import { RootState } from "../redux/Store";
 import {
   setEquippedItemsWindowVisibility,
   setFillItemSocketsWindowVisibility,
@@ -39,11 +32,18 @@ import {
   setSelectedItemSubSlot,
   toggleHiddenItemId,
 } from "../redux/UiSlice";
-import ItemSocketDisplay from "./ItemSocketDisplay";
+import {
+  Enchant,
+  Item,
+  ItemSlot,
+  ItemSlotDetailed,
+  SelectedGemsStruct,
+  SocketColor,
+  Stat,
+  SubSlotValue,
+} from "../Types";
 import { FillItemSockets } from "./FillItemSockets";
-import { nanoid } from "@reduxjs/toolkit";
-import { useTranslation } from "react-i18next";
-import i18n from "../i18n/config";
+import ItemSocketDisplay from "./ItemSocketDisplay";
 
 const itemSlotInformation: {
   Name: string;

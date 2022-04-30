@@ -1,21 +1,21 @@
-import AuraSelection from "./AuraSelection";
-import SettingsDisplay from "./SettingsDisplay";
-import RotationSelection from "./RotationSelection";
-import TalentTrees from "./TalentTrees";
-import StatWeights from "./StatWeights";
-import BreakdownTables from "./BreakdownTables";
-import EquippedItemsDisplay from "./EquippedItemsDisplay";
-import CombatLog from "./CombatLog";
-import DpsHistogram from "./DpsHistogram";
-import ImportExport from "./ImportExport";
-import GemSelection from "./GemSelection";
-import ItemSelection from "./ItemSelection";
 import { useDispatch } from "react-redux";
+import packageJson from "../../package.json";
 import { setGemSelectionTable } from "../redux/UiSlice";
 import { InitialGemSelectionTableValue } from "../Types";
-import ProfilesAndSources from "./ProfilesAndSources";
+import AuraSelection from "./AuraSelection";
+import BreakdownTables from "./BreakdownTables";
+import CombatLog from "./CombatLog";
+import DpsHistogram from "./DpsHistogram";
+import EquippedItemsDisplay from "./EquippedItemsDisplay";
+import GemSelection from "./GemSelection";
+import ImportExport from "./ImportExport";
+import ItemSelection from "./ItemSelection";
 import LanguageSelection from "./LanguageSelection";
-import packageJson from "../../package.json";
+import ProfilesAndSources from "./ProfilesAndSources";
+import RotationSelection from "./RotationSelection";
+import SettingsDisplay from "./SettingsDisplay";
+import StatWeights from "./StatWeights";
+import TalentTrees from "./TalentTrees";
 
 export default function Main() {
   const dispatch = useDispatch();

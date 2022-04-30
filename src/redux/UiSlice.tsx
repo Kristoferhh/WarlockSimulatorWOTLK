@@ -69,7 +69,9 @@ export const UiSlice = createSlice({
   reducers: {
     togglePhase: (state, action: PayloadAction<Phase>) => {
       if (state.Sources.includes(action.payload)) {
-        state.Sources = state.Sources.filter((e: number) => e !== action.payload);
+        state.Sources = state.Sources.filter(
+          (e: number) => e !== action.payload
+        );
       } else {
         state.Sources.push(action.payload);
       }
