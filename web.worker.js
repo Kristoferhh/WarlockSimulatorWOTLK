@@ -242,16 +242,13 @@ onmessage = (event) => {
         playerSettings.enemyFireResist = parseInt(
           playerData.Settings.targetFireResistance
         );
-        playerSettings.totemOfWrathAmount = parseInt(
-          playerData.Settings.totemOfWrathAmount
-        );
-        if (playerData.Settings.petChoice === "0") {
+        if (playerData.Settings.petChoice === "Imp") {
           playerSettings.selectedPet = module.EmbindConstant.imp;
-        } else if (playerData.Settings.petChoice === "2") {
+        } else if (playerData.Settings.petChoice === "Succubus") {
           playerSettings.selectedPet = module.EmbindConstant.succubus;
-        } else if (playerData.Settings.petChoice === "3") {
+        } else if (playerData.Settings.petChoice === "Felhunter") {
           playerSettings.selectedPet = module.EmbindConstant.felhunter;
-        } else if (playerData.Settings.petChoice === "4") {
+        } else if (playerData.Settings.petChoice === "Felguard") {
           playerSettings.selectedPet = module.EmbindConstant.felguard;
         }
         playerSettings.ferociousInspirationAmount = parseInt(
