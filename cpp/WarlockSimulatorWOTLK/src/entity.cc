@@ -36,18 +36,14 @@ Entity::Entity(Player* player, PlayerSettings& player_settings, const EntityType
 
   if (player_settings.auras.moonkin_aura) { stats.spell_crit_chance += 5; }
 
-  if (player_settings.auras.totem_of_wrath) {
-    stats.spell_crit_chance += 3;
-  }
+  if (player_settings.auras.totem_of_wrath) { stats.spell_crit_chance += 3; }
 
   // Hit chance
   if (kEntityType == EntityType::kPlayer) {
     stats.extra_spell_hit_chance = stats.spell_hit_rating / StatConstant::kHitRatingPerPercent;
   }
 
-  if (player_settings.auras.totem_of_wrath) {
-    stats.extra_spell_hit_chance += 3;
-  }
+  if (player_settings.auras.totem_of_wrath) { stats.extra_spell_hit_chance += 3; }
 
   if (player_settings.auras.inspiring_presence) { stats.extra_spell_hit_chance++; }
 
