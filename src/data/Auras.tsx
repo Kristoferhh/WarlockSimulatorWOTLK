@@ -203,7 +203,7 @@ export const Auras: Aura[] = [
     Spirit: true,
   },
   {
-    Name: 'Hunting Party',
+    Name: "Hunting Party",
     Group: AuraGroup.Buffs,
     IconName: "ability_hunter_huntingparty",
     Id: AuraId.HuntingParty,
@@ -277,14 +277,14 @@ export const Auras: Aura[] = [
     ManaRestore: true,
   },
   {
-    Name: 'Vampiric Touch',
+    Name: "Vampiric Touch",
     Group: AuraGroup.Debuffs,
-    IconName: 'spell_holy_stoicism',
+    IconName: "spell_holy_stoicism",
     Id: AuraId.VampiricTouch,
     Replenishment: true,
   },
   {
-    Name: 'Faerie Fire',
+    Name: "Faerie Fire",
     Group: AuraGroup.Debuffs,
     IconName: "spell_nature_faeriefire",
     ForPet: true,
@@ -308,7 +308,7 @@ export const Auras: Aura[] = [
     ArmorMajor: true,
   },
   {
-    Name: 'Blood Frenzy',
+    Name: "Blood Frenzy",
     Group: AuraGroup.Debuffs,
     IconName: "ability_warrior_bloodfrenzy",
     ForPet: true,

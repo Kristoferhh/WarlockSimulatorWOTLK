@@ -333,8 +333,8 @@ export function SimulationButtons() {
               combatLogBreakdownArr.push(combatLogBreakdown);
             },
             (params: SimulationEnd) => {
-              const newMedianDps = params.medianDps
-              simulationsFinished++
+              const newMedianDps = params.medianDps;
+              simulationsFinished++;
               findSimulationProgressPercentObject({
                 simulationProgressPercentages: simulationProgressPercentages,
                 simType: simulationParams.type,
@@ -411,7 +411,8 @@ export function SimulationButtons() {
                         Data: combatLogBreakdownArr,
                       })
                     );
-                    jQuery(".breakdown-table").trigger("update");
+                    // TODO
+                    //jQuery(".breakdown-table").trigger("update");
                   }
                 }
               } else if (simulationParams.type === SimulationType.AllItems) {
@@ -458,7 +459,8 @@ export function SimulationButtons() {
                   domElement.innerHTML = (
                     Math.round(newMedianDps * 100) / 100
                   ).toString();
-                  jQuery("#item-selection-table").trigger("update");
+                  // TODO
+                  //jQuery("#item-selection-table").trigger("update");
                 }
               }
               if (
