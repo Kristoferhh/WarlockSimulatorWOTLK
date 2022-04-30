@@ -9,6 +9,7 @@ on:
       - "public/**"
       - "src/**"
       - "config-overrides.js"
+  workflow_dispatch:
 
 jobs:
   build:
