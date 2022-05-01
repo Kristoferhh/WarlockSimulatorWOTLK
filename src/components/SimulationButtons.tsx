@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   average,
   calculatePlayerStats,
@@ -8,11 +8,11 @@ import {
   getPlayerHitPercent,
   getStdev,
   ItemSlotToItemSlotDetailed,
-  random,
-} from "../Common";
-import { Gems } from "../data/Gems";
-import { Items } from "../data/Items";
-import { RootState } from "../redux/Store";
+  random
+} from '../Common'
+import { Gems } from '../data/Gems'
+import { Items } from '../data/Items'
+import { RootState } from '../redux/Store'
 import {
   clearSavedItemSlotDps,
   setCombatLogBreakdownValue,
@@ -23,9 +23,9 @@ import {
   setSavedItemDps,
   setSimulationInProgressStatus,
   setStatWeightValue,
-  setStatWeightVisibility,
-} from "../redux/UiSlice";
-import { SimWorker } from "../SimWorker.js";
+  setStatWeightVisibility
+} from '../redux/UiSlice'
+import { SimWorker } from '../SimWorker.js'
 import {
   CombatLogBreakdownData,
   GemColor,
@@ -39,45 +39,45 @@ import {
   Stat,
   StatConstant,
   StatWeightStats,
-  WorkerParams,
-} from "../Types";
+  WorkerParams
+} from '../Types'
 
 interface SimulationUpdate {
-  medianDps: number;
-  iteration: number;
-  iterationAmount: number;
-  itemId: number;
-  customStat: string;
+  medianDps: number
+  iteration: number
+  iterationAmount: number
+  itemId: number
+  customStat: string
 }
 
 interface SimulationEnd {
-  customStat: string;
-  itemId: number;
-  iterationAmount: number;
-  totalDuration: number;
-  maxDps: number;
-  minDps: number;
-  medianDps: number;
+  customStat: string
+  itemId: number
+  iterationAmount: number
+  totalDuration: number
+  maxDps: number
+  minDps: number
+  medianDps: number
 }
 
 interface IGetWorkerParams {
-  ItemId: number;
-  EquippedItemId: number;
-  SimulationType: SimulationType;
-  RandomSeed: number;
+  ItemId: number
+  EquippedItemId: number
+  SimulationType: SimulationType
+  RandomSeed: number
   CustomStat?: {
-    Stat: string;
-    Value: number;
-  };
+    Stat: string
+    Value: number
+  }
 }
 
 interface ISimulationProgressPercent {
-  ItemId: number;
-  ProgressPercent: number;
-  CustomStat?: string;
+  ItemId: number
+  ProgressPercent: number
+  CustomStat?: string
 }
 
-const statWeightStatIncrease = 100;
+const statWeightStatIncrease = 100
 const statWeightValues: { [key: string]: number } = {
   normal: 0,
   [Stat.Stamina]: statWeightStatIncrease,
@@ -90,7 +90,7 @@ const statWeightValues: { [key: string]: number } = {
   [Stat.CritRating]: statWeightStatIncrease,
   [Stat.HasteRating]: statWeightStatIncrease,
   [Stat.Mp5]: statWeightStatIncrease,
-};
+}
 
 function getEquippedMetaGemId(
   items: ItemSlotDetailedStruct,
@@ -101,59 +101,57 @@ function getEquippedMetaGemId(
     !gems[ItemSlot.Head] ||
     !gems[ItemSlot.Head][items[ItemSlotDetailed.Head]]
   ) {
-    return 0;
+    return 0
   }
 
   for (const gemId of gems[ItemSlot.Head][items[ItemSlotDetailed.Head]]) {
-    if (Gems.find((e) => e.Id === gemId)?.Color === GemColor.Meta) {
-      return gemId;
+    if (Gems.find(e => e.Id === gemId)?.Color === GemColor.Meta) {
+      return gemId
     }
   }
 
-  return 0;
+  return 0
 }
 
-let lastStatWeightUpdateTime: { [key: string]: number } = {};
+let lastStatWeightUpdateTime: { [key: string]: number } = {}
 
 export function SimulationButtons() {
-  const playerState = useSelector((state: RootState) => state.player);
-  const uiState = useSelector((state: RootState) => state.ui);
-  const dispatch = useDispatch();
+  const playerState = useSelector((state: RootState) => state.player)
+  const uiState = useSelector((state: RootState) => state.ui)
+  const dispatch = useDispatch()
   const [medianDps, setMedianDps] = useState(
-    localStorage.getItem("medianDps") || ""
-  );
-  const [minDps, setMinDps] = useState(localStorage.getItem("minDps") || "");
-  const [maxDps, setMaxDps] = useState(localStorage.getItem("maxDps") || "");
+    localStorage.getItem('medianDps') || ''
+  )
+  const [minDps, setMinDps] = useState(localStorage.getItem('minDps') || '')
+  const [maxDps, setMaxDps] = useState(localStorage.getItem('maxDps') || '')
   const [simulationDuration, setSimulationDuration] = useState(
-    localStorage.getItem("simulationDuration") || ""
-  );
-  const [simulationProgressPercent, setSimulationProgressPercent] = useState(0);
-  const [dpsStdev, setDpsStdev] = useState("");
-  const [simulationType, setSimulationType] = useState(SimulationType.Normal);
-  let combatLogEntries: string[] = [];
+    localStorage.getItem('simulationDuration') || ''
+  )
+  const [simulationProgressPercent, setSimulationProgressPercent] = useState(0)
+  const [dpsStdev, setDpsStdev] = useState('')
+  const [simulationType, setSimulationType] = useState(SimulationType.Normal)
+  let combatLogEntries: string[] = []
 
   function combatLogButtonIsDisabled(): boolean {
-    return uiState.CombatLog.Data.length === 0;
+    return uiState.CombatLog.Data.length === 0
   }
 
   function histogramButtonIsDisabled(): boolean {
-    return uiState.Histogram.Data === undefined;
+    return uiState.Histogram.Data === undefined
   }
 
   function getWorkerParams(params: IGetWorkerParams): WorkerParams {
-    let customPlayerState: PlayerState = JSON.parse(
-      JSON.stringify(playerState)
-    );
+    let customPlayerState: PlayerState = JSON.parse(JSON.stringify(playerState))
     let iterationAmount = parseInt(
       customPlayerState.Settings[Setting.iterations]
-    );
+    )
 
     if (params.SimulationType === SimulationType.StatWeights) {
       // Set minimum iteration amount to 100,000 for stat weight sims
-      iterationAmount = Math.max(iterationAmount, 100000);
+      iterationAmount = Math.max(iterationAmount, 100000)
       // Increase the iteration amount for stat weight sims if it's not the 'normal' sim with no added stats.
-      if (params.CustomStat?.Stat !== "normal") {
-        iterationAmount += 20000;
+      if (params.CustomStat?.Stat !== 'normal') {
+        iterationAmount += 20000
       }
     }
 
@@ -163,17 +161,17 @@ export function SimulationButtons() {
           uiState.SelectedItemSlot,
           uiState.SelectedItemSubSlot
         )
-      ] = params.ItemId;
+      ] = params.ItemId
     }
 
-    let playerStats = calculatePlayerStats(customPlayerState);
+    let playerStats = calculatePlayerStats(customPlayerState)
 
     if (params.SimulationType === SimulationType.StatWeights) {
-      if (params.CustomStat?.Stat && params.CustomStat.Stat !== "normal") {
-        let statValue = params.CustomStat.Value;
+      if (params.CustomStat?.Stat && params.CustomStat.Stat !== 'normal') {
+        let statValue = params.CustomStat.Value
 
         if (params.CustomStat.Stat === Stat[Stat.HitRating]) {
-          const hitPercent = getPlayerHitPercent(customPlayerState);
+          const hitPercent = getPlayerHitPercent(customPlayerState)
           // If the user isn't hitcapped but adding the extra hit rating would overcap them
           // then instead remove hit rating instead of adding it so it doesn't get wasted.
           // Using 15.99 instead of 16 because using 16 was causing issues when a player had
@@ -185,11 +183,11 @@ export function SimulationButtons() {
                 StatConstant.HitRatingPerPercent >
               StatConstant.HitPercentCap
           ) {
-            statValue *= -1;
+            statValue *= -1
           }
         }
 
-        playerStats[params.CustomStat.Stat as unknown as Stat]! += statValue;
+        playerStats[params.CustomStat.Stat as unknown as Stat]! += statValue
       }
     }
 
@@ -218,140 +216,140 @@ export function SimulationButtons() {
       ItemId: params.ItemId,
       SimulationType: params.SimulationType,
       ItemSubSlot: uiState.SelectedItemSubSlot,
-      CustomStat: params.CustomStat?.Stat || "normal",
+      CustomStat: params.CustomStat?.Stat || 'normal',
       EquippedItemSimulation:
         params.ItemId === params.EquippedItemId ||
         (params.ItemId === 0 && params.EquippedItemId == null),
-    };
+    }
   }
 
   function simulate(simulationParams: {
-    type: SimulationType;
-    itemIdsToSim?: number[];
+    type: SimulationType
+    itemIdsToSim?: number[]
   }) {
     if (uiState.SimulationInProgress) {
-      return;
+      return
     }
 
-    let maxWorkers = window.navigator.hardwareConcurrency || 8; // Maximum amount of web workers that can be run concurrently.
+    let maxWorkers = window.navigator.hardwareConcurrency || 8 // Maximum amount of web workers that can be run concurrently.
 
     if (
       playerState.Settings[Setting.maxWebWorkers] &&
       parseInt(playerState.Settings[Setting.maxWebWorkers]) > 0
     ) {
-      maxWorkers = parseInt(playerState.Settings[Setting.maxWebWorkers]);
+      maxWorkers = parseInt(playerState.Settings[Setting.maxWebWorkers])
     }
 
-    const simulations: SimWorker[] = [];
+    const simulations: SimWorker[] = []
     const itemSlot: ItemSlotDetailed = ItemSlotToItemSlotDetailed(
       uiState.SelectedItemSlot,
       uiState.SelectedItemSubSlot
-    );
-    const equippedItemId = playerState.SelectedItems[itemSlot];
-    let simulationsFinished = 0;
-    let simulationsRunning = 0;
-    let simIndex = 0;
-    let dpsArray: number[] = [];
-    let dpsCount: { [key: string]: number } = {};
-    let combatLogBreakdownArr: CombatLogBreakdownData[] = [];
-    let totalManaRegenerated = 0;
-    let totalDamageDone = 0;
-    let spellDamageDict: { [key: string]: number } = {};
-    let spellManaGainDict: { [key: string]: number } = {};
+    )
+    const equippedItemId = playerState.SelectedItems[itemSlot]
+    let simulationsFinished = 0
+    let simulationsRunning = 0
+    let simIndex = 0
+    let dpsArray: number[] = []
+    let dpsCount: { [key: string]: number } = {}
+    let combatLogBreakdownArr: CombatLogBreakdownData[] = []
+    let totalManaRegenerated = 0
+    let totalDamageDone = 0
+    let spellDamageDict: { [key: string]: number } = {}
+    let spellManaGainDict: { [key: string]: number } = {}
     // Used to keep track of the progress % of sims for the progress bar.
-    let simulationProgressPercentages: ISimulationProgressPercent[] = [];
-    let simWorkerParameters: IGetWorkerParams[] = [];
-    combatLogEntries = [];
+    let simulationProgressPercentages: ISimulationProgressPercent[] = []
+    let simWorkerParameters: IGetWorkerParams[] = []
+    combatLogEntries = []
 
-    dispatch(setSimulationInProgressStatus(true));
-    setSimulationType(simulationParams.type);
+    dispatch(setSimulationInProgressStatus(true))
+    setSimulationType(simulationParams.type)
     if (simulationParams.type === SimulationType.AllItems) {
-      dispatch(clearSavedItemSlotDps(itemSlot));
+      dispatch(clearSavedItemSlotDps(itemSlot))
     } else if (simulationParams.type === SimulationType.StatWeights) {
-      dispatch(setStatWeightVisibility(true));
+      dispatch(setStatWeightVisibility(true))
     }
 
-    const randomSeed = random(0, 4294967295);
+    const randomSeed = random(0, 4294967295)
 
     if (simulationParams.type === SimulationType.StatWeights) {
-      Object.entries(statWeightValues).forEach((statWeight) => {
+      Object.entries(statWeightValues).forEach(statWeight => {
         simWorkerParameters.push({
           RandomSeed: randomSeed,
           ItemId: equippedItemId,
           EquippedItemId: equippedItemId,
           SimulationType: simulationParams.type,
           CustomStat: { Stat: statWeight[0], Value: statWeight[1] },
-        });
-      });
+        })
+      })
     } else if (simulationParams.itemIdsToSim) {
-      simulationParams.itemIdsToSim.forEach((itemId) => {
+      simulationParams.itemIdsToSim.forEach(itemId => {
         simWorkerParameters.push({
           RandomSeed: randomSeed,
           ItemId: itemId,
           EquippedItemId: equippedItemId,
           SimulationType: simulationParams.type,
-        });
-      });
+        })
+      })
     }
 
     try {
-      simWorkerParameters.forEach((simWorkerParameter) => {
+      simWorkerParameters.forEach(simWorkerParameter => {
         simulationProgressPercentages.push({
           ItemId: simWorkerParameter.ItemId,
           ProgressPercent: 0,
           CustomStat: simWorkerParameter.CustomStat?.Stat,
-        });
+        })
         simulations.push(
           new SimWorker(
             (dpsUpdate: { dps: number }) => {
-              dpsArray.push(dpsUpdate.dps);
-              const dps: string = Math.round(dpsUpdate.dps).toString();
-              dpsCount[dps] = Math.round(dpsCount[dps]) + 1 || 1;
+              dpsArray.push(dpsUpdate.dps)
+              const dps: string = Math.round(dpsUpdate.dps).toString()
+              dpsCount[dps] = Math.round(dpsCount[dps]) + 1 || 1
             },
             (combatLogVector: {
-              name: string;
-              damage: number;
-              manaGain: number;
+              name: string
+              damage: number
+              manaGain: number
             }) => {
               spellDamageDict[combatLogVector.name] =
                 spellDamageDict[combatLogVector.name] +
-                  combatLogVector.damage || combatLogVector.damage;
+                  combatLogVector.damage || combatLogVector.damage
               spellManaGainDict[combatLogVector.name] =
                 spellManaGainDict[combatLogVector.name] +
-                  combatLogVector.manaGain || combatLogVector.manaGain;
-              totalManaRegenerated += combatLogVector.manaGain;
-              totalDamageDone += combatLogVector.damage;
+                  combatLogVector.manaGain || combatLogVector.manaGain
+              totalManaRegenerated += combatLogVector.manaGain
+              totalDamageDone += combatLogVector.damage
             },
             (errorCallback: { errorMsg: string }) => {
-              populateCombatLog();
-              errorCallbackHandler(errorCallback);
+              populateCombatLog()
+              errorCallbackHandler(errorCallback)
             },
             (combatLogUpdate: { combatLogEntry: string }) => {
-              combatLogEntries.push(combatLogUpdate.combatLogEntry);
+              combatLogEntries.push(combatLogUpdate.combatLogEntry)
             },
             (combatLogBreakdown: CombatLogBreakdownData) => {
-              combatLogBreakdownArr.push(combatLogBreakdown);
+              combatLogBreakdownArr.push(combatLogBreakdown)
             },
             (params: SimulationEnd) => {
-              const newMedianDps = params.medianDps;
-              simulationsFinished++;
+              const newMedianDps = params.medianDps
+              simulationsFinished++
               findSimulationProgressPercentObject({
                 simulationProgressPercentages: simulationProgressPercentages,
                 simType: simulationParams.type,
                 itemId: params.itemId,
                 stat: params.customStat,
-              }).ProgressPercent = 100;
+              }).ProgressPercent = 100
 
               if (
                 simulationParams.type !== SimulationType.StatWeights ||
-                params.customStat === "normal"
+                params.customStat === 'normal'
               ) {
                 setSavedItemDpsValue(
                   itemSlot,
                   params.itemId,
                   newMedianDps,
                   true
-                );
+                )
               }
 
               // Callback for the currently equipped item
@@ -360,27 +358,27 @@ export function SimulationButtons() {
                 (simulationParams.type === SimulationType.AllItems &&
                   params.itemId === equippedItemId) ||
                 (simulationParams.type === SimulationType.StatWeights &&
-                  params.customStat === "normal")
+                  params.customStat === 'normal')
               ) {
-                const newMinDps = Math.round(params.minDps * 100) / 100;
-                const newMaxDps = Math.round(params.maxDps * 100) / 100;
-                setNewMedianDps(newMedianDps.toString(), true);
-                setNewMinDps(newMinDps.toString(), true);
-                setNewMaxDps(newMaxDps.toString(), true);
+                const newMinDps = Math.round(params.minDps * 100) / 100
+                const newMaxDps = Math.round(params.maxDps * 100) / 100
+                setNewMedianDps(newMedianDps.toString(), true)
+                setNewMinDps(newMinDps.toString(), true)
+                setNewMaxDps(newMaxDps.toString(), true)
               }
 
               if (simulationParams.type === SimulationType.StatWeights) {
-                updateStatWeightValue(params.customStat, newMedianDps);
+                updateStatWeightValue(params.customStat, newMedianDps)
               }
 
               if (simulationsFinished === simWorkerParameters.length) {
-                dispatch(setSimulationInProgressStatus(false));
-                const totalSimDuration = (performance.now() - startTime) / 1000;
+                dispatch(setSimulationInProgressStatus(false))
+                const totalSimDuration = (performance.now() - startTime) / 1000
                 setNewSimulationDuration(
                   (Math.round(totalSimDuration * 10000) / 10000).toString(),
                   true
-                );
-                setSimulationProgressPercent(0);
+                )
+                setSimulationProgressPercent(0)
 
                 // Either normal sim or multi-item sim
                 if (
@@ -388,17 +386,17 @@ export function SimulationButtons() {
                     simulationParams.type
                   )
                 ) {
-                  populateCombatLog();
+                  populateCombatLog()
                 }
 
                 if (simulationParams.type === SimulationType.Normal) {
-                  setDpsStdev(Math.round(getStdev(dpsArray)).toString());
-                  dispatch(setHistogramData(dpsCount));
+                  setDpsStdev(Math.round(getStdev(dpsArray)).toString())
+                  dispatch(setHistogramData(dpsCount))
 
                   if (
                     playerState.Settings[
                       Setting.automaticallyOpenSimDetails
-                    ] === "yes"
+                    ] === 'yes'
                   ) {
                     dispatch(
                       setCombatLogBreakdownValue({
@@ -410,9 +408,8 @@ export function SimulationButtons() {
                         SpellManaGainDict: spellManaGainDict,
                         Data: combatLogBreakdownArr,
                       })
-                    );
-                    // TODO
-                    //jQuery(".breakdown-table").trigger("update");
+                    )
+                    $('.breakdown-table').trigger('update')
                   }
                 }
               } else if (simulationParams.type === SimulationType.AllItems) {
@@ -420,30 +417,30 @@ export function SimulationButtons() {
                   simulationsRunning - simulationsFinished < maxWorkers &&
                   simIndex < simulations.length
                 ) {
-                  simulations[simIndex++].start();
-                  simulationsRunning++;
+                  simulations[simIndex++].start()
+                  simulationsRunning++
                 }
               }
             },
             (params: SimulationUpdate) => {
-              let newMedianDps = params.medianDps;
+              let newMedianDps = params.medianDps
               const simProgressPercent = Math.ceil(
                 (params.iteration / params.iterationAmount) * 100
-              );
+              )
 
               findSimulationProgressPercentObject({
                 simulationProgressPercentages: simulationProgressPercentages,
                 simType: simulationParams.type,
                 itemId: params.itemId,
                 stat: params.customStat,
-              }).ProgressPercent = simProgressPercent;
+              }).ProgressPercent = simProgressPercent
               setSimulationProgressPercent(
                 Math.round(
                   average(
-                    simulationProgressPercentages.map((e) => e.ProgressPercent)
+                    simulationProgressPercentages.map(e => e.ProgressPercent)
                   )
                 )
-              );
+              )
               // Only update the item table dps value for every 10% of progress
               // because otherwise the simulation slows down too much.
               if (
@@ -453,14 +450,13 @@ export function SimulationButtons() {
               ) {
                 const domElement = document.getElementById(
                   params.itemId.toString()
-                );
+                )
 
                 if (domElement) {
                   domElement.innerHTML = (
                     Math.round(newMedianDps * 100) / 100
-                  ).toString();
-                  // TODO
-                  //jQuery("#item-selection-table").trigger("update");
+                  ).toString()
+                  $('#item-selection-table').trigger('update')
                 }
               }
               if (
@@ -468,18 +464,18 @@ export function SimulationButtons() {
                 (simulationParams.type === SimulationType.AllItems &&
                   params.itemId === equippedItemId) ||
                 (simulationParams.type === SimulationType.StatWeights &&
-                  params.customStat === "normal")
+                  params.customStat === 'normal')
               ) {
-                setNewMedianDps(newMedianDps.toString(), false);
+                setNewMedianDps(newMedianDps.toString(), false)
               } else if (simulationParams.type === SimulationType.StatWeights) {
                 // Limit the updates to once every 5 seconds
-                const dateNow = Date.now();
+                const dateNow = Date.now()
                 if (
                   !lastStatWeightUpdateTime[params.customStat] ||
                   dateNow - lastStatWeightUpdateTime[params.customStat] > 5000
                 ) {
-                  updateStatWeightValue(params.customStat, params.medianDps);
-                  lastStatWeightUpdateTime[params.customStat] = dateNow;
+                  updateStatWeightValue(params.customStat, params.medianDps)
+                  lastStatWeightUpdateTime[params.customStat] = dateNow
                 }
               }
             },
@@ -491,21 +487,21 @@ export function SimulationButtons() {
               CustomStat: simWorkerParameter.CustomStat,
             })
           )
-        );
-      });
+        )
+      })
 
-      const startTime = performance.now();
+      const startTime = performance.now()
       while (
         (simulationsRunning < maxWorkers ||
           simulationParams.type === SimulationType.StatWeights) &&
         simIndex < simulations.length
       ) {
-        simulations[simIndex++].start();
-        simulationsRunning++;
+        simulations[simIndex++].start()
+        simulationsRunning++
       }
     } catch (error) {
-      dispatch(setSimulationInProgressStatus(false));
-      throw new Error("Error when trying to run simulation. " + error);
+      dispatch(setSimulationInProgressStatus(false))
+      throw new Error('Error when trying to run simulation. ' + error)
     }
   }
 
@@ -514,9 +510,9 @@ export function SimulationButtons() {
       Math.round(
         ((value - Number(medianDps)) / statWeightStatIncrease) * 1000
       ) / 1000
-    );
+    )
     if (dpsDifference < 0.05) {
-      dpsDifference = 0;
+      dpsDifference = 0
     }
 
     dispatch(
@@ -524,21 +520,21 @@ export function SimulationButtons() {
         stat: stat as unknown as [keyof StatWeightStats],
         value: dpsDifference,
       })
-    );
+    )
   }
 
   function findSimulationProgressPercentObject(params: {
-    simulationProgressPercentages: ISimulationProgressPercent[];
-    simType: SimulationType;
-    itemId: number;
-    stat: string;
+    simulationProgressPercentages: ISimulationProgressPercent[]
+    simType: SimulationType
+    itemId: number
+    stat: string
   }): ISimulationProgressPercent {
     return params.simulationProgressPercentages.find(
-      (e) =>
+      e =>
         (e.ItemId === params.itemId &&
           params.simType !== SimulationType.StatWeights) ||
         e.CustomStat === params.stat
-    )!;
+    )!
   }
 
   function setSavedItemDpsValue(
@@ -554,39 +550,39 @@ export function SimulationButtons() {
         dps: newMedianDps,
         saveLocalStorage: saveToLocalStorage,
       })
-    );
+    )
   }
 
   function populateCombatLog(): void {
-    dispatch(setCombatLogData(combatLogEntries));
+    dispatch(setCombatLogData(combatLogEntries))
   }
 
   function errorCallbackHandler(errorCallback: { errorMsg: string }): void {
     alert(
-      "Error: " +
+      'Error: ' +
         errorCallback.errorMsg +
-        "\nPost in the #sim-bug-report channel on the Classic Warlock discord."
-    );
+        '\nPost in the #sim-bug-report channel on the Classic Warlock discord.'
+    )
   }
 
   function setNewMedianDps(newMedianDps: string, savingLocalStorage: boolean) {
-    setMedianDps(newMedianDps);
+    setMedianDps(newMedianDps)
     if (savingLocalStorage) {
-      localStorage.setItem("medianDps", newMedianDps);
+      localStorage.setItem('medianDps', newMedianDps)
     }
   }
 
   function setNewMinDps(newMinDps: string, savingLocalStorage: boolean) {
-    setMinDps(newMinDps);
+    setMinDps(newMinDps)
     if (savingLocalStorage) {
-      localStorage.setItem("minDps", newMinDps);
+      localStorage.setItem('minDps', newMinDps)
     }
   }
 
   function setNewMaxDps(newMaxDps: string, savingLocalStorage: boolean) {
-    setMaxDps(newMaxDps);
+    setMaxDps(newMaxDps)
     if (savingLocalStorage) {
-      localStorage.setItem("maxDps", newMaxDps);
+      localStorage.setItem('maxDps', newMaxDps)
     }
   }
 
@@ -594,40 +590,40 @@ export function SimulationButtons() {
     newSimulationDuration: string,
     savingLocalStorage: boolean
   ) {
-    setSimulationDuration(newSimulationDuration);
+    setSimulationDuration(newSimulationDuration)
     if (savingLocalStorage) {
-      localStorage.setItem("simulationDuration", newSimulationDuration);
+      localStorage.setItem('simulationDuration', newSimulationDuration)
     }
   }
 
   return (
     <>
       {medianDps.length > 0 && (
-        <div id="sim-result-dps-div">
+        <div id='sim-result-dps-div'>
           <p>
-            <span id="median-dps">
+            <span id='median-dps'>
               {Math.round(Number(medianDps) * 100) / 100}
             </span>
-            <span> DPS</span>{" "}
-            <span id="dps-stdev">
-              {dpsStdev.length > 0 ? "±" + dpsStdev : ""}
+            <span> DPS</span>{' '}
+            <span id='dps-stdev'>
+              {dpsStdev.length > 0 ? '±' + dpsStdev : ''}
             </span>
           </p>
           {maxDps.length > 0 && minDps.length > 0 && (
             <p>
-              Min: <span id="min-dps">{minDps}</span> Max:{" "}
-              <span id="max-dps">{maxDps}</span>
+              Min: <span id='min-dps'>{minDps}</span> Max:{' '}
+              <span id='max-dps'>{maxDps}</span>
             </p>
           )}
         </div>
       )}
       <div
-        className="warlock-btn active-btn"
+        className='warlock-btn active-btn'
         onClick={() =>
           simulate({
             itemIdsToSim: [
               Items.find(
-                (e) =>
+                e =>
                   e.Id ===
                   playerState.SelectedItems[
                     ItemSlotToItemSlotDetailed(
@@ -645,16 +641,16 @@ export function SimulationButtons() {
             uiState.SimulationInProgress &&
             simulationType === SimulationType.Normal
               ? `linear-gradient(to right, #9482C9 ${simulationProgressPercent}%, transparent ${simulationProgressPercent}%)`
-              : "",
+              : '',
         }}
       >
         {uiState.SimulationInProgress &&
         simulationType === SimulationType.Normal
           ? `${simulationProgressPercent}%`
-          : "Simulate"}
+          : 'Simulate'}
       </div>
       <div
-        className="warlock-btn active-btn"
+        className='warlock-btn active-btn'
         onClick={() =>
           simulate({
             itemIdsToSim: getItemTableItems(
@@ -666,7 +662,7 @@ export function SimulationButtons() {
               false,
               uiState.SavedItemDps,
               true
-            ).map((item) => item.Id),
+            ).map(item => item.Id),
             type: SimulationType.AllItems,
           })
         }
@@ -675,35 +671,35 @@ export function SimulationButtons() {
             uiState.SimulationInProgress &&
             simulationType === SimulationType.AllItems
               ? `linear-gradient(to right, #9482C9 ${simulationProgressPercent}%, transparent ${simulationProgressPercent}%)`
-              : "",
+              : '',
         }}
       >
         {uiState.SimulationInProgress &&
         simulationType === SimulationType.AllItems
           ? `${simulationProgressPercent}%`
-          : "Simulate All Items"}
+          : 'Simulate All Items'}
       </div>
       <div
-        className="warlock-btn active-btn"
+        className='warlock-btn active-btn'
         onClick={() => simulate({ type: SimulationType.StatWeights })}
         style={{
           background:
             uiState.SimulationInProgress &&
             simulationType === SimulationType.StatWeights
               ? `linear-gradient(to right, #9482C9 ${simulationProgressPercent}%, transparent ${simulationProgressPercent}%)`
-              : "",
+              : '',
         }}
       >
         {uiState.SimulationInProgress &&
         simulationType === SimulationType.StatWeights
           ? `${simulationProgressPercent}%`
-          : "Stat Weights"}
+          : 'Stat Weights'}
       </div>
       {
         <div
           className={
-            "warlock-btn" +
-            (combatLogButtonIsDisabled() ? " disabled-btn" : " active-btn")
+            'warlock-btn' +
+            (combatLogButtonIsDisabled() ? ' disabled-btn' : ' active-btn')
           }
           onClick={() =>
             !combatLogButtonIsDisabled() &&
@@ -716,8 +712,8 @@ export function SimulationButtons() {
       {
         <div
           className={
-            "warlock-btn" +
-            (histogramButtonIsDisabled() ? " disabled-btn" : " active-btn")
+            'warlock-btn' +
+            (histogramButtonIsDisabled() ? ' disabled-btn' : ' active-btn')
           }
           onClick={() =>
             !histogramButtonIsDisabled() &&
@@ -727,9 +723,9 @@ export function SimulationButtons() {
           Histogram
         </div>
       }
-      <p id="sim-length-result">
-        {simulationDuration.length > 0 ? simulationDuration + "s" : ""}
+      <p id='sim-length-result'>
+        {simulationDuration.length > 0 ? simulationDuration + 's' : ''}
       </p>
     </>
-  );
+  )
 }

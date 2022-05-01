@@ -69,7 +69,9 @@ void Pet::Initialize(Simulation* simulation_ptr) {
     }
   }
 
-  if (player->settings.prepop_black_book) { auras.black_book = std::make_shared<BlackBookAura>(*this); }
+  if (player->settings.prepop_black_book) {
+    auras.black_book = std::make_shared<BlackBookAura>(*this);
+  }
 }
 
 void Pet::CalculateStatsFromAuras() {
@@ -93,11 +95,17 @@ void Pet::CalculateStatsFromAuras() {
     stats.spirit_modifier *= 1.1;
   }
 
-  if (player->selected_auras.pet_blessing_of_wisdom) { stats.mp5 += 41; }
+  if (player->selected_auras.pet_blessing_of_wisdom) {
+    stats.mp5 += 41;
+  }
 
-  if (player->selected_auras.mana_spring_totem) { stats.mp5 += 50; }
+  if (player->selected_auras.mana_spring_totem) {
+    stats.mp5 += 50;
+  }
 
-  if (player->selected_auras.wrath_of_air_totem) { stats.spell_power += 101; }
+  if (player->selected_auras.wrath_of_air_totem) {
+    stats.spell_power += 101;
+  }
 
   if (player->selected_auras.misery) {
     constexpr double kDamageModifier = 1.05;
@@ -106,11 +114,17 @@ void Pet::CalculateStatsFromAuras() {
     stats.fire_modifier *= kDamageModifier;
   }
 
-  if (player->selected_auras.shadow_weaving) { stats.shadow_modifier *= 1.1; }
+  if (player->selected_auras.shadow_weaving) {
+    stats.shadow_modifier *= 1.1;
+  }
 
-  if (player->selected_auras.improved_scorch) { stats.fire_modifier *= 1.15; }
+  if (player->selected_auras.improved_scorch) {
+    stats.fire_modifier *= 1.15;
+  }
 
-  if (player->selected_auras.blood_frenzy) { stats.physical_modifier *= 1.04; }
+  if (player->selected_auras.blood_frenzy) {
+    stats.physical_modifier *= 1.04;
+  }
 
   stats.spell_crit_chance += player->talents.demonic_tactics;
   stats.melee_crit_chance += player->talents.demonic_tactics;
@@ -127,44 +141,78 @@ void Pet::CalculateStatsFromAuras() {
     stats.spirit += kStatIncrease;
   }
 
-  if (player->selected_auras.pet_arcane_intellect) { stats.intellect += 40; }
+  if (player->selected_auras.pet_arcane_intellect) {
+    stats.intellect += 40;
+  }
 
-  if (player->selected_auras.pet_prayer_of_fortitude) { stats.stamina += 79; }
+  if (player->selected_auras.pet_prayer_of_fortitude) {
+    stats.stamina += 79;
+  }
 
-  if (player->selected_auras.pet_prayer_of_spirit) { stats.spirit += 50; }
+  if (player->selected_auras.pet_prayer_of_spirit) {
+    stats.spirit += 50;
+  }
 
-  if (player->selected_auras.faerie_fire && player->settings.improved_faerie_fire) { stats.melee_hit_chance += 3; }
+  if (player->selected_auras.faerie_fire && player->settings.improved_faerie_fire) {
+    stats.melee_hit_chance += 3;
+  }
 
-  if (player->selected_auras.pet_heroic_presence) { stats.melee_hit_chance++; }
+  if (player->selected_auras.pet_heroic_presence) {
+    stats.melee_hit_chance++;
+  }
 
-  if (player->selected_auras.pet_blessing_of_might) { stats.attack_power += 220; }
+  if (player->selected_auras.pet_blessing_of_might) {
+    stats.attack_power += 220;
+  }
 
-  if (player->selected_auras.pet_strength_of_earth_totem) { stats.strength += 86; }
+  if (player->selected_auras.pet_strength_of_earth_totem) {
+    stats.strength += 86;
+  }
 
-  if (player->selected_auras.pet_battle_shout) { stats.attack_power += 306; }
+  if (player->selected_auras.pet_battle_shout) {
+    stats.attack_power += 306;
+  }
 
-  if (player->selected_auras.pet_trueshot_aura) { stats.attack_power += 300; }
+  if (player->selected_auras.pet_trueshot_aura) {
+    stats.attack_power += 300;
+  }
 
-  if (player->selected_auras.pet_leader_of_the_pack) { stats.melee_crit_chance += 5; }
+  if (player->selected_auras.pet_leader_of_the_pack) {
+    stats.melee_crit_chance += 5;
+  }
 
-  if (player->selected_auras.pet_unleashed_rage) { stats.attack_power_modifier *= 1.1; }
+  if (player->selected_auras.pet_unleashed_rage) {
+    stats.attack_power_modifier *= 1.1;
+  }
 
-  if (player->selected_auras.pet_stamina_scroll) { stats.stamina += 20; }
+  if (player->selected_auras.pet_stamina_scroll) {
+    stats.stamina += 20;
+  }
 
-  if (player->selected_auras.pet_intellect_scroll) { stats.intellect += 20; }
+  if (player->selected_auras.pet_intellect_scroll) {
+    stats.intellect += 20;
+  }
 
-  if (player->selected_auras.pet_strength_scroll) { stats.strength += 20; }
+  if (player->selected_auras.pet_strength_scroll) {
+    stats.strength += 20;
+  }
 
-  if (player->selected_auras.pet_agility_scroll) { stats.agility += 20; }
+  if (player->selected_auras.pet_agility_scroll) {
+    stats.agility += 20;
+  }
 
-  if (player->selected_auras.pet_spirit_scroll) { stats.spirit += 20; }
+  if (player->selected_auras.pet_spirit_scroll) {
+    stats.spirit += 20;
+  }
 
   if (player->selected_auras.pet_kiblers_bits) {
     stats.strength += 20;
     stats.spirit += 20;
   }
 
-  if (player->settings.race == EmbindConstant::kOrc) { stats.damage_modifier *= 1.05; }
+  if (player->settings.race == EmbindConstant::kOrc) {
+    stats.damage_modifier *= 1.05;
+  }
 
   // Hidden attack power modifiers (source: Max on warlock discord)
   if (pet_name == PetName::kFelguard) {
@@ -245,7 +293,9 @@ double Pet::GetSpellCritChance() {
 }
 
 double Pet::GetHastePercent() {
-  if (pet_type == PetType::kMelee) { return stats.melee_haste_percent; }
+  if (pet_type == PetType::kMelee) {
+    return stats.melee_haste_percent;
+  }
 
   return stats.spell_haste_percent;
 }
@@ -258,7 +308,9 @@ double Pet::GetAttackPower() const {
       (GetStrength() * 2 - 20 + GetPlayerSpellPower() * 0.57 - kAttackPowerFromDebuffs + stats.attack_power) *
       stats.attack_power_modifier;
 
-  if (auras.demonic_frenzy != nullptr) { attack_power *= 1 + 0.05 * auras.demonic_frenzy->stacks; }
+  if (auras.demonic_frenzy != nullptr) {
+    attack_power *= 1 + 0.05 * auras.demonic_frenzy->stacks;
+  }
 
   return attack_power + kAttackPowerFromDebuffs;
 }
@@ -271,7 +323,9 @@ double Pet::GetDebuffAttackPower() const {
         player->settings.survival_hunter_agility * 0.25 * (player->settings.expose_weakness_uptime / 100.0);
   }
 
-  if (player->selected_auras.improved_hunters_mark) { debuff_attack_power += 110; }
+  if (player->selected_auras.improved_hunters_mark) {
+    debuff_attack_power += 110;
+  }
 
   return debuff_attack_power;
 }

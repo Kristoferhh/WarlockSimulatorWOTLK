@@ -198,9 +198,9 @@ TEST_F(PlayerTest, UseCooldowns_Trinket_DoesNotShareCooldown) {
 }
 
 TEST_F(PlayerTest, GetDamageModifier_T6_4PC) {
+  _player->sets.t6 = 4;
   auto shadow_bolt = ShadowBolt(*_player);
   auto incinerate  = Incinerate(*_player);
-  _player->sets.t6 = 4;
 
   EXPECT_EQ(_player->spells.shadow_bolt->GetDamageModifier(), 1.06);
   EXPECT_EQ(_player->spells.incinerate->GetDamageModifier(), 1.06);
@@ -277,11 +277,15 @@ TEST_F(PlayerTest, Tick_Trinkets) {
   _player->trinkets.push_back(SkullOfGuldan(*_player));
   _player->trinkets.push_back(ShiftingNaaruSliver(*_player));
 
-  for (auto& trinket : _player->trinkets) { trinket.cooldown_remaining = 50; }
+  for (auto& trinket : _player->trinkets) {
+    trinket.cooldown_remaining = 50;
+  }
 
   _player->Tick(20);
 
-  for (const auto& kTrinket : _player->trinkets) { EXPECT_EQ(kTrinket.cooldown_remaining, 30); }
+  for (const auto& kTrinket : _player->trinkets) {
+    EXPECT_EQ(kTrinket.cooldown_remaining, 30);
+  }
 }
 
 TEST_F(PlayerTest, Tick_MP5) {
