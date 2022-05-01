@@ -1,135 +1,135 @@
 export enum ItemSlot {
-  Head = "Head",
-  Neck = "Neck",
-  Shoulders = "Shoulders",
-  Back = "Back",
-  Chest = "Chest",
-  Wrist = "Wrist",
-  Hands = "Hands",
-  Waist = "Waist",
-  Legs = "Legs",
-  Feet = "Feet",
-  Finger = "Finger",
-  Trinket = "Trinket",
-  Weapon = "Weapon",
-  OffHand = "OffHand",
-  Wand = "Wand",
+  Head = 'Head',
+  Neck = 'Neck',
+  Shoulders = 'Shoulders',
+  Back = 'Back',
+  Chest = 'Chest',
+  Wrist = 'Wrist',
+  Hands = 'Hands',
+  Waist = 'Waist',
+  Legs = 'Legs',
+  Feet = 'Feet',
+  Finger = 'Finger',
+  Trinket = 'Trinket',
+  Weapon = 'Weapon',
+  OffHand = 'OffHand',
+  Wand = 'Wand',
 }
 
 export enum ItemSlotDetailed {
-  Head = "Head",
-  Neck = "Neck",
-  Shoulders = "Shoulders",
-  Back = "Back",
-  Chest = "Chest",
-  Wrist = "Wrist",
-  Hands = "Hands",
-  Waist = "Waist",
-  Legs = "Legs",
-  Feet = "Feet",
-  Finger1 = "Finger1",
-  Finger2 = "Finger2",
-  Trinket1 = "Trinket1",
-  Trinket2 = "Trinket2",
-  Weapon = "Weapon",
-  OffHand = "OffHand",
-  Wand = "Wand",
+  Head = 'Head',
+  Neck = 'Neck',
+  Shoulders = 'Shoulders',
+  Back = 'Back',
+  Chest = 'Chest',
+  Wrist = 'Wrist',
+  Hands = 'Hands',
+  Waist = 'Waist',
+  Legs = 'Legs',
+  Feet = 'Feet',
+  Finger1 = 'Finger1',
+  Finger2 = 'Finger2',
+  Trinket1 = 'Trinket1',
+  Trinket2 = 'Trinket2',
+  Weapon = 'Weapon',
+  OffHand = 'OffHand',
+  Wand = 'Wand',
 }
 
 export interface Item {
-  Name: string;
-  Id: ItemId;
-  ItemSlot: ItemSlot;
-  Quality: Quality;
-  Stats: StatsCollection;
-  IconName: string;
-  Sockets?: SocketColor[];
-  SocketBonus?: StatsCollection;
-  Set?: ItemSet;
-  DisplayId?: ItemId;
-  Unique?: boolean;
-  Source: ItemSource;
-  Phase: Phase;
-  IsTwoHand?: boolean;
+  Name: string
+  Id: ItemId
+  ItemSlot: ItemSlot
+  Quality: Quality
+  Stats: StatsCollection
+  IconName: string
+  Sockets?: SocketColor[]
+  SocketBonus?: StatsCollection
+  Set?: ItemSet
+  DisplayId?: ItemId
+  Unique?: boolean
+  Source: ItemSource
+  Phase: Phase
+  IsTwoHand?: boolean
 }
 
 export interface Enchant {
-  Name: string;
-  ItemSlot: ItemSlot;
-  Quality: Quality;
-  Stats: StatsCollection;
-  Id: EnchantId;
-  Source: ItemSource;
-  Phase: Phase;
+  Name: string
+  ItemSlot: ItemSlot
+  Quality: Quality
+  Stats: StatsCollection
+  Id: EnchantId
+  Source: ItemSource
+  Phase: Phase
 }
 
 export interface Aura {
-  Name: string;
-  Group?: AuraGroup;
-  Id: AuraId;
-  IconName: string;
-  Stats?: StatsCollection;
-  Drums?: boolean;
-  WeaponOil?: boolean;
-  FoodBuff?: boolean;
-  ForPet?: boolean;
-  DemonicRune?: boolean;
-  GuardianElixir?: boolean;
-  BattleElixir?: boolean;
-  Potion?: boolean;
-  Alcohol?: boolean;
-  AgilityAndStrength?: boolean;
-  AttackPower?: boolean;
-  AttackPowerPercent?: boolean;
-  DamagePercent?: boolean;
-  HastePercent?: boolean;
-  Health?: boolean;
-  Intellect?: boolean;
-  Mp5?: boolean;
-  Crit?: boolean;
-  MeleeCrit?: boolean;
-  MeleeHaste?: boolean;
-  Replenishment?: boolean;
-  SpellCrit?: boolean;
-  SpellHaste?: boolean;
-  SpellPower?: boolean;
-  Spirit?: boolean;
-  StatPercent?: boolean;
-  ArmorMajor?: boolean;
-  ArmorMinor?: boolean;
-  AttackPowerReduction?: boolean;
-  ManaRestore?: boolean;
-  PhysicalVulnerability?: boolean;
-  SpellCritDebuff?: boolean;
-  SpellDamagePercent?: boolean;
-  SpellHit?: boolean;
+  Name: string
+  Group?: AuraGroup
+  Id: AuraId
+  IconName: string
+  Stats?: StatsCollection
+  Drums?: boolean
+  WeaponOil?: boolean
+  FoodBuff?: boolean
+  ForPet?: boolean
+  DemonicRune?: boolean
+  GuardianElixir?: boolean
+  BattleElixir?: boolean
+  Potion?: boolean
+  Alcohol?: boolean
+  AgilityAndStrength?: boolean
+  AttackPower?: boolean
+  AttackPowerPercent?: boolean
+  DamagePercent?: boolean
+  HastePercent?: boolean
+  Health?: boolean
+  Intellect?: boolean
+  Mp5?: boolean
+  Crit?: boolean
+  MeleeCrit?: boolean
+  MeleeHaste?: boolean
+  Replenishment?: boolean
+  SpellCrit?: boolean
+  SpellHaste?: boolean
+  SpellPower?: boolean
+  Spirit?: boolean
+  StatPercent?: boolean
+  ArmorMajor?: boolean
+  ArmorMinor?: boolean
+  AttackPowerReduction?: boolean
+  ManaRestore?: boolean
+  PhysicalVulnerability?: boolean
+  SpellCritDebuff?: boolean
+  SpellDamagePercent?: boolean
+  SpellHit?: boolean
 }
 
 export enum Pet {
-  Imp = "Imp",
-  Succubus = "Succubus",
-  Felhunter = "Felhunter",
-  Felguard = "Felguard",
+  Imp = 'Imp',
+  Succubus = 'Succubus',
+  Felhunter = 'Felhunter',
+  Felguard = 'Felguard',
 }
 
 export interface Spell {
-  Group?: RotationGroup;
-  Name: string;
-  IconName: string;
-  Id: SpellId;
+  Group?: RotationGroup
+  Name: string
+  IconName: string
+  Id: SpellId
 }
 
 export enum RotationGroup {
-  Dots = "Dots",
-  Filler = "Filler",
-  Aoe = "Aoe",
-  Curse = "Curse",
-  Finishers = "Finishers",
-  Other = "Other",
+  Dots = 'Dots',
+  Filler = 'Filler',
+  Aoe = 'Aoe',
+  Curse = 'Curse',
+  Finishers = 'Finishers',
+  Other = 'Other',
 }
 
 export interface IRotationGroup {
-  Header: RotationGroup;
+  Header: RotationGroup
 }
 
 export const RotationGroups: IRotationGroup[] = [
@@ -139,179 +139,179 @@ export const RotationGroups: IRotationGroup[] = [
   { Header: RotationGroup.Curse },
   { Header: RotationGroup.Finishers },
   { Header: RotationGroup.Other },
-];
+]
 
 export interface IAuraGroup {
-  Heading: AuraGroup;
-  Type: "spell" | "item";
+  Heading: AuraGroup
+  Type: 'spell' | 'item'
 }
 
 export enum AuraGroup {
-  Buffs = "Buffs",
-  Debuffs = "Debuffs",
-  Consumables = "Consumables",
-  PetBuffs = "Pet Buffs (your pet also inherits group-wide auras selected above)",
+  Buffs = 'Buffs',
+  Debuffs = 'Debuffs',
+  Consumables = 'Consumables',
+  PetBuffs = 'Pet Buffs (your pet also inherits group-wide auras selected above)',
 }
 
 export enum Race {
-  Gnome = "Gnome",
-  Human = "Human",
-  Orc = "Orc",
-  Undead = "Undead",
-  BloodElf = "BloodElf",
+  Gnome = 'Gnome',
+  Human = 'Human',
+  Orc = 'Orc',
+  Undead = 'Undead',
+  BloodElf = 'BloodElf',
 }
 
 export enum Stat {
-  Health = "Health",
-  HealthModifier = "HealthModifier",
-  Mana = "Mana",
-  ManaModifier = "ManaModifier",
-  Stamina = "Stamina",
-  Intellect = "Intellect",
-  Spirit = "Spirit",
-  SpellPower = "SpellPower",
-  ShadowPower = "ShadowPower",
-  FirePower = "FirePower",
-  CritRating = "CritRating",
-  CritChance = "CritChance",
-  HitRating = "HitRating",
-  HitChance = "HitChance",
-  HasteRating = "HasteRating",
-  ShadowModifier = "ShadowModifier",
-  FireModifier = "FireModifier",
-  Mp5 = "Mp5",
-  EnemyArmor = "EnemyArmor",
-  ArcaneResist = "ArcaneResist",
-  IntellectModifier = "IntellectModifier",
-  SpiritModifier = "SpiritModifier",
-  PetDamageModifier = "PetDamageModifier",
-  ShadowResist = "ShadowResist",
-  FireResist = "FireResist",
-  FrostResist = "FrostResist",
-  NatureResist = "NatureResist",
-  StaminaModifier = "StaminaModifier",
-  ArcaneModifier = "ArcaneModifier",
-  FrostModifier = "FrostModifier",
-  NatureModifier = "NatureModifier",
-  FrostPower = "FrostPower",
-  SpellPenetration = "SpellPenetration",
+  Health = 'Health',
+  HealthModifier = 'HealthModifier',
+  Mana = 'Mana',
+  ManaModifier = 'ManaModifier',
+  Stamina = 'Stamina',
+  Intellect = 'Intellect',
+  Spirit = 'Spirit',
+  SpellPower = 'SpellPower',
+  ShadowPower = 'ShadowPower',
+  FirePower = 'FirePower',
+  CritRating = 'CritRating',
+  CritChance = 'CritChance',
+  HitRating = 'HitRating',
+  HitChance = 'HitChance',
+  HasteRating = 'HasteRating',
+  ShadowModifier = 'ShadowModifier',
+  FireModifier = 'FireModifier',
+  Mp5 = 'Mp5',
+  EnemyArmor = 'EnemyArmor',
+  ArcaneResist = 'ArcaneResist',
+  IntellectModifier = 'IntellectModifier',
+  SpiritModifier = 'SpiritModifier',
+  PetDamageModifier = 'PetDamageModifier',
+  ShadowResist = 'ShadowResist',
+  FireResist = 'FireResist',
+  FrostResist = 'FrostResist',
+  NatureResist = 'NatureResist',
+  StaminaModifier = 'StaminaModifier',
+  ArcaneModifier = 'ArcaneModifier',
+  FrostModifier = 'FrostModifier',
+  NatureModifier = 'NatureModifier',
+  FrostPower = 'FrostPower',
+  SpellPenetration = 'SpellPenetration',
 }
 
 export interface CombatLogBreakdownData {
-  Name: string;
-  Casts: number;
-  Crits: number;
-  Misses: number;
-  Count: number;
-  Uptime: number;
-  Dodges: number;
-  GlancingBlows: number;
-  Damage: number;
-  ManaGain: number;
+  Name: string
+  Casts: number
+  Crits: number
+  Misses: number
+  Count: number
+  Uptime: number
+  Dodges: number
+  GlancingBlows: number
+  Damage: number
+  ManaGain: number
 }
 
 export type StatsCollection = {
-  [key in Stat]?: number;
-};
+  [key in Stat]?: number
+}
 
 export type PlayerStats = {
-  Base: StatsCollection;
-  Auras: StatsCollection;
-  Items: StatsCollection;
-  Gems: StatsCollection;
-  Enchants: StatsCollection;
-  Talents: StatsCollection;
-};
+  Base: StatsCollection
+  Auras: StatsCollection
+  Items: StatsCollection
+  Gems: StatsCollection
+  Enchants: StatsCollection
+  Talents: StatsCollection
+}
 
 // TODO change to PascalCase
 export enum Setting {
-  race = "race",
-  iterations = "iterations",
-  minFightLength = "minFightLength",
-  maxFightLength = "maxFightLength",
-  targetLevel = "targetLevel",
-  petChoice = "petChoice",
-  petMode = "petMode",
-  enemyArmor = "enemyArmor",
-  targetShadowResistance = "targetShadowResistance",
-  targetFireResistance = "targetFireResistance",
-  improvedExposeArmor = "improvedExposeArmor",
-  improvedFaerieFire = "improvedFaerieFire",
-  survivalHunterAgility = "survivalHunterAgility",
-  exposeWeaknessUptime = "exposeWeaknessUptime",
-  lashOfPainUsage = "lashOfPainUsage",
-  automaticallyOpenSimDetails = "automaticallyOpenSimDetails",
-  customIsbUptime = "customIsbUptime",
-  customIsbUptimeValue = "customIsbUptimeValue",
-  randomizeValues = "randomizeValues",
-  infinitePlayerMana = "infinitePlayerMana",
-  infinitePetMana = "infinitePetMana",
-  prepopBlackBook = "prepopBlackBook",
-  rotationOption = "rotationOption",
-  fightType = "fightType",
-  enemyAmount = "enemyAmount",
-  powerInfusionAmount = "powerInfusionAmount",
-  innervateAmount = "innervateAmount",
-  ferociousInspirationAmount = "ferociousInspirationAmount",
-  improvedImpSetting = "improvedImpSetting",
-  maxWebWorkers = "maxWebWorkers",
+  race = 'race',
+  iterations = 'iterations',
+  minFightLength = 'minFightLength',
+  maxFightLength = 'maxFightLength',
+  targetLevel = 'targetLevel',
+  petChoice = 'petChoice',
+  petMode = 'petMode',
+  enemyArmor = 'enemyArmor',
+  targetShadowResistance = 'targetShadowResistance',
+  targetFireResistance = 'targetFireResistance',
+  improvedExposeArmor = 'improvedExposeArmor',
+  improvedFaerieFire = 'improvedFaerieFire',
+  survivalHunterAgility = 'survivalHunterAgility',
+  exposeWeaknessUptime = 'exposeWeaknessUptime',
+  lashOfPainUsage = 'lashOfPainUsage',
+  automaticallyOpenSimDetails = 'automaticallyOpenSimDetails',
+  customIsbUptime = 'customIsbUptime',
+  customIsbUptimeValue = 'customIsbUptimeValue',
+  randomizeValues = 'randomizeValues',
+  infinitePlayerMana = 'infinitePlayerMana',
+  infinitePetMana = 'infinitePetMana',
+  prepopBlackBook = 'prepopBlackBook',
+  rotationOption = 'rotationOption',
+  fightType = 'fightType',
+  enemyAmount = 'enemyAmount',
+  powerInfusionAmount = 'powerInfusionAmount',
+  innervateAmount = 'innervateAmount',
+  ferociousInspirationAmount = 'ferociousInspirationAmount',
+  improvedImpSetting = 'improvedImpSetting',
+  maxWebWorkers = 'maxWebWorkers',
 }
 
 export type Settings = {
-  [key in Setting]: string;
-};
+  [key in Setting]: string
+}
 
 export const InitialSettings: { [key in Setting]: string } = {
   [Setting.race]: Race.Gnome,
-  [Setting.iterations]: "30000",
-  [Setting.minFightLength]: "150",
-  [Setting.maxFightLength]: "210",
-  [Setting.targetLevel]: "83",
-  [Setting.petChoice]: "2",
-  [Setting.petMode]: "1",
-  [Setting.enemyArmor]: "7700",
-  [Setting.targetShadowResistance]: "0",
-  [Setting.targetFireResistance]: "0",
-  [Setting.improvedExposeArmor]: "0",
-  [Setting.improvedFaerieFire]: "no",
-  [Setting.survivalHunterAgility]: "1000",
-  [Setting.exposeWeaknessUptime]: "90",
-  [Setting.lashOfPainUsage]: "noISB",
-  [Setting.automaticallyOpenSimDetails]: "no",
-  [Setting.customIsbUptime]: "yes",
-  [Setting.customIsbUptimeValue]: "70",
-  [Setting.randomizeValues]: "no",
-  [Setting.infinitePlayerMana]: "no",
-  [Setting.infinitePetMana]: "no",
-  [Setting.prepopBlackBook]: "no",
-  [Setting.rotationOption]: "simChooses",
-  [Setting.fightType]: "singleTarget",
-  [Setting.enemyAmount]: "6",
-  [Setting.powerInfusionAmount]: "1",
-  [Setting.innervateAmount]: "1",
-  [Setting.ferociousInspirationAmount]: "1",
-  [Setting.improvedImpSetting]: "0",
-  [Setting.maxWebWorkers]: "0",
-};
+  [Setting.iterations]: '30000',
+  [Setting.minFightLength]: '150',
+  [Setting.maxFightLength]: '210',
+  [Setting.targetLevel]: '83',
+  [Setting.petChoice]: '2',
+  [Setting.petMode]: '1',
+  [Setting.enemyArmor]: '7700',
+  [Setting.targetShadowResistance]: '0',
+  [Setting.targetFireResistance]: '0',
+  [Setting.improvedExposeArmor]: '0',
+  [Setting.improvedFaerieFire]: 'no',
+  [Setting.survivalHunterAgility]: '1000',
+  [Setting.exposeWeaknessUptime]: '90',
+  [Setting.lashOfPainUsage]: 'noISB',
+  [Setting.automaticallyOpenSimDetails]: 'no',
+  [Setting.customIsbUptime]: 'yes',
+  [Setting.customIsbUptimeValue]: '70',
+  [Setting.randomizeValues]: 'no',
+  [Setting.infinitePlayerMana]: 'no',
+  [Setting.infinitePetMana]: 'no',
+  [Setting.prepopBlackBook]: 'no',
+  [Setting.rotationOption]: 'simChooses',
+  [Setting.fightType]: 'singleTarget',
+  [Setting.enemyAmount]: '6',
+  [Setting.powerInfusionAmount]: '1',
+  [Setting.innervateAmount]: '1',
+  [Setting.ferociousInspirationAmount]: '1',
+  [Setting.improvedImpSetting]: '0',
+  [Setting.maxWebWorkers]: '0',
+}
 
 export type TalentStore = {
-  [key in TalentName]: number;
-};
+  [key in TalentName]: number
+}
 
 export type ItemSlotDetailedStruct = {
-  [key in ItemSlotDetailed]: number;
-};
+  [key in ItemSlotDetailed]: number
+}
 
 export type SelectedGemsStruct = {
   [key in ItemSlot]: {
-    [key: string]: number[];
-  };
-};
+    [key: string]: number[]
+  }
+}
 
 // TODO
 export enum ItemSet {
-  T6 = "670",
-  T7 = "-32",
+  T6 = '670',
+  T7 = '-32',
 }
 
 export const InitialSelectedItemsAndEnchants: ItemSlotDetailedStruct = {
@@ -332,7 +332,7 @@ export const InitialSelectedItemsAndEnchants: ItemSlotDetailedStruct = {
   [ItemSlotDetailed.Weapon]: 0,
   [ItemSlotDetailed.OffHand]: 0,
   [ItemSlotDetailed.Wand]: 0,
-};
+}
 
 export const InitialPlayerStats: StatsCollection = {
   [Stat.Health]: 0,
@@ -368,7 +368,7 @@ export const InitialPlayerStats: StatsCollection = {
   [Stat.NatureResist]: 0,
   [Stat.FrostPower]: 0,
   [Stat.SpellPenetration]: 0,
-};
+}
 
 export const InitialSelectedGems: SelectedGemsStruct = {
   [ItemSlot.Head]: {},
@@ -386,7 +386,7 @@ export const InitialSelectedGems: SelectedGemsStruct = {
   [ItemSlot.Weapon]: {},
   [ItemSlot.OffHand]: {},
   [ItemSlot.Wand]: {},
-};
+}
 
 export const InitialRotation: RotationStruct = {
   [RotationGroup.Curse]: [],
@@ -395,39 +395,39 @@ export const InitialRotation: RotationStruct = {
   [RotationGroup.Aoe]: [],
   [RotationGroup.Finishers]: [],
   [RotationGroup.Other]: [],
-};
+}
 
 export type RotationStruct = {
-  [key in RotationGroup]: number[];
-};
+  [key in RotationGroup]: number[]
+}
 
 export interface Profile {
-  Auras: AuraId[];
-  Gems: SelectedGemsStruct;
-  Items: ItemSlotDetailedStruct;
-  Talents: TalentStore;
-  Rotation: RotationStruct;
-  Enchants: ItemSlotDetailedStruct;
-  Settings: Settings;
+  Auras: AuraId[]
+  Gems: SelectedGemsStruct
+  Items: ItemSlotDetailedStruct
+  Talents: TalentStore
+  Rotation: RotationStruct
+  Enchants: ItemSlotDetailedStruct
+  Settings: Settings
 }
 
 export type ProfileContainer = {
-  Name: string;
-  Profile: Profile;
-};
+  Name: string
+  Profile: Profile
+}
 
 export interface PlayerState {
-  Talents: TalentStore;
-  TalentPointsRemaining: number;
-  SelectedItems: ItemSlotDetailedStruct;
-  SelectedEnchants: ItemSlotDetailedStruct;
-  SelectedGems: SelectedGemsStruct;
-  Auras: AuraId[];
-  Rotation: RotationStruct;
-  Stats: PlayerStats;
-  Settings: Settings;
-  Profiles: ProfileContainer[];
-  Sets: SetsStruct;
+  Talents: TalentStore
+  TalentPointsRemaining: number
+  SelectedItems: ItemSlotDetailedStruct
+  SelectedEnchants: ItemSlotDetailedStruct
+  SelectedGems: SelectedGemsStruct
+  Auras: AuraId[]
+  Rotation: RotationStruct
+  Stats: PlayerStats
+  Settings: Settings
+  Profiles: ProfileContainer[]
+  Sets: SetsStruct
 }
 
 export enum MouseButtonClick {
@@ -436,100 +436,100 @@ export enum MouseButtonClick {
 }
 
 export type SetsStruct = {
-  [key in ItemSet]: number;
-};
+  [key in ItemSet]: number
+}
 
 export const InitialSetCounts: SetsStruct = {
   [ItemSet.T6]: 0,
   [ItemSet.T7]: 0,
-};
-
-export enum Quality {
-  Legendary = "Legendary",
-  Heirloom = "Heirloom",
-  Epic = "Epic",
-  Rare = "Rare",
-  Uncommon = "Uncommon",
-  Common = "Common",
 }
 
-export type SourcesStruct = Phase[];
+export enum Quality {
+  Legendary = 'Legendary',
+  Heirloom = 'Heirloom',
+  Epic = 'Epic',
+  Rare = 'Rare',
+  Uncommon = 'Uncommon',
+  Common = 'Common',
+}
+
+export type SourcesStruct = Phase[]
 
 export type SavedItemDps = {
   [key in ItemSlotDetailed]: {
-    [key: number]: number;
-  };
-};
+    [key: number]: number
+  }
+}
 
 export interface UiState {
-  Sources: SourcesStruct;
-  GemSelectionTable: GemSelectionTableStruct;
-  GemPreferences: { hidden: number[]; favorites: number[] };
-  SelectedProfile: string;
-  ImportExportWindowVisible: boolean;
-  EquippedItemsWindowVisible: boolean;
-  FillItemSocketsWindowVisible: boolean;
-  HiddenItems: number[];
-  SelectedItemSlot: ItemSlot;
-  SelectedItemSubSlot: SubSlotValue;
-  SavedItemDps: SavedItemDps;
-  CombatLog: { Visible: boolean; Data: string[] };
-  CombatLogBreakdown: CombatLogBreakdown;
-  Histogram: { Visible: boolean; Data?: { [key: string]: number } };
-  SimulationInProgress: boolean;
+  Sources: SourcesStruct
+  GemSelectionTable: GemSelectionTableStruct
+  GemPreferences: { hidden: number[]; favorites: number[] }
+  SelectedProfile: string
+  ImportExportWindowVisible: boolean
+  EquippedItemsWindowVisible: boolean
+  FillItemSocketsWindowVisible: boolean
+  HiddenItems: number[]
+  SelectedItemSlot: ItemSlot
+  SelectedItemSubSlot: SubSlotValue
+  SavedItemDps: SavedItemDps
+  CombatLog: { Visible: boolean; Data: string[] }
+  CombatLogBreakdown: CombatLogBreakdown
+  Histogram: { Visible: boolean; Data?: { [key: string]: number } }
+  SimulationInProgress: boolean
   StatWeights: {
-    Visible: boolean;
-    StatValues: { [key in Stat]?: number };
-  };
+    Visible: boolean
+    StatValues: { [key in Stat]?: number }
+  }
 }
 
 export interface StatWeightStats {
-  [Stat.Stamina]: number;
-  [Stat.Intellect]: number;
-  [Stat.Spirit]: number;
-  [Stat.SpellPower]: number;
-  [Stat.ShadowPower]: number;
-  [Stat.FirePower]: number;
-  [Stat.HitRating]: number;
-  [Stat.CritRating]: number;
-  [Stat.HasteRating]: number;
-  [Stat.Mp5]: number;
+  [Stat.Stamina]: number
+  [Stat.Intellect]: number
+  [Stat.Spirit]: number
+  [Stat.SpellPower]: number
+  [Stat.ShadowPower]: number
+  [Stat.FirePower]: number
+  [Stat.HitRating]: number
+  [Stat.CritRating]: number
+  [Stat.HasteRating]: number
+  [Stat.Mp5]: number
 }
 
 export type CombatLogBreakdown = {
-  TotalDamageDone: number;
-  TotalManaGained: number;
-  TotalSimulationFightLength: number;
-  TotalIterationAmount: number;
-  SpellDamageDict: { [key: string]: number };
-  SpellManaGainDict: { [key: string]: number };
-  Data: CombatLogBreakdownData[];
-};
+  TotalDamageDone: number
+  TotalManaGained: number
+  TotalSimulationFightLength: number
+  TotalIterationAmount: number
+  SpellDamageDict: { [key: string]: number }
+  SpellManaGainDict: { [key: string]: number }
+  Data: CombatLogBreakdownData[]
+}
 
 export interface WorkerParams {
   PlayerSettings: {
-    Auras: AuraId[];
-    Items: ItemSlotDetailedStruct;
-    Enchants: ItemSlotDetailedStruct;
-    Gems: SelectedGemsStruct;
-    Talents: TalentStore;
-    Rotation: RotationStruct;
-    Stats: StatsCollection;
-    Sets: SetsStruct;
-    Settings: Settings;
-    MetaGemId: number;
-  };
+    Auras: AuraId[]
+    Items: ItemSlotDetailedStruct
+    Enchants: ItemSlotDetailedStruct
+    Gems: SelectedGemsStruct
+    Talents: TalentStore
+    Rotation: RotationStruct
+    Stats: StatsCollection
+    Sets: SetsStruct
+    Settings: Settings
+    MetaGemId: number
+  }
   SimulationSettings: {
-    Iterations: number;
-    MinTime: number;
-    MaxTime: number;
-  };
-  RandomSeed: number;
-  ItemId: number;
-  SimulationType: SimulationType;
-  ItemSubSlot: SubSlotValue;
-  CustomStat: string;
-  EquippedItemSimulation: boolean;
+    Iterations: number
+    MinTime: number
+    MaxTime: number
+  }
+  RandomSeed: number
+  ItemId: number
+  SimulationType: SimulationType
+  ItemSubSlot: SubSlotValue
+  CustomStat: string
+  EquippedItemSimulation: boolean
 }
 
 export enum SimulationType {
@@ -539,167 +539,167 @@ export enum SimulationType {
 }
 
 export interface GemSelectionTableStruct {
-  Visible: boolean;
-  SocketNumber: number;
-  ItemSlot: ItemSlot;
-  ItemId: string;
-  SocketColor: SocketColor;
-  ItemSubSlot?: string;
+  Visible: boolean
+  SocketNumber: number
+  ItemSlot: ItemSlot
+  ItemId: string
+  SocketColor: SocketColor
+  ItemSubSlot?: string
 }
 
 export enum SocketColor {
-  Meta = "Meta",
-  Red = "Red",
-  Yellow = "Yellow",
-  Blue = "Blue",
+  Meta = 'Meta',
+  Red = 'Red',
+  Yellow = 'Yellow',
+  Blue = 'Blue',
 }
 
 export const InitialGemSelectionTableValue = {
   Visible: false,
   SocketNumber: 0,
   ItemSlot: ItemSlot.Weapon,
-  ItemId: "0",
+  ItemId: '0',
   SocketColor: SocketColor.Meta,
-};
+}
 
 export enum GemColor {
-  Meta = "Meta",
-  Red = "Red",
-  Yellow = "Yellow",
-  Blue = "Blue",
-  Orange = "Orange",
-  Green = "Green",
-  Purple = "Purple",
-  Void = "Void",
+  Meta = 'Meta',
+  Red = 'Red',
+  Yellow = 'Yellow',
+  Blue = 'Blue',
+  Orange = 'Orange',
+  Green = 'Green',
+  Purple = 'Purple',
+  Void = 'Void',
 }
 
 export const Languages: { Iso: string; Name: string; WowheadPrefix: string }[] =
   [
-    { Iso: "en", Name: "English", WowheadPrefix: "" },
-    { Iso: "zh", Name: "中文", WowheadPrefix: "cn." },
-  ];
+    { Iso: 'en', Name: 'English', WowheadPrefix: '' },
+    { Iso: 'zh', Name: '中文', WowheadPrefix: 'cn.' },
+  ]
 
 export interface Gem {
-  Name: string;
-  Id: number;
-  Color: GemColor;
-  IconName: string;
-  Phase: Phase;
-  Stats?: StatsCollection;
+  Name: string
+  Id: number
+  Color: GemColor
+  IconName: string
+  Phase: Phase
+  Stats?: StatsCollection
 }
 
 export interface Talent {
-  Name?: TalentName;
-  RankIds?: number[];
-  IconName?: string;
-  Requirement?: TalentRequirement;
+  Name?: TalentName
+  RankIds?: number[]
+  IconName?: string
+  Requirement?: TalentRequirement
 }
 
 export interface TalentRequirement {
-  Name: TalentName;
-  Points: number;
+  Name: TalentName
+  Points: number
 }
 
 export enum TalentTree {
-  Affliction = "Affliction",
-  Demonology = "Demonology",
-  Destruction = "Destruction",
+  Affliction = 'Affliction',
+  Demonology = 'Demonology',
+  Destruction = 'Destruction',
 }
 
 export enum ItemSource {
-  Naxxramas25Normal = "Naxxramas 25m",
-  Naxxramas10Normal = "Naxxramas 10m",
-  KirinTorRevered = "Kirin Tor - Revered",
-  Sunwell = "Sunwell Plateau",
-  BlackTemple = "Black Temple",
+  Naxxramas25Normal = 'Naxxramas 25m',
+  Naxxramas10Normal = 'Naxxramas 10m',
+  KirinTorRevered = 'Kirin Tor - Revered',
+  Sunwell = 'Sunwell Plateau',
+  BlackTemple = 'Black Temple',
 }
 
-export type Phase = 0 | 1 | 2 | 3 | 4 | 5;
+export type Phase = 0 | 1 | 2 | 3 | 4 | 5
 
-export type SubSlotValue = "" | "1" | "2";
+export type SubSlotValue = '' | '1' | '2'
 
 export enum TalentName {
-  ImprovedCurseOfAgony = "Improved Curse of Agony",
-  Suppression = "Suppression",
-  ImprovedCorruption = "Improved Corruption",
-  ImprovedCurseOfWeakness = "Improved Curse of Weakness",
-  ImprovedDrainSoul = "Improved Drain Soul",
-  ImprovedLifeTap = "Improved Life Tap",
-  SoulSiphon = "Soul Siphon",
-  ImprovedFear = "Improved Fear",
-  FelConcentration = "Fel Concentration",
-  AmplifyCurse = "Amplify Curse",
-  GrimReach = "Grim Reach",
-  Nightfall = "Nightfall",
-  EmpoweredCorruption = "Empowered Corruption",
-  ShadowEmbrance = "Shadow Embrace",
-  SiphonLife = "Siphon Life",
-  CurseOfExhaustion = "Curse of Exhaustion",
-  ImprovedFelhunter = "Improved Felhunter",
-  ShadowMastery = "Shadow Mastery",
-  Eradication = "Eradication",
-  Contagion = "Contagion",
-  DarkPact = "Dark Pact",
-  ImprovedHowlOfTerror = "Improved Howl of Terror",
-  Malediction = "Malediction",
+  ImprovedCurseOfAgony = 'Improved Curse of Agony',
+  Suppression = 'Suppression',
+  ImprovedCorruption = 'Improved Corruption',
+  ImprovedCurseOfWeakness = 'Improved Curse of Weakness',
+  ImprovedDrainSoul = 'Improved Drain Soul',
+  ImprovedLifeTap = 'Improved Life Tap',
+  SoulSiphon = 'Soul Siphon',
+  ImprovedFear = 'Improved Fear',
+  FelConcentration = 'Fel Concentration',
+  AmplifyCurse = 'Amplify Curse',
+  GrimReach = 'Grim Reach',
+  Nightfall = 'Nightfall',
+  EmpoweredCorruption = 'Empowered Corruption',
+  ShadowEmbrance = 'Shadow Embrace',
+  SiphonLife = 'Siphon Life',
+  CurseOfExhaustion = 'Curse of Exhaustion',
+  ImprovedFelhunter = 'Improved Felhunter',
+  ShadowMastery = 'Shadow Mastery',
+  Eradication = 'Eradication',
+  Contagion = 'Contagion',
+  DarkPact = 'Dark Pact',
+  ImprovedHowlOfTerror = 'Improved Howl of Terror',
+  Malediction = 'Malediction',
   DeathsEmbrace = `Death's Embrace`,
-  UnstableAffliction = "Unstable Affliction",
-  Pandemic = "Pandemic",
-  EverlastingAffliction = "Everlasting Affliction",
-  Haunt = "Haunt",
-  ImprovedHealthstone = "Improved Healthstone",
-  ImprovedImp = "Improved Imp",
-  DemonicEmbrace = "Demonic Embrace",
-  FelSynergy = "Fel Synergy",
-  ImprovedHealthFunnel = "Improved Health Funnel",
-  DemonicBrutality = "Demonic Brutality",
-  FelVitality = "Fel Vitality",
-  ImprovedSuccubus = "Improved Succubus",
-  SoulLink = "Soul Link",
-  FelDomination = "Fel Domination",
-  DemonicAegis = "Demonic Aegis",
-  UnholyPower = "Unholy Power",
-  MasterSummoner = "Master Summoner",
-  ManaFeed = "Mana Feed",
-  MasterConjuror = "Master Conjuror",
-  MasterDemonologist = "Master Demonologist",
-  MoltenCore = "Molten Core",
-  DemonicResilience = "Demonic Resilience",
-  DemonicEmpowerment = "Demonic Empowerment",
-  DemonicKnowledge = "Demonic Knowledge",
-  DemonicTactics = "Demonic Tactics",
-  Decimation = "Decimation",
-  ImprovedDemonicTactics = "Improved Demonic Tactics",
-  SummonFelguard = "Summon Felguard",
-  Nemesis = "Nemesis",
-  DemonicPact = "Demonic Pact",
-  Metamorphosis = "Metamorphosis",
-  ImprovedShadowBolt = "Improved Shadow Bolt",
-  Bane = "Bane",
-  Aftermath = "Aftermath",
-  MoltenSkin = "Molten Skin",
-  Cataclysm = "Cataclysm",
-  DemonicPower = "Demonic Power",
-  Shadowburn = "Shadowburn",
-  Ruin = "Ruin",
-  Intensity = "Intensity",
-  DestructiveReach = "Destructive Reach",
-  ImprovedSearingPain = "Improved Searing Pain",
-  Backlash = "Backlash",
-  ImprovedImmolate = "Improved Immolate",
-  Devastation = "Devastation",
-  NetherProtection = "Nether Protection",
-  Emberstorm = "Emberstorm",
-  Conflagrate = "Conflagrate",
-  SoulLeech = "Soul Leech",
-  Pyroclasm = "Pyroclasm",
-  ShadowAndFlame = "Shadow and Flame",
-  ImprovedSoulLeech = "Improved Soul Leech",
-  Backdraft = "Backdraft",
-  Shadowfury = "Shadowfury",
-  EmpoweredImp = "Empowered Imp",
-  FireAndBrimstone = "Fire and Brimstone",
-  ChaosBolt = "Chaos Bolt",
+  UnstableAffliction = 'Unstable Affliction',
+  Pandemic = 'Pandemic',
+  EverlastingAffliction = 'Everlasting Affliction',
+  Haunt = 'Haunt',
+  ImprovedHealthstone = 'Improved Healthstone',
+  ImprovedImp = 'Improved Imp',
+  DemonicEmbrace = 'Demonic Embrace',
+  FelSynergy = 'Fel Synergy',
+  ImprovedHealthFunnel = 'Improved Health Funnel',
+  DemonicBrutality = 'Demonic Brutality',
+  FelVitality = 'Fel Vitality',
+  ImprovedSuccubus = 'Improved Succubus',
+  SoulLink = 'Soul Link',
+  FelDomination = 'Fel Domination',
+  DemonicAegis = 'Demonic Aegis',
+  UnholyPower = 'Unholy Power',
+  MasterSummoner = 'Master Summoner',
+  ManaFeed = 'Mana Feed',
+  MasterConjuror = 'Master Conjuror',
+  MasterDemonologist = 'Master Demonologist',
+  MoltenCore = 'Molten Core',
+  DemonicResilience = 'Demonic Resilience',
+  DemonicEmpowerment = 'Demonic Empowerment',
+  DemonicKnowledge = 'Demonic Knowledge',
+  DemonicTactics = 'Demonic Tactics',
+  Decimation = 'Decimation',
+  ImprovedDemonicTactics = 'Improved Demonic Tactics',
+  SummonFelguard = 'Summon Felguard',
+  Nemesis = 'Nemesis',
+  DemonicPact = 'Demonic Pact',
+  Metamorphosis = 'Metamorphosis',
+  ImprovedShadowBolt = 'Improved Shadow Bolt',
+  Bane = 'Bane',
+  Aftermath = 'Aftermath',
+  MoltenSkin = 'Molten Skin',
+  Cataclysm = 'Cataclysm',
+  DemonicPower = 'Demonic Power',
+  Shadowburn = 'Shadowburn',
+  Ruin = 'Ruin',
+  Intensity = 'Intensity',
+  DestructiveReach = 'Destructive Reach',
+  ImprovedSearingPain = 'Improved Searing Pain',
+  Backlash = 'Backlash',
+  ImprovedImmolate = 'Improved Immolate',
+  Devastation = 'Devastation',
+  NetherProtection = 'Nether Protection',
+  Emberstorm = 'Emberstorm',
+  Conflagrate = 'Conflagrate',
+  SoulLeech = 'Soul Leech',
+  Pyroclasm = 'Pyroclasm',
+  ShadowAndFlame = 'Shadow and Flame',
+  ImprovedSoulLeech = 'Improved Soul Leech',
+  Backdraft = 'Backdraft',
+  Shadowfury = 'Shadowfury',
+  EmpoweredImp = 'Empowered Imp',
+  FireAndBrimstone = 'Fire and Brimstone',
+  ChaosBolt = 'Chaos Bolt',
 }
 
 export const StatConstant = {
@@ -711,7 +711,7 @@ export const StatConstant = {
   CritPercentPerIntellect: 1 / 166.6,
   BaseCritChancePercent: 1.70458,
   HitPercentCap: 16,
-};
+}
 
 export enum SpellId {
   ShadowBolt = 47809,

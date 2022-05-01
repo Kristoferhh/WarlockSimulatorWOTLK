@@ -1,12 +1,12 @@
-import { ItemSlotDetailed } from "../Types";
+import { ItemSlotDetailed } from '../Types'
 
 export const PresetItemSets: {
-  name: string;
+  name: string
   items: {
     [key in ItemSlotDetailed]?: {
-      itemId: number;
-      gemIds?: number[];
-      enchantId?: number;
-    };
-  };
-}[] = [];
+      itemId: number
+      gemIds?: number[]
+      enchantId?: number
+    }
+  }
+}[] = []

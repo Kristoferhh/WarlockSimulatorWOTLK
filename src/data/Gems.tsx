@@ -1,12 +1,12 @@
-import { Gem, GemColor, GemId, Stat } from "../Types";
+import { Gem, GemColor, GemId, Stat } from '../Types'
 
 export const Gems: Gem[] = [
   // Meta
   {
     Id: GemId.ChaoticSkyflareDiamond,
-    Name: "Chaotic Skyflare Diamond",
+    Name: 'Chaotic Skyflare Diamond',
     Color: GemColor.Meta,
-    IconName: "inv_jewelcrafting_icediamond_02",
+    IconName: 'inv_jewelcrafting_icediamond_02',
     Phase: 1,
     Stats: { [Stat.CritRating]: 21 },
   },
@@ -14,9 +14,9 @@ export const Gems: Gem[] = [
   // Red
   {
     Id: GemId.RunedCardinalRuby,
-    Name: "Runed Cardinal Ruby",
+    Name: 'Runed Cardinal Ruby',
     Color: GemColor.Red,
-    IconName: "inv_jewelcrafting_gem_37",
+    IconName: 'inv_jewelcrafting_gem_37',
     Phase: 1,
     Stats: { [Stat.SpellPower]: 23 },
   },
@@ -24,17 +24,17 @@ export const Gems: Gem[] = [
   // Orange
   {
     Id: GemId.VeiledAmetrine,
-    Name: "Veiled Ametrine",
+    Name: 'Veiled Ametrine',
     Color: GemColor.Orange,
-    IconName: "inv_jewelcrafting_gem_39",
+    IconName: 'inv_jewelcrafting_gem_39',
     Phase: 1,
     Stats: { [Stat.SpellPower]: 12, [Stat.HitRating]: 10 },
   },
   {
     Id: GemId.RecklessAmetrine,
-    Name: "Reckless Ametrine",
+    Name: 'Reckless Ametrine',
     Color: GemColor.Orange,
-    IconName: "inv_jewelcrafting_gem_39",
+    IconName: 'inv_jewelcrafting_gem_39',
     Phase: 1,
     Stats: { [Stat.SpellPower]: 12, [Stat.HasteRating]: 10 },
   },
@@ -44,7 +44,7 @@ export const Gems: Gem[] = [
     Id: GemId.RigidKingsAmber,
     Name: `Rigid King's Amber`,
     Color: GemColor.Yellow,
-    IconName: "inv_jewelcrafting_gem_38",
+    IconName: 'inv_jewelcrafting_gem_38',
     Phase: 1,
     Stats: { [Stat.HitRating]: 20 },
   },
@@ -52,7 +52,7 @@ export const Gems: Gem[] = [
     Id: GemId.QuickKingsAmber,
     Name: `Quick King's Amber`,
     Color: GemColor.Yellow,
-    IconName: "inv_jewelcrafting_gem_38",
+    IconName: 'inv_jewelcrafting_gem_38',
     Phase: 1,
     Stats: { [Stat.HasteRating]: 20 },
   },
@@ -60,9 +60,9 @@ export const Gems: Gem[] = [
   // Purple
   {
     Id: GemId.PurifiedDreadstone,
-    Name: "Purified Dreadstone",
+    Name: 'Purified Dreadstone',
     Color: GemColor.Purple,
-    IconName: "inv_jewelcrafting_gem_40",
+    IconName: 'inv_jewelcrafting_gem_40',
     Phase: 1,
     Stats: { [Stat.SpellPower]: 12, [Stat.Spirit]: 10 },
   },
@@ -70,9 +70,9 @@ export const Gems: Gem[] = [
   // Green
   {
     Id: GemId.ShiningEyeOfZul,
-    Name: "Shining Eye of Zul",
+    Name: 'Shining Eye of Zul',
     Color: GemColor.Green,
-    IconName: "inv_jewelcrafting_gem_41",
+    IconName: 'inv_jewelcrafting_gem_41',
     Phase: 1,
     Stats: { [Stat.HitRating]: 10, [Stat.Spirit]: 10 },
   },
@@ -80,4 +80,4 @@ export const Gems: Gem[] = [
   // Blue
 
   // Void
-];
+]
