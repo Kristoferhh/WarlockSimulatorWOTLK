@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   getAurasStats,
   getBaseStats,
@@ -7,7 +7,7 @@ import {
   getGemsStats,
   getItemSetCounts,
   getItemsStats,
-} from "../Common";
+} from '../Common'
 import {
   setAurasStats,
   setBaseStats,
@@ -22,9 +22,9 @@ import {
   setSelectedItems,
   setSettingsState,
   setTalentsState,
-} from "../redux/PlayerSlice";
-import { RootState } from "../redux/Store";
-import { setImportExportWindowVisibility } from "../redux/UiSlice";
+} from '../redux/PlayerSlice'
+import { RootState } from '../redux/Store'
+import { setImportExportWindowVisibility } from '../redux/UiSlice'
 import {
   AuraId,
   ItemSlotDetailedStruct,
@@ -33,25 +33,25 @@ import {
   SelectedGemsStruct,
   Settings,
   TalentStore,
-} from "../Types";
+} from '../Types'
 
 interface ProfileJsonExport {
-  Auras: AuraId[];
-  Gems: SelectedGemsStruct;
-  Items: ItemSlotDetailedStruct;
-  Talents: TalentStore;
-  Rotation: RotationStruct;
-  Enchants: ItemSlotDetailedStruct;
-  Settings: Settings;
+  Auras: AuraId[]
+  Gems: SelectedGemsStruct
+  Items: ItemSlotDetailedStruct
+  Talents: TalentStore
+  Rotation: RotationStruct
+  Enchants: ItemSlotDetailedStruct
+  Settings: Settings
 }
 
 export default function ImportExport() {
-  const playerState = useSelector((state: RootState) => state.player);
+  const playerState = useSelector((state: RootState) => state.player)
   const windowIsVisible = useSelector(
     (state: RootState) => state.ui.ImportExportWindowVisible
-  );
-  const dispatch = useDispatch();
-  const [contentString, setContentString] = useState("");
+  )
+  const dispatch = useDispatch()
+  const [contentString, setContentString] = useState('')
 
   function exportProfile() {
     setContentString(
@@ -64,34 +64,34 @@ export default function ImportExport() {
         Enchants: playerState.SelectedEnchants,
         Settings: playerState.Settings,
       } as ProfileJsonExport)
-    );
+    )
 
     setTimeout(
       () =>
         (
-          document.getElementById("import-export-textarea") as HTMLInputElement
+          document.getElementById('import-export-textarea') as HTMLInputElement
         )?.select(),
       100
-    );
+    )
   }
 
   function importProfile() {
     try {
-      const data: ProfileJsonExport = JSON.parse(contentString);
+      const data: ProfileJsonExport = JSON.parse(contentString)
 
       if (data.Auras) {
-        dispatch(setSelectedAuras(data.Auras));
-        dispatch(setAurasStats(getAurasStats(data.Auras)));
+        dispatch(setSelectedAuras(data.Auras))
+        dispatch(setAurasStats(getAurasStats(data.Auras)))
       }
 
       if (data.Items) {
-        dispatch(setSelectedItems(data.Items));
-        dispatch(setItemsStats(getItemsStats(data.Items)));
-        dispatch(setItemSetCounts(getItemSetCounts(data.Items)));
+        dispatch(setSelectedItems(data.Items))
+        dispatch(setItemsStats(getItemsStats(data.Items)))
+        dispatch(setItemSetCounts(getItemSetCounts(data.Items)))
       }
 
       if (data.Enchants) {
-        dispatch(setSelectedEnchants(data.Enchants));
+        dispatch(setSelectedEnchants(data.Enchants))
         dispatch(
           setEnchantsStats(
             getEnchantsStats(
@@ -99,11 +99,11 @@ export default function ImportExport() {
               data.Enchants
             )
           )
-        );
+        )
       }
 
       if (data.Gems) {
-        dispatch(setSelectedGems(data.Gems));
+        dispatch(setSelectedGems(data.Gems))
         dispatch(
           setGemsStats(
             getGemsStats(
@@ -111,66 +111,66 @@ export default function ImportExport() {
               data.Gems
             )
           )
-        );
+        )
       }
 
       if (data.Talents) {
-        dispatch(setTalentsState(data.Talents));
+        dispatch(setTalentsState(data.Talents))
       }
 
       if (data.Rotation) {
-        dispatch(setRotationState(data.Rotation));
+        dispatch(setRotationState(data.Rotation))
       }
 
       if (data.Settings) {
-        dispatch(setSettingsState(data.Settings));
-        dispatch(setBaseStats(getBaseStats(data.Settings.race as Race)));
+        dispatch(setSettingsState(data.Settings))
+        dispatch(setBaseStats(getBaseStats(data.Settings.race as Race)))
       }
 
-      dispatch(setImportExportWindowVisibility(false));
+      dispatch(setImportExportWindowVisibility(false))
     } catch (error) {
-      alert(`Error importing profile: ${error}`);
+      alert(`Error importing profile: ${error}`)
     }
   }
 
   return (
     <div
-      id="import-export-window"
-      className="close-button-target"
-      style={{ display: windowIsVisible ? "" : "none" }}
+      id='import-export-window'
+      className='close-button-target'
+      style={{ display: windowIsVisible ? '' : 'none' }}
     >
       <textarea
-        id="import-export-textarea"
+        id='import-export-textarea'
         value={contentString}
-        onChange={(e) => setContentString(e.target.value)}
+        onChange={e => setContentString(e.target.value)}
       ></textarea>
       <button
-        className="btn btn-primary btn-sm"
-        id="import-button"
+        className='btn btn-primary btn-sm'
+        id='import-button'
         onClick={() => {
-          importProfile();
-          setContentString("");
+          importProfile()
+          setContentString('')
         }}
       >
         Import
-      </button>{" "}
+      </button>{' '}
       <button
-        className="btn btn-primary btn-sm"
-        id="export-button"
+        className='btn btn-primary btn-sm'
+        id='export-button'
         onClick={exportProfile}
       >
         Export
-      </button>{" "}
+      </button>{' '}
       <button
-        className="btn btn-primary btn-sm"
-        id="export-close-button"
+        className='btn btn-primary btn-sm'
+        id='export-close-button'
         onClick={() => {
-          dispatch(setImportExportWindowVisibility(false));
-          setContentString("");
+          dispatch(setImportExportWindowVisibility(false))
+          setContentString('')
         }}
       >
         Close
       </button>
     </div>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import {
   CombatLogBreakdown,
   GemSelectionTableStruct,
@@ -10,30 +10,30 @@ import {
   StatWeightStats,
   SubSlotValue,
   UiState,
-} from "../Types";
+} from '../Types'
 
 const initialUiState: UiState = {
   Sources: JSON.parse(
-    localStorage.getItem("wotlk_sources") || JSON.stringify([0, 1, 2, 3, 4, 5])
+    localStorage.getItem('wotlk_sources') || JSON.stringify([0, 1, 2, 3, 4, 5])
   ),
   GemSelectionTable: InitialGemSelectionTableValue,
   GemPreferences: JSON.parse(
-    localStorage.getItem("wotlk_gemPreferences") ||
+    localStorage.getItem('wotlk_gemPreferences') ||
       JSON.stringify({ hidden: [], favorites: [] })
   ),
-  SelectedProfile: localStorage.getItem("wotlk_selectedProfile") || "",
+  SelectedProfile: localStorage.getItem('wotlk_selectedProfile') || '',
   ImportExportWindowVisible: false,
   EquippedItemsWindowVisible: false,
   FillItemSocketsWindowVisible: false,
   HiddenItems: JSON.parse(
-    localStorage.getItem("wotlk_hiddenItems") || JSON.stringify([])
+    localStorage.getItem('wotlk_hiddenItems') || JSON.stringify([])
   ),
   SelectedItemSlot:
-    (localStorage.getItem("wotlk_selectedItemSlot") as ItemSlot) ||
+    (localStorage.getItem('wotlk_selectedItemSlot') as ItemSlot) ||
     ItemSlot.Weapon,
   SelectedItemSubSlot:
-    (localStorage.getItem("wotlk_selectedItemSubSlot") as SubSlotValue) || "1",
-  SavedItemDps: JSON.parse(localStorage.getItem("wotlk_savedItemDps") || "{}"),
+    (localStorage.getItem('wotlk_selectedItemSubSlot') as SubSlotValue) || '1',
+  SavedItemDps: JSON.parse(localStorage.getItem('wotlk_savedItemDps') || '{}'),
   CombatLog: { Visible: false, Data: [] },
   CombatLogBreakdown: {
     TotalDamageDone: 0,
@@ -61,165 +61,165 @@ const initialUiState: UiState = {
       [Stat.Mp5]: 0,
     },
   },
-};
+}
 
 export const UiSlice = createSlice({
-  name: "ui",
+  name: 'ui',
   initialState: initialUiState,
   reducers: {
     togglePhase: (state, action: PayloadAction<Phase>) => {
       if (state.Sources.includes(action.payload)) {
         state.Sources = state.Sources.filter(
           (e: number) => e !== action.payload
-        );
+        )
       } else {
-        state.Sources.push(action.payload);
+        state.Sources.push(action.payload)
       }
 
-      localStorage.setItem("wotlk_sources", JSON.stringify(state.Sources));
+      localStorage.setItem('wotlk_sources', JSON.stringify(state.Sources))
     },
     setGemSelectionTable: (
       state,
       action: PayloadAction<GemSelectionTableStruct>
     ) => {
-      state.GemSelectionTable = action.payload;
+      state.GemSelectionTable = action.payload
     },
     favoriteGem: (state, action: PayloadAction<number>) => {
       if (state.GemPreferences.favorites.includes(action.payload)) {
         state.GemPreferences.favorites = state.GemPreferences.favorites.filter(
           (e: number) => e !== action.payload
-        );
+        )
       } else {
-        state.GemPreferences.favorites.push(action.payload);
+        state.GemPreferences.favorites.push(action.payload)
       }
 
       localStorage.setItem(
-        "wotlk_gemPreferences",
+        'wotlk_gemPreferences',
         JSON.stringify(state.GemPreferences)
-      );
+      )
     },
     hideGem: (state, action: PayloadAction<number>) => {
       if (state.GemPreferences.hidden.includes(action.payload)) {
         state.GemPreferences.hidden = state.GemPreferences.hidden.filter(
           (e: number) => e !== action.payload
-        );
+        )
       } else {
-        state.GemPreferences.hidden.push(action.payload);
+        state.GemPreferences.hidden.push(action.payload)
       }
 
       localStorage.setItem(
-        "wotlk_gemPreferences",
+        'wotlk_gemPreferences',
         JSON.stringify(state.GemPreferences)
-      );
+      )
     },
     setSelectedProfile: (state, action: PayloadAction<string>) => {
-      state.SelectedProfile = action.payload;
-      localStorage.setItem("wotlk_selectedProfile", action.payload);
+      state.SelectedProfile = action.payload
+      localStorage.setItem('wotlk_selectedProfile', action.payload)
     },
     setImportExportWindowVisibility: (
       state,
       action: PayloadAction<boolean>
     ) => {
-      state.ImportExportWindowVisible = action.payload;
+      state.ImportExportWindowVisible = action.payload
     },
     setEquippedItemsWindowVisibility: (
       state,
       action: PayloadAction<boolean>
     ) => {
-      state.EquippedItemsWindowVisible = action.payload;
+      state.EquippedItemsWindowVisible = action.payload
     },
     setFillItemSocketsWindowVisibility: (
       state,
       action: PayloadAction<boolean>
     ) => {
-      state.FillItemSocketsWindowVisible = action.payload;
+      state.FillItemSocketsWindowVisible = action.payload
     },
     toggleHiddenItemId: (state, action: PayloadAction<number>) => {
       if (state.HiddenItems.includes(action.payload)) {
         state.HiddenItems = state.HiddenItems.filter(
           (e: number) => e !== action.payload
-        );
+        )
       } else {
-        state.HiddenItems.push(action.payload);
+        state.HiddenItems.push(action.payload)
       }
 
       localStorage.setItem(
-        "wotlk_hiddenItems",
+        'wotlk_hiddenItems',
         JSON.stringify(state.HiddenItems)
-      );
+      )
     },
     setSelectedItemSlot: (state, action: PayloadAction<ItemSlot>) => {
-      state.SelectedItemSlot = action.payload;
-      localStorage.setItem("wotlk_selectedItemSlot", state.SelectedItemSlot);
+      state.SelectedItemSlot = action.payload
+      localStorage.setItem('wotlk_selectedItemSlot', state.SelectedItemSlot)
     },
     setSelectedItemSubSlot: (state, action: PayloadAction<SubSlotValue>) => {
-      state.SelectedItemSubSlot = action.payload;
+      state.SelectedItemSubSlot = action.payload
       localStorage.setItem(
-        "wotlk_selectedItemSubSlot",
+        'wotlk_selectedItemSubSlot',
         state.SelectedItemSubSlot
-      );
+      )
     },
     setSavedItemDps: (
       state,
       action: PayloadAction<{
-        itemSlot: ItemSlotDetailed;
-        itemId: number;
-        dps: number;
-        saveLocalStorage: boolean;
+        itemSlot: ItemSlotDetailed
+        itemId: number
+        dps: number
+        saveLocalStorage: boolean
       }>
     ) => {
       if (!state.SavedItemDps[action.payload.itemSlot]) {
-        state.SavedItemDps[action.payload.itemSlot] = {};
+        state.SavedItemDps[action.payload.itemSlot] = {}
       }
 
       state.SavedItemDps[action.payload.itemSlot][action.payload.itemId] =
-        action.payload.dps;
+        action.payload.dps
       if (action.payload.saveLocalStorage) {
         localStorage.setItem(
-          "wotlk_savedItemDps",
+          'wotlk_savedItemDps',
           JSON.stringify(state.SavedItemDps)
-        );
+        )
       }
     },
     setCombatLogVisibility: (state, action: PayloadAction<boolean>) => {
-      state.CombatLog.Visible = action.payload;
+      state.CombatLog.Visible = action.payload
     },
     setCombatLogData: (state, action: PayloadAction<string[]>) => {
-      state.CombatLog.Data = action.payload;
+      state.CombatLog.Data = action.payload
     },
     setCombatLogBreakdownValue: (
       state,
       action: PayloadAction<CombatLogBreakdown>
     ) => {
-      state.CombatLogBreakdown = action.payload;
+      state.CombatLogBreakdown = action.payload
     },
     clearSavedItemSlotDps: (state, action: PayloadAction<ItemSlotDetailed>) => {
-      state.SavedItemDps[action.payload] = {};
+      state.SavedItemDps[action.payload] = {}
     },
     setHistogramVisibility: (state, action: PayloadAction<boolean>) => {
-      state.Histogram.Visible = action.payload;
+      state.Histogram.Visible = action.payload
     },
     setHistogramData: (
       state,
       action: PayloadAction<{ [key: string]: number }>
     ) => {
-      state.Histogram.Data = action.payload;
+      state.Histogram.Data = action.payload
     },
     setStatWeightVisibility: (state, action: PayloadAction<boolean>) => {
-      state.StatWeights.Visible = action.payload;
+      state.StatWeights.Visible = action.payload
     },
     setStatWeightValue: (
       state,
       action: PayloadAction<{ stat: [keyof StatWeightStats]; value: number }>
     ) => {
       state.StatWeights.StatValues[action.payload.stat as unknown as Stat] =
-        action.payload.value;
+        action.payload.value
     },
     setSimulationInProgressStatus: (state, action: PayloadAction<boolean>) => {
-      state.SimulationInProgress = action.payload;
+      state.SimulationInProgress = action.payload
     },
   },
-});
+})
 
 export const {
   setStatWeightValue,
@@ -243,5 +243,5 @@ export const {
   setGemSelectionTable,
   favoriteGem,
   hideGem,
-} = UiSlice.actions;
-export default UiSlice.reducer;
+} = UiSlice.actions
+export default UiSlice.reducer

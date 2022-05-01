@@ -8,7 +8,7 @@ import {
   getPlayerHitPercent,
   getStdev,
   ItemSlotToItemSlotDetailed,
-  random
+  random,
 } from '../Common'
 import { Gems } from '../data/Gems'
 import { Items } from '../data/Items'
@@ -23,7 +23,7 @@ import {
   setSavedItemDps,
   setSimulationInProgressStatus,
   setStatWeightValue,
-  setStatWeightVisibility
+  setStatWeightVisibility,
 } from '../redux/UiSlice'
 import { SimWorker } from '../SimWorker.js'
 import {
@@ -39,7 +39,7 @@ import {
   Stat,
   StatConstant,
   StatWeightStats,
-  WorkerParams
+  WorkerParams,
 } from '../Types'
 
 interface SimulationUpdate {
