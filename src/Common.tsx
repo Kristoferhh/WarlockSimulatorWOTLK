@@ -6,13 +6,14 @@ import { Races } from './data/Races'
 import { Sockets } from './data/Sockets'
 import { TalentTreeStruct } from './data/Talents'
 import {
+  AuraId,
   GemColor,
   InitialPlayerStats,
   InitialSetCounts,
   Item,
-  ItemSlotDetailedStruct,
-  ItemSlotDetailed,
   ItemSlot,
+  ItemSlotDetailed,
+  ItemSlotDetailedStruct,
   Languages,
   Pet,
   PlayerState,
@@ -20,6 +21,7 @@ import {
   SavedItemDps,
   SelectedGemsStruct,
   SetsStruct,
+  Setting,
   Settings,
   SocketColor,
   SourcesStruct,
@@ -28,8 +30,6 @@ import {
   StatsCollection,
   SubSlotValue,
   TalentStore,
-  AuraId,
-  Setting,
 } from './Types'
 
 export function ItemSlotToItemSlotDetailed(
@@ -182,7 +182,7 @@ export function isPetActive(
   requiresPhysicalPet: boolean
 ): boolean {
   return (
-    (!requiresAggressivePet || settings[Setting.petMode] === '1') &&
+    (!requiresAggressivePet || settings[Setting.petIsAggressive] === 'true') &&
     (!requiresPhysicalPet || settings[Setting.petChoice] !== Pet.Imp)
   )
 }

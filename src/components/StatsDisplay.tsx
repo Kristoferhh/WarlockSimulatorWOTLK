@@ -17,23 +17,12 @@ export default function StatsDisplay() {
       .map(obj => obj[Stat.StaminaModifier] || 1)
       .reduce((a, b) => a * b)
 
-    if (playerState.Auras.includes(AuraId.BloodPact)) {
-      let bloodPactModifier =
-        parseInt(playerState.Settings[Setting.improvedImpSetting]) || 0
-
-      // If the player is using an imp, the imp is active, and the player
-      // has more points in the Improved Imp talent than the improved imp setting then use that instead
-      if (
-        isPetActive(playerState.Settings, false, false) &&
-        playerState.Settings[Setting.petChoice] === Pet.Imp
-      ) {
-        bloodPactModifier = Math.max(
-          bloodPactModifier,
-          playerState.Talents['Improved Imp']
-        )
-      }
-
-      stamina += 70 * (0.1 * bloodPactModifier)
+    if (
+      playerState.Auras.includes(AuraId.BloodPact) &&
+      isPetActive(playerState.Settings, false, false) &&
+      playerState.Settings[Setting.petChoice] === Pet.Imp
+    ) {
+      stamina += 70 * (0.1 * playerState.Talents['Improved Imp'] || 0)
     }
 
     return stamina * staminaModifier

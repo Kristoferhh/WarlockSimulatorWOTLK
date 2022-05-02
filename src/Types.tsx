@@ -231,7 +231,7 @@ export enum Setting {
   maxFightLength = 'maxFightLength',
   targetLevel = 'targetLevel',
   petChoice = 'petChoice',
-  petMode = 'petMode',
+  petIsAggressive = 'petMode',
   enemyArmor = 'enemyArmor',
   targetShadowResistance = 'targetShadowResistance',
   targetFireResistance = 'targetFireResistance',
@@ -239,7 +239,7 @@ export enum Setting {
   improvedFaerieFire = 'improvedFaerieFire',
   survivalHunterAgility = 'survivalHunterAgility',
   exposeWeaknessUptime = 'exposeWeaknessUptime',
-  lashOfPainUsage = 'lashOfPainUsage',
+  OnlyLashOfPainWhenIsbIsNotUp = 'lashOfPainUsage',
   automaticallyOpenSimDetails = 'automaticallyOpenSimDetails',
   customIsbUptime = 'customIsbUptime',
   customIsbUptimeValue = 'customIsbUptimeValue',
@@ -253,8 +253,6 @@ export enum Setting {
   powerInfusionAmount = 'powerInfusionAmount',
   innervateAmount = 'innervateAmount',
   ferociousInspirationAmount = 'ferociousInspirationAmount',
-  improvedImpSetting = 'improvedImpSetting',
-  maxWebWorkers = 'maxWebWorkers',
 }
 
 export type Settings = {
@@ -268,7 +266,7 @@ export const InitialSettings: { [key in Setting]: string } = {
   [Setting.maxFightLength]: '210',
   [Setting.targetLevel]: '83',
   [Setting.petChoice]: '2',
-  [Setting.petMode]: '1',
+  [Setting.petIsAggressive]: 'true',
   [Setting.enemyArmor]: '7700',
   [Setting.targetShadowResistance]: '0',
   [Setting.targetFireResistance]: '0',
@@ -276,7 +274,7 @@ export const InitialSettings: { [key in Setting]: string } = {
   [Setting.improvedFaerieFire]: 'no',
   [Setting.survivalHunterAgility]: '1000',
   [Setting.exposeWeaknessUptime]: '90',
-  [Setting.lashOfPainUsage]: 'noISB',
+  [Setting.OnlyLashOfPainWhenIsbIsNotUp]: 'noISB',
   [Setting.automaticallyOpenSimDetails]: 'no',
   [Setting.customIsbUptime]: 'yes',
   [Setting.customIsbUptimeValue]: '70',
@@ -290,8 +288,6 @@ export const InitialSettings: { [key in Setting]: string } = {
   [Setting.powerInfusionAmount]: '1',
   [Setting.innervateAmount]: '1',
   [Setting.ferociousInspirationAmount]: '1',
-  [Setting.improvedImpSetting]: '0',
-  [Setting.maxWebWorkers]: '0',
 }
 
 export type TalentStore = {

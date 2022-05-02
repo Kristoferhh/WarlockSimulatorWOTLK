@@ -231,15 +231,7 @@ export function SimulationButtons() {
       return
     }
 
-    let maxWorkers = window.navigator.hardwareConcurrency || 8 // Maximum amount of web workers that can be run concurrently.
-
-    if (
-      playerState.Settings[Setting.maxWebWorkers] &&
-      parseInt(playerState.Settings[Setting.maxWebWorkers]) > 0
-    ) {
-      maxWorkers = parseInt(playerState.Settings[Setting.maxWebWorkers])
-    }
-
+    const maxWorkers = window.navigator.hardwareConcurrency || 8 // Maximum amount of web workers that can be run concurrently.
     const simulations: SimWorker[] = []
     const itemSlot: ItemSlotDetailed = ItemSlotToItemSlotDetailed(
       uiState.SelectedItemSlot,

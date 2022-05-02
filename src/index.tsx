@@ -9,6 +9,7 @@ import { Store } from './redux/Store'
 
 const container = document.getElementById('root')
 const root = createRoot(container!)
+
 root.render(
   <React.StrictMode>
     <Provider store={Store}>
