@@ -65,15 +65,6 @@ export default function Sidebar() {
 
         <div id='sidebar-simulation-selection'>
           <SimulationButtons />
-          <p id='paypal-note'>
-            <a
-              href='https://www.paypal.com/paypalme/kristoferhh'
-              rel='noreferrer'
-              target='_blank'
-            >
-              Support me via PayPal
-            </a>
-          </p>
         </div>
       </section>
     </div>
