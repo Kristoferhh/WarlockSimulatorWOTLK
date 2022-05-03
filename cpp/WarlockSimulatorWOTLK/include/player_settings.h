@@ -32,7 +32,6 @@ struct PlayerSettings {
   bool using_custom_isb_uptime        = false;
   int custom_isb_uptime_value         = 0;
   int improved_imp                    = 0;
-  int improved_expose_armor           = 0;
   int enemy_amount                    = 0;
   int power_infusion_amount           = 0;
   int innervate_amount                = 0;

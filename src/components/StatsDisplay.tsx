@@ -180,17 +180,11 @@ export default function StatsDisplay() {
     }
 
     if (
-      (playerState.Auras.includes(AuraId.SunderArmor) &&
-        playerState.Auras.includes(AuraId.ExposeArmor) &&
-        playerState.Settings[Setting.improvedExposeArmor] === '2') ||
-      (playerState.Auras.includes(AuraId.ExposeArmor) &&
-        !playerState.Auras.includes(AuraId.SunderArmor))
+      playerState.Auras.includes(AuraId.SunderArmor) ||
+      playerState.Auras.includes(AuraId.ExposeArmor)
     ) {
-      armor -=
-        2050 *
-        (1 + 0.25 * parseInt(playerState.Settings[Setting.improvedExposeArmor]))
-    } else if (playerState.Auras.includes(AuraId.SunderArmor)) {
-      armor -= 520 * 5
+      // TODO it reduces armor by 20%
+      armor -= 2050
     }
 
     if (playerState.Auras.includes(AuraId.CurseOfRecklessness)) {

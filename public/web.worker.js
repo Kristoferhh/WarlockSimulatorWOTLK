@@ -248,9 +248,6 @@ onmessage = event => {
         playerSettings.customIsbUptimeValue = parseFloat(
           playerData.Settings.customIsbUptimeValue
         )
-        playerSettings.improvedExposeArmor = parseInt(
-          playerData.Settings.improvedExposeArmor
-        )
         playerSettings.fightType =
           !playerData.Settings.fightType ||
           playerData.Settings.fightType === 'singleTarget'

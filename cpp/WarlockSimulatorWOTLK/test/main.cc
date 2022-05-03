@@ -106,7 +106,6 @@ int main() {
   player_settings.innervate_amount               = 1;
   player_settings.ferocious_inspiration_amount   = 1;
   player_settings.improved_faerie_fire           = true;
-  player_settings.improved_expose_armor          = 2;
   player_settings.survival_hunter_agility        = 800;
   player_settings.expose_weakness_uptime         = 70;
 

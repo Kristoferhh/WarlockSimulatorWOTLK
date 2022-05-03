@@ -119,7 +119,9 @@ std::vector<uint32_t> AllocRandomSeeds(const int kAmountOfSeeds, const uint32_t 
   srand(kRandSeed);
   std::vector<uint32_t> seeds(kAmountOfSeeds);
 
-  for (int i = 0; i < kAmountOfSeeds; i++) { seeds[i] = rand(); }
+  for (int i = 0; i < kAmountOfSeeds; i++) {
+    seeds[i] = rand();
+  }
 
   return seeds;
 }
@@ -348,7 +350,6 @@ EMSCRIPTEN_BINDINGS(module) {
       .property("usingCustomIsbUptime", &PlayerSettings::using_custom_isb_uptime)
       .property("customIsbUptimeValue", &PlayerSettings::custom_isb_uptime_value)
       .property("improvedImp", &PlayerSettings::improved_imp)
-      .property("improvedExposeArmor", &PlayerSettings::improved_expose_armor)
       .property("fightType", &PlayerSettings::fight_type)
       .property("enemyAmount", &PlayerSettings::enemy_amount)
       .property("race", &PlayerSettings::race)
