@@ -44,19 +44,23 @@ img {
   vertical-align: middle;
 }
 
+.App {
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+}
+
 #sidebar {
   border-right: 1px solid gray;
   position: fixed;
   height: 100%;
   width: 360px;
-  background-color: #0b544a;
   overflow: hidden;
   font-size: 13px;
 }
 
 #main {
   margin-left: 360px;
-  background-color: #0b3954;
 }
 
 .maxed-talent {

@@ -1,17 +1,17 @@
-import { Talents, TalentTreeStruct } from '../data/Talents'
-import { RootState } from '../redux/Store'
-import { useSelector, useDispatch } from 'react-redux'
-import { setTalentsState, setTalentsStats } from '../redux/PlayerSlice'
-import { PresetTalents } from '../data/PresetTalents'
-import { MouseButtonClick, Talent, TalentName, TalentStore } from '../Types'
 import { nanoid } from 'nanoid'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   getAllocatedTalentsPointsInTree,
   getBaseWowheadUrl,
   GetTalentsStats,
 } from '../Common'
-import { useTranslation } from 'react-i18next'
+import { PresetTalents } from '../data/PresetTalents'
+import { Talents, TalentTreeStruct } from '../data/Talents'
 import i18n from '../i18n/config'
+import { setTalentsState, setTalentsStats } from '../redux/PlayerSlice'
+import { RootState } from '../redux/Store'
+import { MouseButtonClick, Talent, TalentName, TalentStore } from '../Types'
 
 export default function TalentTrees() {
   const playerState = useSelector((state: RootState) => state.player)
@@ -98,7 +98,12 @@ export default function TalentTrees() {
             <img
               src={`${process.env.PUBLIC_URL}/img/talent_tree_background_${talentTree.Name}.jpg`}
               alt={talentTree.Name}
-              style={{ position: 'absolute', height: '554px', width: '204px' }}
+              style={{
+                position: 'absolute',
+                height: '554px',
+                width: '204px',
+                opacity: 0.3,
+              }}
             />
             <table
               id={`talent-table-${talentTree.Name}`}
