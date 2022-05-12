@@ -69,8 +69,8 @@ export const Enchants: Enchant[] = [
     Name: 'Exceptional Spellpower',
     ItemSlot: ItemSlot.Hands,
     Quality: Quality.Uncommon,
-    Stats: {[Stat.SpellPower]: 28},
-    Source: ItemSource.Enchanting
+    Stats: { [Stat.SpellPower]: 28 },
+    Source: ItemSource.Enchanting,
   },
 
   // Waist
@@ -80,7 +80,7 @@ export const Enchants: Enchant[] = [
     Name: 'Eternal Belt Buckle',
     ItemSlot: ItemSlot.Waist,
     Quality: Quality.Rare,
-    Source: ItemSource.Blacksmithing
+    Source: ItemSource.Blacksmithing,
   },
 
   // Legs
@@ -90,7 +90,7 @@ export const Enchants: Enchant[] = [
     Name: 'Brilliant Spellthread',
     ItemSlot: ItemSlot.Legs,
     Quality: Quality.Epic,
-    Source: ItemSource.Tailoring
+    Source: ItemSource.Tailoring,
   },
 
   // Feet
@@ -100,7 +100,7 @@ export const Enchants: Enchant[] = [
     Name: `Tuskarr's Vitality`,
     ItemSlot: ItemSlot.Feet,
     Quality: Quality.Uncommon,
-    Source: ItemSource.Enchanting
+    Source: ItemSource.Enchanting,
   },
 
   // Weapon
@@ -110,6 +110,6 @@ export const Enchants: Enchant[] = [
     Name: 'Mighty Spellpower',
     ItemSlot: ItemSlot.Weapon,
     Quality: Quality.Rare,
-    Source: ItemSource.Enchanting
-  }
+    Source: ItemSource.Enchanting,
+  },
 ]

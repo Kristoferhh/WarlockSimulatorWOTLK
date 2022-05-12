@@ -83,11 +83,11 @@ export const Items: Item[] = [
       [Stat.Intellect]: 43,
       [Stat.CritRating]: 38,
       [Stat.Mp5]: 19,
-      [Stat.SpellPower]: 66
+      [Stat.SpellPower]: 66,
     },
     Quality: Quality.Epic,
     Source: ItemSource.Naxxramas10Normal,
-    IconName: 'inv_misc_cape_naxxramas_02'
+    IconName: 'inv_misc_cape_naxxramas_02',
   },
 
   // Chest
