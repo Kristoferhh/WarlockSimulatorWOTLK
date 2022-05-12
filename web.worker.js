@@ -248,12 +248,6 @@ onmessage = event => {
         playerSettings.customIsbUptimeValue = parseFloat(
           playerData.Settings.customIsbUptimeValue
         )
-        playerSettings.improvedImp = parseInt(
-          playerData.Settings.improvedImpSetting
-        )
-        playerSettings.improvedExposeArmor = parseInt(
-          playerData.Settings.improvedExposeArmor
-        )
         playerSettings.fightType =
           !playerData.Settings.fightType ||
           playerData.Settings.fightType === 'singleTarget'
@@ -283,9 +277,9 @@ onmessage = event => {
             ? module.EmbindConstant.onCooldown
             : module.EmbindConstant.noIsb
         playerSettings.petMode =
-          playerData.Settings.petMode === '0'
-            ? module.EmbindConstant.passive
-            : module.EmbindConstant.aggressive
+          playerData.Settings.petIsAggressive === 'true'
+            ? module.EmbindConstant.aggressive
+            : module.EmbindConstant.passive
         playerSettings.prepopBlackBook =
           playerData.Settings.prepopBlackBook === 'yes'
         playerSettings.randomizeValues =
