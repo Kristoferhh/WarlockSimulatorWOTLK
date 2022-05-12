@@ -40,7 +40,7 @@ jobs:
 
       - name: Npm Install and Build
         run: |
-          npm ci
+          npm ci --legacy-peer-deps
           git pull
           npm --no-git-tag-version version patch
           npm run predeploy
