@@ -75,9 +75,7 @@ Player::Player(PlayerSettings& settings)
     stats.fire_modifier *= damage_modifier;
   }
 
-  if (selected_auras.fel_armor) {
-    stats.spell_power += 100 * (0 + 0.1 * talents.demonic_aegis);
-  }
+  if (selected_auras.fel_armor) { stats.spell_power += 100 * (0 + 0.1 * talents.demonic_aegis); }
 
   stats.stamina_modifier *= 1 + (talents.demonic_embrace == 1   ? 0.03
                                  : talents.demonic_embrace == 2 ? 0.07
@@ -85,18 +83,14 @@ Player::Player(PlayerSettings& settings)
                                                                 : 0);
 
   // Enemy Armor Reduction
-  if (selected_auras.faerie_fire) {
-    settings.enemy_armor -= 610;
-  }
+  if (selected_auras.faerie_fire) { settings.enemy_armor -= 610; }
 
   if (selected_auras.sunder_armor || selected_auras.expose_armor) {
     // TODO it reduces armor by 20%
     settings.enemy_armor -= 520 * 5;
   }
 
-  if (selected_auras.annihilator) {
-    settings.enemy_armor -= 600;
-  }
+  if (selected_auras.annihilator) { settings.enemy_armor -= 600; }
   settings.enemy_armor = std::max(0, settings.enemy_armor);
 
   // Health & Mana
@@ -116,13 +110,9 @@ void Player::Initialize(Simulation* simulation_ptr) {
   pet->Initialize(simulation_ptr);
 
   for (const auto& kTrinketId : equipped_trinket_ids) {
-    if (kTrinketId == ItemId::kSkullOfGuldan) {
-      trinkets.push_back(SkullOfGuldan(*this));
-    }
+    if (kTrinketId == ItemId::kSkullOfGuldan) { trinkets.push_back(SkullOfGuldan(*this)); }
 
-    if (kTrinketId == ItemId::kShiftingNaaruSliver) {
-      trinkets.push_back(ShiftingNaaruSliver(*this));
-    }
+    if (kTrinketId == ItemId::kShiftingNaaruSliver) { trinkets.push_back(ShiftingNaaruSliver(*this)); }
   }
 
   // Auras
@@ -152,13 +142,9 @@ void Player::Initialize(Simulation* simulation_ptr) {
       auras.curse_of_the_elements = std::make_shared<CurseOfTheElementsAura>(*this);
     }
 
-    if (settings.has_curse_of_doom) {
-      auras.curse_of_doom = std::make_shared<CurseOfDoomDot>(*this);
-    }
+    if (settings.has_curse_of_doom) { auras.curse_of_doom = std::make_shared<CurseOfDoomDot>(*this); }
 
-    if (talents.nightfall > 0) {
-      auras.shadow_trance = std::make_shared<ShadowTranceAura>(*this);
-    }
+    if (talents.nightfall > 0) { auras.shadow_trance = std::make_shared<ShadowTranceAura>(*this); }
 
     if (talents.amplify_curse == 1 &&
         (settings.has_amplify_curse || settings.rotation_option == EmbindConstant::kSimChooses)) {
@@ -166,29 +152,17 @@ void Player::Initialize(Simulation* simulation_ptr) {
     }
   }
 
-  if (selected_auras.mana_tide_totem) {
-    auras.mana_tide_totem = std::make_shared<ManaTideTotemAura>(*this);
-  }
+  if (selected_auras.mana_tide_totem) { auras.mana_tide_totem = std::make_shared<ManaTideTotemAura>(*this); }
 
-  if (selected_auras.power_infusion) {
-    auras.power_infusion = std::make_shared<PowerInfusionAura>(*this);
-  }
+  if (selected_auras.power_infusion) { auras.power_infusion = std::make_shared<PowerInfusionAura>(*this); }
 
-  if (selected_auras.innervate) {
-    auras.innervate = std::make_shared<InnervateAura>(*this);
-  }
+  if (selected_auras.innervate) { auras.innervate = std::make_shared<InnervateAura>(*this); }
 
-  if (selected_auras.bloodlust) {
-    auras.bloodlust = std::make_shared<BloodlustAura>(*this);
-  }
+  if (selected_auras.bloodlust) { auras.bloodlust = std::make_shared<BloodlustAura>(*this); }
 
-  if (selected_auras.flame_cap) {
-    auras.flame_cap = std::make_shared<FlameCapAura>(*this);
-  }
+  if (selected_auras.flame_cap) { auras.flame_cap = std::make_shared<FlameCapAura>(*this); }
 
-  if (settings.race == EmbindConstant::kOrc) {
-    auras.blood_fury = std::make_shared<BloodFuryAura>(*this);
-  }
+  if (settings.race == EmbindConstant::kOrc) { auras.blood_fury = std::make_shared<BloodFuryAura>(*this); }
 
   if (std::find(equipped_trinket_ids.begin(), equipped_trinket_ids.end(), ItemId::kTheLightningCapacitor) !=
       equipped_trinket_ids.end()) {
@@ -274,29 +248,21 @@ void Player::Initialize(Simulation* simulation_ptr) {
     spells.mana_tide_totem = std::make_shared<ManaTideTotem>(*this, auras.mana_tide_totem);
   }
 
-  if (selected_auras.demonic_rune) {
-    spells.demonic_rune = std::make_shared<DemonicRune>(*this);
-  }
+  if (selected_auras.demonic_rune) { spells.demonic_rune = std::make_shared<DemonicRune>(*this); }
 
   if (talents.dark_pact == 1 && (settings.has_dark_pact || settings.rotation_option == EmbindConstant::kSimChooses)) {
     spells.dark_pact = std::make_shared<DarkPact>(*this);
   }
 
-  if (auras.flame_cap != nullptr) {
-    spells.flame_cap = std::make_shared<FlameCap>(*this, auras.flame_cap);
-  }
+  if (auras.flame_cap != nullptr) { spells.flame_cap = std::make_shared<FlameCap>(*this, auras.flame_cap); }
 
-  if (auras.blood_fury != nullptr) {
-    spells.blood_fury = std::make_shared<BloodFury>(*this, auras.blood_fury);
-  }
+  if (auras.blood_fury != nullptr) { spells.blood_fury = std::make_shared<BloodFury>(*this, auras.blood_fury); }
 
   if (auras.the_lightning_capacitor != nullptr) {
     spells.the_lightning_capacitor = std::make_shared<TheLightningCapacitor>(*this);
   }
 
-  if (selected_auras.judgement_of_wisdom) {
-    spells.judgement_of_wisdom = std::make_shared<JudgementOfWisdom>(*this);
-  }
+  if (selected_auras.judgement_of_wisdom) { spells.judgement_of_wisdom = std::make_shared<JudgementOfWisdom>(*this); }
 
   if (auras.power_infusion != nullptr) {
     for (int i = 0; i < settings.power_infusion_amount; i++) {
@@ -304,9 +270,7 @@ void Player::Initialize(Simulation* simulation_ptr) {
     }
   }
 
-  if (auras.bloodlust != nullptr) {
-    spells.bloodlust = std::make_shared<Bloodlust>(*this, auras.bloodlust);
-  }
+  if (auras.bloodlust != nullptr) { spells.bloodlust = std::make_shared<Bloodlust>(*this, auras.bloodlust); }
 
   if (auras.innervate != nullptr) {
     for (int i = 0; i < settings.innervate_amount; i++) {
@@ -342,24 +306,18 @@ void Player::Reset() {
   iteration_damage      = 0;
   power_infusions_ready = settings.power_infusion_amount;
 
-  for (auto& trinket : trinkets) {
-    trinket.Reset();
-  }
+  for (auto& trinket : trinkets) { trinket.Reset(); }
 }
 
 void Player::EndAuras() {
   Entity::EndAuras();
 
   for (auto& trinket : trinkets) {
-    if (trinket.active) {
-      trinket.Fade();
-    }
+    if (trinket.active) { trinket.Fade(); }
   }
 
   for (const auto& kDot : dot_list) {
-    if (kDot->active) {
-      kDot->Fade();
-    }
+    if (kDot->active) { kDot->Fade(); }
   }
 }
 
@@ -371,9 +329,7 @@ double Player::GetHastePercent() {
   if (auras.bloodlust != nullptr && auras.power_infusion != nullptr && auras.bloodlust->active &&
       auras.power_infusion->active) {
     for (auto& stat : auras.power_infusion->stats) {
-      if (stat.name == StatName::kSpellHastePercent) {
-        haste_percent /= stat.value;
-      }
+      if (stat.name == StatName::kSpellHastePercent) { haste_percent /= stat.value; }
     }
   }
 
@@ -432,13 +388,9 @@ void Player::UseCooldowns(const double kFightTimeRemaining) {
     }
   }
 
-  if (spells.flame_cap != nullptr && spells.flame_cap->Ready()) {
-    spells.flame_cap->StartCast();
-  }
+  if (spells.flame_cap != nullptr && spells.flame_cap->Ready()) { spells.flame_cap->StartCast(); }
 
-  if (spells.blood_fury != nullptr && spells.blood_fury->Ready()) {
-    spells.blood_fury->StartCast();
-  }
+  if (spells.blood_fury != nullptr && spells.blood_fury->Ready()) { spells.blood_fury->StartCast(); }
 
   for (auto i = 0; i < trinkets.size(); i++) {
     if (trinkets[i].Ready()) {
@@ -470,9 +422,7 @@ void Player::ThrowError(const std::string& kError) const {
 }
 
 void Player::SendCombatLogEntries() const {
-  for (const auto& kValue : combat_log_entries) {
-    CombatLogUpdate(kValue.c_str());
-  }
+  for (const auto& kValue : combat_log_entries) { CombatLogUpdate(kValue.c_str()); }
 }
 
 double Player::FindTimeUntilNextAction() {
@@ -486,13 +436,9 @@ double Player::FindTimeUntilNextAction() {
   }
 
   for (const auto& kTrinket : trinkets) {
-    if (kTrinket.active && kTrinket.duration_remaining < time) {
-      time = kTrinket.duration_remaining;
-    }
+    if (kTrinket.active && kTrinket.duration_remaining < time) { time = kTrinket.duration_remaining; }
 
-    if (kTrinket.cooldown_remaining > 0 && kTrinket.cooldown_remaining < time) {
-      time = kTrinket.cooldown_remaining;
-    }
+    if (kTrinket.cooldown_remaining > 0 && kTrinket.cooldown_remaining < time) { time = kTrinket.cooldown_remaining; }
   }
 
   return time;
@@ -501,9 +447,7 @@ double Player::FindTimeUntilNextAction() {
 void Player::Tick(const double kTime) {
   Entity::Tick(kTime);
 
-  for (auto& trinket : trinkets) {
-    trinket.Tick(kTime);
-  }
+  for (auto& trinket : trinkets) { trinket.Tick(kTime); }
 
   if (mp5_timer_remaining <= 0) {
     mp5_timer_remaining = 5;
@@ -514,25 +458,19 @@ void Player::Tick(const double kTime) {
       const double kCurrentPlayerMana = stats.mana;
 
       // MP5
-      if (stats.mp5 > 0) {
-        stats.mana += stats.mp5;
-      }
+      if (stats.mp5 > 0) { stats.mana += stats.mp5; }
 
       // Spirit mana regen
       if (kInnervateIsActive || five_second_rule_timer_remaining <= 0) {
         // Formula from https://wowwiki-archive.fandom.com/wiki/Spirit?oldid=1572910
         auto mp5_from_spirit = 5 * (0.001 + std::sqrt(GetIntellect()) * GetSpirit() * 0.009327);
 
-        if (kInnervateIsActive) {
-          mp5_from_spirit *= 4;
-        }
+        if (kInnervateIsActive) { mp5_from_spirit *= 4; }
 
         stats.mana += mp5_from_spirit;
       }
 
-      if (stats.mana > stats.max_mana) {
-        stats.mana = stats.max_mana;
-      }
+      if (stats.mana > stats.max_mana) { stats.mana = stats.max_mana; }
 
       const double kManaGained = stats.mana - kCurrentPlayerMana;
       if (recording_combat_log_breakdown) {
