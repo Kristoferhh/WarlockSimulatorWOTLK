@@ -635,31 +635,31 @@ export default function ItemSelection() {
                   {t(enchant.Name)}
                 </TableCell>
                 <TableCell style={{ color: 'white', textAlign: 'center' }}>
-                  {enchant.Stats[Stat.SpellPower]}
+                  {enchant.Stats && enchant.Stats[Stat.SpellPower]}
                 </TableCell>
                 <TableCell style={{ color: 'white', textAlign: 'center' }}>
-                  {enchant.Stats[Stat.ShadowPower]}
+                  {enchant.Stats && enchant.Stats[Stat.ShadowPower]}
                 </TableCell>
                 <TableCell style={{ color: 'white', textAlign: 'center' }}>
-                  {enchant.Stats[Stat.FirePower]}
+                  {enchant.Stats && enchant.Stats[Stat.FirePower]}
                 </TableCell>
                 <TableCell style={{ color: 'white', textAlign: 'center' }}>
-                  {enchant.Stats[Stat.HitRating]}
+                  {enchant.Stats && enchant.Stats[Stat.HitRating]}
                 </TableCell>
                 <TableCell style={{ color: 'white', textAlign: 'center' }}>
-                  {enchant.Stats[Stat.CritRating]}
+                  {enchant.Stats && enchant.Stats[Stat.CritRating]}
                 </TableCell>
                 <TableCell style={{ color: 'white', textAlign: 'center' }}>
-                  {enchant.Stats[Stat.Stamina]}
+                  {enchant.Stats && enchant.Stats[Stat.Stamina]}
                 </TableCell>
                 <TableCell style={{ color: 'white', textAlign: 'center' }}>
-                  {enchant.Stats[Stat.Intellect]}
+                  {enchant.Stats && enchant.Stats[Stat.Intellect]}
                 </TableCell>
                 <TableCell style={{ color: 'white', textAlign: 'center' }}>
-                  {enchant.Stats[Stat.Mp5]}
+                  {enchant.Stats && enchant.Stats[Stat.Mp5]}
                 </TableCell>
                 <TableCell style={{ color: 'white', textAlign: 'center' }}>
-                  {enchant.Stats[Stat.SpellPenetration]}
+                  {enchant.Stats && enchant.Stats[Stat.SpellPenetration]}
                 </TableCell>
                 <TableCell
                   style={{ color: 'white', textAlign: 'center' }}

@@ -57,7 +57,7 @@ export interface Enchant {
   Name: string
   ItemSlot: ItemSlot
   Quality: Quality
-  Stats: StatsCollection
+  Stats?: StatsCollection
   Id: EnchantId
   Source: ItemSource
   Phase: Phase
@@ -601,6 +601,12 @@ export enum TalentTree {
 }
 
 export enum ItemSource {
+  Blacksmithing = 'Blacksmithing',
+  Enchanting = 'Enchanting',
+  Tailoring = 'Tailoring',
+  Inscription = 'Inscription',
+  HallsOfStoneHeroic = 'Halls of Stone (H)',
+  OculusHeroic = 'Oculus (H)',
   Naxxramas25Normal = 'Naxxramas 25m',
   Naxxramas10Normal = 'Naxxramas 10m',
   KirinTorRevered = 'Kirin Tor - Revered',
@@ -818,9 +824,34 @@ export enum GemId {
 }
 
 export enum ItemId {
+  CloakOfTheDying = 39425,
+  WandOfTheArchlich = 39426,
+  SparkOfLife = 37657,
+  PendulumOfTelluricCurrents = 37264,
+  SignetOfTheMalevolent = 39389,
+  BandOfNeglectedPleas = 39193,
+  BootsOfTheFollower = 39215,
+  NecrogenicBelt = 39251,
+  ResurgentPhantomBindings = 39390,
   ValorousPlagueheartCirclet = 40421,
+  PendantOfLostVocations = 39232,
+  ValorousPlagueheartShoulderpads = 40424,
+  ValorousPlagueheartRobe = 40423,
+  ValorousPlagueheartLeggings = 40422,
+  ValorousPlagueheartGloves = 40420,
+  TheSoulblade = 39424,
+  WatchfulEye = 39199,
 }
 
 export enum EnchantId {
+  MightySpellpower = 60714,
+  TuskarrsVitality = 47901,
+  BrilliantSpellthread = 55631,
+  EternalBeltBuckle = 55655,
+  ExceptionalSpellpower = 44592,
+  SuperiorSpellpower = 60767,
+  PowerfulStats = 60692,
+  LightweaveEmbroidery = 55642,
+  MastersInscriptionOfTheStorm = 61120,
   ArcanumOfBurningMysteries = 59970,
 }
