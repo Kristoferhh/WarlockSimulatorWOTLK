@@ -1,7 +1,19 @@
+import {
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@mui/material'
 import { nanoid } from '@reduxjs/toolkit'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { getBaseWowheadUrl, ItemSlotDetailedToItemSlot } from '../Common'
+import {
+  getBaseWowheadUrl,
+  GetQualityCssColor,
+  ItemSlotDetailedToItemSlot,
+} from '../Common'
 import { Enchants } from '../data/Enchants'
 import { Items } from '../data/Items'
 import i18n from '../i18n/config'
@@ -45,30 +57,24 @@ export default function EquippedItemsDisplay() {
   }
 
   return (
-    <div
+    <Grid
       id='currently-equipped-items-container'
       style={{ display: uiState.EquippedItemsWindowVisible ? '' : 'none' }}
     >
-      <div id='currently-equipped-items'>
-        <div onClick={() => dispatch(setEquippedItemsWindowVisibility(false))}>
+      <Grid id='currently-equipped-items'>
+        <Grid onClick={() => dispatch(setEquippedItemsWindowVisibility(false))}>
           <p className='close' id='currently-equipped-items-close-button'></p>
-        </div>
-        <table>
-          <colgroup>
-            <col style={{ width: '13%' }} />
-            <col style={{ width: '45%' }} />
-            <col style={{ width: '10%' }} />
-            <col style={{ width: '32%' }} />
-          </colgroup>
-          <thead>
-            <tr>
-              <th>Slot</th>
-              <th>Name</th>
-              <th></th>
-              <th>Enchant</th>
-            </tr>
-          </thead>
-          <tbody>
+        </Grid>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ color: 'white' }}>Slot</TableCell>
+              <TableCell style={{ color: 'white' }}>Name</TableCell>
+              <TableCell style={{ color: 'white' }}></TableCell>
+              <TableCell style={{ color: 'white' }}>Enchant</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {Object.values(ItemSlotDetailed)
               // Don't show the offhand slot if a two handed weapon is equipped
               .filter(slot => {
@@ -91,16 +97,17 @@ export default function EquippedItemsDisplay() {
                 )
 
                 return (
-                  <tr key={nanoid()} className='equipped-item-row'>
-                    <td>{t(formatItemSlotName(slot as ItemSlotDetailed))}</td>
-                    <td
-                      className={
-                        'equipped-item-name ' +
-                        (playerState.SelectedItems[slot as ItemSlotDetailed] !=
-                        null
-                          ? equippedItem?.Quality
-                          : '')
-                      }
+                  <TableRow key={nanoid()} className='equipped-item-row'>
+                    <TableCell style={{ color: 'white' }}>
+                      {t(formatItemSlotName(slot as ItemSlotDetailed))}
+                    </TableCell>
+                    <TableCell
+                      style={{
+                        color: equippedItem
+                          ? GetQualityCssColor(equippedItem.Quality)
+                          : '',
+                      }}
+                      className={'equipped-item-name'}
                     >
                       {equippedItem && (
                         <>
@@ -121,8 +128,8 @@ export default function EquippedItemsDisplay() {
                           {t(equippedItem.Name)}
                         </>
                       )}
-                    </td>
-                    <td>
+                    </TableCell>
+                    <TableCell style={{ color: 'white' }}>
                       {playerState.SelectedItems[slot as ItemSlotDetailed] &&
                       equippedItem ? (
                         <ItemSocketDisplay
@@ -134,9 +141,14 @@ export default function EquippedItemsDisplay() {
                       ) : (
                         ''
                       )}
-                    </td>
-                    <td
+                    </TableCell>
+                    <TableCell
                       className={`equipped-item-enchant-name ${equippedEnchant?.Quality}`}
+                      style={{
+                        color: equippedEnchant
+                          ? GetQualityCssColor(equippedEnchant.Quality)
+                          : '',
+                      }}
                     >
                       {equippedEnchant && (
                         <>
@@ -152,13 +164,13 @@ export default function EquippedItemsDisplay() {
                           {t(equippedEnchant.Name)}
                         </>
                       )}
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 )
               })}
-          </tbody>
-        </table>
-      </div>
-    </div>
+          </TableBody>
+        </Table>
+      </Grid>
+    </Grid>
   )
 }

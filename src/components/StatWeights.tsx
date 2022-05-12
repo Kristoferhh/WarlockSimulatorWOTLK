@@ -1,3 +1,4 @@
+import { Button, Grid, List, ListItem, Typography } from '@mui/material'
 import { nanoid } from 'nanoid'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
@@ -28,12 +29,14 @@ export default function StatWeights() {
     ]
 
   return (
-    <section
-      id='stat-weights-section'
-      style={{ display: uiState.StatWeights.Visible ? '' : 'none' }}
-    >
-      <div>
-        <h2 style={{ display: 'inline-block' }}>Stat Weights</h2>
+    <>
+      <Grid>
+        <Typography
+          variant='h5'
+          style={{ display: 'inline-block', margin: '5px 0 0 10px' }}
+        >
+          Stat Weights
+        </Typography>
         <p
           className='close'
           id='stat-weight-close-button'
@@ -42,18 +45,25 @@ export default function StatWeights() {
             e.preventDefault()
           }}
         ></p>
-      </div>
-      <ul className='character-stats' id='stat-weights'>
+      </Grid>
+      <List>
         {statDisplay.map(stat => (
-          <li key={nanoid()}>
-            <p className='character-stat'>{stat.DisplayName}</p>
-            <p className='character-stat-val'>
+          <ListItem
+            key={nanoid()}
+            style={{
+              justifyContent: 'space-between',
+            }}
+          >
+            <Typography style={{ lineHeight: '1' }}>
+              {stat.DisplayName}
+            </Typography>
+            <Typography style={{ lineHeight: '1' }}>
               {uiState.StatWeights.StatValues[stat.Stat as unknown as Stat]}
-            </p>
-          </li>
+            </Typography>
+          </ListItem>
         ))}
-        <button
-          className='btn btn-primary btn-sm'
+        <Button
+          variant='contained'
           style={{
             marginTop: '15px',
             display: uiState.SimulationInProgress ? 'none' : '',
@@ -124,8 +134,8 @@ export default function StatWeights() {
           }}
         >
           Copy Pawn Import String
-        </button>
-      </ul>
-    </section>
+        </Button>
+      </List>
+    </>
   )
 }

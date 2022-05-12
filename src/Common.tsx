@@ -17,6 +17,7 @@ import {
   Languages,
   Pet,
   PlayerState,
+  Quality,
   Race,
   SavedItemDps,
   SelectedGemsStruct,
@@ -174,6 +175,23 @@ export function itemMeetsSocketRequirements(params: {
 
 export function getRemainingTalentPoints(talents: TalentStore): number {
   return 71 - Object.values<number>(talents).reduce((a, b) => a + b, 0)
+}
+
+export function GetQualityCssColor(quality: Quality): string {
+  switch (quality) {
+    case Quality.Legendary:
+      return '#ff8000'
+    case Quality.Heirloom:
+      return '#e6cc80'
+    case Quality.Epic:
+      return '#a335ee'
+    case Quality.Rare:
+      return '#0070dd'
+    case Quality.Uncommon:
+      return '#1eff00'
+    case Quality.Common:
+      return '#ffffff'
+  }
 }
 
 export function isPetActive(

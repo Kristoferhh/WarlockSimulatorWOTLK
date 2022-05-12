@@ -1,3 +1,4 @@
+import { Grid } from '@mui/material'
 import Main from './components/Main'
 import Session from './components/Session'
 import Sidebar from './components/Sidebar'
@@ -19,7 +20,8 @@ const imagePath = `${process.env.PUBLIC_URL}/img/${randomImageFileName}`
 
 export default function App() {
   return (
-    <div
+    <Grid
+      container
       className='App'
       style={{
         backgroundImage: `${linearGradient}, url(${imagePath})`,
@@ -28,6 +30,6 @@ export default function App() {
       <Sidebar />
       <Main />
       <Session />
-    </div>
+    </Grid>
   )
 }

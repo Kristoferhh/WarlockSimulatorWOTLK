@@ -1,3 +1,10 @@
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Typography,
+} from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
@@ -66,26 +73,31 @@ export default function GemSelection() {
   }
 
   return (
-    <table
+    <Table
       id='gem-selection-table'
       cellSpacing={0}
       data-color='none'
-      style={{ display: uiState.GemSelectionTable.Visible ? '' : 'none' }}
+      style={{
+        width: '15%',
+        borderCollapse: 'unset',
+        display: uiState.GemSelectionTable.Visible ? '' : 'none',
+      }}
       onClick={e => e.stopPropagation()}
     >
-      <tbody>
-        <tr>
-          <td></td>
-          <td
-            id='show-hidden-gems-button'
-            onClick={() => setShowingHiddenGems(!showingHiddenGems)}
-            style={{
-              display: uiState.GemPreferences.hidden.length === 0 ? 'none' : '',
-            }}
-          >
-            {(showingHiddenGems ? 'Hide' : 'Show') + ' Hidden Gems'}
-          </td>
-        </tr>
+      <TableBody>
+        {uiState.GemPreferences.hidden.length > 0 && (
+          <TableRow>
+            <TableCell style={{ borderBottom: 'none' }}></TableCell>
+            <TableCell
+              id='show-hidden-gems-button'
+              onClick={() => setShowingHiddenGems(!showingHiddenGems)}
+            >
+              <Typography>
+                {(showingHiddenGems ? 'Hide' : 'Show') + ' Hidden Gems'}
+              </Typography>
+            </TableCell>
+          </TableRow>
+        )}
         {Gems.filter(
           gem =>
             canGemColorBeInsertedIntoSocketColor(
@@ -100,7 +112,7 @@ export default function GemSelection() {
             )
           })
           .map(gem => (
-            <tr
+            <TableRow
               key={gem.Id}
               className='gem-row'
               data-hidden={false}
@@ -112,7 +124,8 @@ export default function GemSelection() {
                     : '',
               }}
             >
-              <td
+              <TableCell
+                style={{ borderBottom: 'none' }}
                 className='gem-info gem-favorite-star'
                 title={
                   uiState.GemPreferences.favorites.includes(gem.Id)
@@ -125,8 +138,9 @@ export default function GemSelection() {
                 onClick={() => dispatch(favoriteGem(gem.Id))}
               >
                 ★
-              </td>
-              <td
+              </TableCell>
+              <TableCell
+                style={{ borderBottom: 'none' }}
                 className='gem-info gem-name'
                 onClick={e => {
                   gemClickHandler(gem)
@@ -143,8 +157,9 @@ export default function GemSelection() {
                 <a href={`${getBaseWowheadUrl(i18n.language)}/item=${gem.Id}`}>
                   {t(gem.Name)}
                 </a>
-              </td>
-              <td
+              </TableCell>
+              <TableCell
+                style={{ borderBottom: 'none' }}
                 className='gem-info gem-hide'
                 title={
                   uiState.GemPreferences.hidden.includes(gem.Id)
@@ -155,10 +170,10 @@ export default function GemSelection() {
                 onClick={() => dispatch(hideGem(gem.Id))}
               >
                 ❌
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   )
 }

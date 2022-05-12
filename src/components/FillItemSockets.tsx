@@ -1,5 +1,14 @@
-import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material'
+import {
+  Button,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  Radio,
+  RadioGroup,
+  Typography,
+} from '@mui/material'
 import { makeStyles } from '@mui/styles'
+import { nanoid } from 'nanoid'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
@@ -114,13 +123,14 @@ export function FillItemSockets() {
   }
 
   return (
-    <div
+    <Grid
       id='gem-options-window'
       style={{ display: uiState.FillItemSocketsWindowVisible ? '' : 'none' }}
     >
       <FormControl className={mui.formControl} fullWidth={true}>
         <RadioGroup>
           <FormControlLabel
+            key={nanoid()}
             className={replacingExistingGems !== false ? mui.label : ''}
             onChange={() => setReplacingExistingGems(false)}
             checked={replacingExistingGems === false}
@@ -128,6 +138,7 @@ export function FillItemSockets() {
             label='Fill empty sockets'
           />
           <FormControlLabel
+            key={nanoid()}
             className={replacingExistingGems !== true ? mui.label : ''}
             onChange={() => setReplacingExistingGems(true)}
             checked={replacingExistingGems === true}
@@ -137,6 +148,7 @@ export function FillItemSockets() {
         </RadioGroup>
         <RadioGroup>
           <FormControlLabel
+            key={nanoid()}
             className={itemSlotToFill !== 'currentSlot' ? mui.label : ''}
             onChange={() => setItemSlotToFill('currentSlot')}
             checked={itemSlotToFill === 'currentSlot'}
@@ -144,6 +156,7 @@ export function FillItemSockets() {
             label='Current item slot'
           />
           <FormControlLabel
+            key={nanoid()}
             className={itemSlotToFill !== 'allSlots' ? mui.label : ''}
             onChange={() => setItemSlotToFill('allSlots')}
             checked={itemSlotToFill === 'allSlots'}
@@ -154,6 +167,7 @@ export function FillItemSockets() {
         <RadioGroup>
           {socketOptions.map(socket => (
             <FormControlLabel
+              key={nanoid()}
               className={socketColor !== socket.color ? mui.label : ''}
               onChange={() => socketColorClickHandler(socket.color)}
               checked={socketColor === socket.color}
@@ -163,12 +177,12 @@ export function FillItemSockets() {
           ))}
         </RadioGroup>
       </FormControl>
-      <div id='gem-options-gem-list'>
-        <div id='gem-options-gem-list'>
+      <Grid id='gem-options-gem-list'>
+        <Grid id='gem-options-gem-list'>
           {Gems.filter(e =>
             canGemColorBeInsertedIntoSocketColor(socketColor, e.Color)
           ).map(gem => (
-            <div
+            <Grid
               className='gem-options-gem'
               key={gem.Id}
               onClick={e => {
@@ -182,26 +196,26 @@ export function FillItemSockets() {
                 alt={t(gem.Name)}
               />
               <a href={`${getBaseWowheadUrl(i18n.language)}/item=${gem.Id}`}>
-                {t(gem.Name)}
+                <Typography>{t(gem.Name)}</Typography>
               </a>
-            </div>
+            </Grid>
           ))}
-        </div>
-      </div>
-      <button
-        className='btn btn-primary btn-sm'
+        </Grid>
+      </Grid>
+      <Button
+        variant='contained'
         id='gem-options-apply-button'
         onClick={() => fillSockets()}
         disabled={selectedGemId === 0}
       >
         Apply
-      </button>{' '}
-      <button
-        className='btn btn-primary btn-sm'
+      </Button>{' '}
+      <Button
+        variant='contained'
         onClick={() => dispatch(setFillItemSocketsWindowVisibility(false))}
       >
         Close
-      </button>
-    </div>
+      </Button>
+    </Grid>
   )
 }

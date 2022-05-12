@@ -1,6 +1,7 @@
 import {
   Button,
   ClickAwayListener,
+  Grid,
   Grow,
   MenuItem,
   MenuList,
@@ -63,7 +64,7 @@ export default function LanguageSelection() {
 
   return (
     <Stack direction='row' spacing={2} id='language-menu'>
-      <div>
+      <Grid>
         <Button
           ref={anchorRef}
           id='composition-button'
@@ -118,7 +119,7 @@ export default function LanguageSelection() {
             </Grow>
           )}
         </Popper>
-      </div>
+      </Grid>
       <a
         href='https://www.paypal.com/donate/?hosted_button_id=FFV45S7UCKE6S'
         target='_blank'

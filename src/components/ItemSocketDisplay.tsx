@@ -1,3 +1,4 @@
+import { Grid } from '@mui/material'
 import { nanoid } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
 import { getBaseWowheadUrl } from '../Common'
@@ -23,7 +24,7 @@ export default function ItemSocketDisplay(props: Props) {
   const itemSockets = playerState.SelectedGems[props.itemSlot]
 
   return (
-    <div className='item-sockets-container'>
+    <Grid className='item-sockets-container'>
       {props.item.Sockets?.map((socket, j) => {
         const equippedGemId =
           itemSockets &&
@@ -70,6 +71,6 @@ export default function ItemSocketDisplay(props: Props) {
           </a>
         )
       })}
-    </div>
+    </Grid>
   )
 }

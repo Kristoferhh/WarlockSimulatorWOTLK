@@ -1,3 +1,4 @@
+import { Grid, List, ListItem, Typography } from '@mui/material'
 import { nanoid } from 'nanoid'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
@@ -86,17 +87,19 @@ export default function AuraSelection() {
   }
 
   return (
-    <section id='buffs-and-debuffs-section'>
+    <>
       {AuraGroups.map(auraGroup => (
-        <div key={nanoid()}>
-          <h3 className='buffs-heading'>{t(auraGroup.Heading)}</h3>
-          <ul>
+        <Grid item key={nanoid()}>
+          <Typography style={{ marginLeft: '15px' }}>
+            {t(auraGroup.Heading)}
+          </Typography>
+          <List>
             {Auras.filter(
               aura =>
                 aura.Group === auraGroup.Heading &&
                 (!aura.ForPet || isPetActive(playerState.Settings, true, true))
             ).map(aura => (
-              <li
+              <ListItem
                 key={nanoid()}
                 id={aura.Id.toString()}
                 className='buffs aura'
@@ -112,15 +115,17 @@ export default function AuraSelection() {
                   }=${aura.Id}`}
                 >
                   <img
+                    width='40px'
+                    height='40px'
                     src={`${process.env.PUBLIC_URL}/img/${aura.IconName}.jpg`}
                     alt={t(aura.Name)}
                   />
                 </a>
-              </li>
+              </ListItem>
             ))}
-          </ul>
-        </div>
+          </List>
+        </Grid>
       ))}
-    </section>
+    </>
   )
 }

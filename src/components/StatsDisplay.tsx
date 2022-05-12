@@ -1,3 +1,5 @@
+import { List, ListItem, Typography } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import { nanoid } from 'nanoid'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
@@ -5,9 +7,16 @@ import { getPlayerHitPercent, getPlayerHitRating, isPetActive } from '../Common'
 import { RootState } from '../redux/Store'
 import { AuraId, Pet, Setting, Stat, StatConstant } from '../Types'
 
+const useStyles = makeStyles({
+  stat: {
+    lineHeight: '0.7 !important',
+  },
+})
+
 export default function StatsDisplay() {
   const playerState = useSelector((state: RootState) => state.player)
   const { t } = useTranslation()
+  const mui = useStyles()
 
   function getStamina(): number {
     let stamina = Object.values(playerState.Stats)
@@ -233,17 +242,22 @@ export default function StatsDisplay() {
   ]
 
   return (
-    <ul className='character-stats'>
+    <List>
       {stats
         .filter(
           stat => stat.condition === undefined || stat.condition() === true
         )
         .map(stat => (
-          <li key={nanoid()}>
-            <p className='character-stat'>{t(stat.name)}</p>
-            <p className='character-stat-val'>{stat.value()}</p>
-          </li>
+          <ListItem
+            style={{
+              justifyContent: 'space-between',
+            }}
+            key={nanoid()}
+          >
+            <Typography className={mui.stat}>{t(stat.name)}</Typography>
+            <Typography className={mui.stat}>{stat.value()}</Typography>
+          </ListItem>
         ))}
-    </ul>
+    </List>
   )
 }

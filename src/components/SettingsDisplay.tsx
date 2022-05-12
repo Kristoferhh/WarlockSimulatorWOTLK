@@ -60,399 +60,391 @@ export default function SettingsDisplay() {
   }
 
   return (
-    <section id='sim-settings'>
-      <FormControl>
-        <FormGroup row>
-          <Select
-            size='small'
-            className={`${mui.select} ${mui.textFieldAndSelect}`}
-            value={playerStore.Settings[Setting.rotationOption]}
-            onChange={e =>
-              settingModifiedHandler(Setting.rotationOption, e.target.value)
-            }
-          >
-            <MenuItem value='userChooses'>{t('Choose spells myself')}</MenuItem>
-            <MenuItem value='simChooses'>
-              {t('Simulation chooses spells for me')}
-            </MenuItem>
-          </Select>
-          <Select
-            size='small'
-            className={`${mui.select} ${mui.textFieldAndSelect}`}
-            value={playerStore.Settings[Setting.race]}
-            onChange={e => {
-              const race = Races.find(race => race.Race === e.target.value)
+    <FormControl>
+      <FormGroup row>
+        <Select
+          size='small'
+          className={`${mui.select} ${mui.textFieldAndSelect}`}
+          value={playerStore.Settings[Setting.rotationOption]}
+          onChange={e =>
+            settingModifiedHandler(Setting.rotationOption, e.target.value)
+          }
+        >
+          <MenuItem value='userChooses'>{t('Choose spells myself')}</MenuItem>
+          <MenuItem value='simChooses'>
+            {t('Simulation chooses spells for me')}
+          </MenuItem>
+        </Select>
+        <Select
+          size='small'
+          className={`${mui.select} ${mui.textFieldAndSelect}`}
+          value={playerStore.Settings[Setting.race]}
+          onChange={e => {
+            const race = Races.find(race => race.Race === e.target.value)
 
-              settingModifiedHandler(Setting.race, e.target.value)
-              race && dispatch(setBaseStats(getBaseStats(race.Race)))
-            }}
-          >
-            <MenuItem value={Race.Gnome}>{t('Gnome')}</MenuItem>
-            <MenuItem value={Race.Human}>{t('Human')}</MenuItem>
-            <MenuItem value={Race.Orc}>{t('Orc')}</MenuItem>
-            <MenuItem value={Race.Undead}>{t('Undead')}</MenuItem>
-            <MenuItem value={Race.BloodElf}>{t('Blood Elf')}</MenuItem>
-          </Select>
+            settingModifiedHandler(Setting.race, e.target.value)
+            race && dispatch(setBaseStats(getBaseStats(race.Race)))
+          }}
+        >
+          <MenuItem value={Race.Gnome}>{t('Gnome')}</MenuItem>
+          <MenuItem value={Race.Human}>{t('Human')}</MenuItem>
+          <MenuItem value={Race.Orc}>{t('Orc')}</MenuItem>
+          <MenuItem value={Race.Undead}>{t('Undead')}</MenuItem>
+          <MenuItem value={Race.BloodElf}>{t('Blood Elf')}</MenuItem>
+        </Select>
+        <TextField
+          size='small'
+          className={`${mui.textField} ${mui.textFieldAndSelect}`}
+          type='number'
+          label={t('Iterations')}
+          variant='outlined'
+          value={playerStore.Settings[Setting.iterations]}
+          onChange={e =>
+            settingModifiedHandler(Setting.iterations, e.target.value)
+          }
+        />
+        <Select
+          size='small'
+          className={`${mui.select} ${mui.textFieldAndSelect}`}
+          value={playerStore.Settings[Setting.fightType]}
+          onChange={e =>
+            settingModifiedHandler(Setting.fightType, e.target.value)
+          }
+        >
+          <MenuItem value='singleTarget'>{t('Single Target')}</MenuItem>
+          <MenuItem value='aoe'>{t('AoE')}</MenuItem>
+        </Select>
+        <TextField
+          size='small'
+          className={`${mui.textField} ${mui.textFieldAndSelect}`}
+          type='number'
+          label={t('Min Fight Length')}
+          variant='outlined'
+          value={playerStore.Settings[Setting.minFightLength]}
+          onChange={e =>
+            settingModifiedHandler(Setting.minFightLength, e.target.value)
+          }
+        />
+        <TextField
+          size='small'
+          className={`${mui.textField} ${mui.textFieldAndSelect}`}
+          type='number'
+          label={t('Max Fight Length')}
+          variant='outlined'
+          value={playerStore.Settings[Setting.maxFightLength]}
+          onChange={e =>
+            settingModifiedHandler(Setting.maxFightLength, e.target.value)
+          }
+        />
+        <TextField
+          size='small'
+          className={`${mui.textField} ${mui.textFieldAndSelect}`}
+          type='number'
+          label={t('Target Level')}
+          variant='outlined'
+          value={playerStore.Settings[Setting.targetLevel]}
+          onChange={e =>
+            settingModifiedHandler(Setting.targetLevel, e.target.value)
+          }
+        />
+        <TextField
+          size='small'
+          className={`${mui.textField} ${mui.textFieldAndSelect}`}
+          type='number'
+          label={t('Target Shadow Resistance')}
+          variant='outlined'
+          value={playerStore.Settings[Setting.targetShadowResistance]}
+          onChange={e =>
+            settingModifiedHandler(
+              Setting.targetShadowResistance,
+              e.target.value
+            )
+          }
+        />
+        <TextField
+          size='small'
+          className={`${mui.textField} ${mui.textFieldAndSelect}`}
+          type='number'
+          label={t('Target Fire Resistance')}
+          variant='outlined'
+          value={playerStore.Settings[Setting.targetFireResistance]}
+          onChange={e =>
+            settingModifiedHandler(Setting.targetFireResistance, e.target.value)
+          }
+        />
+        {playerStore.Settings[Setting.fightType] === 'aoe' && (
           <TextField
             size='small'
             className={`${mui.textField} ${mui.textFieldAndSelect}`}
             type='number'
-            label={t('Iterations')}
+            label={t('Enemy Amount')}
             variant='outlined'
-            value={playerStore.Settings[Setting.iterations]}
+            value={playerStore.Settings[Setting.enemyAmount]}
             onChange={e =>
-              settingModifiedHandler(Setting.iterations, e.target.value)
+              settingModifiedHandler(Setting.enemyAmount, e.target.value)
             }
           />
-          <Select
-            size='small'
-            className={`${mui.select} ${mui.textFieldAndSelect}`}
-            value={playerStore.Settings[Setting.fightType]}
-            onChange={e =>
-              settingModifiedHandler(Setting.fightType, e.target.value)
-            }
-          >
-            <MenuItem value='singleTarget'>{t('Single Target')}</MenuItem>
-            <MenuItem value='aoe'>{t('AoE')}</MenuItem>
-          </Select>
+        )}
+        <Select
+          size='small'
+          className={`${mui.select} ${mui.textFieldAndSelect}`}
+          value={playerStore.Settings[Setting.petChoice]}
+          onChange={e =>
+            settingModifiedHandler(Setting.petChoice, e.target.value)
+          }
+        >
+          <MenuItem value={Pet.Imp}>{t('Imp')}</MenuItem>
+          <MenuItem value={Pet.Succubus}>{t('Succubus')}</MenuItem>
+          <MenuItem value={Pet.Felhunter}>{t('Felhunter')}</MenuItem>
+          <MenuItem value={Pet.Felguard}>{t('Felguard')}</MenuItem>
+        </Select>
+        {isPetActive(playerStore.Settings, true, true) && (
           <TextField
             size='small'
             className={`${mui.textField} ${mui.textFieldAndSelect}`}
             type='number'
-            label={t('Min Fight Length')}
+            label={t('Enemy Armor')}
             variant='outlined'
-            value={playerStore.Settings[Setting.minFightLength]}
+            value={playerStore.Settings[Setting.enemyArmor]}
             onChange={e =>
-              settingModifiedHandler(Setting.minFightLength, e.target.value)
-            }
-          />
-          <TextField
-            size='small'
-            className={`${mui.textField} ${mui.textFieldAndSelect}`}
-            type='number'
-            label={t('Max Fight Length')}
-            variant='outlined'
-            value={playerStore.Settings[Setting.maxFightLength]}
-            onChange={e =>
-              settingModifiedHandler(Setting.maxFightLength, e.target.value)
+              settingModifiedHandler(Setting.enemyArmor, e.target.value)
             }
           />
+        )}
+        {playerStore.Auras.includes(AuraId.PowerInfusion) && (
           <TextField
             size='small'
             className={`${mui.textField} ${mui.textFieldAndSelect}`}
             type='number'
-            label={t('Target Level')}
+            label={t('Power Infusion Amount')}
             variant='outlined'
-            value={playerStore.Settings[Setting.targetLevel]}
-            onChange={e =>
-              settingModifiedHandler(Setting.targetLevel, e.target.value)
-            }
-          />
-          <TextField
-            size='small'
-            className={`${mui.textField} ${mui.textFieldAndSelect}`}
-            type='number'
-            label={t('Target Shadow Resistance')}
-            variant='outlined'
-            value={playerStore.Settings[Setting.targetShadowResistance]}
+            value={playerStore.Settings[Setting.powerInfusionAmount]}
             onChange={e =>
               settingModifiedHandler(
-                Setting.targetShadowResistance,
+                Setting.powerInfusionAmount,
                 e.target.value
               )
             }
           />
+        )}
+        {playerStore.Auras.includes(AuraId.Innervate) && (
           <TextField
             size='small'
             className={`${mui.textField} ${mui.textFieldAndSelect}`}
             type='number'
-            label={t('Target Fire Resistance')}
+            label={t('Innervate Amount')}
             variant='outlined'
-            value={playerStore.Settings[Setting.targetFireResistance]}
+            value={playerStore.Settings[Setting.innervateAmount]}
+            onChange={e =>
+              settingModifiedHandler(Setting.innervateAmount, e.target.value)
+            }
+          />
+        )}
+        {playerStore.Auras.includes(AuraId.FerociousInspiration) && (
+          <TextField
+            size='small'
+            className={`${mui.textField} ${mui.textFieldAndSelect}`}
+            type='number'
+            label={t('Ferocious Inspiration Amount')}
+            variant='outlined'
+            value={playerStore.Settings[Setting.ferociousInspirationAmount]}
             onChange={e =>
               settingModifiedHandler(
-                Setting.targetFireResistance,
+                Setting.ferociousInspirationAmount,
                 e.target.value
               )
             }
           />
-          {playerStore.Settings[Setting.fightType] === 'aoe' && (
-            <TextField
-              size='small'
-              className={`${mui.textField} ${mui.textFieldAndSelect}`}
-              type='number'
-              label={t('Enemy Amount')}
-              variant='outlined'
-              value={playerStore.Settings[Setting.enemyAmount]}
-              onChange={e =>
-                settingModifiedHandler(Setting.enemyAmount, e.target.value)
-              }
-            />
-          )}
-          <Select
+        )}
+        {playerStore.Settings[Setting.customIsbUptime] === 'yes' && (
+          <TextField
             size='small'
-            className={`${mui.select} ${mui.textFieldAndSelect}`}
-            value={playerStore.Settings[Setting.petChoice]}
+            className={`${mui.textField} ${mui.textFieldAndSelect}`}
+            type='number'
+            label={`${t('Custom ISB Uptime')} %`}
+            variant='outlined'
+            value={playerStore.Settings[Setting.customIsbUptimeValue]}
             onChange={e =>
-              settingModifiedHandler(Setting.petChoice, e.target.value)
-            }
-          >
-            <MenuItem value={Pet.Imp}>{t('Imp')}</MenuItem>
-            <MenuItem value={Pet.Succubus}>{t('Succubus')}</MenuItem>
-            <MenuItem value={Pet.Felhunter}>{t('Felhunter')}</MenuItem>
-            <MenuItem value={Pet.Felguard}>{t('Felguard')}</MenuItem>
-          </Select>
-          {isPetActive(playerStore.Settings, true, true) && (
-            <TextField
-              size='small'
-              className={`${mui.textField} ${mui.textFieldAndSelect}`}
-              type='number'
-              label={t('Enemy Armor')}
-              variant='outlined'
-              value={playerStore.Settings[Setting.enemyArmor]}
-              onChange={e =>
-                settingModifiedHandler(Setting.enemyArmor, e.target.value)
-              }
-            />
-          )}
-          {playerStore.Auras.includes(AuraId.PowerInfusion) && (
-            <TextField
-              size='small'
-              className={`${mui.textField} ${mui.textFieldAndSelect}`}
-              type='number'
-              label={t('Power Infusion Amount')}
-              variant='outlined'
-              value={playerStore.Settings[Setting.powerInfusionAmount]}
-              onChange={e =>
-                settingModifiedHandler(
-                  Setting.powerInfusionAmount,
-                  e.target.value
-                )
-              }
-            />
-          )}
-          {playerStore.Auras.includes(AuraId.Innervate) && (
-            <TextField
-              size='small'
-              className={`${mui.textField} ${mui.textFieldAndSelect}`}
-              type='number'
-              label={t('Innervate Amount')}
-              variant='outlined'
-              value={playerStore.Settings[Setting.innervateAmount]}
-              onChange={e =>
-                settingModifiedHandler(Setting.innervateAmount, e.target.value)
-              }
-            />
-          )}
-          {playerStore.Auras.includes(AuraId.FerociousInspiration) && (
-            <TextField
-              size='small'
-              className={`${mui.textField} ${mui.textFieldAndSelect}`}
-              type='number'
-              label={t('Ferocious Inspiration Amount')}
-              variant='outlined'
-              value={playerStore.Settings[Setting.ferociousInspirationAmount]}
-              onChange={e =>
-                settingModifiedHandler(
-                  Setting.ferociousInspirationAmount,
-                  e.target.value
-                )
-              }
-            />
-          )}
-          {playerStore.Settings[Setting.customIsbUptime] === 'yes' && (
-            <TextField
-              size='small'
-              className={`${mui.textField} ${mui.textFieldAndSelect}`}
-              type='number'
-              label={`${t('Custom ISB Uptime')} %`}
-              variant='outlined'
-              value={playerStore.Settings[Setting.customIsbUptimeValue]}
-              onChange={e =>
-                settingModifiedHandler(
-                  Setting.customIsbUptimeValue,
-                  e.target.value
-                )
-              }
-            />
-          )}
-          {playerStore.Auras.includes(AuraId.ExposeWeakness) &&
-            isPetActive(playerStore.Settings, true, true) && (
-              <>
-                <TextField
-                  size='small'
-                  className={`${mui.textField} ${mui.textFieldAndSelect}`}
-                  type='number'
-                  label={t('Survival Hunter Agility')}
-                  variant='outlined'
-                  value={playerStore.Settings[Setting.customIsbUptimeValue]}
-                  onChange={e =>
-                    settingModifiedHandler(
-                      Setting.customIsbUptimeValue,
-                      e.target.value
-                    )
-                  }
-                />
-                <TextField
-                  size='small'
-                  className={`${mui.textField} ${mui.textFieldAndSelect}`}
-                  type='number'
-                  label={`${t('Expose Weakness Uptime')} %`}
-                  variant='outlined'
-                  value={playerStore.Settings[Setting.exposeWeaknessUptime]}
-                  onChange={e =>
-                    settingModifiedHandler(
-                      Setting.exposeWeaknessUptime,
-                      e.target.value
-                    )
-                  }
-                />
-              </>
-            )}
-        </FormGroup>
-        <FormGroup>
-          <FormControlLabel
-            className={mui.label}
-            label={t('Show Damage & Aura Tables')}
-            control={<Switch size='small' />}
-            labelPlacement='start'
-            onChange={e => {
               settingModifiedHandler(
-                Setting.automaticallyOpenSimDetails,
-                (e.target as HTMLInputElement).checked.toString()
+                Setting.customIsbUptimeValue,
+                e.target.value
               )
-            }}
-            checked={
-              playerStore.Settings[Setting.automaticallyOpenSimDetails] ===
-              'true'
             }
           />
+        )}
+        {playerStore.Auras.includes(AuraId.ExposeWeakness) &&
+          isPetActive(playerStore.Settings, true, true) && (
+            <>
+              <TextField
+                size='small'
+                className={`${mui.textField} ${mui.textFieldAndSelect}`}
+                type='number'
+                label={t('Survival Hunter Agility')}
+                variant='outlined'
+                value={playerStore.Settings[Setting.customIsbUptimeValue]}
+                onChange={e =>
+                  settingModifiedHandler(
+                    Setting.customIsbUptimeValue,
+                    e.target.value
+                  )
+                }
+              />
+              <TextField
+                size='small'
+                className={`${mui.textField} ${mui.textFieldAndSelect}`}
+                type='number'
+                label={`${t('Expose Weakness Uptime')} %`}
+                variant='outlined'
+                value={playerStore.Settings[Setting.exposeWeaknessUptime]}
+                onChange={e =>
+                  settingModifiedHandler(
+                    Setting.exposeWeaknessUptime,
+                    e.target.value
+                  )
+                }
+              />
+            </>
+          )}
+      </FormGroup>
+      <FormGroup>
+        <FormControlLabel
+          className={mui.label}
+          label={t('Show Damage & Aura Tables')}
+          control={<Switch size='small' />}
+          labelPlacement='start'
+          onChange={e => {
+            settingModifiedHandler(
+              Setting.automaticallyOpenSimDetails,
+              (e.target as HTMLInputElement).checked.toString()
+            )
+          }}
+          checked={
+            playerStore.Settings[Setting.automaticallyOpenSimDetails] === 'true'
+          }
+        />
+        <FormControlLabel
+          className={mui.label}
+          label={t('Randomize Instead of Averaging')}
+          title={t(
+            'Chooses a random value between a minimum and a maximum value instead of taking the average of the two.'
+          )}
+          control={<Switch size='small' />}
+          labelPlacement='start'
+          onChange={e => {
+            settingModifiedHandler(
+              Setting.randomizeValues,
+              (e.target as HTMLInputElement).checked.toString()
+            )
+          }}
+          checked={playerStore.Settings[Setting.randomizeValues] === 'true'}
+        />
+        <FormControlLabel
+          className={mui.label}
+          label={t('Infinite Player Mana')}
+          control={<Switch size='small' />}
+          labelPlacement='start'
+          onChange={e => {
+            settingModifiedHandler(
+              Setting.infinitePlayerMana,
+              (e.target as HTMLInputElement).checked.toString()
+            )
+          }}
+          checked={playerStore.Settings[Setting.infinitePlayerMana] === 'true'}
+        />
+        <FormControlLabel
+          className={mui.label}
+          label={t('Infinite Pet Mana')}
+          control={<Switch size='small' />}
+          labelPlacement='start'
+          onChange={e => {
+            settingModifiedHandler(
+              Setting.infinitePetMana,
+              (e.target as HTMLInputElement).checked.toString()
+            )
+          }}
+          checked={playerStore.Settings[Setting.infinitePetMana] === 'true'}
+        />
+        {isPetActive(playerStore.Settings, false, false) && (
           <FormControlLabel
             className={mui.label}
-            label={t('Randomize Instead of Averaging')}
-            title={t(
-              'Chooses a random value between a minimum and a maximum value instead of taking the average of the two.'
-            )}
+            label={t('Aggressive Pet')}
             control={<Switch size='small' />}
             labelPlacement='start'
             onChange={e => {
               settingModifiedHandler(
-                Setting.randomizeValues,
+                Setting.petIsAggressive,
                 (e.target as HTMLInputElement).checked.toString()
               )
             }}
-            checked={playerStore.Settings[Setting.randomizeValues] === 'true'}
+            checked={playerStore.Settings[Setting.petIsAggressive] === 'true'}
           />
+        )}
+        {isPetActive(playerStore.Settings, true, false) && (
           <FormControlLabel
             className={mui.label}
-            label={t('Infinite Player Mana')}
+            label={t('Prepop Black Book')}
             control={<Switch size='small' />}
             labelPlacement='start'
             onChange={e => {
               settingModifiedHandler(
-                Setting.infinitePlayerMana,
+                Setting.prepopBlackBook,
                 (e.target as HTMLInputElement).checked.toString()
               )
             }}
-            checked={
-              playerStore.Settings[Setting.infinitePlayerMana] === 'true'
-            }
+            checked={playerStore.Settings[Setting.prepopBlackBook] === 'true'}
           />
-          <FormControlLabel
-            className={mui.label}
-            label={t('Infinite Pet Mana')}
-            control={<Switch size='small' />}
-            labelPlacement='start'
-            onChange={e => {
-              settingModifiedHandler(
-                Setting.infinitePetMana,
-                (e.target as HTMLInputElement).checked.toString()
-              )
-            }}
-            checked={playerStore.Settings[Setting.infinitePetMana] === 'true'}
-          />
-          {isPetActive(playerStore.Settings, false, false) && (
+        )}
+        {isPetActive(playerStore.Settings, true, true) &&
+          playerStore.Settings[Setting.petChoice] === Pet.Succubus && (
             <FormControlLabel
               className={mui.label}
-              label={t('Aggressive Pet')}
+              label={t('Only use Lash of Pain when ISB is not up')}
               control={<Switch size='small' />}
               labelPlacement='start'
               onChange={e => {
                 settingModifiedHandler(
-                  Setting.petIsAggressive,
+                  Setting.OnlyLashOfPainWhenIsbIsNotUp,
                   (e.target as HTMLInputElement).checked.toString()
                 )
               }}
-              checked={playerStore.Settings[Setting.petIsAggressive] === 'true'}
+              checked={
+                playerStore.Settings[Setting.OnlyLashOfPainWhenIsbIsNotUp] ===
+                'true'
+              }
             />
           )}
-          {isPetActive(playerStore.Settings, true, false) && (
+        {playerStore.Auras.includes(AuraId.FaerieFire) &&
+          isPetActive(playerStore.Settings, true, true) && (
             <FormControlLabel
               className={mui.label}
-              label={t('Prepop Black Book')}
+              label={t('Improved Faerie Fire')}
               control={<Switch size='small' />}
               labelPlacement='start'
               onChange={e => {
                 settingModifiedHandler(
-                  Setting.prepopBlackBook,
+                  Setting.improvedFaerieFire,
                   (e.target as HTMLInputElement).checked.toString()
                 )
               }}
-              checked={playerStore.Settings[Setting.prepopBlackBook] === 'true'}
+              checked={
+                playerStore.Settings[Setting.improvedFaerieFire] === 'true'
+              }
             />
           )}
-          {isPetActive(playerStore.Settings, true, true) &&
-            playerStore.Settings[Setting.petChoice] === Pet.Succubus && (
-              <FormControlLabel
-                className={mui.label}
-                label={t('Only use Lash of Pain when ISB is not up')}
-                control={<Switch size='small' />}
-                labelPlacement='start'
-                onChange={e => {
-                  settingModifiedHandler(
-                    Setting.OnlyLashOfPainWhenIsbIsNotUp,
-                    (e.target as HTMLInputElement).checked.toString()
-                  )
-                }}
-                checked={
-                  playerStore.Settings[Setting.OnlyLashOfPainWhenIsbIsNotUp] ===
-                  'true'
-                }
-              />
-            )}
-          {playerStore.Auras.includes(AuraId.FaerieFire) &&
-            isPetActive(playerStore.Settings, true, true) && (
-              <FormControlLabel
-                className={mui.label}
-                label={t('Improved Faerie Fire')}
-                control={<Switch size='small' />}
-                labelPlacement='start'
-                onChange={e => {
-                  settingModifiedHandler(
-                    Setting.improvedFaerieFire,
-                    (e.target as HTMLInputElement).checked.toString()
-                  )
-                }}
-                checked={
-                  playerStore.Settings[Setting.improvedFaerieFire] === 'true'
-                }
-              />
-            )}
-          <FormControlLabel
-            className={mui.label}
-            label={t('Use Custom ISB Uptime')}
-            control={<Switch size='small' />}
-            labelPlacement='start'
-            onChange={e => {
-              settingModifiedHandler(
-                Setting.customIsbUptime,
-                (e.target as HTMLInputElement).checked.toString()
-              )
-            }}
-            checked={playerStore.Settings[Setting.customIsbUptime] === 'true'}
-          />
-        </FormGroup>
-      </FormControl>
-    </section>
+        <FormControlLabel
+          className={mui.label}
+          label={t('Use Custom ISB Uptime')}
+          control={<Switch size='small' />}
+          labelPlacement='start'
+          onChange={e => {
+            settingModifiedHandler(
+              Setting.customIsbUptime,
+              (e.target as HTMLInputElement).checked.toString()
+            )
+          }}
+          checked={playerStore.Settings[Setting.customIsbUptime] === 'true'}
+        />
+      </FormGroup>
+    </FormControl>
   )
 }
