@@ -1,5 +1,18 @@
+import WarningIcon from '@mui/icons-material/Warning'
+import {
+  Button,
+  Grid,
+  List,
+  ListItem,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material'
 import { nanoid } from 'nanoid'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -9,6 +22,7 @@ import {
   getItemSetCounts,
   getItemsStats,
   getItemTableItems,
+  GetQualityCssColor,
   ItemSlotToItemSlotDetailed,
 } from '../Common'
 import { Enchants } from '../data/Enchants'
@@ -75,6 +89,43 @@ export default function ItemSelection() {
   const uiStore = useSelector((state: RootState) => state.ui)
   const dispatch = useDispatch()
   const { t } = useTranslation()
+  const [items, setItems] = useState<Item[] | undefined>()
+  const [enchants, setEnchants] = useState<Enchant[] | undefined>()
+
+  useEffect(() => {
+    setItems(
+      getItemTableItems(
+        uiStore.SelectedItemSlot,
+        uiStore.SelectedItemSubSlot,
+        playerStore.SelectedItems,
+        uiStore.Sources,
+        uiStore.HiddenItems,
+        hidingItems,
+        uiStore.SavedItemDps,
+        false
+      )
+    )
+  }, [
+    uiStore.SelectedItemSlot,
+    uiStore.SelectedItemSubSlot,
+    uiStore.Sources,
+    uiStore.HiddenItems,
+    uiStore.SavedItemDps,
+    playerStore.SelectedItems,
+    hidingItems,
+  ])
+
+  useEffect(() => {
+    setEnchants(
+      items?.filter(item => !uiStore.HiddenItems.includes(item.Id))?.length
+        ? Enchants.filter(
+            e =>
+              e.ItemSlot === uiStore.SelectedItemSlot &&
+              uiStore.Sources.includes(e.Phase)
+          )
+        : undefined
+    )
+  }, [items, uiStore.HiddenItems, uiStore.SelectedItemSlot, uiStore.Sources])
 
   function changeEquippedItemId(itemSlot: ItemSlotDetailed, newItemId: number) {
     if (playerStore.SelectedItems[itemSlot] === newItemId) {
@@ -191,12 +242,17 @@ export default function ItemSelection() {
   }
 
   return (
-    <div id='item-selection-container'>
-      <ul id='item-slot-selection-list'>
+    <Grid id='item-selection-container' style={{ width: '100%' }}>
+      <List id='item-slot-selection-list' style={{ display: 'inline-flex' }}>
         {itemSlotInformation.map(slot => (
-          <li key={nanoid()}>
-            <p
-              style={{ display: 'inline-block' }}
+          <ListItem
+            key={nanoid()}
+            style={{
+              padding: '8px',
+              justifyContent: 'center',
+            }}
+          >
+            <Typography
               onClick={() => itemSlotClickHandler(slot.ItemSlot, slot.SubSlot)}
               data-selected={
                 uiStore.SelectedItemSlot === slot.ItemSlot &&
@@ -204,28 +260,19 @@ export default function ItemSelection() {
               }
             >
               {t(slot.Name)}
-            </p>
+            </Typography>
             {shouldDisplayMissingEnchantWarning(
               slot.ItemSlot,
               slot.SubSlot
-            ) && (
-              <i
-                title='Missing enchant!'
-                className='fas fa-exclamation-triangle'
-                style={{ marginLeft: '2px' }}
-              ></i>
-            )}
-          </li>
+            ) && <WarningIcon titleAccess='Missing enchant!'></WarningIcon>}
+          </ListItem>
         ))}
-      </ul>
-      <button
-        className='btn btn-primary btn-sm'
-        onClick={() => setHidingItems(!hidingItems)}
-      >
-        {t('Hide / Show Items')}
-      </button>{' '}
-      <button
-        className='btn btn-primary btn-sm'
+      </List>
+      <Button variant='contained' onClick={() => setHidingItems(!hidingItems)}>
+        <Typography>{t('Hide / Show Items')}</Typography>
+      </Button>{' '}
+      <Button
+        variant='contained'
         onClick={() =>
           dispatch(
             setFillItemSocketsWindowVisibility(
@@ -234,10 +281,10 @@ export default function ItemSelection() {
           )
         }
       >
-        {t('Fill Item Sockets')}
-      </button>{' '}
-      <button
-        className='btn btn-primary btn-sm'
+        <Typography>{t('Fill Item Sockets')}</Typography>
+      </Button>{' '}
+      <Button
+        variant='contained'
         onClick={() =>
           dispatch(
             setEquippedItemsWindowVisibility(
@@ -246,82 +293,110 @@ export default function ItemSelection() {
           )
         }
       >
-        {t('Show Equipped Items')}
-      </button>
+        <Typography>{t('Show Equipped Items')}</Typography>
+      </Button>
       <FillItemSockets />
-      <table
+      <Table
         id='item-selection-table'
         data-type='mainhand'
         className='tablesorter'
         data-sortlist='[[12,1]]'
       >
-        {
-          // If no items are found by the filter then don't display the item table headers
-          Items.find(
-            e =>
-              e.ItemSlot === uiStore.SelectedItemSlot &&
-              uiStore.Sources.includes(e.Phase)
-          ) != null ? (
-            <>
-              <colgroup id='item-selection-colgroup'>
-                <col
-                  style={{ width: '2%', display: hidingItems ? '' : 'none' }}
-                />
-                <col />
-                <col style={{ width: '5%' }} />
-                <col style={{ width: '20%' }} />
-                <col style={{ width: '3%' }} />
-                <col style={{ width: '3%' }} />
-                <col style={{ width: '8%' }} />
-                <col style={{ width: '4%' }} />
-                <col style={{ width: '4%' }} />
-                <col style={{ width: '3%' }} />
-                <col style={{ width: '3%' }} />
-                <col style={{ width: '3%' }} />
-                <col style={{ width: '8%' }} />
-              </colgroup>
-              <thead>
-                <tr id='item-selection-header'>
-                  <th style={{ display: hidingItems ? '' : 'none' }}></th>
-                  <th id='header-name'>{t('Name')}</th>
-                  <th id='header-gems'></th>
-                  <th id='header-source'>{t('Source')}</th>
-                  <th id='header-stamina'>{t('Stam')}</th>
-                  <th id='header-intellect'>{t('Int')}</th>
-                  <th id='header-spell-power'>{t('Spell Power')}</th>
-                  <th id='header-shadow-power'>{t('Shadow')}</th>
-                  <th id='header-fire-power'>{t('Fire')}</th>
-                  <th id='header-crit'>{t('Crit')}</th>
-                  <th id='header-hit'>{t('Hit')}</th>
-                  <th id='header-haste'>{t('Haste')}</th>
-                  <th id='header-dps'>{t('DPS')}</th>
-                </tr>
-              </thead>
-            </>
-          ) : (
-            <tbody>
-              <tr>
-                <td>
-                  <h3>
-                    No items found 😱 try selecting different item sources.
-                  </h3>
-                </td>
-              </tr>
-            </tbody>
-          )
-        }
-        <tbody aria-live='polite'>
-          {getItemTableItems(
-            uiStore.SelectedItemSlot,
-            uiStore.SelectedItemSubSlot,
-            playerStore.SelectedItems,
-            uiStore.Sources,
-            uiStore.HiddenItems,
-            hidingItems,
-            uiStore.SavedItemDps,
-            false
-          ).map(item => (
-            <tr
+        {items?.length ? (
+          <TableHead>
+            <TableRow id='item-selection-header'>
+              <TableCell
+                style={{ display: hidingItems ? '' : 'none', color: 'white' }}
+              ></TableCell>
+              <TableCell style={{ color: 'white' }} id='header-name'>
+                {t('Name')}
+              </TableCell>
+              <TableCell
+                style={{ color: 'white' }}
+                id='header-gems'
+              ></TableCell>
+              <TableCell
+                style={{ color: 'white', textAlign: 'center' }}
+                id='header-source'
+              >
+                {t('Source')}
+              </TableCell>
+              <TableCell
+                style={{ color: 'white', textAlign: 'center' }}
+                id='header-stamina'
+              >
+                {t('Stam')}
+              </TableCell>
+              <TableCell
+                style={{ color: 'white', textAlign: 'center' }}
+                id='header-intellect'
+              >
+                {t('Int')}
+              </TableCell>
+              <TableCell
+                style={{ color: 'white', textAlign: 'center' }}
+                id='header-spell-power'
+              >
+                {t('Spell Power')}
+              </TableCell>
+              <TableCell
+                style={{ color: 'white', textAlign: 'center' }}
+                id='header-shadow-power'
+              >
+                {t('Shadow')}
+              </TableCell>
+              <TableCell
+                style={{ color: 'white', textAlign: 'center' }}
+                id='header-fire-power'
+              >
+                {t('Fire')}
+              </TableCell>
+              <TableCell
+                style={{ color: 'white', textAlign: 'center' }}
+                id='header-crit'
+              >
+                {t('Crit')}
+              </TableCell>
+              <TableCell
+                style={{ color: 'white', textAlign: 'center' }}
+                id='header-hit'
+              >
+                {t('Hit')}
+              </TableCell>
+              <TableCell
+                style={{ color: 'white', textAlign: 'center' }}
+                id='header-haste'
+              >
+                {t('Haste')}
+              </TableCell>
+              <TableCell
+                style={{ color: 'white', textAlign: 'center' }}
+                id='header-dps'
+              >
+                {t('DPS')}
+              </TableCell>
+            </TableRow>
+          </TableHead>
+        ) : (
+          <TableBody>
+            <TableRow>
+              <TableCell
+                style={{
+                  color: 'white',
+                  textAlign: 'center',
+                  borderBottom: 'none',
+                }}
+              >
+                <Typography variant='h6'>
+                  No items found 😱 try selecting different item sources.
+                </Typography>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        )}
+        <TableBody aria-live='polite'>
+          {items?.map(item => (
+            <TableRow
               key={item.Id}
               className='item-row'
               data-selected={
@@ -343,9 +418,12 @@ export default function ItemSelection() {
                 )
               }
             >
-              <td
+              <TableCell
                 className='hide-item-btn'
-                style={{ display: hidingItems ? 'table-cell' : 'none' }}
+                style={{
+                  display: hidingItems ? 'table-cell' : 'none',
+                  color: 'white',
+                }}
                 title={
                   uiStore.HiddenItems.includes(item.Id)
                     ? 'Show Item'
@@ -357,8 +435,13 @@ export default function ItemSelection() {
                 }}
               >
                 ❌
-              </td>
-              <td className={`${item.Quality} item-row-name`}>
+              </TableCell>
+              <TableCell
+                className={`item-row-name`}
+                style={{
+                  color: GetQualityCssColor(item.Quality),
+                }}
+              >
                 <a
                   href={`${getBaseWowheadUrl(i18n.language)}/item=${
                     item.DisplayId || item.Id
@@ -374,8 +457,8 @@ export default function ItemSelection() {
                   className='item-icon'
                 />
                 {t(item.Name)}
-              </td>
-              <td>
+              </TableCell>
+              <TableCell style={{ color: 'white', textAlign: 'center' }}>
                 {
                   <ItemSocketDisplay
                     item={item}
@@ -384,17 +467,38 @@ export default function ItemSelection() {
                     removeGemFromSocket={removeGemFromSocket}
                   />
                 }
-              </td>
-              <td>{t(item.Source)}</td>
-              <td>{item.Stats[Stat.Stamina]}</td>
-              <td>{item.Stats[Stat.Intellect]}</td>
-              <td>{item.Stats[Stat.SpellPower]}</td>
-              <td>{item.Stats[Stat.ShadowPower]}</td>
-              <td>{item.Stats[Stat.FirePower]}</td>
-              <td>{item.Stats[Stat.CritRating]}</td>
-              <td>{item.Stats[Stat.HitRating]}</td>
-              <td>{item.Stats[Stat.HasteRating]}</td>
-              <td id={item.Id.toString()}>
+              </TableCell>
+              <TableCell style={{ color: 'white', textAlign: 'center' }}>
+                {t(item.Source)}
+              </TableCell>
+              <TableCell style={{ color: 'white', textAlign: 'center' }}>
+                {item.Stats[Stat.Stamina]}
+              </TableCell>
+              <TableCell style={{ color: 'white', textAlign: 'center' }}>
+                {item.Stats[Stat.Intellect]}
+              </TableCell>
+              <TableCell style={{ color: 'white', textAlign: 'center' }}>
+                {item.Stats[Stat.SpellPower]}
+              </TableCell>
+              <TableCell style={{ color: 'white', textAlign: 'center' }}>
+                {item.Stats[Stat.ShadowPower]}
+              </TableCell>
+              <TableCell style={{ color: 'white', textAlign: 'center' }}>
+                {item.Stats[Stat.FirePower]}
+              </TableCell>
+              <TableCell style={{ color: 'white', textAlign: 'center' }}>
+                {item.Stats[Stat.CritRating]}
+              </TableCell>
+              <TableCell style={{ color: 'white', textAlign: 'center' }}>
+                {item.Stats[Stat.HitRating]}
+              </TableCell>
+              <TableCell style={{ color: 'white', textAlign: 'center' }}>
+                {item.Stats[Stat.HasteRating]}
+              </TableCell>
+              <TableCell
+                style={{ color: 'white', textAlign: 'center' }}
+                id={item.Id.toString()}
+              >
                 {uiStore.SavedItemDps[
                   ItemSlotToItemSlotDetailed(
                     uiStore.SelectedItemSlot,
@@ -418,52 +522,83 @@ export default function ItemSelection() {
                       ) / 100
                     ).toString()
                   : ''}
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
-      {Enchants.filter(
-        e =>
-          e.ItemSlot === uiStore.SelectedItemSlot &&
-          uiStore.Sources.includes(e.Phase)
-      ).length > 0 && (
-        <table id='enchant-selection-table' data-type='mainhand'>
-          <colgroup id='enchant-selection-colgroup'>
-            <col style={{ width: '20%' }} />
-            <col style={{ width: '9%' }} />
-            <col style={{ width: '10%' }} />
-            <col style={{ width: '9%' }} />
-            <col style={{ width: '9%' }} />
-            <col style={{ width: '9%' }} />
-            <col style={{ width: '6%' }} />
-            <col style={{ width: '6%' }} />
-            <col style={{ width: '6%' }} />
-            <col style={{ width: '6%' }} />
-            <col style={{ width: '10%' }} />
-          </colgroup>
-          <thead>
-            <tr id='enchant-selection-header'>
-              <th id='header-enchant-name'>{t('Enchant')}</th>
-              <th id='header-enchant-spell-power'>{t('Spell Power')}</th>
-              <th id='header-enchant-shadow-power'>{t('Shadow Power')}</th>
-              <th id='header-enchant-fire-power'>{t('Fire Power')}</th>
-              <th id='header-enchant-hit-rating'>{t('Hit Rating')}</th>
-              <th id='header-enchant-crit-rating'>{t('Crit Rating')}</th>
-              <th id='header-enchant-stamina'>{t('Stamina')}</th>
-              <th id='header-enchant-intellect'>{t('Intellect')}</th>
-              <th id='header-enchant-mp5'>{t('MP5')}</th>
-              <th id='header-enchant-spell-penetration'>{t('Spell Pen')}</th>
-              <th id='header-enchant-dps'>{t('DPS')}</th>
-            </tr>
-          </thead>
-          <tbody aria-live='polite'>
-            {Enchants.filter(
-              e =>
-                e.ItemSlot === uiStore.SelectedItemSlot &&
-                uiStore.Sources.includes(e.Phase)
-            ).map(enchant => (
-              <tr
+        </TableBody>
+      </Table>
+      {enchants?.length && items?.length && (
+        <Table id='enchant-selection-table' data-type='mainhand'>
+          <TableHead>
+            <TableRow id='enchant-selection-header'>
+              <TableCell style={{ color: 'white' }} id='header-enchant-name'>
+                {t('Enchant')}
+              </TableCell>
+              <TableCell
+                style={{ color: 'white', textAlign: 'center' }}
+                id='header-enchant-spell-power'
+              >
+                {t('Spell Power')}
+              </TableCell>
+              <TableCell
+                style={{ color: 'white', textAlign: 'center' }}
+                id='header-enchant-shadow-power'
+              >
+                {t('Shadow Power')}
+              </TableCell>
+              <TableCell
+                style={{ color: 'white', textAlign: 'center' }}
+                id='header-enchant-fire-power'
+              >
+                {t('Fire Power')}
+              </TableCell>
+              <TableCell
+                style={{ color: 'white', textAlign: 'center' }}
+                id='header-enchant-hit-rating'
+              >
+                {t('Hit Rating')}
+              </TableCell>
+              <TableCell
+                style={{ color: 'white', textAlign: 'center' }}
+                id='header-enchant-crit-rating'
+              >
+                {t('Crit Rating')}
+              </TableCell>
+              <TableCell
+                style={{ color: 'white', textAlign: 'center' }}
+                id='header-enchant-stamina'
+              >
+                {t('Stamina')}
+              </TableCell>
+              <TableCell
+                style={{ color: 'white', textAlign: 'center' }}
+                id='header-enchant-intellect'
+              >
+                {t('Intellect')}
+              </TableCell>
+              <TableCell
+                style={{ color: 'white', textAlign: 'center' }}
+                id='header-enchant-mp5'
+              >
+                {t('MP5')}
+              </TableCell>
+              <TableCell
+                style={{ color: 'white', textAlign: 'center' }}
+                id='header-enchant-spell-penetration'
+              >
+                {t('Spell Pen')}
+              </TableCell>
+              <TableCell
+                style={{ color: 'white', textAlign: 'center' }}
+                id='header-enchant-dps'
+              >
+                {t('DPS')}
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody aria-live='polite'>
+            {enchants?.map(enchant => (
+              <TableRow
                 key={enchant.Id}
                 className='enchant-row'
                 data-selected={
@@ -484,7 +619,10 @@ export default function ItemSelection() {
                   )
                 }
               >
-                <td className={`${enchant.Quality} enchant-row-name`}>
+                <TableCell
+                  style={{ color: GetQualityCssColor(enchant.Quality) }}
+                  className={`enchant-row-name`}
+                >
                   <a
                     href={`${getBaseWowheadUrl(i18n.language)}/spell=${
                       enchant.Id
@@ -495,22 +633,42 @@ export default function ItemSelection() {
                     .
                   </a>
                   {t(enchant.Name)}
-                </td>
-                <td>{enchant.Stats[Stat.SpellPower]}</td>
-                <td>{enchant.Stats[Stat.ShadowPower]}</td>
-                <td>{enchant.Stats[Stat.FirePower]}</td>
-                <td>{enchant.Stats[Stat.HitRating]}</td>
-                <td>{enchant.Stats[Stat.CritRating]}</td>
-                <td>{enchant.Stats[Stat.Stamina]}</td>
-                <td>{enchant.Stats[Stat.Intellect]}</td>
-                <td>{enchant.Stats[Stat.Mp5]}</td>
-                <td>{enchant.Stats[Stat.SpellPenetration]}</td>
-                <td></td>
-              </tr>
+                </TableCell>
+                <TableCell style={{ color: 'white', textAlign: 'center' }}>
+                  {enchant.Stats[Stat.SpellPower]}
+                </TableCell>
+                <TableCell style={{ color: 'white', textAlign: 'center' }}>
+                  {enchant.Stats[Stat.ShadowPower]}
+                </TableCell>
+                <TableCell style={{ color: 'white', textAlign: 'center' }}>
+                  {enchant.Stats[Stat.FirePower]}
+                </TableCell>
+                <TableCell style={{ color: 'white', textAlign: 'center' }}>
+                  {enchant.Stats[Stat.HitRating]}
+                </TableCell>
+                <TableCell style={{ color: 'white', textAlign: 'center' }}>
+                  {enchant.Stats[Stat.CritRating]}
+                </TableCell>
+                <TableCell style={{ color: 'white', textAlign: 'center' }}>
+                  {enchant.Stats[Stat.Stamina]}
+                </TableCell>
+                <TableCell style={{ color: 'white', textAlign: 'center' }}>
+                  {enchant.Stats[Stat.Intellect]}
+                </TableCell>
+                <TableCell style={{ color: 'white', textAlign: 'center' }}>
+                  {enchant.Stats[Stat.Mp5]}
+                </TableCell>
+                <TableCell style={{ color: 'white', textAlign: 'center' }}>
+                  {enchant.Stats[Stat.SpellPenetration]}
+                </TableCell>
+                <TableCell
+                  style={{ color: 'white', textAlign: 'center' }}
+                ></TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       )}
-    </div>
+    </Grid>
   )
 }

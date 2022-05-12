@@ -1,12 +1,13 @@
 import {
+  Button,
   ClickAwayListener,
+  Grid,
+  Grow,
   MenuItem,
   MenuList,
   Paper,
-  Stack,
-  Button,
-  Grow,
   Popper,
+  Stack,
 } from '@mui/material'
 import { nanoid } from '@reduxjs/toolkit'
 import { useEffect, useRef, useState } from 'react'
@@ -63,7 +64,7 @@ export default function LanguageSelection() {
 
   return (
     <Stack direction='row' spacing={2} id='language-menu'>
-      <div>
+      <Grid>
         <Button
           ref={anchorRef}
           id='composition-button'
@@ -118,7 +119,18 @@ export default function LanguageSelection() {
             </Grow>
           )}
         </Popper>
-      </div>
+      </Grid>
+      <a
+        href='https://www.paypal.com/donate/?hosted_button_id=FFV45S7UCKE6S'
+        target='_blank'
+        rel='noreferrer'
+        style={{ marginTop: '5px' }}
+      >
+        <img
+          src={`${process.env.PUBLIC_URL}/img/btn_donate_LG.jpg`}
+          alt='Support me via PayPal'
+        />
+      </a>
     </Stack>
   )
 }

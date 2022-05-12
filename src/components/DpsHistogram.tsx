@@ -27,6 +27,6 @@ export default function DpsHistogram() {
       }}
     />
   ) : (
-    <div></div>
+    <></>
   )
 }

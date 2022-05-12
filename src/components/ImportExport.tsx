@@ -1,3 +1,4 @@
+import { Button, Grid } from '@mui/material'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -134,7 +135,7 @@ export default function ImportExport() {
   }
 
   return (
-    <div
+    <Grid
       id='import-export-window'
       className='close-button-target'
       style={{ display: windowIsVisible ? '' : 'none' }}
@@ -144,8 +145,8 @@ export default function ImportExport() {
         value={contentString}
         onChange={e => setContentString(e.target.value)}
       ></textarea>
-      <button
-        className='btn btn-primary btn-sm'
+      <Button
+        variant='contained'
         id='import-button'
         onClick={() => {
           importProfile()
@@ -153,16 +154,12 @@ export default function ImportExport() {
         }}
       >
         Import
-      </button>{' '}
-      <button
-        className='btn btn-primary btn-sm'
-        id='export-button'
-        onClick={exportProfile}
-      >
+      </Button>{' '}
+      <Button variant='contained' id='export-button' onClick={exportProfile}>
         Export
-      </button>{' '}
-      <button
-        className='btn btn-primary btn-sm'
+      </Button>{' '}
+      <Button
+        variant='contained'
         id='export-close-button'
         onClick={() => {
           dispatch(setImportExportWindowVisibility(false))
@@ -170,7 +167,7 @@ export default function ImportExport() {
         }}
       >
         Close
-      </button>
-    </div>
+      </Button>
+    </Grid>
   )
 }

@@ -1,3 +1,4 @@
+import { Grid, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -231,15 +232,7 @@ export function SimulationButtons() {
       return
     }
 
-    let maxWorkers = window.navigator.hardwareConcurrency || 8 // Maximum amount of web workers that can be run concurrently.
-
-    if (
-      playerState.Settings[Setting.maxWebWorkers] &&
-      parseInt(playerState.Settings[Setting.maxWebWorkers]) > 0
-    ) {
-      maxWorkers = parseInt(playerState.Settings[Setting.maxWebWorkers])
-    }
-
+    const maxWorkers = window.navigator.hardwareConcurrency || 8 // Maximum amount of web workers that can be run concurrently.
     const simulations: SimWorker[] = []
     const itemSlot: ItemSlotDetailed = ItemSlotToItemSlotDetailed(
       uiState.SelectedItemSlot,
@@ -599,8 +592,8 @@ export function SimulationButtons() {
   return (
     <>
       {medianDps.length > 0 && (
-        <div id='sim-result-dps-div'>
-          <p>
+        <Grid id='sim-result-dps-div'>
+          <Typography>
             <span id='median-dps'>
               {Math.round(Number(medianDps) * 100) / 100}
             </span>
@@ -608,16 +601,16 @@ export function SimulationButtons() {
             <span id='dps-stdev'>
               {dpsStdev.length > 0 ? '±' + dpsStdev : ''}
             </span>
-          </p>
+          </Typography>
           {maxDps.length > 0 && minDps.length > 0 && (
-            <p>
+            <Typography>
               Min: <span id='min-dps'>{minDps}</span> Max:{' '}
               <span id='max-dps'>{maxDps}</span>
-            </p>
+            </Typography>
           )}
-        </div>
+        </Grid>
       )}
-      <div
+      <Grid
         className='warlock-btn active-btn'
         onClick={() =>
           simulate({
@@ -644,12 +637,14 @@ export function SimulationButtons() {
               : '',
         }}
       >
-        {uiState.SimulationInProgress &&
-        simulationType === SimulationType.Normal
-          ? `${simulationProgressPercent}%`
-          : 'Simulate'}
-      </div>
-      <div
+        <Typography>
+          {uiState.SimulationInProgress &&
+          simulationType === SimulationType.Normal
+            ? `${simulationProgressPercent}%`
+            : 'Simulate'}
+        </Typography>
+      </Grid>
+      <Grid
         className='warlock-btn active-btn'
         onClick={() =>
           simulate({
@@ -674,12 +669,14 @@ export function SimulationButtons() {
               : '',
         }}
       >
-        {uiState.SimulationInProgress &&
-        simulationType === SimulationType.AllItems
-          ? `${simulationProgressPercent}%`
-          : 'Simulate All Items'}
-      </div>
-      <div
+        <Typography>
+          {uiState.SimulationInProgress &&
+          simulationType === SimulationType.AllItems
+            ? `${simulationProgressPercent}%`
+            : 'Simulate All Items'}
+        </Typography>
+      </Grid>
+      <Grid
         className='warlock-btn active-btn'
         onClick={() => simulate({ type: SimulationType.StatWeights })}
         style={{
@@ -690,13 +687,15 @@ export function SimulationButtons() {
               : '',
         }}
       >
-        {uiState.SimulationInProgress &&
-        simulationType === SimulationType.StatWeights
-          ? `${simulationProgressPercent}%`
-          : 'Stat Weights'}
-      </div>
+        <Typography>
+          {uiState.SimulationInProgress &&
+          simulationType === SimulationType.StatWeights
+            ? `${simulationProgressPercent}%`
+            : 'Stat Weights'}
+        </Typography>
+      </Grid>
       {
-        <div
+        <Grid
           className={
             'warlock-btn' +
             (combatLogButtonIsDisabled() ? ' disabled-btn' : ' active-btn')
@@ -706,11 +705,11 @@ export function SimulationButtons() {
             dispatch(setCombatLogVisibility(!uiState.CombatLog.Visible))
           }
         >
-          Combat Log
-        </div>
+          <Typography>Combat Log</Typography>
+        </Grid>
       }
       {
-        <div
+        <Grid
           className={
             'warlock-btn' +
             (histogramButtonIsDisabled() ? ' disabled-btn' : ' active-btn')
@@ -720,12 +719,12 @@ export function SimulationButtons() {
             dispatch(setHistogramVisibility(!uiState.Histogram.Visible))
           }
         >
-          Histogram
-        </div>
+          <Typography>Histogram</Typography>
+        </Grid>
       }
-      <p id='sim-length-result'>
+      <Typography style={{ marginBottom: '5px' }}>
         {simulationDuration.length > 0 ? simulationDuration + 's' : ''}
-      </p>
+      </Typography>
     </>
   )
 }

@@ -1,3 +1,4 @@
+import { Grid, Typography } from '@mui/material'
 import { nanoid } from 'nanoid'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
@@ -14,50 +15,60 @@ export default function RotationSelection() {
   const { t } = useTranslation()
 
   return (
-    <section id='rotation-section'>
-      <h3>{t('Rotation')}</h3>
-      <ul id='rotation-list'>
-        {RotationGroups.filter(group => {
-          // If the fight type is AOE then only show aoe spells, otherwise if it's single target, show everything but the aoe spells
-          return playerStore.Settings[Setting.fightType] === 'aoe'
-            ? group.Header === RotationGroup.Aoe
-            : group.Header !== RotationGroup.Aoe
-        }).map(group => (
-          <li
-            key={nanoid()}
-            style={{
-              display:
-                group.Header !== RotationGroup.Curse &&
-                playerStore.Settings[Setting.rotationOption] === 'simChooses'
-                  ? 'none'
-                  : '',
-            }}
-          >
-            <h4>{t(group.Header)}</h4>
-            {Spells.filter(s => s.Group === group.Header).map(spell => (
-              <div
-                key={nanoid()}
-                data-checked={playerStore.Rotation[group.Header].includes(
-                  spell.Id
-                )}
-                onClick={e => {
-                  dispatch(toggleRotationSpellSelection(spell))
-                  e.preventDefault()
-                }}
-              >
-                <a
-                  href={`${getBaseWowheadUrl(i18n.language)}/spell=${spell.Id}`}
+    <Grid container>
+      {RotationGroups.filter(group => {
+        // If the fight type is AOE then only show aoe spells, otherwise if it's single target, show everything but the aoe spells
+        return playerStore.Settings[Setting.fightType] === 'aoe'
+          ? group.Header === RotationGroup.Aoe
+          : group.Header !== RotationGroup.Aoe
+      }).map(group => (
+        <Grid
+          item
+          xs={2.4}
+          key={nanoid()}
+          style={{
+            display:
+              group.Header !== RotationGroup.Curse &&
+              playerStore.Settings[Setting.rotationOption] === 'simChooses'
+                ? 'none'
+                : '',
+          }}
+        >
+          <fieldset>
+            <legend>
+              <Typography>{t(group.Header)}</Typography>
+            </legend>
+            <Grid container justifyContent='center'>
+              {Spells.filter(s => s.Group === group.Header).map(spell => (
+                <Grid
+                  className='rotation-spell'
+                  key={nanoid()}
+                  data-checked={playerStore.Rotation[group.Header].includes(
+                    spell.Id
+                  )}
+                  onClick={e => {
+                    dispatch(toggleRotationSpellSelection(spell))
+                    e.preventDefault()
+                  }}
                 >
-                  <img
-                    src={`${process.env.PUBLIC_URL}/img/${spell.IconName}.jpg`}
-                    alt={t(spell.Name)}
-                  />
-                </a>
-              </div>
-            ))}
-          </li>
-        ))}
-      </ul>
-    </section>
+                  <a
+                    href={`${getBaseWowheadUrl(i18n.language)}/spell=${
+                      spell.Id
+                    }`}
+                  >
+                    <img
+                      width={35}
+                      height={35}
+                      src={`${process.env.PUBLIC_URL}/img/${spell.IconName}.jpg`}
+                      alt={t(spell.Name)}
+                    />
+                  </a>
+                </Grid>
+              ))}
+            </Grid>
+          </fieldset>
+        </Grid>
+      ))}
+    </Grid>
   )
 }

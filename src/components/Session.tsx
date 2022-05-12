@@ -56,5 +56,5 @@ export default function Session() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return <div></div>
+  return <></>
 }

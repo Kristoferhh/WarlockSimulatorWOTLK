@@ -6,20 +6,23 @@ import { Races } from './data/Races'
 import { Sockets } from './data/Sockets'
 import { TalentTreeStruct } from './data/Talents'
 import {
+  AuraId,
   GemColor,
   InitialPlayerStats,
   InitialSetCounts,
   Item,
-  ItemSlotDetailedStruct,
-  ItemSlotDetailed,
   ItemSlot,
+  ItemSlotDetailed,
+  ItemSlotDetailedStruct,
   Languages,
   Pet,
   PlayerState,
+  Quality,
   Race,
   SavedItemDps,
   SelectedGemsStruct,
   SetsStruct,
+  Setting,
   Settings,
   SocketColor,
   SourcesStruct,
@@ -28,8 +31,6 @@ import {
   StatsCollection,
   SubSlotValue,
   TalentStore,
-  AuraId,
-  Setting,
 } from './Types'
 
 export function ItemSlotToItemSlotDetailed(
@@ -176,13 +177,30 @@ export function getRemainingTalentPoints(talents: TalentStore): number {
   return 71 - Object.values<number>(talents).reduce((a, b) => a + b, 0)
 }
 
+export function GetQualityCssColor(quality: Quality): string {
+  switch (quality) {
+    case Quality.Legendary:
+      return '#ff8000'
+    case Quality.Heirloom:
+      return '#e6cc80'
+    case Quality.Epic:
+      return '#a335ee'
+    case Quality.Rare:
+      return '#0070dd'
+    case Quality.Uncommon:
+      return '#1eff00'
+    case Quality.Common:
+      return '#ffffff'
+  }
+}
+
 export function isPetActive(
   settings: Settings,
   requiresAggressivePet: boolean,
   requiresPhysicalPet: boolean
 ): boolean {
   return (
-    (!requiresAggressivePet || settings[Setting.petMode] === '1') &&
+    (!requiresAggressivePet || settings[Setting.petIsAggressive] === 'true') &&
     (!requiresPhysicalPet || settings[Setting.petChoice] !== Pet.Imp)
   )
 }

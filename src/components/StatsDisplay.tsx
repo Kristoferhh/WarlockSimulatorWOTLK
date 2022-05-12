@@ -1,3 +1,5 @@
+import { List, ListItem, Typography } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import { nanoid } from 'nanoid'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
@@ -5,9 +7,16 @@ import { getPlayerHitPercent, getPlayerHitRating, isPetActive } from '../Common'
 import { RootState } from '../redux/Store'
 import { AuraId, Pet, Setting, Stat, StatConstant } from '../Types'
 
+const useStyles = makeStyles({
+  stat: {
+    lineHeight: '0.7 !important',
+  },
+})
+
 export default function StatsDisplay() {
   const playerState = useSelector((state: RootState) => state.player)
   const { t } = useTranslation()
+  const mui = useStyles()
 
   function getStamina(): number {
     let stamina = Object.values(playerState.Stats)
@@ -17,23 +26,12 @@ export default function StatsDisplay() {
       .map(obj => obj[Stat.StaminaModifier] || 1)
       .reduce((a, b) => a * b)
 
-    if (playerState.Auras.includes(AuraId.BloodPact)) {
-      let bloodPactModifier =
-        parseInt(playerState.Settings[Setting.improvedImpSetting]) || 0
-
-      // If the player is using an imp, the imp is active, and the player
-      // has more points in the Improved Imp talent than the improved imp setting then use that instead
-      if (
-        isPetActive(playerState.Settings, false, false) &&
-        playerState.Settings[Setting.petChoice] === Pet.Imp
-      ) {
-        bloodPactModifier = Math.max(
-          bloodPactModifier,
-          playerState.Talents['Improved Imp']
-        )
-      }
-
-      stamina += 70 * (0.1 * bloodPactModifier)
+    if (
+      playerState.Auras.includes(AuraId.BloodPact) &&
+      isPetActive(playerState.Settings, false, false) &&
+      playerState.Settings[Setting.petChoice] === Pet.Imp
+    ) {
+      stamina += 70 * (0.1 * playerState.Talents['Improved Imp'] || 0)
     }
 
     return stamina * staminaModifier
@@ -191,17 +189,11 @@ export default function StatsDisplay() {
     }
 
     if (
-      (playerState.Auras.includes(AuraId.SunderArmor) &&
-        playerState.Auras.includes(AuraId.ExposeArmor) &&
-        playerState.Settings[Setting.improvedExposeArmor] === '2') ||
-      (playerState.Auras.includes(AuraId.ExposeArmor) &&
-        !playerState.Auras.includes(AuraId.SunderArmor))
+      playerState.Auras.includes(AuraId.SunderArmor) ||
+      playerState.Auras.includes(AuraId.ExposeArmor)
     ) {
-      armor -=
-        2050 *
-        (1 + 0.25 * parseInt(playerState.Settings[Setting.improvedExposeArmor]))
-    } else if (playerState.Auras.includes(AuraId.SunderArmor)) {
-      armor -= 520 * 5
+      // TODO it reduces armor by 20%
+      armor -= 2050
     }
 
     if (playerState.Auras.includes(AuraId.CurseOfRecklessness)) {
@@ -250,17 +242,22 @@ export default function StatsDisplay() {
   ]
 
   return (
-    <ul className='character-stats'>
+    <List>
       {stats
         .filter(
           stat => stat.condition === undefined || stat.condition() === true
         )
         .map(stat => (
-          <li key={nanoid()}>
-            <p className='character-stat'>{t(stat.name)}</p>
-            <p className='character-stat-val'>{stat.value()}</p>
-          </li>
+          <ListItem
+            style={{
+              justifyContent: 'space-between',
+            }}
+            key={nanoid()}
+          >
+            <Typography className={mui.stat}>{t(stat.name)}</Typography>
+            <Typography className={mui.stat}>{stat.value()}</Typography>
+          </ListItem>
         ))}
-    </ul>
+    </List>
   )
 }

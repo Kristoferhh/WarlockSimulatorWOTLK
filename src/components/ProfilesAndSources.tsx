@@ -1,3 +1,11 @@
+import {
+  Button,
+  Grid,
+  List,
+  ListItem,
+  TextField,
+  Typography,
+} from '@mui/material'
 import { nanoid } from '@reduxjs/toolkit'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -139,63 +147,69 @@ export default function ProfilesAndSources() {
   }
 
   return (
-    <div id='profiles-and-sources'>
+    <Grid
+      container
+      id='profiles-and-sources'
+      style={{ paddingLeft: '40px', paddingRight: '40px' }}
+    >
       <fieldset id='profile-fieldset'>
-        <legend>{t('Profile Options')}</legend>
-        <input
+        <legend>
+          <Typography>{t('Profile Options')}</Typography>
+        </legend>
+        <TextField
+          size='small'
           placeholder={t('E.g. "P3 Shadow BiS"')}
-          type='text'
           value={profileName}
           onChange={e => setProfileName(e.target.value)}
           name='profileName'
         />
-        <button
-          className='btn btn-primary btn-sm'
+        <Button
+          variant='contained'
           id='save-new-profile-button'
           onClick={() => callSetProfile(true)}
           disabled={profileName.length === 0}
         >
-          {t('Save New Profile')}
-        </button>
-        <div id='update-profile-div'>
-          <button
-            className='btn btn-primary btn-sm'
+          <Typography>{t('Save New Profile')}</Typography>
+        </Button>
+        <Grid id='update-profile-Grid'>
+          <Button
+            variant='contained'
             style={{
               display: selectedProfileExists ? '' : 'none',
             }}
             id='save-profile-button'
             onClick={() => callSetProfile(false)}
           >
-            {t('Save')}
-          </button>{' '}
-          <button
-            className='btn btn-primary btn-sm'
+            <Typography>{t('Save')}</Typography>
+          </Button>{' '}
+          <Button
+            variant='contained'
             style={{
               display: selectedProfileExists ? '' : 'none',
             }}
             id='delete-profile-button'
             onClick={() => deleteProfileHandler()}
           >
-            {t('Delete')}
-          </button>{' '}
-          <button
-            className='btn btn-primary btn-sm'
+            <Typography>{t('Delete')}</Typography>
+          </Button>{' '}
+          <Button
+            variant='contained'
             style={{
               display: selectedProfileExists ? '' : 'none',
             }}
             id='rename-profile-button'
             onClick={() => renameProfileHandler()}
           >
-            {t('Rename')}
-          </button>{' '}
-          <button
+            <Typography>{t('Rename')}</Typography>
+          </Button>{' '}
+          <Button
+            variant='contained'
             id='import-export-button'
-            className='btn btn-primary btn-sm'
             onClick={() => dispatch(setImportExportWindowVisibility(true))}
           >
-            {t('Import/Export')}
-          </button>
-        </div>
+            <Typography>{t('Import/Export')}</Typography>
+          </Button>
+        </Grid>
       </fieldset>
       <fieldset
         id='saved-profiles'
@@ -203,36 +217,40 @@ export default function ProfilesAndSources() {
           display: playerStore.Profiles.length === 0 ? 'none' : '',
         }}
       >
-        <legend>{t('Saved Profiles')}</legend>
-        <ul>
+        <legend>
+          <Typography>{t('Saved Profiles')}</Typography>
+        </legend>
+        <List>
           {playerStore.Profiles.map(profileContainer => (
-            <li
+            <ListItem
               key={nanoid()}
               className='saved-profile'
               data-checked={selectedProfileState === profileContainer.Name}
               onClick={() => profileClickHandler(profileContainer)}
             >
-              {profileContainer.Name}
-            </li>
+              <Typography>{profileContainer.Name}</Typography>
+            </ListItem>
           ))}
-        </ul>
+        </List>
       </fieldset>
 
       <fieldset id='source-filters'>
-        <legend>{t('Sources')}</legend>
-        <ul>
+        <legend>
+          <Typography>{t('Sources')}</Typography>
+        </legend>
+        <List style={{ display: 'flex' }}>
           {phases.map(phase => (
-            <li
+            <ListItem
               key={phase.phase}
               data-checked={sourcesState.includes(phase.phase)}
               className='phase-btn'
               onClick={() => dispatch(togglePhase(phase.phase))}
             >
-              {t(phase.title)}
-            </li>
+              <Typography>{t(phase.title)}</Typography>
+            </ListItem>
           ))}
-        </ul>
+        </List>
       </fieldset>
-    </div>
+    </Grid>
   )
 }

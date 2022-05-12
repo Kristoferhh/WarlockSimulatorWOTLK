@@ -1,4 +1,14 @@
-import { nanoid } from '@reduxjs/toolkit'
+import {
+  Button,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  Radio,
+  RadioGroup,
+  Typography,
+} from '@mui/material'
+import { makeStyles } from '@mui/styles'
+import { nanoid } from 'nanoid'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
@@ -22,6 +32,18 @@ const socketOptions: { name: string; color: SocketColor }[] = [
   { name: 'Blue Socket', color: SocketColor.Blue },
 ]
 
+const useStyles = makeStyles(() => ({
+  formControl: {
+    justifyContent: 'center',
+    flexDirection: 'row !important' as 'row',
+  },
+  label: {
+    '& span': {
+      color: 'white',
+    },
+  },
+}))
+
 export function FillItemSockets() {
   const uiState = useSelector((state: RootState) => state.ui)
   const playerState = useSelector((state: RootState) => state.player)
@@ -33,62 +55,60 @@ export function FillItemSockets() {
   >('currentSlot')
   const [replacingExistingGems, setReplacingExistingGems] = useState(false)
   const { t } = useTranslation()
+  const mui = useStyles()
 
   function fillSockets(): void {
-    if (selectedGemId === 0) {
-      return
+    if (selectedGemId !== 0) {
+      let newSelectedGems = JSON.parse(JSON.stringify(playerState.SelectedGems))
+
+      Items.filter(
+        item =>
+          (item.ItemSlot === uiState.SelectedItemSlot &&
+            itemSlotToFill === 'currentSlot') ||
+          itemSlotToFill === 'allSlots'
+      ).forEach(item => {
+        fillSocketsInItem(item, newSelectedGems)
+      })
+
+      dispatch(setSelectedGems(newSelectedGems))
+      dispatch(
+        setGemsStats(getGemsStats(playerState.SelectedItems, newSelectedGems))
+      )
+      dispatch(setFillItemSocketsWindowVisibility(false))
     }
-    let newSelectedGems = JSON.parse(JSON.stringify(playerState.SelectedGems))
-
-    Items.filter(
-      item =>
-        (item.ItemSlot === uiState.SelectedItemSlot &&
-          itemSlotToFill === 'currentSlot') ||
-        itemSlotToFill === 'allSlots'
-    ).forEach(item => {
-      fillSocketsInItem(item, newSelectedGems)
-    })
-
-    dispatch(setSelectedGems(newSelectedGems))
-    dispatch(
-      setGemsStats(getGemsStats(playerState.SelectedItems, newSelectedGems))
-    )
-    dispatch(setFillItemSocketsWindowVisibility(false))
   }
 
   function fillSocketsInItem(
     item: Item,
     selectedGemsObj: SelectedGemsStruct
   ): void {
-    if (!item.Sockets) {
-      return
-    }
-
-    // Create an empty gem array.
-    // If the item already has a gem array then replace it with the existing one.
-    let itemGemArray = Array(item.Sockets.length).fill(['', 0])
-    if (
-      playerState.SelectedGems[item.ItemSlot] &&
-      playerState.SelectedGems[item.ItemSlot][item.Id]
-    ) {
-      itemGemArray = JSON.parse(
-        JSON.stringify(playerState.SelectedGems[item.ItemSlot][item.Id])
-      )
-    }
-
-    // Loop through the sockets in the item and insert the gem if the socket color matches the user's choice or if the user is inserting into all sockets
-    // and if the socket is empty or if the user chose to replace existing gems as well
-    for (let i = 0; i < item.Sockets.length; i++) {
+    if (item.Sockets) {
+      // Create an empty gem array.
+      // If the item already has a gem array then replace it with the existing one.
+      let itemGemArray = Array(item.Sockets.length).fill(['', 0])
       if (
-        item.Sockets[i] === socketColor &&
-        ([null, 0].includes(itemGemArray[i][1]) || replacingExistingGems)
+        playerState.SelectedGems[item.ItemSlot] &&
+        playerState.SelectedGems[item.ItemSlot][item.Id]
       ) {
-        itemGemArray[i] = [item.Sockets[i], selectedGemId]
+        itemGemArray = JSON.parse(
+          JSON.stringify(playerState.SelectedGems[item.ItemSlot][item.Id])
+        )
       }
-    }
 
-    selectedGemsObj[item.ItemSlot] = selectedGemsObj[item.ItemSlot] || {}
-    selectedGemsObj[item.ItemSlot][item.Id.toString()] = itemGemArray
+      // Loop through the sockets in the item and insert the gem if the socket color matches the user's choice or if the user is inserting into all sockets
+      // and if the socket is empty or if the user chose to replace existing gems as well
+      for (let i = 0; i < item.Sockets.length; i++) {
+        if (
+          item.Sockets[i] === socketColor &&
+          ([null, 0].includes(itemGemArray[i][1]) || replacingExistingGems)
+        ) {
+          itemGemArray[i] = [item.Sockets[i], selectedGemId]
+        }
+      }
+
+      selectedGemsObj[item.ItemSlot] = selectedGemsObj[item.ItemSlot] || {}
+      selectedGemsObj[item.ItemSlot][item.Id.toString()] = itemGemArray
+    }
   }
 
   function socketColorClickHandler(newColor: SocketColor) {
@@ -98,71 +118,71 @@ export function FillItemSockets() {
     ) {
       setSelectedGemId(0)
     }
+
     setSocketColor(newColor)
   }
 
   return (
-    <div
+    <Grid
       id='gem-options-window'
       style={{ display: uiState.FillItemSocketsWindowVisible ? '' : 'none' }}
     >
-      <div id='gem-options-window-replacement-options'>
-        <label htmlFor='emptySockets'>Fill empty sockets</label>
-        <input
-          type='radio'
-          name='gem-replacement-option'
-          id='emptySockets'
-          onChange={() => setReplacingExistingGems(false)}
-          checked={replacingExistingGems === false}
-        />
-        <label htmlFor='allSockets'>
-          Fill all sockets (replaces equipped gems)
-        </label>
-        <input
-          type='radio'
-          name='gem-replacement-option'
-          id='allSockets'
-          onChange={() => setReplacingExistingGems(true)}
-          checked={replacingExistingGems === true}
-        />
-      </div>
-      <div id='gem-options-window-item-slot'>
-        <label htmlFor='currentSlot'>Current item slot</label>
-        <input
-          type='radio'
-          name='item-slot'
-          id='currentSlot'
-          onChange={() => setItemSlotToFill('currentSlot')}
-          checked={itemSlotToFill === 'currentSlot'}
-        />
-        <label htmlFor='allSlots'>All item slots</label>
-        <input
-          type='radio'
-          name='item-slot'
-          id='allSlots'
-          onChange={() => setItemSlotToFill('allSlots')}
-          checked={itemSlotToFill === 'allSlots'}
-        />
-      </div>
-      <div id='gem-options-window-socket-selection'>
-        {socketOptions.map(socket => (
-          <label key={nanoid()}>
-            {socket.name}
-            <input
-              type='radio'
-              name='socket-selection'
+      <FormControl className={mui.formControl} fullWidth={true}>
+        <RadioGroup>
+          <FormControlLabel
+            key={nanoid()}
+            className={replacingExistingGems !== false ? mui.label : ''}
+            onChange={() => setReplacingExistingGems(false)}
+            checked={replacingExistingGems === false}
+            control={<Radio />}
+            label='Fill empty sockets'
+          />
+          <FormControlLabel
+            key={nanoid()}
+            className={replacingExistingGems !== true ? mui.label : ''}
+            onChange={() => setReplacingExistingGems(true)}
+            checked={replacingExistingGems === true}
+            control={<Radio />}
+            label='Fill all sockets'
+          />
+        </RadioGroup>
+        <RadioGroup>
+          <FormControlLabel
+            key={nanoid()}
+            className={itemSlotToFill !== 'currentSlot' ? mui.label : ''}
+            onChange={() => setItemSlotToFill('currentSlot')}
+            checked={itemSlotToFill === 'currentSlot'}
+            control={<Radio />}
+            label='Current item slot'
+          />
+          <FormControlLabel
+            key={nanoid()}
+            className={itemSlotToFill !== 'allSlots' ? mui.label : ''}
+            onChange={() => setItemSlotToFill('allSlots')}
+            checked={itemSlotToFill === 'allSlots'}
+            control={<Radio />}
+            label='All item slots'
+          />
+        </RadioGroup>
+        <RadioGroup>
+          {socketOptions.map(socket => (
+            <FormControlLabel
+              key={nanoid()}
+              className={socketColor !== socket.color ? mui.label : ''}
               onChange={() => socketColorClickHandler(socket.color)}
               checked={socketColor === socket.color}
-            ></input>
-          </label>
-        ))}
-      </div>
-      <div id='gem-options-gem-list'>
-        <div id='gem-options-gem-list'>
+              control={<Radio />}
+              label={socket.name}
+            />
+          ))}
+        </RadioGroup>
+      </FormControl>
+      <Grid id='gem-options-gem-list'>
+        <Grid id='gem-options-gem-list'>
           {Gems.filter(e =>
             canGemColorBeInsertedIntoSocketColor(socketColor, e.Color)
           ).map(gem => (
-            <div
+            <Grid
               className='gem-options-gem'
               key={gem.Id}
               onClick={e => {
@@ -176,26 +196,26 @@ export function FillItemSockets() {
                 alt={t(gem.Name)}
               />
               <a href={`${getBaseWowheadUrl(i18n.language)}/item=${gem.Id}`}>
-                {t(gem.Name)}
+                <Typography>{t(gem.Name)}</Typography>
               </a>
-            </div>
+            </Grid>
           ))}
-        </div>
-      </div>
-      <button
-        className='btn btn-primary btn-sm'
+        </Grid>
+      </Grid>
+      <Button
+        variant='contained'
         id='gem-options-apply-button'
         onClick={() => fillSockets()}
         disabled={selectedGemId === 0}
       >
         Apply
-      </button>{' '}
-      <button
-        className='btn btn-primary btn-sm'
+      </Button>{' '}
+      <Button
+        variant='contained'
         onClick={() => dispatch(setFillItemSocketsWindowVisibility(false))}
       >
         Close
-      </button>
-    </div>
+      </Button>
+    </Grid>
   )
 }

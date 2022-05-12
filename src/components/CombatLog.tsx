@@ -1,3 +1,4 @@
+import { Grid, Typography } from '@mui/material'
 import { nanoid } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
 import { RootState } from '../redux/Store'
@@ -6,13 +7,13 @@ export default function CombatLog() {
   const uiState = useSelector((state: RootState) => state.ui)
 
   return (
-    <div
+    <Grid
       id='combat-log'
       style={{ display: uiState.CombatLog.Visible ? '' : 'none' }}
     >
       {uiState.CombatLog.Data.map(entry => (
-        <p key={nanoid()}>{entry}</p>
+        <Typography key={nanoid()}>{entry}</Typography>
       ))}
-    </div>
+    </Grid>
   )
 }

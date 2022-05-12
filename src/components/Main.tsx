@@ -1,5 +1,7 @@
-import { useDispatch } from 'react-redux'
+import { Grid, Link, Typography } from '@mui/material'
+import { useDispatch, useSelector } from 'react-redux'
 import packageJson from '../../package.json'
+import { RootState } from '../redux/Store'
 import { setGemSelectionTable } from '../redux/UiSlice'
 import { InitialGemSelectionTableValue } from '../Types'
 import AuraSelection from './AuraSelection'
@@ -19,39 +21,54 @@ import TalentTrees from './TalentTrees'
 
 export default function Main() {
   const dispatch = useDispatch()
+  const uiState = useSelector((state: RootState) => state.ui)
 
   return (
-    <div
+    <Grid
       id='main'
       onClick={() =>
         dispatch(setGemSelectionTable(InitialGemSelectionTableValue))
       }
     >
-      <div id='header'>
+      <Grid id='header'>
         <LanguageSelection />
-        <p style={{ marginRight: 'auto' }}>
+        <Typography style={{ marginRight: 'auto' }}>
           Please report bugs in the #sim-bug-report channel on the Warlock
           Classic discord.{' '}
-          <a
+          <Link
             target='_blank'
             rel='noreferrer'
             href='https://discord.gg/5MX6j7nk7s'
           >
             Click here to join
-          </a>
+          </Link>
           .
-        </p>
-        <p id='sim-version-number'>v{packageJson.version}</p>
-      </div>
-      <div id='container-1'>
-        <AuraSelection />
-        <RotationSelection />
-        <SettingsDisplay />
-        <TalentTrees />
-        <StatWeights />
-        <BreakdownTables />
-      </div>
-      <div id='container-2'>
+        </Typography>
+        <Typography id='sim-version-number'>v{packageJson.version}</Typography>
+      </Grid>
+      <Grid container id='container-1'>
+        {uiState.StatWeights.Visible && (
+          <Grid item style={{ width: '200px' }}>
+            <StatWeights />
+          </Grid>
+        )}
+        <Grid item xs>
+          <AuraSelection />
+          <RotationSelection />
+        </Grid>
+        <Grid item xs={3}>
+          <SettingsDisplay />
+        </Grid>
+        <Grid item style={{ width: '618px' }}>
+          <TalentTrees />
+        </Grid>
+        {uiState.CombatLogBreakdown.Data.length > 0 && (
+          <Grid item xs={9}>
+            <BreakdownTables />
+          </Grid>
+        )}
+      </Grid>
+      <Grid container id='container-2'>
         <EquippedItemsDisplay />
         <CombatLog />
         <DpsHistogram />
@@ -59,7 +76,7 @@ export default function Main() {
         <GemSelection />
         <ProfilesAndSources />
         <ItemSelection />
-      </div>
-    </div>
+      </Grid>
+    </Grid>
   )
 }
