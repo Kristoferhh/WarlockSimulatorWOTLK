@@ -469,31 +469,31 @@ export default function ItemSelection() {
                 }
               </TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center' }}>
-                {t(item.Source)}
+                {item.Source && t(item.Source)}
               </TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center' }}>
-                {item.Stats[Stat.Stamina]}
+                {item.Stats && item.Stats[Stat.Stamina]}
               </TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center' }}>
-                {item.Stats[Stat.Intellect]}
+                {item.Stats && item.Stats[Stat.Intellect]}
               </TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center' }}>
-                {item.Stats[Stat.SpellPower]}
+                {item.Stats && item.Stats[Stat.SpellPower]}
               </TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center' }}>
-                {item.Stats[Stat.ShadowPower]}
+                {item.Stats && item.Stats[Stat.ShadowPower]}
               </TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center' }}>
-                {item.Stats[Stat.FirePower]}
+                {item.Stats && item.Stats[Stat.FirePower]}
               </TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center' }}>
-                {item.Stats[Stat.CritRating]}
+                {item.Stats && item.Stats[Stat.CritRating]}
               </TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center' }}>
-                {item.Stats[Stat.HitRating]}
+                {item.Stats && item.Stats[Stat.HitRating]}
               </TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center' }}>
-                {item.Stats[Stat.HasteRating]}
+                {item.Stats && item.Stats[Stat.HasteRating]}
               </TableCell>
               <TableCell
                 style={{ color: 'white', textAlign: 'center' }}

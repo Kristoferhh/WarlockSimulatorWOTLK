@@ -36,19 +36,26 @@ export enum ItemSlotDetailed {
   Wand = 'Wand',
 }
 
+export enum Faction {
+  Alliance,
+  Horde,
+}
+
 export interface Item {
   Name: string
-  Id: ItemId
+  Id: number
   ItemSlot: ItemSlot
   Quality: Quality
-  Stats: StatsCollection
+  UniqueId?: Number[]
+  Faction?: Faction
+  Stats?: StatsCollection
   IconName: string
   Sockets?: SocketColor[]
   SocketBonus?: StatsCollection
   Set?: ItemSet
-  DisplayId?: ItemId
+  DisplayId?: number
   Unique?: boolean
-  Source: ItemSource
+  Source?: ItemSource // TODO make this not nullable
   Phase: Phase
   IsTwoHand?: boolean
 }
@@ -58,7 +65,7 @@ export interface Enchant {
   ItemSlot: ItemSlot
   Quality: Quality
   Stats?: StatsCollection
-  Id: EnchantId
+  Id: number
   Source: ItemSource
   Phase: Phase
 }
@@ -195,6 +202,7 @@ export enum Stat {
   NatureModifier = 'NatureModifier',
   FrostPower = 'FrostPower',
   SpellPenetration = 'SpellPenetration',
+  ResilienceRating = 'ResilienceRating',
 }
 
 export interface CombatLogBreakdownData {
@@ -302,10 +310,16 @@ export type SelectedGemsStruct = {
   }
 }
 
-// TODO
 export enum ItemSet {
   T6 = '670',
-  T7 = '-32',
+  Duskweaver = '764',
+  GladiatorsFelshroud = '780',
+  T7 = '802',
+  GuldansRegalia = '845',
+  KelthuzadsRegalia = '846',
+  FrostsavageBattlegear = '819',
+  T8 = '837',
+  DarkCovensRegalia = '884',
 }
 
 export const InitialSelectedItemsAndEnchants: ItemSlotDetailedStruct = {
@@ -435,7 +449,14 @@ export type SetsStruct = {
 
 export const InitialSetCounts: SetsStruct = {
   [ItemSet.T6]: 0,
+  [ItemSet.Duskweaver]: 0,
   [ItemSet.T7]: 0,
+  [ItemSet.GuldansRegalia]: 0,
+  [ItemSet.KelthuzadsRegalia]: 0,
+  [ItemSet.FrostsavageBattlegear]: 0,
+  [ItemSet.T8]: 0,
+  [ItemSet.GladiatorsFelshroud]: 0,
+  [ItemSet.DarkCovensRegalia]: 0,
 }
 
 export enum Quality {
@@ -565,6 +586,7 @@ export enum GemColor {
   Green = 'Green',
   Purple = 'Purple',
   Void = 'Void',
+  Prismatic = 'Prismatic',
 }
 
 export const Languages: { Iso: string; Name: string; WowheadPrefix: string }[] =
@@ -577,6 +599,7 @@ export interface Gem {
   Name: string
   Id: number
   Color: GemColor
+  Quality: Quality
   IconName: string
   Phase: Phase
   Stats?: StatsCollection
@@ -810,48 +833,4 @@ export enum AuraId {
   PotionOfSpeed = 40211,
   PotionOfWildMagic = 40212,
   GrandSpellstone = 41196,
-}
-
-export enum GemId {
-  ChaoticSkyflareDiamond = 41285,
-  RunedCardinalRuby = 40113,
-  RigidKingsAmber = 40125,
-  QuickKingsAmber = 40128,
-  PurifiedDreadstone = 40133,
-  ShiningEyeOfZul = 40172,
-  VeiledAmetrine = 40153,
-  RecklessAmetrine = 40155,
-}
-
-export enum ItemId {
-  CloakOfTheDying = 39425,
-  WandOfTheArchlich = 39426,
-  SparkOfLife = 37657,
-  PendulumOfTelluricCurrents = 37264,
-  SignetOfTheMalevolent = 39389,
-  BandOfNeglectedPleas = 39193,
-  BootsOfTheFollower = 39215,
-  NecrogenicBelt = 39251,
-  ResurgentPhantomBindings = 39390,
-  ValorousPlagueheartCirclet = 40421,
-  PendantOfLostVocations = 39232,
-  ValorousPlagueheartShoulderpads = 40424,
-  ValorousPlagueheartRobe = 40423,
-  ValorousPlagueheartLeggings = 40422,
-  ValorousPlagueheartGloves = 40420,
-  TheSoulblade = 39424,
-  WatchfulEye = 39199,
-}
-
-export enum EnchantId {
-  MightySpellpower = 60714,
-  TuskarrsVitality = 47901,
-  BrilliantSpellthread = 55631,
-  EternalBeltBuckle = 55655,
-  ExceptionalSpellpower = 44592,
-  SuperiorSpellpower = 60767,
-  PowerfulStats = 60692,
-  LightweaveEmbroidery = 55642,
-  MastersInscriptionOfTheStorm = 61120,
-  ArcanumOfBurningMysteries = 59970,
 }

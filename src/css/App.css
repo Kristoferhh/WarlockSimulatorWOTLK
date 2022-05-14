@@ -489,7 +489,6 @@ img {
 
 .gem-row td a {
   text-decoration: none;
-  color: white;
 }
 
 /* Socket borders */
@@ -504,6 +503,14 @@ img[data-color='blue'] {
 }
 img[data-color='meta'] {
   border: 1px solid white;
+}
+
+#profile-name-input {
+  color: white;
+}
+
+#profile-name-input fieldset {
+  border-color: white;
 }
 
 #profile-fieldset {
@@ -553,7 +560,7 @@ img[data-color='meta'] {
 }
 
 #item-selection-container {
-  padding: 0px 40px;
+  padding: 0px 40px 40px 40px;
   min-height: 1500px;
 }
 
@@ -584,11 +591,6 @@ img[data-color='meta'] {
   width: 22px;
   height: 22px;
   margin-right: 5px;
-}
-
-#enchant-selection-table {
-  margin-top: 60px;
-  padding-bottom: 100px;
 }
 
 #header-name,
@@ -724,7 +726,7 @@ table.dataTable.no-footer {
 
 #gem-options-gem-list div {
   display: inline-block;
-  min-width: 300px;
+  min-width: 320px;
 }
 
 .gem-options-gem[data-checked='true'] {

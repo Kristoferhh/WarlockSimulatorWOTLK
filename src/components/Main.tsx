@@ -33,14 +33,16 @@ export default function Main() {
       <Grid id='header'>
         <LanguageSelection />
         <Typography style={{ marginRight: 'auto' }}>
-          Please report bugs in the #sim-bug-report channel on the Warlock
-          Classic discord.{' '}
+          This sim is still in beta so results might not be 100% accurate.
+          Please report bugs by creating a GitHub issue{' '}
           <Link
             target='_blank'
             rel='noreferrer'
-            href='https://discord.gg/5MX6j7nk7s'
+            href='https://github.com/Kristoferhh/WarlockSimulatorWOTLK/issues/new'
+            underline='always'
+            style={{ textDecorationColor: 'white' }}
           >
-            Click here to join
+            here
           </Link>
           .
         </Typography>

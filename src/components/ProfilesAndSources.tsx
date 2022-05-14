@@ -159,6 +159,7 @@ export default function ProfilesAndSources() {
         <TextField
           size='small'
           placeholder={t('E.g. "P3 Shadow BiS"')}
+          id='profile-name-input'
           value={profileName}
           onChange={e => setProfileName(e.target.value)}
           name='profileName'

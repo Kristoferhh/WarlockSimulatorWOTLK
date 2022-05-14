@@ -12,6 +12,7 @@ import {
   canGemColorBeInsertedIntoSocketColor,
   getBaseWowheadUrl,
   getGemsStats,
+  GetQualityCssColor,
 } from '../Common'
 import { Gems } from '../data/Gems'
 import { Items } from '../data/Items'
@@ -78,7 +79,7 @@ export default function GemSelection() {
       cellSpacing={0}
       data-color='none'
       style={{
-        width: '15%',
+        width: '380px',
         borderCollapse: 'unset',
         display: uiState.GemSelectionTable.Visible ? '' : 'none',
       }}
@@ -154,7 +155,10 @@ export default function GemSelection() {
                   width={20}
                   height={20}
                 />
-                <a href={`${getBaseWowheadUrl(i18n.language)}/item=${gem.Id}`}>
+                <a
+                  href={`${getBaseWowheadUrl(i18n.language)}/item=${gem.Id}`}
+                  style={{ color: GetQualityCssColor(gem.Quality) }}
+                >
                   {t(gem.Name)}
                 </a>
               </TableCell>

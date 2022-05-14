@@ -16,6 +16,7 @@ import {
   canGemColorBeInsertedIntoSocketColor,
   getBaseWowheadUrl,
   getGemsStats,
+  GetQualityCssColor,
 } from '../Common'
 import { Gems } from '../data/Gems'
 import { Items } from '../data/Items'
@@ -196,7 +197,9 @@ export function FillItemSockets() {
                 alt={t(gem.Name)}
               />
               <a href={`${getBaseWowheadUrl(i18n.language)}/item=${gem.Id}`}>
-                <Typography>{t(gem.Name)}</Typography>
+                <Typography style={{ color: GetQualityCssColor(gem.Quality) }}>
+                  {t(gem.Name)}
+                </Typography>
               </a>
             </Grid>
           ))}
