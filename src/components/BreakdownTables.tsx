@@ -1,5 +1,6 @@
 import {
   Grid,
+  Link,
   Table,
   TableBody,
   TableCell,
@@ -137,7 +138,7 @@ export default function BreakdownTables() {
                         src={`${process.env.PUBLIC_URL}/img/${spellObj?.iconName}.jpg`}
                       />
                     )}
-                    <a
+                    <Link
                       className='breakdown-table-spell-name'
                       target='_blank'
                       rel='noreferrer'
@@ -150,7 +151,7 @@ export default function BreakdownTables() {
                       }
                     >
                       {t(spell.Name)}
-                    </a>
+                    </Link>
                   </TableCell>
                   <TableCell>
                     <meter
@@ -255,7 +256,7 @@ export default function BreakdownTables() {
                         src={`${process.env.PUBLIC_URL}/img/${spellObj?.iconName}.jpg`}
                       />
                     )}
-                    <a
+                    <Link
                       className='breakdown-table-spell-name'
                       target='_blank'
                       rel='noreferrer'
@@ -268,7 +269,7 @@ export default function BreakdownTables() {
                       }
                     >
                       {t(spell.Name)}
-                    </a>
+                    </Link>
                   </TableCell>
                   <TableCell>
                     <meter
@@ -344,7 +345,7 @@ export default function BreakdownTables() {
                         src={`${process.env.PUBLIC_URL}/img/${spellObj?.iconName}.jpg`}
                       />
                     )}
-                    <a
+                    <Link
                       className='breakdown-table-spell-name'
                       target='_blank'
                       rel='noreferrer'
@@ -357,7 +358,7 @@ export default function BreakdownTables() {
                       }
                     >
                       {t(spell.Name)}
-                    </a>
+                    </Link>
                   </TableCell>
                   {/*If the aura's count is less than 2 then show 1 decimal place, otherwise just round the value*/}
                   <TableCell className='number'>

@@ -623,7 +623,7 @@ export function getAllocatedTalentsPointsInTree(
     for (const talent in tree.Rows[row]) {
       const talentKey = tree.Rows[row][talent].Name
 
-      if (talentKey != null) {
+      if (talentKey != null && talentState[talentKey]) {
         points += talentState[talentKey]
       }
     }

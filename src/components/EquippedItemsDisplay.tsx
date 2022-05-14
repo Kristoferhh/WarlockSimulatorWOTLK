@@ -1,5 +1,6 @@
 import {
   Grid,
+  Link,
   Table,
   TableBody,
   TableCell,
@@ -111,7 +112,7 @@ export default function EquippedItemsDisplay() {
                     >
                       {equippedItem && (
                         <>
-                          <a
+                          <Link
                             href={`${getBaseWowheadUrl(i18n.language)}/item=${
                               equippedItem!.DisplayId || equippedItem!.Id
                             }`}
@@ -119,7 +120,7 @@ export default function EquippedItemsDisplay() {
                             style={{ fontSize: '0px' }}
                           >
                             .
-                          </a>
+                          </Link>
                           <img
                             alt={equippedItem.Name}
                             src={`${process.env.PUBLIC_URL}/img/${equippedItem.IconName}.jpg`}
@@ -152,7 +153,7 @@ export default function EquippedItemsDisplay() {
                     >
                       {equippedEnchant && (
                         <>
-                          <a
+                          <Link
                             href={`${getBaseWowheadUrl(i18n.language)}/spell=${
                               equippedEnchant.Id
                             }`}
@@ -160,7 +161,7 @@ export default function EquippedItemsDisplay() {
                             style={{ fontSize: '0px' }}
                           >
                             .
-                          </a>
+                          </Link>
                           {t(equippedEnchant.Name)}
                         </>
                       )}

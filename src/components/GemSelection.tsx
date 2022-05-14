@@ -1,4 +1,5 @@
 import {
+  Link,
   Table,
   TableBody,
   TableCell,
@@ -155,12 +156,12 @@ export default function GemSelection() {
                   width={20}
                   height={20}
                 />
-                <a
+                <Link
                   href={`${getBaseWowheadUrl(i18n.language)}/item=${gem.Id}`}
                   style={{ color: GetQualityCssColor(gem.Quality) }}
                 >
                   {t(gem.Name)}
-                </a>
+                </Link>
               </TableCell>
               <TableCell
                 style={{ borderBottom: 'none' }}

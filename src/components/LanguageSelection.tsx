@@ -3,6 +3,7 @@ import {
   ClickAwayListener,
   Grid,
   Grow,
+  Link,
   MenuItem,
   MenuList,
   Paper,
@@ -120,7 +121,7 @@ export default function LanguageSelection() {
           )}
         </Popper>
       </Grid>
-      <a
+      <Link
         href='https://www.paypal.com/donate/?hosted_button_id=FFV45S7UCKE6S'
         target='_blank'
         rel='noreferrer'
@@ -130,7 +131,7 @@ export default function LanguageSelection() {
           src={`${process.env.PUBLIC_URL}/img/btn_donate_LG.jpg`}
           alt='Support me via PayPal'
         />
-      </a>
+      </Link>
     </Stack>
   )
 }

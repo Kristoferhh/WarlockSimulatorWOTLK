@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@mui/material'
+import { Grid, Link, Typography } from '@mui/material'
 import { nanoid } from 'nanoid'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
@@ -51,7 +51,7 @@ export default function RotationSelection() {
                     e.preventDefault()
                   }}
                 >
-                  <a
+                  <Link
                     href={`${getBaseWowheadUrl(i18n.language)}/spell=${
                       spell.Id
                     }`}
@@ -62,7 +62,7 @@ export default function RotationSelection() {
                       src={`${process.env.PUBLIC_URL}/img/${spell.IconName}.jpg`}
                       alt={t(spell.Name)}
                     />
-                  </a>
+                  </Link>
                 </Grid>
               ))}
             </Grid>

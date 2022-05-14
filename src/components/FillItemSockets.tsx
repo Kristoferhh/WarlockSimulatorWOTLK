@@ -3,6 +3,7 @@ import {
   FormControl,
   FormControlLabel,
   Grid,
+  Link,
   Radio,
   RadioGroup,
   Typography,
@@ -196,11 +197,11 @@ export function FillItemSockets() {
                 src={`${process.env.PUBLIC_URL}/img/${gem.IconName}.jpg`}
                 alt={t(gem.Name)}
               />
-              <a href={`${getBaseWowheadUrl(i18n.language)}/item=${gem.Id}`}>
+              <Link href={`${getBaseWowheadUrl(i18n.language)}/item=${gem.Id}`}>
                 <Typography style={{ color: GetQualityCssColor(gem.Quality) }}>
                   {t(gem.Name)}
                 </Typography>
-              </a>
+              </Link>
             </Grid>
           ))}
         </Grid>

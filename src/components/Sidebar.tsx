@@ -1,4 +1,4 @@
-import { Drawer, Grid, List, ListItem, Typography } from '@mui/material'
+import { Drawer, Grid, Link, List, ListItem, Typography } from '@mui/material'
 import { nanoid } from 'nanoid'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
@@ -46,16 +46,19 @@ export default function Sidebar() {
 
             return (
               <ListItem key={nanoid()} className='sidebar-set-bonus'>
-                <a
+                <Link
                   target='_blank'
                   rel='noreferrer'
                   href={`${getBaseWowheadUrl(i18n.language)}/item-set=${
                     setObj?.Set
                   }`}
                   className={setObj?.Quality}
+                  underline='none'
                 >
-                  {t(setObj!.Name)} ({set[1]})
-                </a>
+                  <Typography>
+                    {t(setObj!.Name)} ({set[1]})
+                  </Typography>
+                </Link>
               </ListItem>
             )
           })}

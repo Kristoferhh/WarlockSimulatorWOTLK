@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material'
+import { Grid, Link } from '@mui/material'
 import { nanoid } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
 import { getBaseWowheadUrl } from '../Common'
@@ -32,7 +32,7 @@ export default function ItemSocketDisplay(props: Props) {
           itemSockets[props.item.Id][j]
 
         return (
-          <a
+          <Link
             target='_blank'
             rel='noreferrer'
             href={
@@ -68,7 +68,7 @@ export default function ItemSocketDisplay(props: Props) {
               }.jpg`}
               alt={`${socket} socket`}
             />
-          </a>
+          </Link>
         )
       })}
     </Grid>

@@ -315,11 +315,11 @@ export enum ItemSet {
   Duskweaver = '764',
   GladiatorsFelshroud = '780',
   T7 = '802',
-  GuldansRegalia = '845',
-  KelthuzadsRegalia = '846',
   FrostsavageBattlegear = '819',
   T8 = '837',
-  DarkCovensRegalia = '884',
+  T9Horde = '845',
+  T9Alliance = '846',
+  T10 = '884',
 }
 
 export const InitialSelectedItemsAndEnchants: ItemSlotDetailedStruct = {
@@ -451,12 +451,12 @@ export const InitialSetCounts: SetsStruct = {
   [ItemSet.T6]: 0,
   [ItemSet.Duskweaver]: 0,
   [ItemSet.T7]: 0,
-  [ItemSet.GuldansRegalia]: 0,
-  [ItemSet.KelthuzadsRegalia]: 0,
+  [ItemSet.T9Horde]: 0,
+  [ItemSet.T9Alliance]: 0,
   [ItemSet.FrostsavageBattlegear]: 0,
   [ItemSet.T8]: 0,
   [ItemSet.GladiatorsFelshroud]: 0,
-  [ItemSet.DarkCovensRegalia]: 0,
+  [ItemSet.T10]: 0,
 }
 
 export enum Quality {

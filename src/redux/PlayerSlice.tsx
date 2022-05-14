@@ -23,7 +23,6 @@ import {
   StatsCollection,
   TalentStore,
 } from '../Types'
-//const ldb = require('localdata')
 
 const initialPlayerState: PlayerState = {
   Talents: JSON.parse(localStorage.getItem('wotlk_talents') || '{}'),

@@ -2,6 +2,7 @@ import WarningIcon from '@mui/icons-material/Warning'
 import {
   Button,
   Grid,
+  Link,
   List,
   ListItem,
   Table,
@@ -442,7 +443,7 @@ export default function ItemSelection() {
                   color: GetQualityCssColor(item.Quality),
                 }}
               >
-                <a
+                <Link
                   href={`${getBaseWowheadUrl(i18n.language)}/item=${
                     item.DisplayId || item.Id
                   }`}
@@ -450,7 +451,7 @@ export default function ItemSelection() {
                   style={{ fontSize: '0px' }}
                 >
                   .
-                </a>
+                </Link>
                 <img
                   src={`${process.env.PUBLIC_URL}/img/${item.IconName}.jpg`}
                   alt={t(item.Name)}
@@ -623,7 +624,7 @@ export default function ItemSelection() {
                   style={{ color: GetQualityCssColor(enchant.Quality) }}
                   className={`enchant-row-name`}
                 >
-                  <a
+                  <Link
                     href={`${getBaseWowheadUrl(i18n.language)}/spell=${
                       enchant.Id
                     }`}
@@ -631,7 +632,7 @@ export default function ItemSelection() {
                     style={{ fontSize: '0px' }}
                   >
                     .
-                  </a>
+                  </Link>
                   {t(enchant.Name)}
                 </TableCell>
                 <TableCell style={{ color: 'white', textAlign: 'center' }}>

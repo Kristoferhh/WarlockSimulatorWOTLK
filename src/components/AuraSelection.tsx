@@ -1,4 +1,4 @@
-import { Grid, List, ListItem, Typography } from '@mui/material'
+import { Grid, Link, List, ListItem, Typography } from '@mui/material'
 import { nanoid } from 'nanoid'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
@@ -109,7 +109,7 @@ export default function AuraSelection() {
                   e.preventDefault()
                 }}
               >
-                <a
+                <Link
                   href={`${getBaseWowheadUrl(i18n.language)}/${
                     auraGroup.Type
                   }=${aura.Id}`}
@@ -120,7 +120,7 @@ export default function AuraSelection() {
                     src={`${process.env.PUBLIC_URL}/img/${aura.IconName}.jpg`}
                     alt={t(aura.Name)}
                   />
-                </a>
+                </Link>
               </ListItem>
             ))}
           </List>

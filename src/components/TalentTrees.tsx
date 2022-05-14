@@ -1,6 +1,7 @@
 import {
   Button,
   Grid,
+  Link,
   Table,
   TableBody,
   TableCell,
@@ -75,7 +76,11 @@ export default function TalentTrees() {
 
     for (const row in talentTree.Rows) {
       for (const talentKey in talentTree.Rows[row]) {
-        newSelectedTalents[talentKey as TalentName] = 0
+        let talentName = talentTree.Rows[row][talentKey]?.Name
+
+        if (talentName) {
+          newSelectedTalents[talentName] = 0
+        }
       }
     }
 
@@ -109,7 +114,7 @@ export default function TalentTrees() {
               alt={talentTree.Name}
               style={{
                 position: 'absolute',
-                height: '554px',
+                height: '534px',
                 width: '204px',
                 opacity: 0.3,
               }}
@@ -140,7 +145,7 @@ export default function TalentTrees() {
                               e.preventDefault()
                             }}
                           >
-                            <a
+                            <Link
                               href={`${getBaseWowheadUrl(
                                 i18n.language
                               )}/spell=${
@@ -181,7 +186,7 @@ export default function TalentTrees() {
                               >
                                 {playerState.Talents[talent.Name!] || 0}
                               </span>
-                            </a>
+                            </Link>
                           </Grid>
                         )}
                       </TableCell>
@@ -190,7 +195,7 @@ export default function TalentTrees() {
                 ))}
               </TableBody>
             </Table>
-            <Grid className='talent-tree-name'>
+            <Grid className='talent-tree-name' style={{ padding: '10px' }}>
               <Typography style={{ display: 'inline-block' }}>
                 {`${t(talentTree.Name)} ${
                   getAllocatedTalentsPointsInTree(

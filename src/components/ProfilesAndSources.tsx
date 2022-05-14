@@ -1,11 +1,4 @@
-import {
-  Button,
-  Grid,
-  List,
-  ListItem,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Button, Grid, TextField, Typography } from '@mui/material'
 import { nanoid } from '@reduxjs/toolkit'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -221,36 +214,38 @@ export default function ProfilesAndSources() {
         <legend>
           <Typography>{t('Saved Profiles')}</Typography>
         </legend>
-        <List>
+        <Grid container id='profile-list'>
           {playerStore.Profiles.map(profileContainer => (
-            <ListItem
+            <Grid
+              item
               key={nanoid()}
               className='saved-profile'
               data-checked={selectedProfileState === profileContainer.Name}
               onClick={() => profileClickHandler(profileContainer)}
             >
               <Typography>{profileContainer.Name}</Typography>
-            </ListItem>
+            </Grid>
           ))}
-        </List>
+        </Grid>
       </fieldset>
 
       <fieldset id='source-filters'>
         <legend>
           <Typography>{t('Sources')}</Typography>
         </legend>
-        <List style={{ display: 'flex' }}>
+        <Grid container>
           {phases.map(phase => (
-            <ListItem
+            <Grid
+              item
               key={phase.phase}
               data-checked={sourcesState.includes(phase.phase)}
               className='phase-btn'
               onClick={() => dispatch(togglePhase(phase.phase))}
             >
               <Typography>{t(phase.title)}</Typography>
-            </ListItem>
+            </Grid>
           ))}
-        </List>
+        </Grid>
       </fieldset>
     </Grid>
   )

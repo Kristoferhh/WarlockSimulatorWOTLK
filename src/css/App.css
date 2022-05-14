@@ -526,20 +526,31 @@ img[data-color='meta'] {
   margin-bottom: 0.3rem;
 }
 
-.saved-profile {
+#profile-list {
+  align-items: center;
+}
+
+.saved-profile,
+.phase-btn {
   margin-left: 5px;
+  display: inline-block;
+  border: 1px solid white;
+  padding: 5px;
+  border-radius: 3px;
 }
 
 #source-filters {
   margin-left: auto;
 }
 
-#profiles-and-sources ul li[data-checked='true'] {
+.saved-profile[data-checked='true'],
+.phase-btn[data-checked='true'] {
   color: black;
   background-color: white;
 }
 
-#profiles-and-sources ul li:hover {
+.saved-profile:hover,
+.phase-btn:hover {
   color: black;
   background-color: white;
   opacity: 0.5;
@@ -656,12 +667,6 @@ img[data-color='meta'] {
 #item-selection-table td,
 #enchant-selection-table td {
   padding: 5px;
-}
-
-.item-row a,
-.enchant-row a,
-.sidebar-set-bonus a {
-  text-decoration: none;
 }
 
 .sidebar-set-bonus a {

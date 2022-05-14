@@ -11772,7 +11772,7 @@ export const Items: Item[] = [
       [Stat.CritRating]: 82,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.KelthuzadsRegalia,
+    Set: ItemSet.T9Alliance,
     Sockets: [SocketColor.Meta, SocketColor.Blue],
     SocketBonus: {
       [Stat.SpellPower]: 9,
@@ -11793,7 +11793,7 @@ export const Items: Item[] = [
       [Stat.HitRating]: 82,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.KelthuzadsRegalia,
+    Set: ItemSet.T9Alliance,
     Sockets: [SocketColor.Red, SocketColor.Blue],
     SocketBonus: {
       [Stat.SpellPower]: 7,
@@ -11814,7 +11814,7 @@ export const Items: Item[] = [
       [Stat.HasteRating]: 74,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.KelthuzadsRegalia,
+    Set: ItemSet.T9Alliance,
     Sockets: [SocketColor.Red, SocketColor.Yellow],
     SocketBonus: {
       [Stat.SpellPower]: 7,
@@ -11835,7 +11835,7 @@ export const Items: Item[] = [
       [Stat.CritRating]: 67,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.KelthuzadsRegalia,
+    Set: ItemSet.T9Alliance,
     Sockets: [SocketColor.Yellow],
     SocketBonus: {
       [Stat.SpellPower]: 5,
@@ -11856,7 +11856,7 @@ export const Items: Item[] = [
       [Stat.HitRating]: 59,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.KelthuzadsRegalia,
+    Set: ItemSet.T9Alliance,
     Sockets: [SocketColor.Red],
     SocketBonus: {
       [Stat.CritRating]: 4,
@@ -11877,7 +11877,7 @@ export const Items: Item[] = [
       [Stat.HitRating]: 52,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.KelthuzadsRegalia,
+    Set: ItemSet.T9Alliance,
     Sockets: [SocketColor.Red],
     SocketBonus: {
       [Stat.CritRating]: 4,
@@ -11898,7 +11898,7 @@ export const Items: Item[] = [
       [Stat.CritRating]: 72,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.KelthuzadsRegalia,
+    Set: ItemSet.T9Alliance,
     Sockets: [SocketColor.Meta, SocketColor.Blue],
     SocketBonus: {
       [Stat.SpellPower]: 9,
@@ -11919,7 +11919,7 @@ export const Items: Item[] = [
       [Stat.HasteRating]: 64,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.KelthuzadsRegalia,
+    Set: ItemSet.T9Alliance,
     Sockets: [SocketColor.Red, SocketColor.Yellow],
     SocketBonus: {
       [Stat.SpellPower]: 7,
@@ -11940,7 +11940,7 @@ export const Items: Item[] = [
       [Stat.HitRating]: 72,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.KelthuzadsRegalia,
+    Set: ItemSet.T9Alliance,
     Sockets: [SocketColor.Red, SocketColor.Blue],
     SocketBonus: {
       [Stat.SpellPower]: 7,
@@ -11961,7 +11961,7 @@ export const Items: Item[] = [
       [Stat.CritRating]: 60,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.KelthuzadsRegalia,
+    Set: ItemSet.T9Alliance,
     Sockets: [SocketColor.Yellow],
     SocketBonus: {
       [Stat.SpellPower]: 5,
@@ -11982,7 +11982,7 @@ export const Items: Item[] = [
       [Stat.HitRating]: 68,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.KelthuzadsRegalia,
+    Set: ItemSet.T9Alliance,
     Sockets: [SocketColor.Red],
     SocketBonus: {
       [Stat.CritRating]: 4,
@@ -12003,7 +12003,7 @@ export const Items: Item[] = [
       [Stat.CritRating]: 94,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.KelthuzadsRegalia,
+    Set: ItemSet.T9Alliance,
     Sockets: [SocketColor.Meta, SocketColor.Blue],
     SocketBonus: {
       [Stat.SpellPower]: 9,
@@ -12024,7 +12024,7 @@ export const Items: Item[] = [
       [Stat.HasteRating]: 86,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.KelthuzadsRegalia,
+    Set: ItemSet.T9Alliance,
     Sockets: [SocketColor.Red, SocketColor.Yellow],
     SocketBonus: {
       [Stat.SpellPower]: 7,
@@ -12045,7 +12045,7 @@ export const Items: Item[] = [
       [Stat.HitRating]: 94,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.KelthuzadsRegalia,
+    Set: ItemSet.T9Alliance,
     Sockets: [SocketColor.Red, SocketColor.Blue],
     SocketBonus: {
       [Stat.SpellPower]: 7,
@@ -12066,7 +12066,7 @@ export const Items: Item[] = [
       [Stat.CritRating]: 76,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.KelthuzadsRegalia,
+    Set: ItemSet.T9Alliance,
     Sockets: [SocketColor.Yellow],
     SocketBonus: {
       [Stat.SpellPower]: 5,
@@ -12087,7 +12087,7 @@ export const Items: Item[] = [
       [Stat.CritRating]: 76,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.GuldansRegalia,
+    Set: ItemSet.T9Horde,
     Sockets: [SocketColor.Yellow],
     SocketBonus: {
       [Stat.SpellPower]: 5,
@@ -12108,7 +12108,7 @@ export const Items: Item[] = [
       [Stat.HitRating]: 94,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.GuldansRegalia,
+    Set: ItemSet.T9Horde,
     Sockets: [SocketColor.Red, SocketColor.Blue],
     SocketBonus: {
       [Stat.SpellPower]: 7,
@@ -12129,7 +12129,7 @@ export const Items: Item[] = [
       [Stat.HasteRating]: 86,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.GuldansRegalia,
+    Set: ItemSet.T9Horde,
     Sockets: [SocketColor.Red, SocketColor.Yellow],
     SocketBonus: {
       [Stat.SpellPower]: 7,
@@ -12150,7 +12150,7 @@ export const Items: Item[] = [
       [Stat.CritRating]: 94,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.GuldansRegalia,
+    Set: ItemSet.T9Horde,
     Sockets: [SocketColor.Meta, SocketColor.Blue],
     SocketBonus: {
       [Stat.SpellPower]: 9,
@@ -12171,7 +12171,7 @@ export const Items: Item[] = [
       [Stat.HitRating]: 68,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.GuldansRegalia,
+    Set: ItemSet.T9Horde,
     Sockets: [SocketColor.Red],
     SocketBonus: {
       [Stat.CritRating]: 4,
@@ -12192,7 +12192,7 @@ export const Items: Item[] = [
       [Stat.CritRating]: 60,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.GuldansRegalia,
+    Set: ItemSet.T9Horde,
     Sockets: [SocketColor.Yellow],
     SocketBonus: {
       [Stat.SpellPower]: 5,
@@ -12213,7 +12213,7 @@ export const Items: Item[] = [
       [Stat.HitRating]: 72,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.GuldansRegalia,
+    Set: ItemSet.T9Horde,
     Sockets: [SocketColor.Red, SocketColor.Blue],
     SocketBonus: {
       [Stat.SpellPower]: 7,
@@ -12234,7 +12234,7 @@ export const Items: Item[] = [
       [Stat.HasteRating]: 64,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.GuldansRegalia,
+    Set: ItemSet.T9Horde,
     Sockets: [SocketColor.Red, SocketColor.Yellow],
     SocketBonus: {
       [Stat.SpellPower]: 7,
@@ -12255,7 +12255,7 @@ export const Items: Item[] = [
       [Stat.CritRating]: 72,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.GuldansRegalia,
+    Set: ItemSet.T9Horde,
     Sockets: [SocketColor.Meta, SocketColor.Blue],
     SocketBonus: {
       [Stat.SpellPower]: 9,
@@ -12276,7 +12276,7 @@ export const Items: Item[] = [
       [Stat.HitRating]: 52,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.GuldansRegalia,
+    Set: ItemSet.T9Horde,
     Sockets: [SocketColor.Red],
     SocketBonus: {
       [Stat.CritRating]: 4,
@@ -12297,7 +12297,7 @@ export const Items: Item[] = [
       [Stat.HitRating]: 59,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.GuldansRegalia,
+    Set: ItemSet.T9Horde,
     Sockets: [SocketColor.Red],
     SocketBonus: {
       [Stat.CritRating]: 4,
@@ -12318,7 +12318,7 @@ export const Items: Item[] = [
       [Stat.CritRating]: 82,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.GuldansRegalia,
+    Set: ItemSet.T9Horde,
     Sockets: [SocketColor.Meta, SocketColor.Blue],
     SocketBonus: {
       [Stat.SpellPower]: 9,
@@ -12339,7 +12339,7 @@ export const Items: Item[] = [
       [Stat.HasteRating]: 74,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.GuldansRegalia,
+    Set: ItemSet.T9Horde,
     Sockets: [SocketColor.Red, SocketColor.Yellow],
     SocketBonus: {
       [Stat.SpellPower]: 7,
@@ -12360,7 +12360,7 @@ export const Items: Item[] = [
       [Stat.HitRating]: 82,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.GuldansRegalia,
+    Set: ItemSet.T9Horde,
     Sockets: [SocketColor.Red, SocketColor.Blue],
     SocketBonus: {
       [Stat.SpellPower]: 7,
@@ -12381,7 +12381,7 @@ export const Items: Item[] = [
       [Stat.CritRating]: 67,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.GuldansRegalia,
+    Set: ItemSet.T9Horde,
     Sockets: [SocketColor.Yellow],
     SocketBonus: {
       [Stat.SpellPower]: 5,
@@ -14935,7 +14935,7 @@ export const Items: Item[] = [
       [Stat.HitRating]: 63,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.DarkCovensRegalia,
+    Set: ItemSet.T10,
     Sockets: [SocketColor.Blue],
     SocketBonus: {
       [Stat.SpellPower]: 5,
@@ -14955,7 +14955,7 @@ export const Items: Item[] = [
       [Stat.HasteRating]: 80,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.DarkCovensRegalia,
+    Set: ItemSet.T10,
     Sockets: [SocketColor.Meta, SocketColor.Blue],
     SocketBonus: {
       [Stat.SpellPower]: 9,
@@ -14975,7 +14975,7 @@ export const Items: Item[] = [
       [Stat.HitRating]: 80,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.DarkCovensRegalia,
+    Set: ItemSet.T10,
     Sockets: [SocketColor.Blue, SocketColor.Yellow],
     SocketBonus: {
       [Stat.SpellPower]: 7,
@@ -14995,7 +14995,7 @@ export const Items: Item[] = [
       [Stat.HasteRating]: 80,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.DarkCovensRegalia,
+    Set: ItemSet.T10,
     Sockets: [SocketColor.Red, SocketColor.Yellow],
     SocketBonus: {
       [Stat.SpellPower]: 7,
@@ -15015,7 +15015,7 @@ export const Items: Item[] = [
       [Stat.HasteRating]: 63,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.DarkCovensRegalia,
+    Set: ItemSet.T10,
     Sockets: [SocketColor.Yellow],
     SocketBonus: {
       [Stat.SpellPower]: 5,
@@ -16844,7 +16844,7 @@ export const Items: Item[] = [
       [Stat.HasteRating]: 72,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.DarkCovensRegalia,
+    Set: ItemSet.T10,
     Sockets: [SocketColor.Yellow],
     SocketBonus: {
       [Stat.SpellPower]: 5,
@@ -16864,7 +16864,7 @@ export const Items: Item[] = [
       [Stat.HasteRating]: 92,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.DarkCovensRegalia,
+    Set: ItemSet.T10,
     Sockets: [SocketColor.Red, SocketColor.Yellow],
     SocketBonus: {
       [Stat.SpellPower]: 7,
@@ -16884,7 +16884,7 @@ export const Items: Item[] = [
       [Stat.HitRating]: 92,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.DarkCovensRegalia,
+    Set: ItemSet.T10,
     Sockets: [SocketColor.Blue, SocketColor.Yellow],
     SocketBonus: {
       [Stat.SpellPower]: 7,
@@ -16904,7 +16904,7 @@ export const Items: Item[] = [
       [Stat.HasteRating]: 92,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.DarkCovensRegalia,
+    Set: ItemSet.T10,
     Sockets: [SocketColor.Meta, SocketColor.Blue],
     SocketBonus: {
       [Stat.SpellPower]: 9,
@@ -16924,7 +16924,7 @@ export const Items: Item[] = [
       [Stat.HitRating]: 72,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.DarkCovensRegalia,
+    Set: ItemSet.T10,
     Sockets: [SocketColor.Blue],
     SocketBonus: {
       [Stat.SpellPower]: 5,
@@ -16944,7 +16944,7 @@ export const Items: Item[] = [
       [Stat.HitRating]: 82,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.DarkCovensRegalia,
+    Set: ItemSet.T10,
     Sockets: [SocketColor.Blue],
     SocketBonus: {
       [Stat.SpellPower]: 5,
@@ -16964,7 +16964,7 @@ export const Items: Item[] = [
       [Stat.HasteRating]: 106,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.DarkCovensRegalia,
+    Set: ItemSet.T10,
     Sockets: [SocketColor.Meta, SocketColor.Blue],
     SocketBonus: {
       [Stat.SpellPower]: 9,
@@ -16984,7 +16984,7 @@ export const Items: Item[] = [
       [Stat.HitRating]: 106,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.DarkCovensRegalia,
+    Set: ItemSet.T10,
     Sockets: [SocketColor.Blue, SocketColor.Yellow],
     SocketBonus: {
       [Stat.SpellPower]: 7,
@@ -17004,7 +17004,7 @@ export const Items: Item[] = [
       [Stat.HasteRating]: 106,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.DarkCovensRegalia,
+    Set: ItemSet.T10,
     Sockets: [SocketColor.Red, SocketColor.Yellow],
     SocketBonus: {
       [Stat.SpellPower]: 7,
@@ -17024,7 +17024,7 @@ export const Items: Item[] = [
       [Stat.HasteRating]: 82,
     },
     Quality: Quality.Epic,
-    Set: ItemSet.DarkCovensRegalia,
+    Set: ItemSet.T10,
     Sockets: [SocketColor.Yellow],
     SocketBonus: {
       [Stat.SpellPower]: 5,
