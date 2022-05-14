@@ -635,6 +635,7 @@ export enum ItemSource {
   KirinTorRevered = 'Kirin Tor - Revered',
   Sunwell = 'Sunwell Plateau',
   BlackTemple = 'Black Temple',
+  TheSonsOfHodirExalted = 'The Sons of Hodir - Exalted',
 }
 
 export type Phase = 0 | 1 | 2 | 3 | 4 | 5

@@ -1,7 +1,6 @@
 import { Enchant, ItemSlot, ItemSource, Quality, Stat } from '../Types'
 
 export const Enchants: Enchant[] = [
-  // Head
   {
     Phase: 1,
     Id: 59970,
@@ -11,8 +10,6 @@ export const Enchants: Enchant[] = [
     Stats: { [Stat.SpellPower]: 30, [Stat.CritRating]: 20 },
     Source: ItemSource.KirinTorRevered,
   },
-
-  // Shoulders
   {
     Phase: 1,
     Id: 61120,
@@ -22,8 +19,6 @@ export const Enchants: Enchant[] = [
     Stats: { [Stat.SpellPower]: 70, [Stat.CritRating]: 15 },
     Source: ItemSource.Inscription,
   },
-
-  // Back
   {
     Phase: 1,
     Id: 55642,
@@ -32,8 +27,6 @@ export const Enchants: Enchant[] = [
     Quality: Quality.Uncommon,
     Source: ItemSource.Tailoring,
   },
-
-  // Chest
   {
     Phase: 1,
     Id: 60692,
@@ -43,8 +36,6 @@ export const Enchants: Enchant[] = [
     Stats: { [Stat.Stamina]: 10, [Stat.Intellect]: 10, [Stat.Spirit]: 10 },
     Source: ItemSource.Enchanting,
   },
-
-  // Wrist
   {
     Phase: 1,
     Id: 60767,
@@ -54,8 +45,6 @@ export const Enchants: Enchant[] = [
     Stats: { [Stat.SpellPower]: 30 },
     Source: ItemSource.Enchanting,
   },
-
-  // Hands
   {
     Phase: 1,
     Id: 44592,
@@ -65,8 +54,6 @@ export const Enchants: Enchant[] = [
     Stats: { [Stat.SpellPower]: 28 },
     Source: ItemSource.Enchanting,
   },
-
-  // Waist
   {
     Phase: 1,
     Id: 55655,
@@ -75,8 +62,6 @@ export const Enchants: Enchant[] = [
     Quality: Quality.Rare,
     Source: ItemSource.Blacksmithing,
   },
-
-  // Legs
   {
     Phase: 1,
     Id: 55631,
@@ -85,8 +70,6 @@ export const Enchants: Enchant[] = [
     Quality: Quality.Epic,
     Source: ItemSource.Tailoring,
   },
-
-  // Feet
   {
     Phase: 1,
     Id: 47901,
@@ -95,12 +78,87 @@ export const Enchants: Enchant[] = [
     Quality: Quality.Uncommon,
     Source: ItemSource.Enchanting,
   },
-
-  // Weapon
   {
     Phase: 1,
     Id: 60714,
     Name: 'Mighty Spellpower',
+    ItemSlot: ItemSlot.Weapon,
+    Quality: Quality.Rare,
+    Source: ItemSource.Enchanting,
+  },
+  {
+    Phase: 1,
+    Id: 50338,
+    Name: 'Greater Inscription of the Storm',
+    ItemSlot: ItemSlot.Shoulders,
+    Quality: Quality.Heirloom,
+    Source: ItemSource.TheSonsOfHodirExalted,
+    Stats: {
+      [Stat.SpellPower]: 24,
+      [Stat.CritRating]: 15,
+    },
+  },
+  {
+    Phase: 1,
+    Id: 47898,
+    Name: 'Greater Speed',
+    ItemSlot: ItemSlot.Back,
+    Quality: Quality.Uncommon,
+    Source: ItemSource.Enchanting,
+    Stats: {
+      [Stat.HasteRating]: 23,
+    },
+  },
+  {
+    Phase: 1,
+    Id: 44593,
+    Name: 'Major Spirit',
+    ItemSlot: ItemSlot.Chest,
+    Quality: Quality.Uncommon,
+    Source: ItemSource.Enchanting,
+    Stats: {
+      [Stat.Spirit]: 18,
+    },
+  },
+  {
+    Phase: 1,
+    Id: 56039,
+    Name: 'Sanctified Spellthread',
+    ItemSlot: ItemSlot.Legs,
+    Quality: Quality.Epic,
+    Source: ItemSource.Tailoring,
+    Stats: {
+      [Stat.SpellPower]: 50,
+      [Stat.Spirit]: 20,
+    },
+  },
+  {
+    Phase: 1,
+    Id: 60623,
+    Name: 'Icewalker',
+    ItemSlot: ItemSlot.Feet,
+    Quality: Quality.Uncommon,
+    Source: ItemSource.Enchanting,
+    Stats: {
+      [Stat.CritRating]: 12,
+      [Stat.HitRating]: 12,
+    },
+  },
+  {
+    Phase: 1,
+    Id: 44635,
+    Name: 'Greater Spellpower',
+    ItemSlot: ItemSlot.Weapon,
+    Quality: Quality.Rare,
+    Source: ItemSource.Enchanting,
+    Stats: {
+      [Stat.SpellPower]: 23,
+    },
+  },
+  {
+    Phase: 1,
+    Id: 59625,
+    Name: 'Black Magic',
     ItemSlot: ItemSlot.Weapon,
     Quality: Quality.Rare,
     Source: ItemSource.Enchanting,
