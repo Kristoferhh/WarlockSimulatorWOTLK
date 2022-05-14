@@ -28,36 +28,36 @@ export const Sets: {
     Name: 'Duskweaver',
     Set: ItemSet.Duskweaver,
     Quality: Quality.Uncommon,
-    Bonuses: [2, 4]
+    Bonuses: [2, 4],
   },
   {
     Name: `Gladiator's Felshroud`,
     Set: ItemSet.GladiatorsFelshroud,
     Quality: Quality.Epic,
-    Bonuses: [2, 4]
+    Bonuses: [2, 4],
   },
   {
     Name: 'Plagueheart Garb',
     Set: ItemSet.T7,
     Quality: Quality.Epic,
-    Bonuses: [2, 4]
+    Bonuses: [2, 4],
   },
   {
     Name: 'Frostsavage Battlegear',
     Set: ItemSet.FrostsavageBattlegear,
     Quality: Quality.Rare,
-    Bonuses: [4, 6]
+    Bonuses: [4, 6],
   },
   {
     Name: 'Deathbringer Garb',
     Set: ItemSet.T8,
     Quality: Quality.Epic,
-    Bonuses: [2, 4]
+    Bonuses: [2, 4],
   },
   {
     Name: `Dark Coven's Regalia`,
     Set: ItemSet.T10,
     Quality: Quality.Epic,
-    Bonuses: [2, 4]
-  }
+    Bonuses: [2, 4],
+  },
 ]
