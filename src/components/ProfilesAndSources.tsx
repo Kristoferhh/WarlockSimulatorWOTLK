@@ -233,7 +233,7 @@ export default function ProfilesAndSources() {
         <legend>
           <Typography>{t('Sources')}</Typography>
         </legend>
-        <Grid container>
+        <Grid container id='source-list'>
           {phases.map(phase => (
             <Grid
               item

@@ -383,10 +383,6 @@ img {
   margin-left: 3px;
 }
 
-#preset-talent-buttons {
-  text-align: center;
-}
-
 .talent-tree-div {
   display: inline-block;
   width: 204px;
@@ -526,8 +522,10 @@ img[data-color='meta'] {
   margin-bottom: 0.3rem;
 }
 
-#profile-list {
-  align-items: center;
+#profile-list,
+#source-list {
+  height: 100%;
+  align-content: center;
 }
 
 .saved-profile,

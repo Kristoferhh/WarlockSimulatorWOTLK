@@ -94,16 +94,18 @@ export default function TalentTrees() {
 
   return (
     <>
-      <Grid id='preset-talent-buttons'>
+      <Grid container style={{ justifyContent: 'center' }}>
         {PresetTalents.map(talentTemplate => (
-          <Button
-            variant='contained'
-            type='button'
-            key={nanoid()}
-            onClick={() => applyTalentTemplate(talentTemplate.talents)}
-          >
-            {t(talentTemplate.name)}
-          </Button>
+          <Grid item>
+            <Button
+              variant='contained'
+              type='button'
+              key={nanoid()}
+              onClick={() => applyTalentTemplate(talentTemplate.Talents)}
+            >
+              {t(talentTemplate.Name)}
+            </Button>
+          </Grid>
         ))}
       </Grid>
       <Grid>
