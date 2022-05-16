@@ -2,7 +2,9 @@ import os
 
 
 def get_icon_name_from_string(string: str):
-    return string[string.find('IconName') + len('IconName: "'):len(string) - 3]
+    start_index = string.find('IconName') + len('IconName: "')
+    end_index = string.find(',', start_index) - 1
+    return string[start_index:end_index]
 
 def assert_icon_image_existence_in_file(file_path: str):
     with open(file_path) as f:
