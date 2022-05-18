@@ -23,7 +23,7 @@ void DamageOverTime::Setup() {
 }
 
 void DamageOverTime::Apply() {
-  const bool kIsAlreadyActive = active == true;
+  const bool kIsAlreadyActive = is_active == true;
 
   if (kIsAlreadyActive && player.ShouldWriteToCombatLog()) {
     player.CombatLog(name + " refreshed before letting it expire");
@@ -32,11 +32,13 @@ void DamageOverTime::Apply() {
   }
 
   spell_power          = player.GetSpellPower(school);
-  active               = true;
+  is_active            = true;
   tick_timer_remaining = tick_timer_total;
   ticks_remaining      = ticks_total;
 
-  if (player.recording_combat_log_breakdown) { player.combat_log_breakdown.at(name)->count++; }
+  if (player.recording_combat_log_breakdown) {
+    player.combat_log_breakdown.at(name)->count++;
+  }
 
   if (player.ShouldWriteToCombatLog()) {
     player.CombatLog(name + " " + (kIsAlreadyActive ? "refreshed" : "applied") + " (" + DoubleToString(spell_power) +
@@ -45,7 +47,7 @@ void DamageOverTime::Apply() {
 
   // Amplify Curse
   if ((name == SpellName::kCurseOfAgony || name == SpellName::kCurseOfDoom) && player.auras.amplify_curse != nullptr &&
-      player.auras.amplify_curse->active) {
+      player.auras.amplify_curse->is_active) {
     applied_with_amplify_curse = true;
     player.auras.amplify_curse->Fade();
   } else {
@@ -54,35 +56,54 @@ void DamageOverTime::Apply() {
 }
 
 void DamageOverTime::Fade() {
-  active               = false;
+  is_active            = false;
   tick_timer_remaining = 0;
   ticks_remaining      = 0;
 
   if (player.recording_combat_log_breakdown) {
-    player.combat_log_breakdown.at(name)->uptime +=
+    player.combat_log_breakdown.at(name)->uptime_in_seconds +=
         player.simulation->current_fight_time - player.combat_log_breakdown.at(name)->applied_at;
   }
 
-  if (player.ShouldWriteToCombatLog()) { player.CombatLog(name + " faded"); }
+  if (player.ShouldWriteToCombatLog()) {
+    player.CombatLog(name + " faded");
+  }
 }
 
 std::vector<double> DamageOverTime::GetConstantDamage() const {
-  const auto kCurrentSpellPower       = active ? spell_power : player.GetSpellPower(school);
-  const auto kModifier                = parent_spell->GetDamageModifier();
+  const auto kCurrentSpellPower       = is_active ? spell_power : player.GetSpellPower(school);
+  const auto kModifier                = GetDamageModifier();
   const auto kPartialResistMultiplier = parent_spell->GetPartialResistMultiplier();
   auto dmg                            = base_damage;
 
-  if (applied_with_amplify_curse) { dmg *= 1.5; }
+  if (applied_with_amplify_curse) {
+    dmg *= 1.5;
+  }
 
   auto total_damage = dmg;
   total_damage += kCurrentSpellPower * coefficient;
   total_damage *= kModifier * kPartialResistMultiplier;
+
+  if (name == SpellName::kDrainSoul &&
+      player.simulation->fight_time_remaining / player.simulation->iteration_fight_length <= 0.25) {
+    total_damage *= 4;
+  }
 
   return std::vector{dmg, total_damage, kCurrentSpellPower, kModifier, kPartialResistMultiplier};
 }
 
 double DamageOverTime::PredictDamage() const {
   return GetConstantDamage()[1];
+}
+
+double DamageOverTime::GetDamageModifier() const {
+  auto damage_modifier = parent_spell->GetDamageModifier();
+
+  if (school == SpellSchool::kShadow && player.auras.haunt != nullptr && player.auras.haunt->is_active) {
+    damage_modifier *= 1.2;
+  }
+
+  return damage_modifier;
 }
 
 void DamageOverTime::Tick(const double kTime) {
@@ -98,14 +119,18 @@ void DamageOverTime::Tick(const double kTime) {
 
     // Check for Nightfall proc
     if (name == SpellName::kCorruption && player.talents.nightfall > 0) {
-      if (player.RollRng(player.talents.nightfall * 2)) { player.auras.shadow_trance->Apply(); }
+      if (player.RollRng(player.talents.nightfall * 2)) {
+        player.auras.shadow_trance->Apply();
+      }
     }
 
     player.iteration_damage += kDamage;
     ticks_remaining--;
     tick_timer_remaining = tick_timer_total;
 
-    if (player.recording_combat_log_breakdown) { player.combat_log_breakdown.at(name)->iteration_damage += kDamage; }
+    if (player.recording_combat_log_breakdown) {
+      player.combat_log_breakdown.at(name)->iteration_damage += kDamage;
+    }
 
     if (player.ShouldWriteToCombatLog()) {
       player.CombatLog(name + " Tick " + DoubleToString(round(kDamage)) + " (" + DoubleToString(kBaseDamage) +
@@ -116,10 +141,14 @@ void DamageOverTime::Tick(const double kTime) {
     }
 
     for (const auto& kProc : player.on_dot_tick_procs) {
-      if (kProc->Ready() && kProc->ShouldProc(this) && player.RollRng(kProc->proc_chance)) { kProc->StartCast(); }
+      if (kProc->Ready() && kProc->ShouldProc(this) && player.RollRng(kProc->proc_chance)) {
+        kProc->StartCast();
+      }
     }
 
-    if (ticks_remaining <= 0) { Fade(); }
+    if (ticks_remaining <= 0) {
+      Fade();
+    }
   }
 }
 
@@ -181,6 +210,7 @@ ShadowflameDot::ShadowflameDot(Player& player_param) : DamageOverTime(player_par
   base_damage      = 512;
   school           = SpellSchool::kFire;
   coefficient      = 1.0 / 15.0;
+  Setup();
 }
 
 ConflagrateDot::ConflagrateDot(Player& player_param) : DamageOverTime(player_param) {
@@ -188,4 +218,15 @@ ConflagrateDot::ConflagrateDot(Player& player_param) : DamageOverTime(player_par
   duration         = 6;
   tick_timer_total = 2;
   school           = SpellSchool::kFire;
+  Setup();
+}
+
+DrainSoulDot::DrainSoulDot(Player& player_param) : DamageOverTime(player_param) {
+  name             = SpellName::kDrainSoul;
+  duration         = 15;
+  tick_timer_total = 3;
+  base_damage      = 710;
+  coefficient      = 0.429;
+  school           = SpellSchool::kShadow;
+  Setup();
 }

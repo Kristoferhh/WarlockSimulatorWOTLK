@@ -37,7 +37,7 @@ void PostCombatLogBreakdownVector(const char* name, double mana_gain, double dam
 }
 
 void PostCombatLogBreakdown(const char* name, uint32_t casts, uint32_t crits, uint32_t misses, uint32_t count,
-                            double uptime, uint32_t dodges, uint32_t glancing_blows) {
+                            double uptime_in_seconds, uint32_t dodges, uint32_t glancing_blows) {
 #ifdef EMSCRIPTEN
   EM_ASM(
       {
@@ -49,7 +49,7 @@ void PostCombatLogBreakdown(const char* name, uint32_t casts, uint32_t crits, ui
               crits : $2,
               misses : $3,
               count : $4,
-              uptime : $5,
+              uptime_in_seconds : $5,
               dodges : $6,
               glancingBlows : $7,
               damage : 0,
@@ -58,7 +58,7 @@ void PostCombatLogBreakdown(const char* name, uint32_t casts, uint32_t crits, ui
           }
           )
   },
-      name, casts, crits, misses, count, uptime, dodges, glancing_blows);
+      name, casts, crits, misses, count, uptime_in_seconds, dodges, glancing_blows);
 #endif
 }
 
@@ -119,7 +119,9 @@ std::vector<uint32_t> AllocRandomSeeds(const int kAmountOfSeeds, const uint32_t 
   srand(kRandSeed);
   std::vector<uint32_t> seeds(kAmountOfSeeds);
 
-  for (int i = 0; i < kAmountOfSeeds; i++) { seeds[i] = rand(); }
+  for (int i = 0; i < kAmountOfSeeds; i++) {
+    seeds[i] = rand();
+  }
 
   return seeds;
 }
@@ -382,7 +384,8 @@ EMSCRIPTEN_BINDINGS(module) {
       .property("hasConflagrate", &PlayerSettings::has_conflagrate)
       .property("hasShadowfury", &PlayerSettings::has_shadowfury)
       .property("hasAmplifyCurse", &PlayerSettings::has_amplify_curse)
-      .property("hasDarkPact", &PlayerSettings::has_dark_pact);
+      .property("hasDarkPact", &PlayerSettings::has_dark_pact)
+      .property("hasDrainSoul", &PlayerSettings::has_drain_soul);
 
   emscripten::class_<SimulationSettings>("SimulationSettings")
       .constructor<>()

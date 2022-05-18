@@ -55,7 +55,7 @@ TEST_F(AuraTest, Tick_HasDuration) {
   EXPECT_EQ(_aura->duration_remaining, 7);
 
   _aura->Tick(7);
-  EXPECT_FALSE(_aura->active);
+  EXPECT_FALSE(_aura->is_active);
   EXPECT_EQ(_aura->duration_remaining, 0);
 }
 
@@ -64,7 +64,7 @@ TEST_F(AuraTest, Tick_DoesNotHaveDuration) {
   _aura->Apply();
 
   _aura->Tick(99999);
-  EXPECT_TRUE(_aura->active);
+  EXPECT_TRUE(_aura->is_active);
 }
 
 TEST_F(AuraTest, Apply) {
@@ -76,14 +76,16 @@ TEST_F(AuraTest, Apply) {
   _aura->entity.simulation->current_fight_time = 50;
 
   _aura->Apply();
-  EXPECT_TRUE(_aura->active);
+  EXPECT_TRUE(_aura->is_active);
   EXPECT_EQ(_aura->entity.stats.spell_power, 1000);
   EXPECT_EQ(_aura->entity.combat_log_breakdown.at(_aura->name)->applied_at,
             _aura->entity.simulation->current_fight_time);
   EXPECT_EQ(_aura->entity.combat_log_breakdown.at(_aura->name)->count, 1);
   EXPECT_EQ(_aura->duration_remaining, 20);
 
-  for (int i = 0; i < 5; i++) { _aura->Apply(); }
+  for (int i = 0; i < 5; i++) {
+    _aura->Apply();
+  }
 
   EXPECT_EQ(_aura->entity.combat_log_breakdown.at(_aura->name)->count, 6);
   EXPECT_EQ(_aura->entity.stats.spell_power, 3000);
@@ -99,10 +101,10 @@ TEST_F(AuraTest, Fade) {
   _aura->Apply();
 
   _aura->Fade();
-  EXPECT_FALSE(_aura->active);
+  EXPECT_FALSE(_aura->is_active);
   EXPECT_EQ(_aura->entity.stats.spell_power, 0);
   EXPECT_EQ(
-      _aura->entity.combat_log_breakdown.at(_aura->name)->uptime,
+      _aura->entity.combat_log_breakdown.at(_aura->name)->uptime_in_seconds,
       _aura->entity.simulation->current_fight_time - _aura->entity.combat_log_breakdown.at(_aura->name)->applied_at);
 }
 

@@ -37,6 +37,7 @@ struct Spells {
   std::shared_ptr<Spell> cleave;
   std::shared_ptr<Spell> demonic_frenzy;
   std::shared_ptr<Spell> bloodlust;
+  std::shared_ptr<Spell> drain_soul;
   std::vector<std::shared_ptr<Spell>> power_infusion;
   std::vector<std::shared_ptr<Spell>> innervate;
 };

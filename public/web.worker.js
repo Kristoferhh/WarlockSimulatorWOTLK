@@ -316,6 +316,8 @@ onmessage = event => {
           playerData.Rotation.Finishers.includes(17877)
         playerSettings.hasConflagrate =
           playerData.Rotation.Finishers.includes(17962)
+        playerSettings.hasDrainSoul =
+          playerData.Rotation.Finishers.includes(47855)
         playerSettings.hasShadowfury = playerData.Rotation.Other.includes(30283)
         playerSettings.hasAmplifyCurse =
           playerData.Rotation.Other.includes(18288)

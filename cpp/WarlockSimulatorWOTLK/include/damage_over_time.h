@@ -21,8 +21,8 @@ struct DamageOverTime {
   double spell_power              = 0;  // Spell Power amount when dot was applied
   double base_damage              = 0;
   double coefficient              = 0;
-  bool active                     = false;
-  bool applied_with_amplify_curse = false;
+  bool is_active                  = false;
+  bool applied_with_amplify_curse = false;  // TODO replace this with a "snapshot_base_damage_modifier" variable
   std::string name;
 
   explicit DamageOverTime(Player& player_param);
@@ -32,6 +32,7 @@ struct DamageOverTime {
   void Tick(double kTime);
   [[nodiscard]] std::vector<double> GetConstantDamage() const;
   [[nodiscard]] double PredictDamage() const;
+  double GetDamageModifier() const;
 };
 
 struct CorruptionDot final : DamageOverTime {
@@ -60,4 +61,9 @@ struct ShadowflameDot final : DamageOverTime {
 
 struct ConflagrateDot final : DamageOverTime {
   explicit ConflagrateDot(Player& player_param);
+};
+
+// TODO turn this into a channeled spell or something instead of being a dot
+struct DrainSoulDot final : DamageOverTime {
+  explicit DrainSoulDot(Player& player_param);
 };

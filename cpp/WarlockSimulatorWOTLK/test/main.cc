@@ -108,6 +108,7 @@ int main() {
   player_settings.improved_faerie_fire           = true;
   player_settings.survival_hunter_agility        = 800;
   player_settings.expose_weakness_uptime         = 70;
+  player_settings.has_drain_soul                 = true;
 
   auto player                         = Player(player_settings);
   auto simulation_settings            = SimulationSettings();

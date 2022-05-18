@@ -229,3 +229,7 @@ struct ChaosBolt final : Spell {
 struct Shadowflame final : Spell {
   explicit Shadowflame(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot);
 };
+
+struct DrainSoul final : Spell {
+  explicit DrainSoul(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot);
+};

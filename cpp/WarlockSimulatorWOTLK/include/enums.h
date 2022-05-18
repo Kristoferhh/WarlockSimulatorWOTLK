@@ -68,6 +68,7 @@ const std::string kCleave                = "Cleave";
 const std::string kBlackBook             = "The Black Book";
 const std::string kImprovedShadowBolt    = "Improved Shadow Bolt";
 const std::string kShadowflame           = "Shadowflame";
+const std::string kDrainSoul             = "Drain Soul";
 }  // namespace SpellName
 
 namespace StatName {

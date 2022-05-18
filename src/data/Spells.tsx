@@ -100,6 +100,12 @@ export const Spells: Spell[] = [
     IconName: 'spell_fire_fireball',
     Id: SpellId.Conflagrate,
   },
+  {
+    Group: RotationGroup.Finishers,
+    Name: 'Drain Soul',
+    IconName: 'spell_shadow_haunting',
+    Id: 47855,
+  },
 
   // Other
   {

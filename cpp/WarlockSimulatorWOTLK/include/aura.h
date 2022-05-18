@@ -13,7 +13,7 @@ struct Aura {
   std::string name;
   int duration              = 0;
   double duration_remaining = 0;
-  bool active               = false;
+  bool is_active            = false;
   bool has_duration         = true;
   bool group_wide           = false;  // true if it's an aura that applies to everyone in the group
   // (will apply to pets as well then)

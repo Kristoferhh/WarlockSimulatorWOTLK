@@ -24,31 +24,39 @@ void Trinket::Setup() {
 }
 
 void Trinket::Use() {
-  if (player.ShouldWriteToCombatLog()) { player.CombatLog(name + " used"); }
+  if (player.ShouldWriteToCombatLog()) {
+    player.CombatLog(name + " used");
+  }
 
   if (player.recording_combat_log_breakdown) {
     player.combat_log_breakdown.at(name)->applied_at = player.simulation->current_fight_time;
     player.combat_log_breakdown.at(name)->count++;
   }
 
-  for (auto& stat : stats) { stat.AddStat(); }
+  for (auto& stat : stats) {
+    stat.AddStat();
+  }
 
-  active             = true;
+  is_active          = true;
   duration_remaining = duration;
   cooldown_remaining = cooldown;
 }
 
 void Trinket::Fade() {
-  if (player.ShouldWriteToCombatLog()) { player.CombatLog(name + " faded"); }
+  if (player.ShouldWriteToCombatLog()) {
+    player.CombatLog(name + " faded");
+  }
 
   if (player.recording_combat_log_breakdown) {
-    player.combat_log_breakdown.at(name)->uptime +=
+    player.combat_log_breakdown.at(name)->uptime_in_seconds +=
         player.simulation->current_fight_time - player.combat_log_breakdown.at(name)->applied_at;
   }
 
-  for (auto& stat : stats) { stat.RemoveStat(); }
+  for (auto& stat : stats) {
+    stat.RemoveStat();
+  }
 
-  active = false;
+  is_active = false;
 }
 
 void Trinket::Tick(const double kTime) {
@@ -57,7 +65,9 @@ void Trinket::Tick(const double kTime) {
   }
   cooldown_remaining -= kTime;
   duration_remaining -= kTime;
-  if (active && duration_remaining <= 0) { Fade(); }
+  if (is_active && duration_remaining <= 0) {
+    Fade();
+  }
 }
 
 ShiftingNaaruSliver::ShiftingNaaruSliver(Player& player) : Trinket(player) {

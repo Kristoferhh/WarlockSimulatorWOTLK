@@ -62,6 +62,7 @@ struct PlayerSettings {
   bool has_shadowfury                 = false;
   bool has_amplify_curse              = false;
   bool has_dark_pact                  = false;
+  bool has_drain_soul                 = false;
 
   PlayerSettings(AuraSelection& auras, Talents& talents, Sets& sets, const CharacterStats& kStats, ItemSlot& items)
       : auras(auras), talents(talents), sets(sets), stats(kStats), items(items) {}

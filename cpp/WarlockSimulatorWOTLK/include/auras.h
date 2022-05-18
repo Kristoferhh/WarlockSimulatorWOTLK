@@ -11,7 +11,7 @@ struct Auras {
   std::shared_ptr<DamageOverTime> immolate;
   std::shared_ptr<DamageOverTime> curse_of_agony;
   std::shared_ptr<DamageOverTime> curse_of_doom;
-  std::shared_ptr<DamageOverTime> haunt;
+  std::shared_ptr<DamageOverTime> drain_soul;
   std::shared_ptr<Aura> improved_shadow_bolt;
   std::shared_ptr<Aura> curse_of_the_elements;
   std::shared_ptr<Aura> shadow_trance;
@@ -25,4 +25,5 @@ struct Auras {
   std::shared_ptr<Aura> mana_tide_totem;
   std::shared_ptr<Aura> demonic_frenzy;
   std::shared_ptr<Aura> black_book;
+  std::shared_ptr<Aura> haunt;
 };

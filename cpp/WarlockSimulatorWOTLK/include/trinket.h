@@ -12,7 +12,7 @@ struct Trinket {
   double duration_remaining = 0;
   int cooldown              = 0;
   double cooldown_remaining = 0;
-  bool active               = false;
+  bool is_active            = false;
   bool shares_cooldown      = true;
   std::string name;
 

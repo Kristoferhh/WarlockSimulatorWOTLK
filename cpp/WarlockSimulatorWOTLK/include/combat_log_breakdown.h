@@ -12,7 +12,7 @@ struct CombatLogBreakdown {
   uint32_t dodge             = 0;
   uint32_t glancing_blows    = 0;
   double applied_at          = 0;
-  double uptime              = 0;
+  double uptime_in_seconds   = 0;
 
   explicit CombatLogBreakdown(std::string name) : name(std::move(name)) {}
 };
