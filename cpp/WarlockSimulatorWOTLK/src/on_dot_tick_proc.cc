@@ -15,5 +15,7 @@ bool OnDotTickProc::ShouldProc(DamageOverTime*) {
 void OnDotTickProc::Setup() {
   SpellProc::Setup();
 
-  if (procs_on_dot_ticks && on_dot_tick_procs_enabled) { entity.on_dot_tick_procs.push_back(this); }
+  if (procs_on_dot_ticks && on_dot_tick_procs_enabled) {
+    entity.on_dot_tick_procs.push_back(this);
+  }
 }

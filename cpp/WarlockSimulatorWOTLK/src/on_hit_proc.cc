@@ -13,7 +13,9 @@ OnHitProc::OnHitProc(Entity& entity, std::shared_ptr<Aura> aura) : SpellProc(ent
 void OnHitProc::Setup() {
   SpellProc::Setup();
 
-  if (procs_on_hit && on_hit_procs_enabled) { entity.on_hit_procs.push_back(this); }
+  if (procs_on_hit && on_hit_procs_enabled) {
+    entity.on_hit_procs.push_back(this);
+  }
 }
 
 JudgementOfWisdom::JudgementOfWisdom(Entity& entity) : OnHitProc(entity) {

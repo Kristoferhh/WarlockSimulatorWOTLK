@@ -15,7 +15,9 @@ OnCritProc::OnCritProc(Player& player, std::shared_ptr<Aura> aura) : SpellProc(p
 void OnCritProc::Setup() {
   SpellProc::Setup();
 
-  if (procs_on_crit && on_crit_procs_enabled) { entity.on_crit_procs.push_back(this); }
+  if (procs_on_crit && on_crit_procs_enabled) {
+    entity.on_crit_procs.push_back(this);
+  }
 }
 
 ImprovedShadowBolt::ImprovedShadowBolt(Player& player, std::shared_ptr<Aura> aura)

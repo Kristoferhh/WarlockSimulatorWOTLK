@@ -55,7 +55,9 @@ void LifeTap::Cast() {
     }
   }
 
-  if (name == SpellName::kDarkPact) { entity.pet->stats.mana = std::max(0.0, entity.pet->stats.mana - kManaGain); }
+  if (name == SpellName::kDarkPact) {
+    entity.pet->stats.mana = std::max(0.0, entity.pet->stats.mana - kManaGain);
+  }
 }
 
 DarkPact::DarkPact(Entity& entity) : LifeTap(entity) {
