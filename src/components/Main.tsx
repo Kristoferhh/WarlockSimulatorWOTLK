@@ -65,7 +65,7 @@ export default function Main() {
           <TalentTrees />
         </Grid>
         {uiState.CombatLogBreakdown.Data.length > 0 && (
-          <Grid item xs={9}>
+          <Grid item xs={12}>
             <BreakdownTables />
           </Grid>
         )}

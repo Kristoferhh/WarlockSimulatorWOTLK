@@ -389,7 +389,7 @@ export function SimulationButtons() {
                   if (
                     playerState.Settings[
                       Setting.automaticallyOpenSimDetails
-                    ] === 'yes'
+                    ] === 'true'
                   ) {
                     dispatch(
                       setCombatLogBreakdownValue({

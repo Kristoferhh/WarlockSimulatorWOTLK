@@ -316,13 +316,6 @@ export const Auras: Aura[] = [
     PhysicalVulnerability: true,
   },
   {
-    Name: 'Expose Weakness',
-    Group: AuraGroup.Debuffs,
-    IconName: 'ability_rogue_findweakness',
-    ForPet: true,
-    Id: AuraId.ExposeWeakness,
-  },
-  {
     Name: 'Annihilator',
     Group: AuraGroup.Debuffs,
     IconName: 'inv_axe_12',
@@ -369,6 +362,20 @@ export const Auras: Aura[] = [
     Id: AuraId.PotionOfWildMagic,
     IconName: 'inv_alchemy_elixir_01',
     Potion: true,
+  },
+  {
+    Name: 'Runic Mana Potion',
+    Group: AuraGroup.Consumables,
+    Id: 33448,
+    IconName: 'inv_alchemy_elixir_02',
+    Potion: true,
+  },
+  {
+    Name: 'Demonic Rune',
+    Group: AuraGroup.Consumables,
+    Id: 12662,
+    IconName: 'inv_misc_rune_04',
+    DemonicRune: true,
   },
   {
     Name: 'Grand Spellstone',
@@ -532,4 +539,14 @@ export const Auras: Aura[] = [
   },
 
   // Noncategorized
+  {
+    Name: 'Nightfall',
+    IconName: 'spell_shadow_twilight',
+    Id: 17941,
+  },
+  {
+    Name: 'Improved Shadow Bolt',
+    IconName: 'spell_shadow_shadowbolt',
+    Id: 17800,
+  },
 ]

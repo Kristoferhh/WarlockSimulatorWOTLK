@@ -256,55 +256,6 @@ export default function SettingsDisplay() {
             }
           />
         )}
-        {playerStore.Settings[Setting.customIsbUptime] === 'yes' && (
-          <TextField
-            size='small'
-            className={`${mui.textField} ${mui.textFieldAndSelect}`}
-            type='number'
-            label={`${t('Custom ISB Uptime')} %`}
-            variant='outlined'
-            value={playerStore.Settings[Setting.customIsbUptimeValue]}
-            onChange={e =>
-              settingModifiedHandler(
-                Setting.customIsbUptimeValue,
-                e.target.value
-              )
-            }
-          />
-        )}
-        {playerStore.Auras.includes(AuraId.ExposeWeakness) &&
-          isPetActive(playerStore.Settings, true, true) && (
-            <>
-              <TextField
-                size='small'
-                className={`${mui.textField} ${mui.textFieldAndSelect}`}
-                type='number'
-                label={t('Survival Hunter Agility')}
-                variant='outlined'
-                value={playerStore.Settings[Setting.customIsbUptimeValue]}
-                onChange={e =>
-                  settingModifiedHandler(
-                    Setting.customIsbUptimeValue,
-                    e.target.value
-                  )
-                }
-              />
-              <TextField
-                size='small'
-                className={`${mui.textField} ${mui.textFieldAndSelect}`}
-                type='number'
-                label={`${t('Expose Weakness Uptime')} %`}
-                variant='outlined'
-                value={playerStore.Settings[Setting.exposeWeaknessUptime]}
-                onChange={e =>
-                  settingModifiedHandler(
-                    Setting.exposeWeaknessUptime,
-                    e.target.value
-                  )
-                }
-              />
-            </>
-          )}
       </FormGroup>
       <FormGroup>
         <FormControlLabel
@@ -431,19 +382,6 @@ export default function SettingsDisplay() {
               }
             />
           )}
-        <FormControlLabel
-          className={mui.label}
-          label={t('Use Custom ISB Uptime')}
-          control={<Switch size='small' />}
-          labelPlacement='start'
-          onChange={e => {
-            settingModifiedHandler(
-              Setting.customIsbUptime,
-              (e.target as HTMLInputElement).checked.toString()
-            )
-          }}
-          checked={playerStore.Settings[Setting.customIsbUptime] === 'true'}
-        />
       </FormGroup>
     </FormControl>
   )

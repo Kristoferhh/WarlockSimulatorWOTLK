@@ -206,16 +206,16 @@ export enum Stat {
 }
 
 export interface CombatLogBreakdownData {
-  Name: string
-  Casts: number
-  Crits: number
-  Misses: number
-  Count: number
-  Uptime: number
-  Dodges: number
-  GlancingBlows: number
-  Damage: number
-  ManaGain: number
+  name: string
+  casts: number
+  crits: number
+  misses: number
+  count: number
+  uptime_in_seconds: number
+  dodges: number
+  glancingBlows: number
+  damage: number
+  manaGain: number
 }
 
 export type StatsCollection = {
@@ -245,11 +245,8 @@ export enum Setting {
   targetFireResistance = 'targetFireResistance',
   improvedFaerieFire = 'improvedFaerieFire',
   survivalHunterAgility = 'survivalHunterAgility',
-  exposeWeaknessUptime = 'exposeWeaknessUptime',
   OnlyLashOfPainWhenIsbIsNotUp = 'lashOfPainUsage',
   automaticallyOpenSimDetails = 'automaticallyOpenSimDetails',
-  customIsbUptime = 'customIsbUptime',
-  customIsbUptimeValue = 'customIsbUptimeValue',
   randomizeValues = 'randomizeValues',
   infinitePlayerMana = 'infinitePlayerMana',
   infinitePetMana = 'infinitePetMana',
@@ -279,11 +276,8 @@ export const InitialSettings: { [key in Setting]: string } = {
   [Setting.targetFireResistance]: '0',
   [Setting.improvedFaerieFire]: 'no',
   [Setting.survivalHunterAgility]: '1000',
-  [Setting.exposeWeaknessUptime]: '90',
   [Setting.OnlyLashOfPainWhenIsbIsNotUp]: 'noISB',
   [Setting.automaticallyOpenSimDetails]: 'no',
-  [Setting.customIsbUptime]: 'yes',
-  [Setting.customIsbUptimeValue]: '70',
   [Setting.randomizeValues]: 'no',
   [Setting.infinitePlayerMana]: 'no',
   [Setting.infinitePetMana]: 'no',
@@ -826,7 +820,6 @@ export enum AuraId {
   ExposeArmor = 26866,
   CurseOfRecklessness = 27226,
   BloodFrenzy = 29859,
-  ExposeWeakness = 34503,
   Annihilator = 16928,
   ImprovedHuntersMark = 19425,
   FlaskOfTheNorth = 47499,

@@ -1,6 +1,7 @@
 #include "../include/player.h"
 
 #include <cmath>
+#include <iostream>
 
 #include "../include/aura.h"
 #include "../include/aura_selection.h"
@@ -287,6 +288,10 @@ void Player::Initialize(Simulation* simulation_ptr) {
     spells.demonic_rune = std::make_shared<DemonicRune>(*this);
   }
 
+  if (selected_auras.runic_mana_potion) {
+    spells.runic_mana_potion = std::make_shared<RunicManaPotion>(*this);
+  }
+
   if (talents.dark_pact == 1 && (settings.has_dark_pact || settings.rotation_option == EmbindConstant::kSimChooses)) {
     spells.dark_pact = std::make_shared<DarkPact>(*this);
   }
@@ -569,7 +574,7 @@ void Player::SendPlayerInfoToCombatLog() {
   combat_log_entries.push_back(
       "Crit Chance: " + DoubleToString(round((GetSpellCritChance() + 5 * talents.devastation) * 100) / 100, 2) + "%");
   combat_log_entries.push_back(
-      "Hit Chance: " + DoubleToString(std::min(16.0, round(stats.extra_spell_hit_chance * 100) / 100), 2) + "%");
+      "Hit Chance: " + DoubleToString(std::min(17.0, round(stats.extra_spell_hit_chance * 100) / 100), 2) + "%");
   combat_log_entries.push_back(
       "Haste: " +
       DoubleToString(round(stats.spell_haste_rating / StatConstant::kHasteRatingPerPercent * 100) / 100, 2) + "%");

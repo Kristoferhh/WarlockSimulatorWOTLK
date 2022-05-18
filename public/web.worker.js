@@ -58,9 +58,9 @@ onmessage = event => {
         auras.exposeArmor = playerData.Auras.includes(26866)
         auras.curseOfRecklessness = playerData.Auras.includes(27226)
         auras.bloodFrenzy = playerData.Auras.includes(29859)
-        auras.exposeWeakness = playerData.Auras.includes(34503)
         auras.annihilator = playerData.Auras.includes(16928)
         auras.improvedHuntersMark = playerData.Auras.includes(19425)
+        auras.runicManaPotion = playerData.Auras.includes(33448)
         auras.demonicRune = playerData.Auras.includes(12662)
         auras.flameCap = playerData.Auras.includes(22788)
         auras.petBlessingOfKings = playerData.Auras.includes(25898)
@@ -153,6 +153,7 @@ onmessage = event => {
         talents.bane = parseInt(playerData.Talents.Bane)
         talents.aftermath = parseInt(playerData.Talents.Aftermath)
         talents.cataclysm = parseInt(playerData.Talents.Cataclysm)
+        console.log(playerData.Talents.Cataclysm)
         talents.demonicPower = parseInt(playerData.Talents['Demonic Power'])
         talents.shadowburn = parseInt(playerData.Talents.Shadowburn)
         talents.ruin = parseInt(playerData.Talents.Ruin)
@@ -222,7 +223,7 @@ onmessage = event => {
         playerSettings.equippedItemSimulation =
           event.data.EquippedItemSimulation === true
         playerSettings.recordingCombatLogBreakdown =
-          playerData.Settings.automaticallyOpenSimDetails === 'yes'
+          playerData.Settings.automaticallyOpenSimDetails === 'true'
         playerSettings.customStat = module.EmbindConstant[event.data.CustomStat]
         playerSettings.enemyLevel = parseInt(playerData.Settings.targetLevel)
         playerSettings.enemyShadowResist = parseInt(
@@ -243,11 +244,6 @@ onmessage = event => {
         playerSettings.ferociousInspirationAmount = parseInt(
           playerData.Settings.ferociousInspirationAmount
         )
-        playerSettings.usingCustomIsbUptime =
-          playerData.Settings.customIsbUptime === 'yes'
-        playerSettings.customIsbUptimeValue = parseFloat(
-          playerData.Settings.customIsbUptimeValue
-        )
         playerSettings.fightType =
           !playerData.Settings.fightType ||
           playerData.Settings.fightType === 'singleTarget'
@@ -263,9 +259,6 @@ onmessage = event => {
           playerData.Settings.innervateAmount
         )
         playerSettings.enemyArmor = parseInt(playerData.Settings.enemyArmor)
-        playerSettings.exposeWeaknessUptime = parseFloat(
-          playerData.Settings.exposeWeaknessUptime
-        )
         playerSettings.improvedFaerieFire =
           playerData.Settings.improvedFaerieFire === 'yes'
         playerSettings.infinitePlayerMana =

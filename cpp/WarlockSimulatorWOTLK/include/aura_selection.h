@@ -30,6 +30,7 @@ struct AuraSelection {
   bool annihilator;
   bool improved_hunters_mark;
 
+  bool runic_mana_potion;
   bool demonic_rune;
   bool flame_cap;
 

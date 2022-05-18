@@ -132,4 +132,16 @@ export const Spells: Spell[] = [
     IconName: 'ability_warlock_haunt',
     Id: SpellId.Haunt,
   },
+
+  // Uncategorized
+  {
+    Name: 'Mp5',
+    IconName: 'inv_elemental_mote_mana',
+    Id: 0,
+  },
+  {
+    Name: 'Life Tap',
+    IconName: 'spell_shadow_burningspirit',
+    Id: 57946,
+  },
 ]

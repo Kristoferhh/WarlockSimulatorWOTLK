@@ -49,7 +49,7 @@ void Spell::Setup() {
       mana_cost *= 1 - (entity.player->talents.cataclysm == 1   ? 0.04
                         : entity.player->talents.cataclysm == 2 ? 0.07
                         : entity.player->talents.cataclysm == 3 ? 0.1
-                                                                : 1);
+                                                                : 0);
       bonus_crit_chance += 5 * entity.player->talents.devastation;
     } else if (spell_type == SpellType::kAffliction) {
       mana_cost *= 1 - 0.02 * entity.player->talents.suppression;
@@ -421,7 +421,7 @@ bool Spell::IsHit() const {
 
 double Spell::GetHitChance() const {
   if (attack_type == AttackType::kMagical) {
-    return std::min(99.0, entity.stats.spell_hit_chance + entity.stats.extra_spell_hit_chance);
+    return entity.stats.spell_hit_chance + entity.stats.extra_spell_hit_chance;
   }
 
   if (attack_type == AttackType::kPhysical) {

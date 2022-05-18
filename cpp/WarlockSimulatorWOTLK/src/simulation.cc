@@ -157,13 +157,12 @@ void Simulation::CastNonGcdSpells() const {
     player.spells.demonic_rune->StartCast();
   }
 
-  // Super Mana Potion
-  // TODO
-  /*if ((current_fight_time > 5 || player.stats.mp5 == 0.0) && player.spells.super_mana_potion != nullptr &&
-      player.stats.max_mana - player.stats.mana > player.spells.super_mana_potion->max_mana_gain &&
-      player.spells.super_mana_potion->Ready()) {
-    player.spells.super_mana_potion->StartCast();
-  }*/
+  // Mana Potion
+  if ((current_fight_time > 5 || player.stats.mp5 == 0.0) && player.spells.runic_mana_potion != nullptr &&
+      player.stats.max_mana - player.stats.mana > player.spells.runic_mana_potion->max_mana_gain &&
+      player.spells.runic_mana_potion->Ready()) {
+    player.spells.runic_mana_potion->StartCast();
+  }
 }
 
 void Simulation::CastGcdSpells() const {

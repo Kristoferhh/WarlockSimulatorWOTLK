@@ -1,14 +1,19 @@
 #include "../include/mana_potion.h"
 
+#include <iostream>
+
 #include "../include/combat_log_breakdown.h"
 #include "../include/common.h"
 #include "../include/player.h"
 #include "../include/player_settings.h"
 
+// TODO create a Potion class and inherit from that
 ManaPotion::ManaPotion(Player& player) : Spell(player) {
-  cooldown = 120;
-  is_item  = true;
-  on_gcd   = false;
+  cooldown                  = 60;
+  is_item                   = true;
+  on_gcd                    = false;
+  limited_amount_of_casts   = true;
+  amount_of_casts_per_fight = 1;
 }
 
 void ManaPotion::Cast() {
@@ -32,9 +37,17 @@ void ManaPotion::Cast() {
   }
 }
 
+RunicManaPotion::RunicManaPotion(Player& player) : ManaPotion(player) {
+  name          = SpellName::kRunicManaPotion;
+  min_mana_gain = 4200;
+  max_mana_gain = 4400;
+  Spell::Setup();
+}
+
 DemonicRune::DemonicRune(Player& player) : ManaPotion(player) {
   name          = SpellName::kDemonicRune;
   min_mana_gain = 900;
   max_mana_gain = 1500;
+  cooldown      = 900;
   Spell::Setup();
 }

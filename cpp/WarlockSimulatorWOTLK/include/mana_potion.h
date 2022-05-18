@@ -8,6 +8,10 @@ struct ManaPotion : Spell {
   void Cast() override;
 };
 
+struct RunicManaPotion final : ManaPotion {
+  explicit RunicManaPotion(Player& player);
+};
+
 struct DemonicRune final : ManaPotion {
   explicit DemonicRune(Player& player);
 };

@@ -192,21 +192,8 @@ img {
   text-align: center;
 }
 
-#breakdown-tables-container {
-  display: flex;
-  justify-content: center;
-  overflow-x: visible;
-}
-
 .breakdown-section {
   vertical-align: top;
-}
-
-.breakdown-table {
-  padding-left: 8px;
-  display: inline-block;
-  border-spacing: 0;
-  font-size: 11px;
 }
 
 .breakdown-table .number {
@@ -220,7 +207,6 @@ img {
 .breakdown-table td,
 .breakdown-table th {
   padding: 8px;
-  border: 1px solid black;
   border-collapse: collapse;
 }
 

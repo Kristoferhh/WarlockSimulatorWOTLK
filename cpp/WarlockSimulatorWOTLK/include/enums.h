@@ -69,6 +69,7 @@ const std::string kBlackBook             = "The Black Book";
 const std::string kImprovedShadowBolt    = "Improved Shadow Bolt";
 const std::string kShadowflame           = "Shadowflame";
 const std::string kDrainSoul             = "Drain Soul";
+const std::string kRunicManaPotion       = "Runic Mana Potion";
 }  // namespace SpellName
 
 namespace StatName {
