@@ -112,9 +112,7 @@ void Entity::Reset() {
   mp5_timer_remaining              = 5;
   five_second_rule_timer_remaining = 5;
 
-  for (const auto& kSpell : spell_list) {
-    kSpell->Reset();
-  }
+  for (const auto& kSpell : spell_list) { kSpell->Reset(); }
 }
 
 void Entity::Initialize(Simulation* simulation_ptr) {

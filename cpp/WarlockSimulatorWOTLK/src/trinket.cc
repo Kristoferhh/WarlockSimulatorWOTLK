@@ -33,9 +33,7 @@ void Trinket::Use() {
     player.combat_log_breakdown.at(name)->count++;
   }
 
-  for (auto& stat : stats) {
-    stat.AddStat();
-  }
+  for (auto& stat : stats) { stat.AddStat(); }
 
   is_active          = true;
   duration_remaining = duration;
@@ -52,9 +50,7 @@ void Trinket::Fade() {
         player.simulation->current_fight_time - player.combat_log_breakdown.at(name)->applied_at;
   }
 
-  for (auto& stat : stats) {
-    stat.RemoveStat();
-  }
+  for (auto& stat : stats) { stat.RemoveStat(); }
 
   is_active = false;
 }

@@ -41,7 +41,9 @@ void ManaOverTime::Tick(const double kTime) {
     ticks_remaining--;
     tick_timer_remaining = tick_timer_total;
 
-    if (ticks_remaining <= 0) { Fade(); }
+    if (ticks_remaining <= 0) {
+      Fade();
+    }
   }
 }
 ManaTideTotemAura::ManaTideTotemAura(Entity& entity) : ManaOverTime(entity) {

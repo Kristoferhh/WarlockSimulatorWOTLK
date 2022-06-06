@@ -9,7 +9,9 @@ double Median(std::vector<double> vec) {
   if (const size_t kSize = vec.size(); kSize > 0) {
     std::sort(vec.begin(), vec.end());
 
-    if (kSize % 2 == 0) { return (vec[kSize / 2 - 1] + vec[kSize / 2]) / 2; }
+    if (kSize % 2 == 0) {
+      return (vec[kSize / 2 - 1] + vec[kSize / 2]) / 2;
+    }
 
     return vec[kSize / 2];
   }
