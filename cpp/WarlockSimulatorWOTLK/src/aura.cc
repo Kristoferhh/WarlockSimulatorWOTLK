@@ -54,9 +54,7 @@ void Aura::Apply() {
     } else {
       stacks++;
 
-      for (auto& stat : stats_per_stack) {
-        stat.AddStat();
-      }
+      for (auto& stat : stats_per_stack) { stat.AddStat(); }
     }
 
     if (entity.ShouldWriteToCombatLog()) {
