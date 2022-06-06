@@ -23,6 +23,7 @@ struct Pet final : Entity, std::enable_shared_from_this<Pet> {
   double GetSpellCritChance() override;
   double GetStamina() override;
   double GetIntellect() override;
+  double GetMeleeCritChance() override;
   double GetAgility() const;
   double GetStrength() const;
   double GetPlayerSpellPower() const;

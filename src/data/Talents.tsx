@@ -1,4 +1,4 @@
-import { TalentTree, Talent, TalentName, SpellId } from '../Types'
+import { SpellId, Talent, TalentName, TalentTree } from '../Types'
 
 export interface TalentTreeStruct {
   Name: TalentTree
@@ -61,7 +61,7 @@ export const Talents: TalentTreeStruct[] = [
         },
         {
           Name: TalentName.AmplifyCurse,
-          RankIds: [SpellId.AmplifyCurse],
+          RankIds: [18288],
           IconName: 'spell_shadow_contagion',
         },
       ],

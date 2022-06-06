@@ -80,20 +80,14 @@ void Simulation::SelectedSpellHandler(const std::shared_ptr<Spell>& kSpell,
       !predicted_damage_of_spells.contains(kSpell)) {
     predicted_damage_of_spells.insert({kSpell, kSpell->PredictDamage()});
   } else if (kSpell->HasEnoughMana()) {
-    CastSelectedSpell(kSpell, fight_time_remaining);
+    CastSelectedSpell(kSpell);
   } else {
     player.CastLifeTapOrDarkPact();
   }
 }
 
 void Simulation::CastSelectedSpell(const std::shared_ptr<Spell>& kSpell, const double kPredictedDamage) const {
-  player.UseCooldowns(fight_time_remaining);
-
-  if (player.spells.amplify_curse != nullptr && player.spells.amplify_curse->Ready() &&
-      (kSpell->name == SpellName::kCurseOfAgony || kSpell->name == SpellName::kCurseOfDoom)) {
-    player.spells.amplify_curse->StartCast();
-  }
-
+  player.UseCooldowns();
   kSpell->StartCast(kPredictedDamage);
 }
 
@@ -289,8 +283,7 @@ void Simulation::CastGcdSpells() const {
 
     // Cast Drain Soul if the boss is at or below 25% hp (25% time left of the fight, might have to rethink this :|)
     if (player.gcd_remaining <= 0 && player.auras.drain_soul != nullptr && !player.auras.drain_soul->is_active &&
-        player.spells.drain_soul->CanCast() &&
-        player.simulation->fight_time_remaining / player.simulation->iteration_fight_length <= 0.25) {
+        player.spells.drain_soul->CanCast() && player.simulation->GetEnemyHealthPercent() <= 25) {
       SelectedSpellHandler(player.spells.drain_soul, predicted_damage_of_spells);
     }
 
@@ -334,7 +327,7 @@ void Simulation::CastGcdSpells() const {
   // AoE (currently just does Seed of Corruption by default)
   else {
     if (player.spells.seed_of_corruption->Ready()) {
-      player.UseCooldowns(fight_time_remaining);
+      player.UseCooldowns();
       player.spells.seed_of_corruption->StartCast();
     } else {
       player.CastLifeTapOrDarkPact();
@@ -354,10 +347,7 @@ void Simulation::CastPetSpells() const {
   }
 
   // Succubus Lash of Pain
-  if (player.pet->spells.lash_of_pain != nullptr && player.pet->spells.lash_of_pain->Ready() &&
-      (player.settings.lash_of_pain_usage == EmbindConstant::kOnCooldown ||
-       !player.settings.using_custom_isb_uptime &&
-           (player.auras.improved_shadow_bolt == nullptr || !player.auras.improved_shadow_bolt->is_active))) {
+  if (player.pet->spells.lash_of_pain != nullptr && player.pet->spells.lash_of_pain->Ready()) {
     player.pet->spells.lash_of_pain->StartCast();
   }
 
@@ -421,4 +411,9 @@ void Simulation::SimulationEnd(const long long kSimulationDuration) const {
 
   SendSimulationResults(Median(dps_vector), min_dps, max_dps, player.settings.item_id, kSettings.iterations,
                         static_cast<int>(player.total_fight_duration), player.custom_stat.c_str(), kSimulationDuration);
+}
+
+// TODO :-)
+int Simulation::GetEnemyHealthPercent() const {
+  return static_cast<int>(std::ceil(fight_time_remaining / iteration_fight_length));
 }

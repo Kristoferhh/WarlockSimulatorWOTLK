@@ -1,8 +1,10 @@
 #pragma once
 #include <string>
 
+struct Pet;
 struct Stat;
 struct Entity;
+struct Player;
 #include <vector>
 
 struct Aura {
@@ -11,11 +13,12 @@ struct Aura {
   std::vector<Stat> stats;
   std::vector<Stat> stats_per_stack;
   std::string name;
-  int duration              = 0;
-  double duration_remaining = 0;
-  bool is_active            = false;
-  bool has_duration         = true;
-  bool group_wide           = false;  // true if it's an aura that applies to everyone in the group
+  int duration                 = 0;
+  double duration_remaining    = 0;
+  bool is_active               = false;
+  bool has_duration            = true;
+  bool applies_with_max_stacks = true;
+  bool group_wide              = false;  // true if it's an aura that applies to everyone in the group
   // (will apply to pets as well then)
   // dots
   int tick_timer_total        = 0;
@@ -34,59 +37,98 @@ struct Aura {
   virtual void Tick(double kTime);
   virtual void Apply();
   void Fade();
-  virtual void DecrementStacks();  // ISB
-};
-
-struct ImprovedShadowBoltAura final : Aura {
-  explicit ImprovedShadowBoltAura(Entity& entity_param);
-  void Apply() override;
-  void DecrementStacks() override;
+  virtual void DecrementStacks();
 };
 
 struct CurseOfTheElementsAura final : Aura {
-  explicit CurseOfTheElementsAura(Entity& entity_param);
+  explicit CurseOfTheElementsAura(Player& player);
 };
 
 struct ShadowTranceAura final : Aura {
-  explicit ShadowTranceAura(Entity& entity_param);
+  explicit ShadowTranceAura(Player& player);
 };
 
 struct PowerInfusionAura final : Aura {
-  explicit PowerInfusionAura(Entity& entity_param);
+  explicit PowerInfusionAura(Player& player);
 };
 
 struct FlameCapAura final : Aura {
-  explicit FlameCapAura(Entity& entity_param);
+  explicit FlameCapAura(Player& player);
 };
 
 struct BloodFuryAura final : Aura {
-  explicit BloodFuryAura(Entity& entity_param);
+  explicit BloodFuryAura(Player& player);
 };
 
 struct BloodlustAura final : Aura {
-  explicit BloodlustAura(Entity& entity_param);
+  explicit BloodlustAura(Player& player);
 };
 
 struct TheLightningCapacitorAura final : Aura {
-  explicit TheLightningCapacitorAura(Entity& entity_param);
-};
-
-struct AmplifyCurseAura final : Aura {
-  explicit AmplifyCurseAura(Entity& entity_param);
+  explicit TheLightningCapacitorAura(Player& player);
 };
 
 struct InnervateAura final : Aura {
-  explicit InnervateAura(Entity& entity_param);
+  explicit InnervateAura(Player& player);
 };
 
 struct DemonicFrenzyAura final : Aura {
-  explicit DemonicFrenzyAura(Entity& entity_param);
+  explicit DemonicFrenzyAura(Pet& pet);
 };
 
 struct BlackBookAura final : Aura {
-  explicit BlackBookAura(Entity& entity_param);
+  explicit BlackBookAura(Pet& pet);
 };
 
 struct HauntAura final : Aura {
-  explicit HauntAura(Entity& entity_param);
+  explicit HauntAura(Player& player);
+};
+
+struct ShadowEmbraceAura final : Aura {
+  explicit ShadowEmbraceAura(Player& player);
+};
+
+struct EradicationAura final : Aura {
+  explicit EradicationAura(Player& player);
+};
+
+struct MoltenCoreAura final : Aura {
+  explicit MoltenCoreAura(Player& player);
+};
+
+struct DemonicEmpowermentAura final : Aura {
+  explicit DemonicEmpowermentAura(Pet& pet);
+};
+
+struct DecimationAura final : Aura {
+  explicit DecimationAura(Player& player);
+};
+
+struct DemonicPactAura final : Aura {
+  explicit DemonicPactAura(Player& player);
+};
+
+struct MetamorphosisAura final : Aura {
+  explicit MetamorphosisAura(Player& player);
+};
+
+struct ShadowMasteryAura final : Aura {
+  explicit ShadowMasteryAura(Player& player);
+};
+
+struct PyroclasmAura final : Aura {
+  explicit PyroclasmAura(Player& player);
+};
+
+struct ImprovedSoulLeechAura final : Aura {
+  explicit ImprovedSoulLeechAura(Player& player);
+  void Apply() override;
+};
+
+struct BackdraftAura final : Aura {
+  explicit BackdraftAura(Player& player);
+};
+
+struct EmpoweredImpAura final : Aura {
+  explicit EmpoweredImpAura(Player& player);
 };

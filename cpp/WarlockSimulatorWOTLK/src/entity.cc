@@ -1,5 +1,7 @@
 #include "../include/entity.h"
 
+#include <iostream>
+
 #include "../include/aura.h"
 #include "../include/aura_selection.h"
 #include "../include/bindings.h"
@@ -62,10 +64,6 @@ Entity::Entity(Player* player, PlayerSettings& player_settings, const EntityType
     stats.damage_modifier *= std::pow(1.03, settings.ferocious_inspiration_amount);
   }
 
-  if (settings.using_custom_isb_uptime) {
-    stats.shadow_modifier *= GetCustomImprovedShadowBoltDamageModifier();
-  }
-
   if (player_settings.auras.blood_pact) {
     if (kEntityType == EntityType::kPet) {
       // Only add 70 stam if it's a pet since it's added to the player's stats in the client.
@@ -80,6 +78,17 @@ Entity::Entity(Player* player, PlayerSettings& player_settings, const EntityType
 
     stats.stamina += 70 * 0.1 * improved_imp_points;
   }
+
+  if (player->settings.selected_pet == EmbindConstant::kImp) {
+    stats.fire_modifier *= 1 + 0.01 * player->talents.master_demonologist;
+  } else if (player->settings.selected_pet == EmbindConstant::kSuccubus) {
+    stats.shadow_modifier *= 1 + 0.01 * player->talents.master_demonologist;
+  } else if (player->settings.selected_pet == EmbindConstant::kFelguard) {
+    stats.damage_modifier *= 1 + 0.01 * player->talents.master_demonologist;
+  }
+
+  stats.shadow_modifier *= 1 + 0.02 * player_settings.talents.demonic_pact;
+  stats.fire_modifier *= 1 + 0.02 * player_settings.talents.demonic_pact;
 }
 
 void Entity::PostIterationDamageAndMana(const std::string& kSpellName) const {
@@ -205,12 +214,8 @@ double Entity::GetBaseSpellHitChance(const int kEntityLevel, const int kEnemyLev
   }
 }
 
-double Entity::GetMeleeCritChance() const {
+double Entity::GetMeleeCritChance() {
   return pet->GetAgility() * 0.04 + 0.65 + stats.melee_crit_chance - StatConstant::kMeleeCritChanceSuppression;
-}
-
-double Entity::GetCustomImprovedShadowBoltDamageModifier() const {
-  return 1 + 0.2 * (settings.custom_isb_uptime_value / 100.0);
 }
 
 void Entity::Tick(const double kTime) {

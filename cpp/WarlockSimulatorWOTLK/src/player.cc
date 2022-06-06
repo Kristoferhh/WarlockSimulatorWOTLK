@@ -21,84 +21,72 @@
 #include "../include/pet.h"
 #include "../include/player_settings.h"
 #include "../include/sets.h"
+#include "../include/simulation.h"
 #include "../include/spell.h"
 #include "../include/stat.h"
 #include "../include/talents.h"
 #include "../include/trinket.h"
 
-Player::Player(PlayerSettings& settings)
-    : Entity(nullptr, settings, EntityType::kPlayer),
-      selected_auras(settings.auras),
-      talents(settings.talents),
-      sets(settings.sets),
-      items(settings.items) {
+Player::Player(PlayerSettings& player_settings)
+    : Entity(nullptr, player_settings, EntityType::kPlayer),
+      selected_auras(player_settings.auras),
+      talents(player_settings.talents),
+      sets(player_settings.sets),
+      items(player_settings.items) {
   name          = "Player";
-  infinite_mana = settings.infinite_player_mana;
+  infinite_mana = player_settings.infinite_player_mana;
 
   if (recording_combat_log_breakdown) {
     combat_log_breakdown.insert({StatName::kMp5, std::make_shared<CombatLogBreakdown>(StatName::kMp5)});
   }
 
-  if (settings.custom_stat == EmbindConstant::kStamina) {
+  if (player_settings.custom_stat == EmbindConstant::kStamina) {
     custom_stat = "stamina";
-  } else if (settings.custom_stat == EmbindConstant::kIntellect) {
+  } else if (player_settings.custom_stat == EmbindConstant::kIntellect) {
     custom_stat = "intellect";
-  } else if (settings.custom_stat == EmbindConstant::kSpirit) {
+  } else if (player_settings.custom_stat == EmbindConstant::kSpirit) {
     custom_stat = "spirit";
-  } else if (settings.custom_stat == EmbindConstant::kSpellPower) {
+  } else if (player_settings.custom_stat == EmbindConstant::kSpellPower) {
     custom_stat = "spellPower";
-  } else if (settings.custom_stat == EmbindConstant::kShadowPower) {
+  } else if (player_settings.custom_stat == EmbindConstant::kShadowPower) {
     custom_stat = "shadowPower";
-  } else if (settings.custom_stat == EmbindConstant::kFirePower) {
+  } else if (player_settings.custom_stat == EmbindConstant::kFirePower) {
     custom_stat = "firePower";
-  } else if (settings.custom_stat == EmbindConstant::kCritRating) {
+  } else if (player_settings.custom_stat == EmbindConstant::kCritRating) {
     custom_stat = "critRating";
-  } else if (settings.custom_stat == EmbindConstant::kHitRating) {
+  } else if (player_settings.custom_stat == EmbindConstant::kHitRating) {
     custom_stat = "hitRating";
-  } else if (settings.custom_stat == EmbindConstant::kHasteRating) {
+  } else if (player_settings.custom_stat == EmbindConstant::kHasteRating) {
     custom_stat = "hasteRating";
-  } else if (settings.custom_stat == EmbindConstant::kMp5) {
+  } else if (player_settings.custom_stat == EmbindConstant::kMp5) {
     custom_stat = "mp5";
   } else {
     custom_stat = "normal";
-  }
-
-  if (talents.master_demonologist > 0) {
-    auto damage_modifier = 1.0;
-
-    if (settings.selected_pet == EmbindConstant::kSuccubus) {
-      damage_modifier += 0.02 * talents.master_demonologist;
-    } else if (settings.selected_pet == EmbindConstant::kFelguard) {
-      damage_modifier += 0.01 * talents.master_demonologist;
-    }
-
-    stats.shadow_modifier *= damage_modifier;
-    stats.fire_modifier *= damage_modifier;
   }
 
   if (selected_auras.fel_armor) {
     stats.spell_power += 100 * (0 + 0.1 * talents.demonic_aegis);
   }
 
-  stats.stamina_modifier *= 1 + (talents.demonic_embrace == 1   ? 0.03
+  stats.stamina_modifier *= 1 + (talents.demonic_embrace == 1   ? 0.04
                                  : talents.demonic_embrace == 2 ? 0.07
                                  : talents.demonic_embrace == 3 ? 0.1
                                                                 : 0);
 
   // Enemy Armor Reduction
   if (selected_auras.faerie_fire) {
-    settings.enemy_armor -= 610;
+    player_settings.enemy_armor -= 610;
   }
 
   if (selected_auras.sunder_armor || selected_auras.expose_armor) {
     // TODO it reduces armor by 20%
-    settings.enemy_armor -= 520 * 5;
+    player_settings.enemy_armor -= 520 * 5;
   }
 
   if (selected_auras.annihilator) {
-    settings.enemy_armor -= 600;
+    player_settings.enemy_armor -= 600;
   }
-  settings.enemy_armor = std::max(0, settings.enemy_armor);
+  player_settings.enemy_armor = std::max(0, player_settings.enemy_armor);
 
   // Health & Mana
   stats.health = (stats.health + Entity::GetStamina() * StatConstant::kHealthPerStamina) *
@@ -129,7 +117,7 @@ void Player::Initialize(Simulation* simulation_ptr) {
   // Auras
   if (settings.fight_type == EmbindConstant::kSingleTarget) {
     if (talents.improved_shadow_bolt > 0) {
-      auras.improved_shadow_bolt = std::make_shared<ImprovedShadowBoltAura>(*this);
+      auras.shadow_mastery = std::make_shared<ShadowMasteryAura>(*this);
     }
 
     if (settings.has_corruption || settings.rotation_option == EmbindConstant::kSimChooses) {
@@ -161,14 +149,49 @@ void Player::Initialize(Simulation* simulation_ptr) {
       auras.shadow_trance = std::make_shared<ShadowTranceAura>(*this);
     }
 
-    if (talents.amplify_curse == 1 &&
-        (settings.has_amplify_curse || settings.rotation_option == EmbindConstant::kSimChooses)) {
-      auras.amplify_curse = std::make_shared<AmplifyCurseAura>(*this);
-    }
-
     if (settings.has_drain_soul || settings.rotation_option == EmbindConstant::kSimChooses) {
       auras.drain_soul = std::make_shared<DrainSoulDot>(*this);
     }
+
+    if (talents.shadow_embrace > 0) {
+      auras.shadow_embrace = std::make_shared<ShadowEmbraceAura>(*this);
+    }
+
+    if (talents.eradication > 0) {
+      auras.eradication = std::make_shared<EradicationAura>(*this);
+    }
+
+    if (talents.molten_core > 0) {
+      auras.molten_core = std::make_shared<MoltenCoreAura>(*this);
+    }
+
+    if (talents.decimation > 0) {
+      auras.decimation = std::make_shared<DecimationAura>(*this);
+    }
+
+    if (talents.pyroclasm > 0) {
+      auras.pyroclasm = std::make_shared<PyroclasmAura>(*this);
+    }
+
+    if (talents.improved_soul_leech > 0) {
+      auras.improved_soul_leech = std::make_shared<ImprovedSoulLeechAura>(*this);
+    }
+
+    if (talents.backdraft > 0) {
+      auras.backdraft = std::make_shared<BackdraftAura>(*this);
+    }
+
+    if (talents.empowered_imp > 0) {
+      auras.empowered_imp = std::make_shared<EmpoweredImpAura>(*this);
+    }
+  }
+
+  if (talents.metamorphosis == 1) {
+    auras.metamorphosis = std::make_shared<MetamorphosisAura>(*this);
+  }
+
+  if (talents.demonic_pact > 0) {
+    auras.demonic_pact = std::make_shared<DemonicPactAura>(*this);
   }
 
   if (selected_auras.mana_tide_totem) {
@@ -266,18 +289,22 @@ void Player::Initialize(Simulation* simulation_ptr) {
       auras.curse_of_doom->parent_spell = spells.curse_of_doom;
     }
 
-    if (auras.amplify_curse != nullptr) {
-      spells.amplify_curse = std::make_shared<AmplifyCurse>(*this, auras.amplify_curse);
-    }
-
     if (auras.drain_soul != nullptr) {
       spells.drain_soul              = std::make_shared<DrainSoul>(*this, nullptr, auras.drain_soul);
       auras.drain_soul->parent_spell = spells.drain_soul;
     }
-  }
 
-  if (auras.improved_shadow_bolt != nullptr) {
-    spells.improved_shadow_bolt = std::make_shared<ImprovedShadowBolt>(*this, auras.improved_shadow_bolt);
+    if (auras.shadow_mastery != nullptr) {
+      spells.improved_shadow_bolt = std::make_shared<ImprovedShadowBolt>(*this, auras.shadow_mastery);
+    }
+
+    if (auras.pyroclasm != nullptr) {
+      spells.pyroclasm = std::make_shared<Pyroclasm>(*this, auras.pyroclasm);
+    }
+
+    if (auras.improved_soul_leech != nullptr) {
+      spells.soul_leech = std::make_shared<SoulLeech>(*this, auras.improved_soul_leech);
+    }
   }
 
   if (auras.mana_tide_totem != nullptr) {
@@ -304,8 +331,8 @@ void Player::Initialize(Simulation* simulation_ptr) {
     spells.blood_fury = std::make_shared<BloodFury>(*this, auras.blood_fury);
   }
 
-  if (auras.the_lightning_capacitor != nullptr) {
-    spells.the_lightning_capacitor = std::make_shared<TheLightningCapacitor>(*this);
+  if (auras.metamorphosis != nullptr) {
+    spells.metamorphosis = std::make_shared<Metamorphosis>(*this, auras.metamorphosis);
   }
 
   if (selected_auras.judgement_of_wisdom) {
@@ -407,6 +434,21 @@ double Player::GetSpellPower(const SpellSchool kSchool) {
     spell_power += stats.fire_power;
   }
 
+  auto highest_spell_power = 0.0;
+
+  if (selected_auras.totem_of_wrath) {
+    highest_spell_power = std::max(highest_spell_power, 280.0);
+  }
+
+  if (selected_auras.flametongue_totem) {
+    highest_spell_power = std::max(highest_spell_power, 144.0);
+  }
+
+  // TODO add demonic pact from selected_auras
+  if (auras.demonic_pact != nullptr && auras.demonic_pact->is_active) {
+    highest_spell_power = std::max(highest_spell_power, spell_power * 0.02 * talents.demonic_pact);
+  }
+
   return spell_power;
 }
 
@@ -423,12 +465,12 @@ bool Player::RollRng(const double kChance) {
   return GetRand() <= kChance * kFloatNumberMultiplier;
 }
 
-void Player::UseCooldowns(const double kFightTimeRemaining) {
+void Player::UseCooldowns() {
   // Only use PI if Bloodlust isn't selected or if Bloodlust isn't active since they don't stack, or if there are enough
   // Power Infusions available to last until the end of the fight for the mana cost reduction
   if (!spells.power_infusion.empty() && !auras.power_infusion->is_active &&
       (spells.bloodlust == nullptr || !auras.bloodlust->is_active ||
-       power_infusions_ready * auras.power_infusion->duration >= kFightTimeRemaining)) {
+       power_infusions_ready * auras.power_infusion->duration >= simulation->fight_time_remaining)) {
     for (const auto& kPi : spells.power_infusion) {
       if (kPi->Ready()) {
         kPi->StartCast();
@@ -446,8 +488,18 @@ void Player::UseCooldowns(const double kFightTimeRemaining) {
     }
   }
 
+  if (spells.demonic_empowerment != nullptr &&
+      (pet->pet_name == PetName::kImp || pet->pet_name == PetName::kFelguard) &&
+      settings.pet_mode == EmbindConstant::kAggressive && spells.demonic_empowerment->Ready()) {
+    spells.demonic_empowerment->StartCast();
+  }
+
   if (spells.flame_cap != nullptr && spells.flame_cap->Ready()) {
     spells.flame_cap->StartCast();
+  }
+
+  if (spells.metamorphosis != nullptr && spells.metamorphosis->Ready()) {
+    spells.metamorphosis->StartCast();
   }
 
   if (spells.blood_fury != nullptr && spells.blood_fury->Ready()) {
@@ -487,6 +539,37 @@ void Player::SendCombatLogEntries() const {
   for (const auto& kValue : combat_log_entries) {
     CombatLogUpdate(kValue.c_str());
   }
+}
+
+// TODO improve
+int Player::GetActiveAfflictionEffectsCount() const {
+  int count = 0;
+
+  if (player->auras.corruption != nullptr && player->auras.corruption->is_active) {
+    count++;
+  }
+
+  if (player->auras.curse_of_agony != nullptr && player->auras.curse_of_agony->is_active) {
+    count++;
+  }
+
+  if (player->auras.curse_of_doom != nullptr && player->auras.curse_of_doom->is_active) {
+    count++;
+  }
+
+  if (player->auras.curse_of_the_elements != nullptr && player->auras.curse_of_the_elements->is_active) {
+    count++;
+  }
+
+  if (player->auras.haunt != nullptr && player->auras.haunt->is_active) {
+    count++;
+  }
+
+  if (player->auras.unstable_affliction != nullptr && player->auras.unstable_affliction->is_active) {
+    count++;
+  }
+
+  return count;
 }
 
 double Player::FindTimeUntilNextAction() {
@@ -579,7 +662,7 @@ void Player::SendPlayerInfoToCombatLog() {
       "Haste: " +
       DoubleToString(round(stats.spell_haste_rating / StatConstant::kHasteRatingPerPercent * 100) / 100, 2) + "%");
   combat_log_entries.push_back(
-      "Shadow Modifier: " + DoubleToString(stats.shadow_modifier * (1 + 0.02 * talents.shadow_mastery) * 100, 2) + "%");
+      "Shadow Modifier: " + DoubleToString(stats.shadow_modifier * (1 + 0.03 * talents.shadow_mastery) * 100, 2) + "%");
   combat_log_entries.push_back(
       "Fire Modifier: " + DoubleToString(stats.fire_modifier * (1 + 0.02 * talents.emberstorm) * 100, 2) + "%");
   combat_log_entries.push_back("MP5: " + DoubleToString(stats.mp5));

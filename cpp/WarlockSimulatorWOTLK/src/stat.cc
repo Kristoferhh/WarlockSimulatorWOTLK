@@ -124,3 +124,25 @@ AttackPowerModifier::AttackPowerModifier(Entity& entity_param, const double kVal
   name             = StatName::kAttackPowerModifier;
   calculation_type = CalculationType::kMultiplicative;
 }
+
+DamageModifier::DamageModifier(Entity& entity_param, const double kValue)
+    : Stat(entity_param, entity_param.stats.damage_modifier, kValue) {
+  name             = StatName::kDamageModifier;
+  calculation_type = CalculationType::kMultiplicative;
+}
+
+ShadowModifier::ShadowModifier(Entity& entity_param, const double kValue)
+    : Stat(entity_param, entity_param.stats.shadow_modifier, kValue) {
+  name             = StatName::kDamageModifier;
+  calculation_type = CalculationType::kMultiplicative;
+}
+FireModifier::FireModifier(Entity& entity_param, const double kValue)
+    : Stat(entity_param, entity_param.stats.fire_modifier, kValue) {
+  name             = StatName::kDamageModifier;
+  calculation_type = CalculationType::kMultiplicative;
+}
+
+ManaPer5::ManaPer5(Entity& entity_param, const double kValue) : Stat(entity_param, entity_param.stats.mp5, kValue) {
+  name             = StatName::kMp5;
+  calculation_type = CalculationType::kAdditive;
+}

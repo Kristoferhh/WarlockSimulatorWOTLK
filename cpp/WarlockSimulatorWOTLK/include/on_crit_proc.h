@@ -4,16 +4,18 @@
 struct Player;
 
 struct OnCritProc : SpellProc {
-  explicit OnCritProc(Player& player, std::shared_ptr<Aura> aura = nullptr);
+  explicit OnCritProc(Entity& entity_param, std::shared_ptr<Aura> aura = nullptr);
   void Setup() override;
 };
 
-struct ImprovedShadowBolt final : OnCritProc {
-  ImprovedShadowBolt(Player& player, std::shared_ptr<Aura> aura);
-  bool ShouldProc(Spell* spell) override;
+struct DemonicPact final : OnCritProc {
+  explicit DemonicPact(Pet& pet, std::shared_ptr<Aura> aura);
 };
 
-struct TheLightningCapacitor final : OnCritProc {
-  explicit TheLightningCapacitor(Player& player);
-  void StartCast(double predicted_damage = 0) override;
+struct Pyroclasm final : OnCritProc {
+  explicit Pyroclasm(Player& player, std::shared_ptr<Aura> aura);
+};
+
+struct EmpoweredImp final : OnCritProc {
+  explicit EmpoweredImp(Pet& pet, std::shared_ptr<Aura> aura);
 };

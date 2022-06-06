@@ -27,6 +27,20 @@ const std::string kFelguard = "Felguard";
 }  // namespace PetNameStr
 
 namespace SpellName {
+const std::string kEmpoweredImp          = "Empowered Imp";
+const std::string kSoulLeech             = "Soul Leech";
+const std::string kBackdraft             = "Backdraft";
+const std::string kImprovedSoulLeech     = "Improved Soul Leech";
+const std::string kPyroclasm             = "Pyroclasm";
+const std::string kImprovedShadowBolt    = "Improved Shadow Bolt";
+const std::string kShadowMastery         = "Shadow Mastery";
+const std::string kDemonicPact           = "Demonic Pact";
+const std::string kMetamorphosis         = "Metamorphosis";
+const std::string kDecimation            = "Decimation";
+const std::string kDemonicEmpowerment    = "Demonic Empowerment";
+const std::string kMoltenCore            = "Molten Core";
+const std::string kEradication           = "Eradication";
+const std::string kShadowEmbrace         = "Shadow Embrace";
 const std::string kShadowBolt            = "Shadow Bolt";
 const std::string kChaosBolt             = "Chaos Bolt";
 const std::string kLifeTap               = "Life Tap";
@@ -52,7 +66,6 @@ const std::string kFlameCap              = "Flame Cap";
 const std::string kBloodFury             = "Blood Fury";
 const std::string kBloodlust             = "Bloodlust";
 const std::string kTheLightningCapacitor = "The Lightning Capacitor";
-const std::string kAmplifyCurse          = "Amplify Curse";
 const std::string kPowerInfusion         = "Power Infusion";
 const std::string kInnervate             = "Innervate";
 const std::string kNightfall             = "Nightfall";
@@ -66,13 +79,13 @@ const std::string kLashOfPain            = "Lash of Pain";
 const std::string kMelee                 = "Melee";
 const std::string kCleave                = "Cleave";
 const std::string kBlackBook             = "The Black Book";
-const std::string kImprovedShadowBolt    = "Improved Shadow Bolt";
 const std::string kShadowflame           = "Shadowflame";
 const std::string kDrainSoul             = "Drain Soul";
 const std::string kRunicManaPotion       = "Runic Mana Potion";
 }  // namespace SpellName
 
 namespace StatName {
+const std::string kDamageModifier      = "Damage Modifier";
 const std::string kSpellPower          = "Spell Power";
 const std::string kShadowPower         = "Shadow Power";
 const std::string kFirePower           = "Fire Power";

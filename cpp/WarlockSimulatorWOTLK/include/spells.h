@@ -22,7 +22,6 @@ struct Spells {
   std::shared_ptr<Spell> shadowburn;
   std::shared_ptr<Spell> death_coil;
   std::shared_ptr<Spell> shadowfury;
-  std::shared_ptr<Spell> amplify_curse;
   std::shared_ptr<Spell> dark_pact;
   std::shared_ptr<Spell> demonic_rune;
   std::shared_ptr<Spell> flame_cap;
@@ -30,7 +29,6 @@ struct Spells {
   std::shared_ptr<Spell> the_lightning_capacitor;
   std::shared_ptr<Spell> mana_tide_totem;
   std::shared_ptr<Spell> judgement_of_wisdom;
-  std::shared_ptr<Spell> improved_shadow_bolt;
   std::shared_ptr<Spell> melee;
   std::shared_ptr<Spell> firebolt;
   std::shared_ptr<Spell> lash_of_pain;
@@ -39,6 +37,13 @@ struct Spells {
   std::shared_ptr<Spell> bloodlust;
   std::shared_ptr<Spell> drain_soul;
   std::shared_ptr<Spell> runic_mana_potion;
+  std::shared_ptr<Spell> demonic_empowerment;
+  std::shared_ptr<Spell> demonic_pact;
+  std::shared_ptr<Spell> metamorphosis;
+  std::shared_ptr<Spell> improved_shadow_bolt;
+  std::shared_ptr<Spell> pyroclasm;
+  std::shared_ptr<Spell> soul_leech;
+  std::shared_ptr<Spell> empowered_imp;
   std::vector<std::shared_ptr<Spell>> power_infusion;
   std::vector<std::shared_ptr<Spell>> innervate;
 };

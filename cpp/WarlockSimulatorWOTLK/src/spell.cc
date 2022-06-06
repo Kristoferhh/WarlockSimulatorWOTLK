@@ -1,5 +1,6 @@
 #include "../include/spell.h"
 
+#include <iostream>
 #include <utility>
 
 #include "../include/aura.h"
@@ -16,6 +17,7 @@
 #include "../include/player.h"
 #include "../include/player_settings.h"
 #include "../include/sets.h"
+#include "../include/simulation.h"
 #include "../include/talents.h"
 
 Spell::Spell(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
@@ -45,6 +47,12 @@ void Spell::Setup() {
   }
 
   if (entity.entity_type == EntityType::kPlayer) {
+    bonus_hit_chance += entity.player->talents.suppression;
+
+    if (attack_type == AttackType::kMagical && entity.entity_type == EntityType::kPlayer) {
+      multiplicative_modifier *= 1 + 0.01 * entity.player->talents.malediction;
+    }
+
     if (spell_type == SpellType::kDestruction) {
       mana_cost *= 1 - (entity.player->talents.cataclysm == 1   ? 0.04
                         : entity.player->talents.cataclysm == 2 ? 0.07
@@ -53,7 +61,6 @@ void Spell::Setup() {
       bonus_crit_chance += 5 * entity.player->talents.devastation;
     } else if (spell_type == SpellType::kAffliction) {
       mana_cost *= 1 - 0.02 * entity.player->talents.suppression;
-      bonus_hit_chance += entity.player->talents.suppression;
     }
 
     if (entity.player->sets.t6 >= 4 && (name == SpellName::kShadowBolt || name == SpellName::kIncinerate)) {
@@ -62,30 +69,40 @@ void Spell::Setup() {
 
     // TODO does curse of doom still not benefit from SM?
     if (spell_school == SpellSchool::kShadow && name != SpellName::kCurseOfDoom) {
-      additive_modifier += 0.02 * entity.player->talents.shadow_mastery;
+      additive_modifier += 0.03 * entity.player->talents.shadow_mastery;
     }
 
     if (name == SpellName::kCurseOfAgony || name == SpellName::kCorruption || name == SpellName::kSeedOfCorruption) {
       additive_modifier += 0.01 * entity.player->talents.contagion;
     }
 
-    additive_modifier += 0.03 * entity.player->talents.emberstorm;
+    if (spell_school == SpellSchool::kFire) {
+      additive_modifier += 0.03 * entity.player->talents.emberstorm;
+    }
 
     if (name == SpellName::kImmolate) {
-      additive_modifier += 0.1 * entity.player->talents.improved_immolate;
+      additive_modifier += 0.1 * entity.player->talents.improved_immolate;  // TODO does this also apply to the dot
     }
 
     if (entity.player->settings.meta_gem_id == 34220) {
       crit_damage_multiplier *= 1.03;
     }
 
-    if (spell_type == SpellType::kDestruction && entity.player->talents.ruin > 0) {
+    if ((spell_type == SpellType::kDestruction || name == SpellName::kFirebolt) && entity.player->talents.ruin > 0) {
       // Ruin doubles the *bonus* of your crits, not the Damage of the crit itself
       // So if your crit Damage % is e.g. 154.5% it would become 209% because
       // the 54.5% is being doubled
       crit_damage_multiplier -= 1;
       crit_damage_multiplier *= 1 + 0.2 * entity.player->talents.ruin;
       crit_damage_multiplier += 1;
+    }
+
+    if (name == SpellName::kDemonicEmpowerment || name == SpellName::kMetamorphosis) {
+      // TODO confirm this is calculated correctly
+      cooldown /= entity.player->talents.nemesis == 1   ? 1.1
+                  : entity.player->talents.nemesis == 2 ? 1.2
+                  : entity.player->talents.nemesis == 3 ? 1.3
+                                                        : 1;
     }
   } else if (entity.entity_type == EntityType::kPet) {
     additive_modifier += 0.04 * entity.player->talents.unholy_power;
@@ -121,7 +138,23 @@ double Spell::GetManaCost() const {
 }
 
 double Spell::GetCastTime() {
-  return cast_time / entity.GetHastePercent();
+  auto true_cast_time = cast_time / entity.GetHastePercent();
+
+  if (name == SpellName::kIncinerate && entity.player->auras.molten_core != nullptr &&
+      entity.player->auras.molten_core->is_active) {
+    true_cast_time /= 1.3;
+  }
+
+  if (name == SpellName::kSoulFire && entity.player->auras.decimation != nullptr &&
+      entity.player->auras.decimation->is_active) {
+    true_cast_time /= 1 + 0.2 * entity.player->talents.decimation;
+  }
+
+  if (spell_type == SpellType::kDestruction && entity.auras.backdraft != nullptr) {
+    true_cast_time /= 1 + 0.1 * entity.player->talents.backdraft;
+  }
+
+  return true_cast_time;
 }
 
 void Spell::Tick(const double kTime) {
@@ -163,6 +196,16 @@ void Spell::Cast() {
 
   if (name == SpellName::kPowerInfusion) {
     entity.player->power_infusions_ready--;
+  }
+
+  if (name == SpellName::kIncinerate || name == SpellName::kSoulFire && entity.player->auras.molten_core != nullptr &&
+                                            entity.player->auras.molten_core->is_active) {
+    entity.player->auras.molten_core->DecrementStacks();
+  }
+
+  if ((name == SpellName::kShadowBolt || name == SpellName::kIncinerate || name == SpellName::kSoulFire) &&
+      entity.player->auras.decimation != nullptr && entity.simulation->GetEnemyHealthPercent() <= 35) {
+    entity.player->auras.decimation->Apply();
   }
 
   if (aura_effect == nullptr && entity.recording_combat_log_breakdown) {
@@ -211,10 +254,6 @@ void Spell::Damage(const bool kIsCrit, const bool kIsGlancing) {
   if (kIsCrit) {
     total_damage *= crit_damage_multiplier;
     OnCritProcs();
-  } else if (spell_school == SpellSchool::kShadow && dot_effect == nullptr &&
-             entity.player->auras.improved_shadow_bolt != nullptr &&
-             entity.player->auras.improved_shadow_bolt->is_active && !entity.player->settings.using_custom_isb_uptime) {
-    entity.player->auras.improved_shadow_bolt->DecrementStacks();
   }
 
   if (kIsGlancing) {
@@ -280,9 +319,21 @@ double Spell::GetBaseDamage() {
 }
 
 double Spell::GetCritChance() const {
-  return bonus_crit_chance + (attack_type == AttackType::kMagical    ? entity.GetSpellCritChance()
-                              : attack_type == AttackType::kPhysical ? entity.GetMeleeCritChance()
-                                                                     : 0);
+  auto crit_chance = bonus_crit_chance + (attack_type == AttackType::kMagical    ? entity.GetSpellCritChance()
+                                          : attack_type == AttackType::kPhysical ? entity.GetMeleeCritChance()
+                                                                                 : 0);
+
+  if (entity.pet != nullptr && (spell_school == SpellSchool::kFire && entity.pet->pet_name == PetName::kImp ||
+                                spell_school == SpellSchool::kShadow && entity.pet->pet_name == PetName::kSuccubus)) {
+    crit_chance += entity.player->talents.master_demonologist;
+  }
+
+  if (name == SpellName::kSoulFire && entity.player->auras.molten_core != nullptr &&
+      entity.player->auras.molten_core->is_active) {
+    crit_chance += 15;
+  }
+
+  return crit_chance;
 }
 
 double Spell::PredictDamage() {
@@ -304,15 +355,6 @@ double Spell::PredictDamage() {
   // Add the predicted Damage of the DoT over its full duration
   if (dot_effect != nullptr) {
     estimated_damage += dot_effect->PredictDamage();
-  }
-
-  // If the player is not using a custom ISB uptime, they have the ISB talent
-  // selected, but the ISB aura is not active, then give some % modifier as an
-  // "average" for the Damage. Without this, the sim will choose Incinerate over
-  // Shadow Bolt because it basically just doesn't know that ISB exists
-  if (spell_school == SpellSchool::kShadow && !entity.player->settings.using_custom_isb_uptime &&
-      entity.player->auras.improved_shadow_bolt != nullptr && !entity.player->auras.improved_shadow_bolt->is_active) {
-    estimated_damage *= 1.15;  // using 75% uptime as the default for now
   }
 
   return estimated_damage * kHitChance / std::max(entity.GetGcdValue(), GetCastTime());
@@ -348,6 +390,14 @@ void Spell::OnHitProcs() {
       kProc->StartCast();
     }
   }
+
+  if (entity.entity_type == EntityType::kPlayer &&
+      (name == SpellName::kDrainSoul || name == SpellName::kShadowBolt || name == SpellName::kHaunt) &&
+      entity.auras.corruption != nullptr && entity.auras.corruption->is_active &&
+      entity.player->RollRng(20 * entity.player->talents.everlasting_affliction)) {
+    entity.auras.corruption->ticks_remaining      = entity.auras.corruption->ticks_total;
+    entity.auras.corruption->tick_timer_remaining = entity.auras.corruption->tick_timer_total;
+  }
 }
 
 void Spell::StartCast(const double kPredictedDamage) {
@@ -359,6 +409,19 @@ void Spell::StartCast(const double kPredictedDamage) {
     }
 
     entity.gcd_remaining = entity.GetGcdValue();
+
+    // TODO improve
+    if (entity.player->talents.amplify_curse == 1 &&
+        (name == SpellName::kCurseOfTheElements || name == SpellName::kCurseOfDoom ||
+         name == SpellName::kCurseOfAgony)) {
+      entity.gcd_remaining = std::max(0.0, entity.gcd_remaining - 0.5);
+    }
+
+    if (entity.player->auras.backdraft != nullptr && entity.player->auras.backdraft->is_active &&
+        spell_type == SpellType::kDestruction) {
+      entity.gcd_remaining = std::max(0.0, entity.gcd_remaining / (1 + 0.1 * entity.player->talents.backdraft));
+      entity.auras.backdraft->DecrementStacks();
+    }
   }
 
   // Error: Starting to Cast a spell while casting another spell
@@ -412,6 +475,11 @@ void Spell::StartCast(const double kPredictedDamage) {
 }
 
 bool Spell::IsCrit() const {
+  if (entity.auras.empowered_imp != nullptr && entity.auras.empowered_imp->is_active) {
+    entity.auras.empowered_imp->Fade();
+    return true;
+  }
+
   return entity.player->RollRng(GetCritChance());
 }
 
@@ -477,24 +545,34 @@ double Spell::GetPartialResistMultiplier() const {
 }
 
 double Spell::GetDamageModifier() const {
-  auto damage_modifier = entity.stats.damage_modifier * multiplicative_modifier;
+  auto damage_modifier        = entity.stats.damage_modifier * multiplicative_modifier;
+  auto true_additive_modifier = additive_modifier;
 
   if (spell_school == SpellSchool::kShadow) {
     damage_modifier *= entity.stats.shadow_modifier;
 
-    if (!entity.settings.using_custom_isb_uptime && entity.auras.improved_shadow_bolt != nullptr &&
-        entity.auras.improved_shadow_bolt->is_active) {
-      damage_modifier *= entity.auras.improved_shadow_bolt->modifier;
+    if (entity.entity_type == EntityType::kPlayer && entity.simulation->GetEnemyHealthPercent() <= 35) {
+      damage_modifier *= 1 + 0.04 * entity.player->talents.deaths_embrace;
     }
   } else if (spell_school == SpellSchool::kFire) {
     damage_modifier *= entity.stats.fire_modifier;
+
+    if ((name == SpellName::kIncinerate || name == SpellName::kSoulFire) &&
+        entity.player->auras.molten_core != nullptr && entity.player->auras.molten_core->is_active) {
+      damage_modifier *= 1.18;
+    }
+
+    if ((name == SpellName::kIncinerate || name == SpellName::kChaosBolt) && entity.auras.immolate != nullptr &&
+        entity.auras.immolate->is_active) {
+      true_additive_modifier += 0.02 * entity.player->talents.fire_and_brimstone;
+    }
   }
 
   if (attack_type == AttackType::kPhysical) {
     damage_modifier *= entity.stats.physical_modifier;
   }
 
-  return additive_modifier * damage_modifier;
+  return true_additive_modifier * damage_modifier;
 }
 
 SpellCastResult Spell::PhysicalSpellCast() const {
@@ -574,7 +652,7 @@ void Spell::OnSpellHit(const SpellCastResult& kSpellCastResult) {
     Damage(kSpellCastResult.is_crit, kSpellCastResult.is_glancing);
   }
 
-  if (!is_item && !is_proc && !is_non_warlock_ability && name != SpellName::kAmplifyCurse) {
+  if (!is_item && !is_proc && !is_non_warlock_ability) {
     OnHitProcs();
   }
 }
@@ -638,11 +716,11 @@ void Spell::ManaGainOnCast() const {
   }
 }
 
-ShadowBolt::ShadowBolt(Entity& entity_param) : Spell(entity_param) {
+ShadowBolt::ShadowBolt(Player& player) : Spell(player) {
   name         = SpellName::kShadowBolt;
   cast_time    = CalculateCastTime();
   mana_cost    = 0.17;
-  coefficient  = 3 / 3.5 + 0.04 * entity_param.player->talents.shadow_and_flame;
+  coefficient  = 3 / 3.5 + 0.04 * player.talents.shadow_and_flame;
   min_dmg      = 690;
   max_dmg      = 770;
   does_damage  = true;
@@ -651,6 +729,7 @@ ShadowBolt::ShadowBolt(Entity& entity_param) : Spell(entity_param) {
   spell_school = SpellSchool::kShadow;
   spell_type   = SpellType::kDestruction;
   attack_type  = AttackType::kMagical;
+  additive_modifier += 0.02 * player.talents.improved_shadow_bolt;
   Spell::Setup();
 }
 
@@ -673,11 +752,11 @@ double ShadowBolt::CalculateCastTime() const {
   return 3 - 0.1 * entity.player->talents.bane;
 }
 
-Incinerate::Incinerate(Entity& entity_param) : Spell(entity_param) {
+Incinerate::Incinerate(Player& player) : Spell(player) {
   name                           = SpellName::kIncinerate;
-  cast_time                      = 2.5 - 0.05 * entity_param.player->talents.emberstorm;
+  cast_time                      = 2.5 - 0.05 * player.talents.emberstorm;
   mana_cost                      = 0.14;
-  coefficient                    = 2.5 / 3.5 + 0.04 * entity_param.player->talents.shadow_and_flame;
+  coefficient                    = 2.5 / 3.5 + 0.04 * player.talents.shadow_and_flame;
   min_dmg                        = 582;
   max_dmg                        = 676;
   bonus_damage_from_immolate_min = 111;
@@ -692,17 +771,17 @@ Incinerate::Incinerate(Entity& entity_param) : Spell(entity_param) {
   Spell::Setup();
 }
 
-SearingPain::SearingPain(Entity& entity_param) : Spell(entity_param) {
+SearingPain::SearingPain(Player& player) : Spell(player) {
   name              = SpellName::kSearingPain;
   cast_time         = 1.5;
   mana_cost         = 0.08;
   coefficient       = 1.5 / 3.5;
   min_dmg           = 343;
   max_dmg           = 405;
-  bonus_crit_chance = entity_param.player->talents.improved_searing_pain == 1   ? 4
-                      : entity_param.player->talents.improved_searing_pain == 2 ? 7
-                      : entity_param.player->talents.improved_searing_pain == 3 ? 10
-                                                                                : 0;
+  bonus_crit_chance = player.talents.improved_searing_pain == 1   ? 4
+                      : player.talents.improved_searing_pain == 2 ? 7
+                      : player.talents.improved_searing_pain == 3 ? 10
+                                                                  : 0;
   does_damage       = true;
   can_crit          = true;
   can_miss          = true;
@@ -712,9 +791,9 @@ SearingPain::SearingPain(Entity& entity_param) : Spell(entity_param) {
   Spell::Setup();
 }
 
-SoulFire::SoulFire(Entity& entity_param) : Spell(entity_param) {
+SoulFire::SoulFire(Player& player) : Spell(player) {
   name         = SpellName::kSoulFire;
-  cast_time    = 6 - 0.4 * entity_param.player->talents.bane;
+  cast_time    = 6 - 0.4 * player.talents.bane;
   mana_cost    = 0.09;
   coefficient  = 1.15;
   min_dmg      = 1323;
@@ -728,11 +807,11 @@ SoulFire::SoulFire(Entity& entity_param) : Spell(entity_param) {
   Spell::Setup();
 }
 
-Shadowburn::Shadowburn(Entity& entity_param) : Spell(entity_param) {
+Shadowburn::Shadowburn(Player& player) : Spell(player) {
   name         = SpellName::kShadowburn;
   cooldown     = 15;
   mana_cost    = 0.2;
-  coefficient  = 0.22;
+  coefficient  = 0.22 + 0.04 * player.talents.shadow_and_flame;
   min_dmg      = 775;
   max_dmg      = 865;
   does_damage  = true;
@@ -745,7 +824,7 @@ Shadowburn::Shadowburn(Entity& entity_param) : Spell(entity_param) {
   Spell::Setup();
 }
 
-DeathCoil::DeathCoil(Entity& entity_param) : Spell(entity_param) {
+DeathCoil::DeathCoil(Player& player) : Spell(player) {
   name         = SpellName::kDeathCoil;
   cooldown     = 120;
   mana_cost    = 0.23;
@@ -760,7 +839,7 @@ DeathCoil::DeathCoil(Entity& entity_param) : Spell(entity_param) {
   Spell::Setup();
 }
 
-Shadowfury::Shadowfury(Entity& entity_param) : Spell(entity_param) {
+Shadowfury::Shadowfury(Player& player) : Spell(player) {
   name         = SpellName::kShadowfury;
   cast_time    = 0.5;
   mana_cost    = 0.27;
@@ -778,7 +857,7 @@ Shadowfury::Shadowfury(Entity& entity_param) : Spell(entity_param) {
   Spell::Setup();
 }
 
-SeedOfCorruption::SeedOfCorruption(Entity& entity_param) : Spell(entity_param), aoe_cap(13580) {
+SeedOfCorruption::SeedOfCorruption(Player& player) : Spell(player), aoe_cap(13580) {
   name         = SpellName::kSeedOfCorruption;
   min_dmg      = 1110;
   max_dmg      = 1290;
@@ -790,6 +869,8 @@ SeedOfCorruption::SeedOfCorruption(Entity& entity_param) : Spell(entity_param), 
   coefficient  = 0.214;
   can_miss     = true;
   attack_type  = AttackType::kMagical;
+  bonus_crit_chance += player.talents.improved_corruption;
+  additive_modifier += 0.05 * player.talents.siphon_life;
   Spell::Setup();
 }
 
@@ -805,11 +886,6 @@ void SeedOfCorruption::Damage(bool, bool) {
   auto crit_damage_multiplier = 0.0;
   auto internal_modifier      = GetDamageModifier();
   auto external_modifier      = 1.0;
-
-  // If using a custom ISB uptime % then remove the damage bonus since ISB won't be up on the mobs
-  if (entity.player->settings.using_custom_isb_uptime) {
-    internal_modifier /= entity.GetCustomImprovedShadowBoltDamageModifier();
-  }
 
   // Remove debuffs from the modifier since they ignore the AOE cap, so we'll
   // add the debuff % modifiers after the Damage has been calculated.
@@ -903,20 +979,21 @@ void SeedOfCorruption::Damage(bool, bool) {
   }
 }
 
-Corruption::Corruption(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
-    : Spell(entity_param, std::move(aura), std::move(dot)) {
+Corruption::Corruption(Player& player, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
+    : Spell(player, std::move(aura), std::move(dot)) {
   name         = SpellName::kCorruption;
   mana_cost    = 0.14;
   spell_school = SpellSchool::kShadow;
   spell_type   = SpellType::kAffliction;
   can_miss     = true;
   attack_type  = AttackType::kMagical;
+  additive_modifier += 0.05 * player.talents.siphon_life;
+  bonus_crit_chance += 3 * player.talents.malediction;
   Spell::Setup();
 }
 
-UnstableAffliction::UnstableAffliction(Entity& entity_param, std::shared_ptr<Aura> aura,
-                                       std::shared_ptr<DamageOverTime> dot)
-    : Spell(entity_param, std::move(aura), std::move(dot)) {
+UnstableAffliction::UnstableAffliction(Player& player, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
+    : Spell(player, std::move(aura), std::move(dot)) {
   name         = SpellName::kUnstableAffliction;
   mana_cost    = 0.15;
   cast_time    = 1.5;
@@ -924,14 +1001,16 @@ UnstableAffliction::UnstableAffliction(Entity& entity_param, std::shared_ptr<Aur
   spell_type   = SpellType::kAffliction;
   can_miss     = true;
   attack_type  = AttackType::kMagical;
+  additive_modifier += 0.05 * player.talents.siphon_life;
+  bonus_crit_chance += 3 * player.talents.malediction;
   Spell::Setup();
 }
 
-Immolate::Immolate(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
-    : Spell(entity_param, std::move(aura), std::move(dot)) {
+Immolate::Immolate(Player& player, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
+    : Spell(player, std::move(aura), std::move(dot)) {
   name         = SpellName::kImmolate;
   mana_cost    = 0.17;
-  cast_time    = 2 - 0.1 * entity_param.player->talents.bane;
+  cast_time    = 2 - 0.1 * player.talents.bane;
   does_damage  = true;
   can_crit     = true;
   can_miss     = true;
@@ -943,8 +1022,8 @@ Immolate::Immolate(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared
   Spell::Setup();
 }
 
-CurseOfAgony::CurseOfAgony(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
-    : Spell(entity_param, std::move(aura), std::move(dot)) {
+CurseOfAgony::CurseOfAgony(Player& player, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
+    : Spell(player, std::move(aura), std::move(dot)) {
   name         = SpellName::kCurseOfAgony;
   mana_cost    = 0.1;
   spell_school = SpellSchool::kShadow;
@@ -955,8 +1034,7 @@ CurseOfAgony::CurseOfAgony(Entity& entity_param, std::shared_ptr<Aura> aura, std
   Spell::Setup();
 }
 
-CurseOfTheElements::CurseOfTheElements(Entity& entity_param, std::shared_ptr<Aura> aura)
-    : Spell(entity_param, std::move(aura)) {
+CurseOfTheElements::CurseOfTheElements(Player& player, std::shared_ptr<Aura> aura) : Spell(player, std::move(aura)) {
   name         = SpellName::kCurseOfTheElements;
   mana_cost    = 0.1;
   spell_type   = SpellType::kAffliction;
@@ -966,8 +1044,8 @@ CurseOfTheElements::CurseOfTheElements(Entity& entity_param, std::shared_ptr<Aur
   Spell::Setup();
 }
 
-CurseOfDoom::CurseOfDoom(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
-    : Spell(entity_param, std::move(aura), std::move(dot)) {
+CurseOfDoom::CurseOfDoom(Player& player, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
+    : Spell(player, std::move(aura), std::move(dot)) {
   name         = SpellName::kCurseOfDoom;
   mana_cost    = 0.15;
   cooldown     = 60;
@@ -978,14 +1056,16 @@ CurseOfDoom::CurseOfDoom(Entity& entity_param, std::shared_ptr<Aura> aura, std::
   Spell::Setup();
 }
 
-Conflagrate::Conflagrate(Entity& entity_param) : Spell(entity_param) {
-  name         = SpellName::kConflagrate;
-  mana_cost    = 0.16;
-  cooldown     = 10;
-  coefficient  = 1.5 / 3.5;
-  does_damage  = true;
-  can_crit     = true;
-  can_miss     = true;
+// TODO
+Conflagrate::Conflagrate(Player& player) : Spell(player) {
+  name        = SpellName::kConflagrate;
+  mana_cost   = 0.16;
+  cooldown    = 10;
+  coefficient = 1.5 / 3.5;
+  does_damage = true;
+  can_crit    = true;
+  can_miss    = true;
+  bonus_crit_chance += 5 * player.talents.fire_and_brimstone;
   spell_school = SpellSchool::kFire;
   spell_type   = SpellType::kDestruction;
   attack_type  = AttackType::kMagical;
@@ -999,9 +1079,13 @@ bool Conflagrate::CanCast() {
 void Conflagrate::Cast() {
   Spell::Cast();
   entity.player->auras.immolate->Fade();
+
+  if (entity.player->auras.backdraft != nullptr) {
+    entity.player->auras.backdraft->Apply();
+  }
 }
 
-FlameCap::FlameCap(Entity& entity_param, std::shared_ptr<Aura> aura) : Spell(entity_param, std::move(aura)) {
+FlameCap::FlameCap(Player& player, std::shared_ptr<Aura> aura) : Spell(player, std::move(aura)) {
   name     = SpellName::kFlameCap;
   cooldown = 180;
   is_item  = true;
@@ -1009,7 +1093,7 @@ FlameCap::FlameCap(Entity& entity_param, std::shared_ptr<Aura> aura) : Spell(ent
   Spell::Setup();
 }
 
-BloodFury::BloodFury(Entity& entity_param, std::shared_ptr<Aura> aura) : Spell(entity_param, std::move(aura)) {
+BloodFury::BloodFury(Player& player, std::shared_ptr<Aura> aura) : Spell(player, std::move(aura)) {
   name     = SpellName::kBloodFury;
   cooldown = 120;
   on_gcd   = false;
@@ -1017,7 +1101,7 @@ BloodFury::BloodFury(Entity& entity_param, std::shared_ptr<Aura> aura) : Spell(e
   Spell::Setup();
 }
 
-Bloodlust::Bloodlust(Entity& entity_param, std::shared_ptr<Aura> aura) : Spell(entity_param, std::move(aura)) {
+Bloodlust::Bloodlust(Player& player, std::shared_ptr<Aura> aura) : Spell(player, std::move(aura)) {
   name                   = SpellName::kBloodlust;
   cooldown               = 600;
   is_item                = true;
@@ -1026,14 +1110,7 @@ Bloodlust::Bloodlust(Entity& entity_param, std::shared_ptr<Aura> aura) : Spell(e
   Spell::Setup();
 }
 
-AmplifyCurse::AmplifyCurse(Entity& entity_param, std::shared_ptr<Aura> aura) : Spell(entity_param, std::move(aura)) {
-  name     = SpellName::kAmplifyCurse;
-  cooldown = 180;
-  on_gcd   = false;
-  Spell::Setup();
-}
-
-PowerInfusion::PowerInfusion(Entity& entity_param, std::shared_ptr<Aura> aura) : Spell(entity_param, std::move(aura)) {
+PowerInfusion::PowerInfusion(Player& player, std::shared_ptr<Aura> aura) : Spell(player, std::move(aura)) {
   name                   = SpellName::kPowerInfusion;
   cooldown               = 180;
   on_gcd                 = false;
@@ -1041,7 +1118,7 @@ PowerInfusion::PowerInfusion(Entity& entity_param, std::shared_ptr<Aura> aura) :
   Spell::Setup();
 }
 
-Innervate::Innervate(Entity& entity_param, std::shared_ptr<Aura> aura) : Spell(entity_param, std::move(aura)) {
+Innervate::Innervate(Player& player, std::shared_ptr<Aura> aura) : Spell(player, std::move(aura)) {
   name                   = SpellName::kInnervate;
   cooldown               = 360;
   on_gcd                 = false;
@@ -1049,18 +1126,18 @@ Innervate::Innervate(Entity& entity_param, std::shared_ptr<Aura> aura) : Spell(e
   Spell::Setup();
 }
 
-ManaTideTotem::ManaTideTotem(Entity& entity_param, std::shared_ptr<Aura> aura) : Spell(entity_param, std::move(aura)) {
+ManaTideTotem::ManaTideTotem(Player& player, std::shared_ptr<Aura> aura) : Spell(player, std::move(aura)) {
   name                   = SpellName::kManaTideTotem;
   cooldown               = 300;
   is_non_warlock_ability = true;
   Spell::Setup();
 }
 
-ImpFirebolt::ImpFirebolt(Entity& entity_param) : Spell(entity_param) {
+ImpFirebolt::ImpFirebolt(Pet& pet) : Spell(pet) {
   name         = SpellName::kFirebolt;
-  cast_time    = 2.5 - 0.25 * entity_param.player->talents.demonic_power;
+  cast_time    = 2.5 - 0.25 * pet.player->talents.demonic_power;
   mana_cost    = 180;
-  base_damage  = 211 * (1 + 0.1 * entity_param.player->talents.improved_imp);
+  base_damage  = 211 * (1 + 0.1 * pet.player->talents.improved_imp);
   coefficient  = 2 / 3.5;
   spell_school = SpellSchool::kFire;
   attack_type  = AttackType::kMagical;
@@ -1070,7 +1147,7 @@ ImpFirebolt::ImpFirebolt(Entity& entity_param) : Spell(entity_param) {
   Spell::Setup();
 }
 
-PetMelee::PetMelee(Entity& entity_param) : Spell(entity_param) {
+PetMelee::PetMelee(Pet& pet) : Spell(pet) {
   name        = SpellName::kMelee;
   attack_type = AttackType::kPhysical;
   cooldown    = 2;
@@ -1089,7 +1166,7 @@ double PetMelee::GetCooldown() {
   return cooldown / entity.GetHastePercent();
 }
 
-FelguardCleave::FelguardCleave(Entity& entity_param) : Spell(entity_param) {
+FelguardCleave::FelguardCleave(Pet& pet) : Spell(pet) {
   name        = SpellName::kCleave;
   cooldown    = 6;
   mana_cost   = 0.1;
@@ -1104,9 +1181,9 @@ double FelguardCleave::GetBaseDamage() {
   return entity.pet->spells.melee->GetBaseDamage() + 78;
 }
 
-SuccubusLashOfPain::SuccubusLashOfPain(Entity& entity_param) : Spell(entity_param) {
+SuccubusLashOfPain::SuccubusLashOfPain(Pet& pet) : Spell(pet) {
   name         = SpellName::kLashOfPain;
-  cooldown     = 12 - 3 * entity_param.player->talents.demonic_power;
+  cooldown     = 12 - 3 * pet.player->talents.demonic_power;
   mana_cost    = 250;
   base_damage  = 123;
   spell_school = SpellSchool::kShadow;
@@ -1119,23 +1196,23 @@ SuccubusLashOfPain::SuccubusLashOfPain(Entity& entity_param) : Spell(entity_para
   Spell::Setup();
 }
 
-ChaosBolt::ChaosBolt(Entity& entity_param) : Spell(entity_param) {
+ChaosBolt::ChaosBolt(Player& player) : Spell(player) {
   name         = SpellName::kChaosBolt;
   cooldown     = 12;
-  cast_time    = 2.5 - 0.1 * entity_param.player->talents.bane;
+  cast_time    = 2.5 - 0.1 * player.talents.bane;
   mana_cost    = 0.07;
   min_dmg      = 1429;
   max_dmg      = 1813;
   spell_school = SpellSchool::kFire;
   attack_type  = AttackType::kMagical;
-  coefficient  = 2.5 / 3.5 + 0.04 * entity_param.player->talents.shadow_and_flame;
+  coefficient  = 2.5 / 3.5 + 0.04 * player.talents.shadow_and_flame;
   can_crit     = true;
   can_miss     = true;
   does_damage  = true;
   Spell::Setup();
 }
 
-Haunt::Haunt(Entity& entity_param, std::shared_ptr<Aura> aura) : Spell(entity_param, std::move(aura)) {
+Haunt::Haunt(Player& player, std::shared_ptr<Aura> aura) : Spell(player, std::move(aura)) {
   name         = SpellName::kHaunt;
   mana_cost    = 0.12;
   cooldown     = 8;
@@ -1152,8 +1229,8 @@ Haunt::Haunt(Entity& entity_param, std::shared_ptr<Aura> aura) : Spell(entity_pa
   Spell::Setup();
 }
 
-Shadowflame::Shadowflame(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
-    : Spell(entity_param, std::move(aura), std::move(dot)) {
+Shadowflame::Shadowflame(Player& player, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
+    : Spell(player, std::move(aura), std::move(dot)) {
   name         = SpellName::kShadowflame;
   mana_cost    = 0.25;
   cooldown     = 15;
@@ -1168,8 +1245,8 @@ Shadowflame::Shadowflame(Entity& entity_param, std::shared_ptr<Aura> aura, std::
   Spell::Setup();
 }
 
-DrainSoul::DrainSoul(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
-    : Spell(entity_param, std::move(aura), std::move(dot)) {
+DrainSoul::DrainSoul(Player& player, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
+    : Spell(player, std::move(aura), std::move(dot)) {
   name         = SpellName::kDrainSoul;
   mana_cost    = 0.14;
   can_miss     = true;
@@ -1177,4 +1254,20 @@ DrainSoul::DrainSoul(Entity& entity_param, std::shared_ptr<Aura> aura, std::shar
   spell_type   = SpellType::kAffliction;
   attack_type  = AttackType::kMagical;
   Spell::Setup();
+}
+
+DemonicEmpowerment::DemonicEmpowerment(Player& player, std::shared_ptr<Aura> aura) : Spell(player, std::move(aura)) {
+  name      = SpellName::kDemonicEmpowerment;
+  mana_cost = 0.06;
+  cooldown  = 60;
+  on_gcd    = false;  // TODO confirm
+  is_item   = true;
+  Spell::Setup();
+}
+
+Metamorphosis::Metamorphosis(Player& player, std::shared_ptr<Aura> aura) : Spell(player, std::move(aura)) {
+  name     = SpellName::kMetamorphosis;
+  cooldown = 180;
+  on_gcd   = false;
+  is_item  = true;
 }

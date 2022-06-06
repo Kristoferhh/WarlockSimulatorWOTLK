@@ -13,13 +13,12 @@ struct PlayerSettings {
   Sets& sets;
   CharacterStats stats;
   ItemSlot& items;
-  EmbindConstant custom_stat        = EmbindConstant::kUnused;
-  EmbindConstant selected_pet       = EmbindConstant::kUnused;
-  EmbindConstant fight_type         = EmbindConstant::kUnused;
-  EmbindConstant race               = EmbindConstant::kUnused;
-  EmbindConstant lash_of_pain_usage = EmbindConstant::kUnused;
-  EmbindConstant pet_mode           = EmbindConstant::kUnused;
-  EmbindConstant rotation_option    = EmbindConstant::kUnused;
+  EmbindConstant custom_stat     = EmbindConstant::kUnused;
+  EmbindConstant selected_pet    = EmbindConstant::kUnused;
+  EmbindConstant fight_type      = EmbindConstant::kUnused;
+  EmbindConstant race            = EmbindConstant::kUnused;
+  EmbindConstant pet_mode        = EmbindConstant::kUnused;
+  EmbindConstant rotation_option = EmbindConstant::kUnused;
   std::vector<uint32_t> random_seeds;
   int item_id                         = 0;
   int meta_gem_id                     = 0;
@@ -29,20 +28,16 @@ struct PlayerSettings {
   int enemy_shadow_resist             = 0;
   int enemy_fire_resist               = 0;
   int ferocious_inspiration_amount    = 0;
-  bool using_custom_isb_uptime        = false;
-  int custom_isb_uptime_value         = 0;
   int improved_imp                    = 0;
   int enemy_amount                    = 0;
   int power_infusion_amount           = 0;
   int innervate_amount                = 0;
   int enemy_armor                     = 0;
-  int expose_weakness_uptime          = 0;
   bool improved_faerie_fire           = false;
   bool infinite_player_mana           = false;
   bool infinite_pet_mana              = false;
   bool prepop_black_book              = false;
   bool randomize_values               = false;
-  int survival_hunter_agility         = 0;
   bool has_immolate                   = false;
   bool has_corruption                 = false;
   bool has_unstable_affliction        = false;
@@ -60,7 +55,6 @@ struct PlayerSettings {
   bool has_shadow_burn                = false;
   bool has_conflagrate                = false;
   bool has_shadowfury                 = false;
-  bool has_amplify_curse              = false;
   bool has_dark_pact                  = false;
   bool has_drain_soul                 = false;
 

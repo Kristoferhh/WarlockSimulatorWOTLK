@@ -201,6 +201,7 @@ EMSCRIPTEN_BINDINGS(module) {
       .property("manaSpringTotem", &AuraSelection::mana_spring_totem)
       .property("wrathOfAirTotem", &AuraSelection::wrath_of_air_totem)
       .property("totemOfWrath", &AuraSelection::totem_of_wrath)
+      .property("flametongueTotem", &AuraSelection::flametongue_totem)
       .property("markOfTheWild", &AuraSelection::mark_of_the_wild)
       .property("prayerOfSpirit", &AuraSelection::prayer_of_spirit)
       .property("bloodPact", &AuraSelection::blood_pact)
@@ -275,6 +276,7 @@ EMSCRIPTEN_BINDINGS(module) {
       .property("suppression", &Talents::suppression)
       .property("improvedCorruption", &Talents::improved_corruption)
       .property("improvedLifeTap", &Talents::improved_life_tap)
+      .property("soulSiphon", &Talents::soul_siphon)
       .property("amplifyCurse", &Talents::amplify_curse)
       .property("nightfall", &Talents::nightfall)
       .property("empoweredCorruption", &Talents::empowered_corruption)
@@ -325,6 +327,7 @@ EMSCRIPTEN_BINDINGS(module) {
       .property("conflagrate", &Talents::conflagrate)
       .property("pyroclasm", &Talents::pyroclasm)
       .property("shadowAndFlame", &Talents::shadow_and_flame)
+      .property("soulLeech", &Talents::soul_leech)
       .property("improvedSoulLeech", &Talents::improved_soul_leech)
       .property("backdraft", &Talents::backdraft)
       .property("shadowfury", &Talents::shadowfury)
@@ -332,7 +335,16 @@ EMSCRIPTEN_BINDINGS(module) {
       .property("fireAndBrimstone", &Talents::fire_and_brimstone)
       .property("chaosBolt", &Talents::chaos_bolt);
 
-  emscripten::class_<Sets>("Sets").constructor<>().property("t6", &Sets::t6);
+  emscripten::class_<Sets>("Sets")
+      .constructor<>()
+      .property("t6", &Sets::t6)
+      .property("duskweaver", &Sets::duskweaver)
+      .property("gladiatorsFelshroud", &Sets::gladiators_felshroud)
+      .property("t7", &Sets::t7)
+      .property("frostsavageBattlegear", &Sets::frostsavage_battlegear)
+      .property("t8", &Sets::t8)
+      .property("t9", &Sets::t9)
+      .property("t10", &Sets::t10);
 
   emscripten::class_<PlayerSettings>("PlayerSettings")
       .constructor<AuraSelection&, Talents&, Sets&, CharacterStats&, ItemSlot&>()
@@ -357,12 +369,10 @@ EMSCRIPTEN_BINDINGS(module) {
       .property("improvedFaerieFire", &PlayerSettings::improved_faerie_fire)
       .property("infinitePlayerMana", &PlayerSettings::infinite_player_mana)
       .property("infinitePetMana", &PlayerSettings::infinite_pet_mana)
-      .property("lashOfPainUsage", &PlayerSettings::lash_of_pain_usage)
       .property("petMode", &PlayerSettings::pet_mode)
       .property("prepopBlackBook", &PlayerSettings::prepop_black_book)
       .property("randomizeValues", &PlayerSettings::randomize_values)
       .property("rotationOption", &PlayerSettings::rotation_option)
-      .property("survivalHunterAgility", &PlayerSettings::survival_hunter_agility)
       .property("hasImmolate", &PlayerSettings::has_immolate)
       .property("hasCorruption", &PlayerSettings::has_corruption)
       .property("hasUnstableAffliction", &PlayerSettings::has_unstable_affliction)
@@ -380,7 +390,6 @@ EMSCRIPTEN_BINDINGS(module) {
       .property("hasShadowburn", &PlayerSettings::has_shadow_burn)
       .property("hasConflagrate", &PlayerSettings::has_conflagrate)
       .property("hasShadowfury", &PlayerSettings::has_shadowfury)
-      .property("hasAmplifyCurse", &PlayerSettings::has_amplify_curse)
       .property("hasDarkPact", &PlayerSettings::has_dark_pact)
       .property("hasDrainSoul", &PlayerSettings::has_drain_soul);
 
@@ -397,10 +406,8 @@ EMSCRIPTEN_BINDINGS(module) {
       .value("statWeights", SimulationType::kStatWeights);
 
   emscripten::enum_<EmbindConstant>("EmbindConstant")
-      .value("onCooldown", EmbindConstant::kOnCooldown)
       .value("singleTarget", EmbindConstant::kSingleTarget)
       .value("aoe", EmbindConstant::kAoe)
-      .value("noIsb", EmbindConstant::kNoIsb)
       .value("human", EmbindConstant::kHuman)
       .value("gnome", EmbindConstant::kGnome)
       .value("orc", EmbindConstant::kOrc)

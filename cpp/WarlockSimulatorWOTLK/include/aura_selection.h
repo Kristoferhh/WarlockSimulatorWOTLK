@@ -6,6 +6,7 @@ struct AuraSelection {
   bool mana_spring_totem;
   bool wrath_of_air_totem;
   bool totem_of_wrath;
+  bool flametongue_totem;
   bool mark_of_the_wild;
   bool prayer_of_spirit;
   bool blood_pact;
@@ -26,7 +27,6 @@ struct AuraSelection {
   bool sunder_armor;
   bool expose_armor;
   bool blood_frenzy;
-  bool expose_weakness;
   bool annihilator;
   bool improved_hunters_mark;
 

@@ -33,13 +33,13 @@ struct Player final : Entity {
   double iteration_damage;
   int power_infusions_ready;
 
-  explicit Player(PlayerSettings& settings);
+  explicit Player(PlayerSettings& player_settings);
   void Initialize(Simulation* simulation_ptr) override;
   void Reset() override;
   void EndAuras() override;
   void ThrowError(const std::string& kError) const;
   void CastLifeTapOrDarkPact() const;
-  void UseCooldowns(double kFightTimeRemaining);
+  void UseCooldowns();
   void SendCombatLogEntries() const;
   void SendPlayerInfoToCombatLog();
   void Tick(double kTime) override;
@@ -49,4 +49,5 @@ struct Player final : Entity {
   double FindTimeUntilNextAction() override;
   int GetRand();
   bool RollRng(double kChance);
+  int GetActiveAfflictionEffectsCount() const;
 };

@@ -101,11 +101,20 @@ export default function BreakdownTables() {
             <TableRow>
               <TableCell style={{ color: 'white' }}>{t('Name')}</TableCell>
               <TableCell style={{ color: 'white' }}>{t('Damage')}</TableCell>
-              <TableCell style={{ color: 'white' }}>{t('Casts')}</TableCell>
-              <TableCell style={{ color: 'white' }}>{t('Avg Cast')}</TableCell>
-              <TableCell style={{ color: 'white' }}>{t('Crit %')}</TableCell>
-              <TableCell style={{ color: 'white' }}>{t('Miss %')}</TableCell>
+              <TableCell align='right' style={{ color: 'white' }}>
+                {t('Casts')}
+              </TableCell>
+              <TableCell align='right' style={{ color: 'white' }}>
+                {t('Avg Cast')}
+              </TableCell>
+              <TableCell align='right' style={{ color: 'white' }}>
+                {t('Crit %')}
+              </TableCell>
+              <TableCell align='right' style={{ color: 'white' }}>
+                {t('Miss %')}
+              </TableCell>
               <TableCell
+                align='right'
                 style={{
                   display: breakdownObj.SpellDamageDict.Melee ? '' : 'none',
                   color: 'white',
@@ -114,6 +123,7 @@ export default function BreakdownTables() {
                 {t('Dodge %')}
               </TableCell>
               <TableCell
+                align='right'
                 style={{
                   display: breakdownObj.SpellDamageDict.Melee ? '' : 'none',
                   color: 'white',
@@ -121,7 +131,9 @@ export default function BreakdownTables() {
               >
                 {t('Glancing %')}
               </TableCell>
-              <TableCell style={{ color: 'white' }}>{t('Dps')}</TableCell>
+              <TableCell align='right' style={{ color: 'white' }}>
+                {t('Dps')}
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -246,8 +258,12 @@ export default function BreakdownTables() {
               <TableCell style={{ color: 'white' }}>
                 {t('% Of Total Gain')}
               </TableCell>
-              <TableCell style={{ color: 'white' }}>{t('Casts')}</TableCell>
-              <TableCell style={{ color: 'white' }}>{t('Avg Cast')}</TableCell>
+              <TableCell align='right' style={{ color: 'white' }}>
+                {t('Casts')}
+              </TableCell>
+              <TableCell align='right' style={{ color: 'white' }}>
+                {t('Avg Cast')}
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -341,7 +357,9 @@ export default function BreakdownTables() {
           <TableHead>
             <TableRow>
               <TableCell style={{ color: 'white' }}>{t('Name')}</TableCell>
-              <TableCell style={{ color: 'white' }}>{t('Count')}</TableCell>
+              <TableCell align='right' style={{ color: 'white' }}>
+                {t('Count')}
+              </TableCell>
               <TableCell style={{ color: 'white' }}>{t('Uptime')}</TableCell>
             </TableRow>
           </TableHead>

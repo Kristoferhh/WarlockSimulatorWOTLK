@@ -32,4 +32,5 @@ struct Simulation {
   void SelectedSpellHandler(const std::shared_ptr<Spell>& kSpell,
                             std::map<std::shared_ptr<Spell>, double>& predicted_damage_of_spells) const;
   void CastSelectedSpell(const std::shared_ptr<Spell>& kSpell, double kPredictedDamage = 0) const;
+  int GetEnemyHealthPercent() const;
 };

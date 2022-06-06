@@ -74,9 +74,8 @@ struct Entity {
   virtual void Initialize(Simulation* simulation_ptr);
   virtual double GetSpellPower(SpellSchool spell_school) = 0;
   virtual double GetSpellCritChance()                    = 0;
+  virtual double GetMeleeCritChance();
   [[nodiscard]] double GetSpirit() const;
-  [[nodiscard]] double GetMeleeCritChance() const;
-  [[nodiscard]] double GetCustomImprovedShadowBoltDamageModifier() const;
   double GetGcdValue();
   [[nodiscard]] double GetBaseSpellHitChance(int kEntityLevel, int kEnemyLevel) const;
   void SendCombatLogBreakdown() const;

@@ -94,20 +94,15 @@ int main() {
   player_settings.meta_gem_id                    = 34220;
   player_settings.recording_combat_log_breakdown = true;
   player_settings.enemy_level                    = 73;
-  player_settings.using_custom_isb_uptime        = true;
-  player_settings.custom_isb_uptime_value        = 70;
   player_settings.infinite_player_mana           = false;
   player_settings.has_curse_of_doom              = true;
   player_settings.prepop_black_book              = false;
   player_settings.pet_mode                       = EmbindConstant::kAggressive;
-  player_settings.lash_of_pain_usage             = EmbindConstant::kOnCooldown;
   player_settings.enemy_armor                    = 7700;
   player_settings.power_infusion_amount          = 1;
   player_settings.innervate_amount               = 1;
   player_settings.ferocious_inspiration_amount   = 1;
   player_settings.improved_faerie_fire           = true;
-  player_settings.survival_hunter_agility        = 800;
-  player_settings.expose_weakness_uptime         = 70;
   player_settings.has_drain_soul                 = true;
 
   auto player                         = Player(player_settings);

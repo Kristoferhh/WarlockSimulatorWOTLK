@@ -19,6 +19,16 @@ void DamageOverTime::Setup() {
     player.combat_log_breakdown.insert({name, std::make_shared<CombatLogBreakdown>(name)});
   }
 
+  if (player.talents.pandemic == 1) {
+    if (name == SpellName::kCorruption || name == SpellName::kUnstableAffliction) {
+      crit_damage_multiplier = 2.0;
+    } else if (name == SpellName::kHaunt) {
+      crit_damage_multiplier -= 1;
+      crit_damage_multiplier *= 2;
+      crit_damage_multiplier += 1;
+    }
+  }
+
   player.dot_list.push_back(this);
 }
 
@@ -44,15 +54,6 @@ void DamageOverTime::Apply() {
     player.CombatLog(name + " " + (kIsAlreadyActive ? "refreshed" : "applied") + " (" + DoubleToString(spell_power) +
                      " Spell Power)");
   }
-
-  // Amplify Curse
-  if ((name == SpellName::kCurseOfAgony || name == SpellName::kCurseOfDoom) && player.auras.amplify_curse != nullptr &&
-      player.auras.amplify_curse->is_active) {
-    applied_with_amplify_curse = true;
-    player.auras.amplify_curse->Fade();
-  } else {
-    applied_with_amplify_curse = false;
-  }
 }
 
 void DamageOverTime::Fade() {
@@ -75,18 +76,17 @@ std::vector<double> DamageOverTime::GetConstantDamage() const {
   const auto kModifier                = GetDamageModifier();
   const auto kPartialResistMultiplier = parent_spell->GetPartialResistMultiplier();
   auto dmg                            = base_damage;
+  auto total_damage                   = dmg;
 
-  if (applied_with_amplify_curse) {
-    dmg *= 1.5;
-  }
-
-  auto total_damage = dmg;
   total_damage += kCurrentSpellPower * coefficient;
   total_damage *= kModifier * kPartialResistMultiplier;
 
-  if (name == SpellName::kDrainSoul &&
-      player.simulation->fight_time_remaining / player.simulation->iteration_fight_length <= 0.25) {
+  if (name == SpellName::kDrainSoul && player.simulation->GetEnemyHealthPercent() <= 25) {
     total_damage *= 4;
+  }
+
+  if (name == SpellName::kCorruption) {
+    total_damage *= 1 + 0.02 * player.talents.improved_corruption;
   }
 
   return std::vector{dmg, total_damage, kCurrentSpellPower, kModifier, kPartialResistMultiplier};
@@ -101,6 +101,20 @@ double DamageOverTime::GetDamageModifier() const {
 
   if (school == SpellSchool::kShadow && player.auras.haunt != nullptr && player.auras.haunt->is_active) {
     damage_modifier *= 1.2;
+  }
+
+  // TODO maybe additive
+  if (name == SpellName::kDrainSoul && player.talents.soul_siphon > 0) {
+    damage_modifier *= 1 + std::min(0.18, 0.03 * player.GetActiveAfflictionEffectsCount() * player.talents.soul_siphon);
+  }
+
+  if (school == SpellSchool::kShadow && player.auras.shadow_embrace != nullptr &&
+      player.auras.shadow_embrace->is_active) {
+    damage_modifier *= 1 + 0.01 * player.auras.shadow_embrace->stacks * player.talents.shadow_embrace;
+  }
+
+  if (name == SpellName::kImmolate && player.talents.aftermath > 0) {
+    damage_modifier *= 1 + 0.03 * player.talents.aftermath;
   }
 
   return damage_modifier;
@@ -122,6 +136,11 @@ void DamageOverTime::Tick(const double kTime) {
       if (player.RollRng(player.talents.nightfall * 2)) {
         player.auras.shadow_trance->Apply();
       }
+    }
+
+    // TODO this can maybe be changed into a OnDotTickProc
+    if (name == SpellName::kCorruption && player.auras.eradication != nullptr && player.RollRng(6)) {
+      player.auras.eradication->Apply();
     }
 
     player.iteration_damage += kDamage;
@@ -223,7 +242,7 @@ ConflagrateDot::ConflagrateDot(Player& player_param) : DamageOverTime(player_par
 
 DrainSoulDot::DrainSoulDot(Player& player_param) : DamageOverTime(player_param) {
   name             = SpellName::kDrainSoul;
-  duration         = 15;
+  duration         = 15;  // TODO drain soul's duration is reduced with haste
   tick_timer_total = 3;
   base_damage      = 710;
   coefficient      = 0.429;

@@ -62,3 +62,19 @@ struct AttackPower : Stat {
 struct AttackPowerModifier : Stat {
   AttackPowerModifier(Entity& entity_param, double kValue);
 };
+
+struct DamageModifier : Stat {
+  DamageModifier(Entity& entity_param, double kValue);
+};
+
+struct ShadowModifier : Stat {
+  ShadowModifier(Entity& entity_param, double kValue);
+};
+
+struct FireModifier : Stat {
+  FireModifier(Entity& entity_param, double kValue);
+};
+
+struct ManaPer5 : Stat {
+  ManaPer5(Entity& entity_param, double kValue);
+};

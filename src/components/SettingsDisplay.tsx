@@ -345,25 +345,6 @@ export default function SettingsDisplay() {
             checked={playerStore.Settings[Setting.prepopBlackBook] === 'true'}
           />
         )}
-        {isPetActive(playerStore.Settings, true, true) &&
-          playerStore.Settings[Setting.petChoice] === Pet.Succubus && (
-            <FormControlLabel
-              className={mui.label}
-              label={t('Only use Lash of Pain when ISB is not up')}
-              control={<Switch size='small' />}
-              labelPlacement='start'
-              onChange={e => {
-                settingModifiedHandler(
-                  Setting.OnlyLashOfPainWhenIsbIsNotUp,
-                  (e.target as HTMLInputElement).checked.toString()
-                )
-              }}
-              checked={
-                playerStore.Settings[Setting.OnlyLashOfPainWhenIsbIsNotUp] ===
-                'true'
-              }
-            />
-          )}
         {playerStore.Auras.includes(AuraId.FaerieFire) &&
           isPetActive(playerStore.Settings, true, true) && (
             <FormControlLabel

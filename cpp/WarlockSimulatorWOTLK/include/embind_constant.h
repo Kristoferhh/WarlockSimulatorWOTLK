@@ -2,10 +2,8 @@
 
 enum class EmbindConstant : int {
   kUnused,
-  kOnCooldown,
   kSingleTarget,
   kAoe,
-  kNoIsb,
   kHuman,
   kGnome,
   kOrc,

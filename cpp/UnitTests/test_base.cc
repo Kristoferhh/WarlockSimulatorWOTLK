@@ -16,7 +16,9 @@
 #include "../WarlockSimulatorWOTLK/include/trinket.h"
 
 Player TestBase::SetUpPlayer(std::shared_ptr<PlayerSettings> player_settings) {
-  if (player_settings == nullptr) { player_settings = std::make_shared<PlayerSettings>(GetDefaultPlayerSettings()); }
+  if (player_settings == nullptr) {
+    player_settings = std::make_shared<PlayerSettings>(GetDefaultPlayerSettings());
+  }
 
   return Player(*player_settings);
 }
@@ -34,24 +36,32 @@ PlayerSettings TestBase::GetDefaultPlayerSettings(std::shared_ptr<AuraSelection>
                                                   std::shared_ptr<Talents> talents, std::shared_ptr<Sets> sets,
                                                   std::shared_ptr<CharacterStats> stats,
                                                   std::shared_ptr<ItemSlot> items) {
-  if (auras == nullptr) { auras = std::make_shared<AuraSelection>(GetDefaultAuras()); }
+  if (auras == nullptr) {
+    auras = std::make_shared<AuraSelection>(GetDefaultAuras());
+  }
 
-  if (talents == nullptr) { talents = std::make_shared<Talents>(GetDefaultTalents()); }
+  if (talents == nullptr) {
+    talents = std::make_shared<Talents>(GetDefaultTalents());
+  }
 
-  if (sets == nullptr) { sets = std::make_shared<Sets>(GetDefaultSets()); }
+  if (sets == nullptr) {
+    sets = std::make_shared<Sets>(GetDefaultSets());
+  }
 
-  if (stats == nullptr) { stats = std::make_shared<CharacterStats>(GetDefaultStats()); }
+  if (stats == nullptr) {
+    stats = std::make_shared<CharacterStats>(GetDefaultStats());
+  }
 
-  if (items == nullptr) { items = std::make_shared<ItemSlot>(GetDefaultItems()); }
+  if (items == nullptr) {
+    items = std::make_shared<ItemSlot>(GetDefaultItems());
+  }
 
   auto player_settings                           = PlayerSettings(*auras, *talents, *sets, *stats, *items);
-  player_settings.custom_isb_uptime_value        = 75;
   player_settings.enemy_amount                   = 5;
   player_settings.enemy_armor                    = 7700;
   player_settings.enemy_level                    = 83;
   player_settings.equipped_item_simulation       = true;
   player_settings.fight_type                     = EmbindConstant::kSingleTarget;
-  player_settings.has_amplify_curse              = true;
   player_settings.has_conflagrate                = true;
   player_settings.has_corruption                 = true;
   player_settings.has_curse_of_agony             = true;

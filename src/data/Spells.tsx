@@ -116,12 +116,6 @@ export const Spells: Spell[] = [
   },
   {
     Group: RotationGroup.Other,
-    Name: 'Amplify Curse',
-    IconName: 'spell_shadow_contagion',
-    Id: SpellId.AmplifyCurse,
-  },
-  {
-    Group: RotationGroup.Other,
     Name: 'Dark Pact',
     IconName: 'spell_shadow_darkritual',
     Id: SpellId.DarkPact,

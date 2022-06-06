@@ -5,6 +5,7 @@ struct Talents {
   int suppression;
   int improved_corruption;
   int improved_life_tap;
+  int soul_siphon;
   int amplify_curse;
   int nightfall;
   int empowered_corruption;
@@ -57,6 +58,7 @@ struct Talents {
   int conflagrate;
   int pyroclasm;
   int shadow_and_flame;
+  int soul_leech;
   int improved_soul_leech;
   int backdraft;
   int shadowfury;
