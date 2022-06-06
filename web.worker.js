@@ -38,6 +38,7 @@ onmessage = event => {
         auras.manaSpringTotem = playerData.Auras.includes(25570)
         auras.wrathOfAirTotem = playerData.Auras.includes(3738)
         auras.totemOfWrath = playerData.Auras.includes(30706)
+        auras.flametongueTotem = playerData.Auras.includes(58656)
         auras.markOfTheWild = playerData.Auras.includes(26990)
         auras.prayerOfSpirit = playerData.Auras.includes(32999)
         auras.bloodPact = playerData.Auras.includes(27268)
@@ -56,11 +57,10 @@ onmessage = event => {
         auras.faerieFire = playerData.Auras.includes(26993)
         auras.sunderArmor = playerData.Auras.includes(25225)
         auras.exposeArmor = playerData.Auras.includes(26866)
-        auras.curseOfRecklessness = playerData.Auras.includes(27226)
         auras.bloodFrenzy = playerData.Auras.includes(29859)
-        auras.exposeWeakness = playerData.Auras.includes(34503)
         auras.annihilator = playerData.Auras.includes(16928)
         auras.improvedHuntersMark = playerData.Auras.includes(19425)
+        auras.runicManaPotion = playerData.Auras.includes(33448)
         auras.demonicRune = playerData.Auras.includes(12662)
         auras.flameCap = playerData.Auras.includes(22788)
         auras.petBlessingOfKings = playerData.Auras.includes(25898)
@@ -94,6 +94,7 @@ onmessage = event => {
         talents.improvedLifeTap = parseInt(
           playerData.Talents['Improved Life Tap']
         )
+        talents.soulSiphon = parseInt(playerData.Talents['Soul Siphon'])
         talents.amplifyCurse = parseInt(playerData.Talents['Amplify Curse'])
         talents.nightfall = parseInt(playerData.Talents.Nightfall)
         talents.empoweredCorruption = parseInt(
@@ -170,6 +171,7 @@ onmessage = event => {
         talents.shadowAndFlame = parseInt(
           playerData.Talents['Shadow and Flame']
         )
+        talents.soulLeech = parseInt(playerData.Talents['Soul Leech'])
         talents.improvedSoulLeech = parseInt(
           playerData.Talents['Improved Soul Leech']
         )
@@ -183,6 +185,16 @@ onmessage = event => {
 
         const sets = module.allocSets()
         sets.t6 = parseInt(playerData.Sets['670']) || 0
+        sets.duskweaver = parseInt(playerData.Sets['764']) || 0
+        sets.gladiatorsFelshroud = parseInt(playerData.Sets['780']) || 0
+        sets.t7 = parseInt(playerData.Sets['802']) || 0
+        sets.frostsavageBattlegear = parseInt(playerData.Sets['819']) || 0
+        sets.t8 = parseInt(playerData.Sets['837']) || 0
+        sets.t9 = Math.max(
+          parseInt(playerData.Sets['845']) || 0,
+          parseInt(playerData.Sets['846']) || 0
+        )
+        sets.t10 = parseInt(playerData.Sets['884']) || 0
 
         const stats = module.allocStats()
         stats.health = parseFloat(playerData.Stats.Health)
@@ -222,7 +234,7 @@ onmessage = event => {
         playerSettings.equippedItemSimulation =
           event.data.EquippedItemSimulation === true
         playerSettings.recordingCombatLogBreakdown =
-          playerData.Settings.automaticallyOpenSimDetails === 'yes'
+          playerData.Settings.automaticallyOpenSimDetails === 'true'
         playerSettings.customStat = module.EmbindConstant[event.data.CustomStat]
         playerSettings.enemyLevel = parseInt(playerData.Settings.targetLevel)
         playerSettings.enemyShadowResist = parseInt(
@@ -243,11 +255,6 @@ onmessage = event => {
         playerSettings.ferociousInspirationAmount = parseInt(
           playerData.Settings.ferociousInspirationAmount
         )
-        playerSettings.usingCustomIsbUptime =
-          playerData.Settings.customIsbUptime === 'yes'
-        playerSettings.customIsbUptimeValue = parseFloat(
-          playerData.Settings.customIsbUptimeValue
-        )
         playerSettings.fightType =
           !playerData.Settings.fightType ||
           playerData.Settings.fightType === 'singleTarget'
@@ -263,34 +270,24 @@ onmessage = event => {
           playerData.Settings.innervateAmount
         )
         playerSettings.enemyArmor = parseInt(playerData.Settings.enemyArmor)
-        playerSettings.exposeWeaknessUptime = parseFloat(
-          playerData.Settings.exposeWeaknessUptime
-        )
         playerSettings.improvedFaerieFire =
-          playerData.Settings.improvedFaerieFire === 'yes'
+          playerData.Settings.improvedFaerieFire === 'true'
         playerSettings.infinitePlayerMana =
-          playerData.Settings.infinitePlayerMana === 'yes'
+          playerData.Settings.infinitePlayerMana === 'true'
         playerSettings.infinitePetMana =
-          playerData.Settings.infinitePetMana === 'yes'
-        playerSettings.lashOfPainUsage =
-          playerData.Settings.lashOfPainUsage === 'onCooldown'
-            ? module.EmbindConstant.onCooldown
-            : module.EmbindConstant.noIsb
+          playerData.Settings.infinitePetMana === 'true'
         playerSettings.petMode =
           playerData.Settings.petIsAggressive === 'true'
             ? module.EmbindConstant.aggressive
             : module.EmbindConstant.passive
         playerSettings.prepopBlackBook =
-          playerData.Settings.prepopBlackBook === 'yes'
+          playerData.Settings.prepopBlackBook === 'true'
         playerSettings.randomizeValues =
-          playerData.Settings.randomizeValues === 'yes'
+          playerData.Settings.randomizeValues === 'true'
         playerSettings.rotationOption =
           playerData.Settings.rotationOption === 'simChooses'
             ? module.EmbindConstant.simChooses
             : module.EmbindConstant.userChooses
-        playerSettings.survivalHunterAgility = parseInt(
-          playerData.Settings.survivalHunterAgility
-        )
         playerSettings.hasHaunt = playerData.Rotation.Dots.includes(48181)
         playerSettings.hasImmolate = playerData.Rotation.Dots.includes(47811)
         playerSettings.hasCorruption = playerData.Rotation.Dots.includes(47813)
@@ -302,8 +299,6 @@ onmessage = event => {
           playerData.Rotation.Filler.includes(47809)
         playerSettings.hasIncinerate =
           playerData.Rotation.Filler.includes(47838)
-        playerSettings.hasCurseOfRecklessness =
-          playerData.Rotation.Curse.includes(16231)
         playerSettings.hasCurseOfTheElements =
           playerData.Rotation.Curse.includes(47865)
         playerSettings.hasCurseOfAgony =
@@ -319,8 +314,6 @@ onmessage = event => {
         playerSettings.hasDrainSoul =
           playerData.Rotation.Finishers.includes(47855)
         playerSettings.hasShadowfury = playerData.Rotation.Other.includes(30283)
-        playerSettings.hasAmplifyCurse =
-          playerData.Rotation.Other.includes(18288)
         playerSettings.hasDarkPact = playerData.Rotation.Other.includes(59092)
 
         const simulationSettings = module.allocSimSettings()
