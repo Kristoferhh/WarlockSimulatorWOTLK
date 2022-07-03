@@ -635,5 +635,5 @@ export function getAllocatedTalentsPointsInTree(
 export function getBaseWowheadUrl(language: string): string {
   return `https://${
     Languages.find(e => e.Iso === language)?.WowheadPrefix || ''
-  }wotlk.wowhead.com`
+  }wowhead.com/wotlk`
 }
