@@ -242,7 +242,7 @@ export function getItemTableItems(
       e.ItemSlot === itemSlot &&
       sources.includes(e.Phase) &&
       (!hiddenItems.includes(e.Id) || hidingItems) &&
-      (!e.Unique || secondRingOrTrinket !== e.Id)
+      ((!e.Unique || secondRingOrTrinket !== e.Id) || (e.Unique && e.ItemSlot === ItemSlot.Weapon))
     )
   }).sort((a, b) => {
     // If it's a multi-item simulation then sort by phase from highest to lowest, otherwise sort by the saved dps or by phase as backup
@@ -468,10 +468,10 @@ export function GetTalentsStats(
     demonicEmbraceAmount === 1
       ? 1.04
       : demonicEmbraceAmount === 2
-      ? 1.07
-      : demonicEmbraceAmount === 3
-      ? 1.1
-      : 1
+        ? 1.07
+        : demonicEmbraceAmount === 3
+          ? 1.1
+          : 1
   )
   AddOrMultiplyStat(
     statsObj || stats,
@@ -487,8 +487,8 @@ export function GetTalentsStats(
     statsObj || stats,
     Stat.SpellPower,
     Auras.find(x => x.Id === AuraId.FelArmor)!.Stats![Stat.SpellPower]! *
-      0.1 *
-      talents['Demonic Aegis'] || 0
+    0.1 *
+    talents['Demonic Aegis'] || 0
   )
 
   if (
@@ -605,7 +605,7 @@ export function getPlayerHitPercent(
 ): number {
   let hitPercent =
     (hitRating || getPlayerHitRating(playerState)) /
-      StatConstant.HitRatingPerPercent +
+    StatConstant.HitRatingPerPercent +
     Object.values(playerState.Stats)
       .map(obj => obj[Stat.HitChance] || 0)
       .reduce((a, b) => a + b)
@@ -633,7 +633,6 @@ export function getAllocatedTalentsPointsInTree(
 }
 
 export function getBaseWowheadUrl(language: string): string {
-  return `https://${
-    Languages.find(e => e.Iso === language)?.WowheadPrefix || ''
-  }wowhead.com/wotlk`
+  return `https://${Languages.find(e => e.Iso === language)?.WowheadPrefix || ''
+    }wowhead.com/wotlk`
 }
