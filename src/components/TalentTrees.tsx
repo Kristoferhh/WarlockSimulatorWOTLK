@@ -34,8 +34,13 @@ export default function TalentTrees() {
   function applyTalentTemplate(talentTemplate: {
     [key in TalentName]?: number
   }) {
+    var emptyTalents: { [key: string]: number } = {}
+    for (const talentKey in TalentName) {
+      emptyTalents[talentKey] = 0
+    }
+
     let newSelectedTalents: TalentStore = JSON.parse(
-      JSON.stringify(playerState.Talents)
+      JSON.stringify(emptyTalents)
     )
 
     for (const [talentKey, points] of Object.entries(talentTemplate)) {

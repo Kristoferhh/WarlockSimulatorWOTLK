@@ -242,7 +242,9 @@ export function getItemTableItems(
       e.ItemSlot === itemSlot &&
       sources.includes(e.Phase) &&
       (!hiddenItems.includes(e.Id) || hidingItems) &&
-      (!e.Unique || secondRingOrTrinket !== e.Id)
+      (!e.Unique ||
+        secondRingOrTrinket !== e.Id ||
+        (e.Unique && e.ItemSlot === ItemSlot.Weapon))
     )
   }).sort((a, b) => {
     // If it's a multi-item simulation then sort by phase from highest to lowest, otherwise sort by the saved dps or by phase as backup
@@ -635,5 +637,5 @@ export function getAllocatedTalentsPointsInTree(
 export function getBaseWowheadUrl(language: string): string {
   return `https://${
     Languages.find(e => e.Iso === language)?.WowheadPrefix || ''
-  }wotlk.wowhead.com`
+  }wowhead.com/wotlk`
 }
