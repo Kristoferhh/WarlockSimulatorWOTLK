@@ -53,3 +53,28 @@ bool SoulLeech::ShouldProc(Spell* spell) {
          spell->name == SpellName::kIncinerate || spell->name == SpellName::kSearingPain ||
          spell->name == SpellName::kConflagrate;
 }
+
+PendulumOfTelluricCurrents::PendulumOfTelluricCurrents(Player& player) : OnHitProc(player) {
+  name         = SpellName::kPendulumOfTelluricCurrents;
+  proc_chance  = 15;
+  cooldown     = 45;
+  does_damage  = true;
+  is_harmful   = true;
+  min_dmg      = 1168;
+  max_dmg      = 1752;
+  can_crit     = true;
+  spell_school = SpellSchool::kShadow;
+  attack_type  = AttackType::kMagical;
+  OnHitProc::Setup();
+}
+
+bool PendulumOfTelluricCurrents::ShouldProc(Spell* spell) {
+  return spell->is_harmful;
+}
+
+JoustersFury::JoustersFury(Player& player, std::shared_ptr<Aura> aura) : OnHitProc(player, std::move(aura)) {
+  name        = "Jouster's Fury";
+  proc_chance = 10;
+  cooldown    = 45;
+  OnHitProc::Setup();
+}

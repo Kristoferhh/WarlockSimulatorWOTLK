@@ -5,7 +5,7 @@ import {
   ItemSlot,
   Quality,
   SocketColor,
-  Stat,
+  Stat
 } from '../Types'
 
 export const Items: Item[] = [
@@ -11637,19 +11637,6 @@ export const Items: Item[] = [
     ItemSlot: ItemSlot.Trinket,
   },
   {
-    IconName: 'inv_misc_rune_11',
-    Stats: {
-      [Stat.Mp5]: 57,
-    },
-    Quality: Quality.Epic,
-    Unique: true,
-    Faction: Faction.Alliance,
-    Name: 'Binding Light',
-    Id: 47728,
-    Phase: 1,
-    ItemSlot: ItemSlot.Trinket,
-  },
-  {
     IconName: 'inv_jewelry_ring_54',
     Stats: {
       [Stat.Stamina]: 58,
@@ -12613,19 +12600,6 @@ export const Items: Item[] = [
     ItemSlot: ItemSlot.Trinket,
   },
   {
-    IconName: 'inv_misc_rune_11',
-    Stats: {
-      [Stat.Mp5]: 57,
-    },
-    Quality: Quality.Epic,
-    Unique: true,
-    Faction: Faction.Horde,
-    Name: 'Binding Stone',
-    Id: 47880,
-    Phase: 1,
-    ItemSlot: ItemSlot.Trinket,
-  },
-  {
     IconName: 'inv_gauntlets_61',
     Stats: {
       [Stat.Stamina]: 68,
@@ -12938,19 +12912,6 @@ export const Items: Item[] = [
     ItemSlot: ItemSlot.Trinket,
   },
   {
-    IconName: 'inv_misc_rune_11',
-    Stats: {
-      [Stat.Mp5]: 63,
-    },
-    Quality: Quality.Epic,
-    Unique: true,
-    Faction: Faction.Alliance,
-    Name: 'Binding Light',
-    Id: 47947,
-    Phase: 1,
-    ItemSlot: ItemSlot.Trinket,
-  },
-  {
     IconName: 'inv_gauntlets_79',
     Stats: {
       [Stat.Stamina]: 77,
@@ -13259,19 +13220,6 @@ export const Items: Item[] = [
     Faction: Faction.Horde,
     Name: 'Fetish of Volatile Power',
     Id: 48018,
-    Phase: 1,
-    ItemSlot: ItemSlot.Trinket,
-  },
-  {
-    IconName: 'inv_misc_rune_11',
-    Stats: {
-      [Stat.Mp5]: 63,
-    },
-    Quality: Quality.Epic,
-    Unique: true,
-    Faction: Faction.Horde,
-    Name: 'Binding Stone',
-    Id: 48019,
     Phase: 1,
     ItemSlot: ItemSlot.Trinket,
   },
@@ -15352,19 +15300,6 @@ export const Items: Item[] = [
     Phase: 1,
     Name: 'Phylactery of the Nameless Lich',
     Id: 50365,
-    ItemSlot: ItemSlot.Trinket,
-  },
-  {
-    IconName: 'inv_jewelry_trinket_02',
-    Stats: {
-      [Stat.SpellPower]: 201,
-    },
-    Quality: Quality.Epic,
-    Unique: true,
-    UniqueId: [50359, 50366],
-    Phase: 1,
-    Name: "Althor's Abacus",
-    Id: 50366,
     ItemSlot: ItemSlot.Trinket,
   },
   {

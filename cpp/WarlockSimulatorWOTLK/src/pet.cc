@@ -18,7 +18,6 @@ Pet::Pet(Player& player_param, const EmbindConstant kSelectedPet)
     : Entity(&player_param, player_param.settings, EntityType::kPet),
       glancing_blow_multiplier(1 - (0.1 + (player_param.settings.enemy_level * 5 - kLevel * 5) / 100.0)),
       glancing_blow_chance(std::max(0.0, 6 + (player_param.settings.enemy_level * 5 - kLevel * 5) * 1.2)) {
-  std::cout << "pet start" << std::endl;
   infinite_mana = player_param.settings.infinite_pet_mana;
 
   if (kSelectedPet == EmbindConstant::kImp) {
@@ -50,11 +49,9 @@ Pet::Pet(Player& player_param, const EmbindConstant kSelectedPet)
     stats.intellect += 150;
     stats.spirit += 209;
   }
-  std::cout << "pet end" << std::endl;
 }
 
 void Pet::Initialize(Simulation* simulation_ptr) {
-  std::cout << "pet init start" << std::endl;
   Entity::Initialize(simulation_ptr);
   pet = shared_from_this();
   Setup();
@@ -89,7 +86,6 @@ void Pet::Initialize(Simulation* simulation_ptr) {
   if (player->auras.empowered_imp != nullptr) {
     spells.empowered_imp = std::make_shared<EmpoweredImp>(*this, player->auras.empowered_imp);
   }
-  std::cout << "pet init end" << std::endl;
 }
 
 void Pet::CalculateStatsFromAuras() {

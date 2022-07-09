@@ -8,6 +8,7 @@
 #include "../include/player.h"
 #include "../include/player_settings.h"
 #include "../include/simulation.h"
+#include "../include/spell.h"
 #include "../include/stat.h"
 #include "../include/talents.h"
 
@@ -39,7 +40,9 @@ void Aura::Apply() {
       entity.combat_log_breakdown.at(name)->applied_at = entity.simulation->current_fight_time;
     }
 
-    for (auto& stat : stats) { stat.AddStat(); }
+    for (auto& stat : stats) {
+      stat.AddStat();
+    }
 
     if (entity.ShouldWriteToCombatLog()) {
       entity.CombatLog(name + " applied");
@@ -52,11 +55,7 @@ void Aura::Apply() {
     if (applies_with_max_stacks) {
       stacks = max_stacks;
     } else {
-      stacks++;
-
-      for (auto& stat : stats_per_stack) {
-        stat.AddStat();
-      }
+      IncrementStacks();
     }
 
     if (entity.ShouldWriteToCombatLog()) {
@@ -76,7 +75,9 @@ void Aura::Fade() {
     entity.player->ThrowError("Attempting to fade " + name + " when it isn't is_active");
   }
 
-  for (auto& stat : stats) { stat.RemoveStat(); }
+  for (auto& stat : stats) {
+    stat.RemoveStat();
+  }
 
   if (entity.ShouldWriteToCombatLog()) {
     entity.CombatLog(name + " faded");
@@ -88,11 +89,21 @@ void Aura::Fade() {
   }
 
   if (stacks > 0) {
-    for (auto& stat : stats_per_stack) { stat.RemoveStat(stacks); }
+    for (auto& stat : stats_per_stack) {
+      stat.RemoveStat(stacks);
+    }
   }
 
   is_active = false;
   stacks    = 0;
+}
+
+void Aura::IncrementStacks() {
+  stacks++;
+
+  for (auto& stat : stats_per_stack) {
+    stat.AddStat();
+  }
 }
 
 void Aura::DecrementStacks() {
@@ -195,10 +206,11 @@ ShadowEmbraceAura::ShadowEmbraceAura(Player& player) : Aura(player) {
 EradicationAura::EradicationAura(Player& player) : Aura(player) {
   name     = SpellName::kEradication;
   duration = 10;
-  stats.push_back(SpellHastePercent(player, player.talents.eradication == 1   ? 1.06
-                                            : player.talents.eradication == 2 ? 1.12
-                                            : player.talents.eradication == 3 ? 1.2
-                                                                              : 1));
+  stats.push_back(SpellHastePercent(player,
+                                    player.talents.eradication == 1   ? 1.06
+                                    : player.talents.eradication == 2 ? 1.12
+                                    : player.talents.eradication == 3 ? 1.2
+                                                                      : 1));
   Aura::Setup();
 }
 
@@ -289,5 +301,306 @@ BackdraftAura::BackdraftAura(Player& player) : Aura(player) {
 EmpoweredImpAura::EmpoweredImpAura(Player& player) : Aura(player) {
   name     = SpellName::kEmpoweredImp;
   duration = 8;
+  Aura::Setup();
+}
+
+JeTzesBellAura::JeTzesBellAura(Player& player) : Aura(player) {
+  name     = SpellName::kJeTzesBell;
+  duration = 15;
+  stats.push_back(ManaPer5(player, 125));
+  Aura::Setup();
+}
+
+EmbraceOfTheSpiderAura::EmbraceOfTheSpiderAura(Player& player) : Aura(player) {
+  name     = SpellName::kEmbraceOfTheSpider;
+  duration = 10;
+  stats.push_back(SpellHasteRating(player, 505));
+  Aura::Setup();
+}
+
+DyingCurseAura::DyingCurseAura(Player& player) : Aura(player) {
+  name     = SpellName::kDyingCurse;
+  duration = 10;
+  stats.push_back(SpellPower(player, 765));
+  Aura::Setup();
+}
+
+MajesticDragonFigurineAura::MajesticDragonFigurineAura(Player& player) : Aura(player) {
+  name       = "Majestic Dragon Figurine";
+  duration   = 10;
+  max_stacks = 10;
+  stats_per_stack.push_back(Spirit(player, 18));
+  Aura::Setup();
+}
+
+IllustrationOfTheDragonSoulAura::IllustrationOfTheDragonSoulAura(Player& player) : Aura(player) {
+  name       = "Illustration of the Dragon Soul";
+  duration   = 10;
+  max_stacks = 10;
+  stats_per_stack.push_back(SpellPower(player, 20));
+  Aura::Setup();
+}
+
+SundialOfTheExiledAura::SundialOfTheExiledAura(Player& player) : Aura(player) {
+  name     = "Sundial of the Exiled";
+  duration = 10;
+  stats.push_back(SpellPower(player, 590));
+  Aura::Setup();
+}
+
+DarkmoonCardBerserkerAura::DarkmoonCardBerserkerAura(Player& player) : Aura(player) {
+  name       = "Darkmoon Card: Berserker!";
+  duration   = 12;
+  max_stacks = 3;
+  stats_per_stack.push_back(SpellCritRating(player, 35));
+  Aura::Setup();
+}
+
+DarkmoonCardGreatnessAura::DarkmoonCardGreatnessAura(Player& player) : Aura(player) {
+  name     = "Darkmoon Card: Crusade";
+  duration = 15;
+  Aura::Setup();
+}
+
+// TODO maybe need to improve this :-)
+void DarkmoonCardGreatnessAura::Apply() {
+  if (entity.stats.intellect > entity.stats.spirit) {
+    stats = std::vector<Stat>{Intellect(entity, 300)};
+  } else {
+    stats = std::vector<Stat>{Spirit(entity, 300)};
+  }
+
+  Aura::Apply();
+}
+
+FlowOfKnowledgeAura::FlowOfKnowledgeAura(Player& player) : Aura(player) {
+  name     = "Flow of Knowledge";
+  duration = 10;
+  stats.push_back(SpellPower(player, 590));
+  Aura::Setup();
+}
+
+JoustersFuryAura::JoustersFuryAura(Player& player) : Aura(player) {
+  name     = "Jouster's Fury";
+  duration = 10;
+  stats.push_back(SpellCritRating(player, 328));
+  Aura::Setup();
+}
+
+EyeOfTheBroodmotherAura::EyeOfTheBroodmotherAura(Player& player) : Aura(player) {
+  name       = "Eye of the Broodmother";
+  duration   = 10;
+  max_stacks = 5;
+  stats_per_stack.push_back(SpellPower(player, 25));
+  Aura::Setup();
+}
+
+PandorasPleaAura::PandorasPleaAura(Player& player) : Aura(player) {
+  name     = "Pandora's Plea";
+  duration = 10;
+  stats.push_back(SpellPower(player, 751));
+  Aura::Setup();
+}
+
+FlareOfTheHeavensAura::FlareOfTheHeavensAura(Player& player) : Aura(player) {
+  name     = "Flare of the Heavens";
+  duration = 10;
+  stats.push_back(SpellPower(player, 850));
+  Aura::Setup();
+}
+
+ShowOfFaithAura::ShowOfFaithAura(Player& player) : Aura(player) {
+  name     = "Show of Faith";
+  duration = 15;
+  stats.push_back(ManaPer5(player, 241));
+  Aura::Setup();
+}
+
+ElementalFocusStoneAura::ElementalFocusStoneAura(Player& player) : Aura(player) {
+  name     = "Elemental Focus Stone";
+  duration = 10;
+  stats.push_back(SpellHasteRating(player, 522));
+  Aura::Setup();
+}
+
+SifsRemembranceAura::SifsRemembranceAura(Player& player) : Aura(player) {
+  name     = "Sif's Remembrance";
+  duration = 15;
+  stats.push_back(ManaPer5(player, 195));
+  Aura::Setup();
+}
+
+MeteoriteCrystalAura::MeteoriteCrystalAura(Player& player) : Aura(player) {
+  name     = "Meteorite Crystal";
+  duration = 20;
+  Aura::Setup();
+}
+
+void MeteoriteCrystalAura::Fade() {
+  entity.auras.meteoric_inspiration->Fade();
+}
+
+MeteoricInspirationAura::MeteoricInspirationAura(Player& player) : Aura(player) {
+  name       = "Meteoric Inspiration";
+  duration   = 20;
+  max_stacks = 20;
+  stats_per_stack.push_back(ManaPer5(player, 75));
+  Aura::Setup();
+}
+
+SolaceOfTheDefeatedAura::SolaceOfTheDefeatedAura(Player& player) : Aura(player) {
+  name       = "Solace of the Defeated";
+  duration   = 10;
+  max_stacks = 8;
+  stats_per_stack.push_back(ManaPer5(player, 16));
+  Aura::Setup();
+}
+
+SolaceOfTheDefeatedHeroicAura::SolaceOfTheDefeatedHeroicAura(Player& player) : Aura(player) {
+  name       = "Solace of the Defeated";
+  duration   = 10;
+  max_stacks = 8;
+  stats_per_stack.push_back(ManaPer5(player, 18));
+  Aura::Setup();
+}
+
+MoteOfFlameAura::MoteOfFlameAura(Player& player, const std::shared_ptr<Spell>& kSpell)
+    : Aura(player), reign_of_the_unliving(*kSpell) {
+  name         = "Mote of Flame";
+  has_duration = false;
+  max_stacks   = 3;
+  Aura::Setup();
+}
+
+void MoteOfFlameAura::Apply() {
+  Aura::Apply();
+
+  if (stacks == max_stacks) {
+    stacks = 0;
+    reign_of_the_unliving.StartCast();
+  }
+}
+
+AbyssalRuneAura::AbyssalRuneAura(Player& player) : Aura(player) {
+  name     = "Abyssal Rune";
+  duration = 10;
+  stats.push_back(SpellPower(player, 590));
+  Aura::Setup();
+}
+
+TalismanOfVolatilePowerAura::TalismanOfVolatilePowerAura(Player& player) : Aura(player) {
+  name     = "Talisman of Volatile Power";
+  duration = 20;
+  Aura::Setup();
+}
+
+void TalismanOfVolatilePowerAura::Fade() {
+  Aura::Fade();
+  entity.auras.volatile_power->Fade();
+}
+
+VolatilePowerAura::VolatilePowerAura(Player& player) : Aura(player) {
+  name         = "Volatile Power";
+  has_duration = false;
+  stats_per_stack.push_back(SpellHasteRating(player, 57));
+  max_stacks = 8;
+  Aura::Setup();
+}
+
+VolatilePowerHeroicAura::VolatilePowerHeroicAura(Player& player) : Aura(player) {
+  name         = "Volatile Power";
+  has_duration = false;
+  stats_per_stack.push_back(SpellHasteRating(player, 64));
+  max_stacks = 8;
+  Aura::Setup();
+}
+
+MithrilPocketwatchAura::MithrilPocketwatchAura(Player& player) : Aura(player) {
+  name     = "Mithril Pocketwatch";
+  duration = 10;
+  stats.push_back(SpellPower(player, 590));
+  Aura::Setup();
+}
+
+NevermeltingIceCrystalAura::NevermeltingIceCrystalAura(Player& player) : Aura(player) {
+  name     = "Nevermelting Ice Crystal";
+  duration = 20;
+  stats_per_stack.push_back(SpellCritRating(player, 184));
+  max_stacks              = 5;
+  applies_with_max_stacks = true;
+  Aura::Setup();
+}
+
+MuradinsSpyglassAura::MuradinsSpyglassAura(Player& player) : Aura(player) {
+  name       = "Muradin's Spyglass";
+  duration   = 10;
+  max_stacks = 10;
+  stats_per_stack.push_back(SpellPower(player, 18));
+  Aura::Setup();
+}
+
+MuradinsSpyglassHeroicAura::MuradinsSpyglassHeroicAura(Player& player) : Aura(player) {
+  name       = "Muradin's Spyglass";
+  duration   = 10;
+  max_stacks = 10;
+  stats_per_stack.push_back(SpellPower(player, 20));
+  Aura::Setup();
+}
+
+DislodgedForeignObjectAura::DislodgedForeignObjectAura(Player& player, const bool kIsHeroicVersion)
+    : Aura(player), additional_spell_power_timer(2) {
+  name       = "Dislodged Foreign Object";
+  duration   = 20;
+  max_stacks = 10;
+  stats_per_stack.push_back(SpellPower(player, kIsHeroicVersion ? 121 : 105));
+  Aura::Setup();
+}
+
+void DislodgedForeignObjectAura::Apply() {
+  Aura::Apply();
+  additional_spell_power_timer = 2;
+}
+
+void DislodgedForeignObjectAura::Tick(const double kTime) {
+  Aura::Tick(kTime);
+  additional_spell_power_timer -= kTime;
+
+  if (additional_spell_power_timer <= 0) {
+    IncrementStacks();
+  }
+}
+
+PurifiedLunarDustAura::PurifiedLunarDustAura(Player& player) : Aura(player) {
+  name     = "Purified Lunar Dust";
+  duration = 15;
+  stats.push_back(ManaPer5(player, 304));
+  Aura::Setup();
+}
+
+PhylacteryOfTheNamelessLichAura::PhylacteryOfTheNamelessLichAura(Player& player) : Aura(player) {
+  name     = "Phylactery of the Nameless Lich";
+  duration = 20;
+  stats.push_back(SpellPower(player, 1074));
+  Aura::Setup();
+}
+
+PhylacteryOfTheNamelessLichHeroicAura::PhylacteryOfTheNamelessLichHeroicAura(Player& player) : Aura(player) {
+  name     = "Phylactery of the Nameless Lich";
+  duration = 20;
+  stats.push_back(SpellPower(player, 1207));
+  Aura::Setup();
+}
+
+CharredTwilightScaleAura::CharredTwilightScaleAura(Player& player) : Aura(player) {
+  name     = "Charred Twilight Scale";
+  duration = 15;
+  stats.push_back(SpellPower(player, 763));
+  Aura::Setup();
+}
+
+CharredTwilightScaleHeroicAura::CharredTwilightScaleHeroicAura(Player& player) : Aura(player) {
+  name     = "Charred Twilight Scale";
+  duration = 15;
+  stats.push_back(SpellPower(player, 861));
   Aura::Setup();
 }

@@ -8,6 +8,7 @@
 #include "enums.h"
 #include "spells.h"
 
+struct OnCastProc;
 struct DamageOverTime;
 struct Spell;
 struct Aura;
@@ -41,7 +42,7 @@ struct Entity {
   Spells spells = Spells();
   std::shared_ptr<Pet> pet;
   CharacterStats stats;
-  EntityType entity_type;
+  EntityType type;
   std::string name;
   std::map<std::string, std::shared_ptr<CombatLogBreakdown>> combat_log_breakdown;
   std::vector<Aura*> aura_list;
@@ -52,6 +53,7 @@ struct Entity {
   std::vector<OnDotTickProc*> on_dot_tick_procs;
   std::vector<OnDamageProc*> on_damage_procs;
   std::vector<OnResistProc*> on_resist_procs;
+  std::vector<OnCastProc*> on_cast_procs;
   double cast_time_remaining              = 0;
   double gcd_remaining                    = 0;
   double five_second_rule_timer_remaining = 5;

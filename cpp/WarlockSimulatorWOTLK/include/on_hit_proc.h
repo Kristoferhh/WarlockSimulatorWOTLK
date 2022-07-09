@@ -22,3 +22,12 @@ struct SoulLeech final : OnHitProc {
   explicit SoulLeech(Player& player, std::shared_ptr<Aura> aura);
   bool ShouldProc(Spell* spell) override;
 };
+
+struct PendulumOfTelluricCurrents final : OnHitProc {
+  explicit PendulumOfTelluricCurrents(Player& player);
+  bool ShouldProc(Spell* spell) override;
+};
+
+struct JoustersFury final : OnHitProc {
+  explicit JoustersFury(Player& player, std::shared_ptr<Aura> aura);
+};

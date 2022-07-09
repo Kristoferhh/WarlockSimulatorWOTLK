@@ -3,9 +3,10 @@
 #include "../include/combat_log_breakdown.h"
 #include "../include/common.h"
 #include "../include/entity.h"
+#include "../include/player.h"
 #include "../include/stat.h"
 
-ManaOverTime::ManaOverTime(Entity& entity) : Aura(entity) {}
+ManaOverTime::ManaOverTime(Entity& entity_param) : Aura(entity_param), mana_per_tick(0) {}
 
 void ManaOverTime::Setup() {
   ticks_total = duration / tick_timer_total;
@@ -46,7 +47,12 @@ void ManaOverTime::Tick(const double kTime) {
     }
   }
 }
-ManaTideTotemAura::ManaTideTotemAura(Entity& entity) : ManaOverTime(entity) {
+
+double ManaOverTime::GetManaGain() {
+  return mana_per_tick;
+}
+
+ManaTideTotemAura::ManaTideTotemAura(Entity& entity_param) : ManaOverTime(entity_param) {
   name             = SpellName::kManaTideTotem;
   duration         = 12;
   tick_timer_total = 3;
@@ -56,4 +62,12 @@ ManaTideTotemAura::ManaTideTotemAura(Entity& entity) : ManaOverTime(entity) {
 
 double ManaTideTotemAura::GetManaGain() {
   return entity.stats.max_mana * 0.06;
+}
+
+FigurineSapphireOwlAura::FigurineSapphireOwlAura(Player& player) : ManaOverTime(player) {
+  name             = "Figurine - Sapphire Owl";
+  duration         = 12;
+  tick_timer_total = 1;
+  mana_per_tick    = 195;
+  ManaOverTime::Setup();
 }

@@ -42,3 +42,19 @@ EmpoweredImp::EmpoweredImp(Pet& pet, std::shared_ptr<Aura> aura) : OnCritProc(pe
                                                          : 0;
   OnCritProc::Setup();
 }
+
+SoulOfTheDead::SoulOfTheDead(Player& player) : OnCritProc(player) {
+  name              = "Soul of the Dead";
+  proc_chance       = 25;
+  cooldown          = 45;
+  gain_mana_on_cast = true;
+  mana_gain         = 900;
+  OnCritProc::Setup();
+}
+
+MoteOfFlame::MoteOfFlame(Player& player, std::shared_ptr<Aura> aura) : OnCritProc(player, std::move(aura)) {
+  name        = "Mote of Flame";
+  proc_chance = 100;
+  cooldown    = 2;
+  OnCritProc::Setup();
+}

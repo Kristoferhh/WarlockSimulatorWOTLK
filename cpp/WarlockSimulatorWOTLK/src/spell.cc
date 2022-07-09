@@ -9,6 +9,7 @@
 #include "../include/common.h"
 #include "../include/damage_over_time.h"
 #include "../include/entity.h"
+#include "../include/item_slot.h"
 #include "../include/on_crit_proc.h"
 #include "../include/on_damage_proc.h"
 #include "../include/on_hit_proc.h"
@@ -19,6 +20,7 @@
 #include "../include/sets.h"
 #include "../include/simulation.h"
 #include "../include/talents.h"
+#include "../on_cast_proc.h"
 
 Spell::Spell(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
     : entity(entity_param),
@@ -46,10 +48,10 @@ void Spell::Setup() {
     entity.combat_log_breakdown.insert({name, std::make_shared<CombatLogBreakdown>(name)});
   }
 
-  if (entity.entity_type == EntityType::kPlayer) {
+  if (entity.type == EntityType::kPlayer) {
     bonus_hit_chance += entity.player->talents.suppression;
 
-    if (attack_type == AttackType::kMagical && entity.entity_type == EntityType::kPlayer) {
+    if (attack_type == AttackType::kMagical && entity.type == EntityType::kPlayer) {
       multiplicative_modifier *= 1 + 0.01 * entity.player->talents.malediction;
     }
 
@@ -104,7 +106,7 @@ void Spell::Setup() {
                   : entity.player->talents.nemesis == 3 ? 1.3
                                                         : 1;
     }
-  } else if (entity.entity_type == EntityType::kPet) {
+  } else if (entity.type == EntityType::kPet) {
     additive_modifier += 0.04 * entity.player->talents.unholy_power;
   }
 
@@ -134,7 +136,14 @@ bool Spell::CanCast() {
 }
 
 double Spell::GetManaCost() const {
-  return mana_cost * entity.stats.mana_cost_modifier;
+  auto true_mana_cost = mana_cost * entity.stats.mana_cost_modifier;
+
+  if (entity.type == EntityType::kPlayer && (entity.player->items.trinket_1 == ItemId::kSparkOfHope ||
+                                             entity.player->items.trinket_2 == ItemId::kSparkOfHope)) {
+    true_mana_cost -= 42;
+  }
+
+  return true_mana_cost;
 }
 
 double Spell::GetCastTime() {
@@ -186,6 +195,8 @@ void Spell::Cast() {
   casting                   = false;
   amount_of_casts_this_fight++;
 
+  OnCastProcs();
+
   for (auto& spell_name : shared_cooldown_spells) {
     for (const auto& kPlayerSpell : entity.spell_list) {
       if (kPlayerSpell->name == spell_name) {
@@ -215,6 +226,10 @@ void Spell::Cast() {
   if (mana_cost > 0 && !entity.infinite_mana) {
     entity.stats.mana -= kManaCost;
     entity.five_second_rule_timer_remaining = 5;
+
+    if (entity.auras.meteorite_crystal != nullptr && entity.auras.meteorite_crystal->is_active) {
+      entity.auras.meteoric_inspiration->Apply();
+    }
   }
 
   if (cast_time > 0 && entity.ShouldWriteToCombatLog()) {
@@ -222,7 +237,7 @@ void Spell::Cast() {
     msg += " - Mana: " + DoubleToString(kCurrentMana) + " -> " + DoubleToString(entity.stats.mana);
     msg += " - Mana Cost: " + DoubleToString(round(kManaCost));
 
-    if (entity.entity_type == EntityType::kPlayer) {
+    if (entity.type == EntityType::kPlayer) {
       msg += " - Mana Cost Modifier: " + DoubleToString(round(entity.stats.mana_cost_modifier * 100)) + "%";
     }
 
@@ -268,8 +283,14 @@ void Spell::Damage(const bool kIsCrit, const bool kIsGlancing) {
   }
 
   if (entity.ShouldWriteToCombatLog()) {
-    CombatLogDamage(kIsCrit, kIsGlancing, total_damage, kBaseDamage, kSpellPower, crit_damage_multiplier,
-                    kDamageModifier, kPartialResistMultiplier);
+    CombatLogDamage(kIsCrit,
+                    kIsGlancing,
+                    total_damage,
+                    kBaseDamage,
+                    kSpellPower,
+                    crit_damage_multiplier,
+                    kDamageModifier,
+                    kPartialResistMultiplier);
   }
 }
 
@@ -366,6 +387,10 @@ void Spell::OnCritProcs() {
       kProc->StartCast();
     }
   }
+
+  if (entity.auras.nevermelting_ice_crystal != nullptr && entity.auras.nevermelting_ice_crystal->is_active) {
+    entity.auras.nevermelting_ice_crystal->DecrementStacks();
+  }
 }
 
 void Spell::OnResistProcs() {
@@ -391,12 +416,20 @@ void Spell::OnHitProcs() {
     }
   }
 
-  if (entity.entity_type == EntityType::kPlayer &&
+  if (entity.type == EntityType::kPlayer &&
       (name == SpellName::kDrainSoul || name == SpellName::kShadowBolt || name == SpellName::kHaunt) &&
       entity.auras.corruption != nullptr && entity.auras.corruption->is_active &&
       entity.player->RollRng(20 * entity.player->talents.everlasting_affliction)) {
     entity.auras.corruption->ticks_remaining      = entity.auras.corruption->ticks_total;
     entity.auras.corruption->tick_timer_remaining = entity.auras.corruption->tick_timer_total;
+  }
+}
+
+void Spell::OnCastProcs() {
+  for (const auto& kProc : entity.on_cast_procs) {
+    if (kProc->Ready() && kProc->ShouldProc(this) && entity.player->RollRng(kProc->proc_chance)) {
+      kProc->StartCast();
+    }
   }
 }
 
@@ -551,7 +584,7 @@ double Spell::GetDamageModifier() const {
   if (spell_school == SpellSchool::kShadow) {
     damage_modifier *= entity.stats.shadow_modifier;
 
-    if (entity.entity_type == EntityType::kPlayer && entity.simulation->GetEnemyHealthPercent() <= 35) {
+    if (entity.type == EntityType::kPlayer && entity.simulation->GetEnemyHealthPercent() <= 35) {
       damage_modifier *= 1 + 0.04 * entity.player->talents.deaths_embrace;
     }
   } else if (spell_school == SpellSchool::kFire) {
@@ -657,9 +690,14 @@ void Spell::OnSpellHit(const SpellCastResult& kSpellCastResult) {
   }
 }
 
-void Spell::CombatLogDamage(const bool kIsCrit, const bool kIsGlancing, const double kTotalDamage,
-                            const double kSpellBaseDamage, const double kSpellPower, const double kCritMultiplier,
-                            const double kDamageModifier, const double kPartialResistMultiplier) const {
+void Spell::CombatLogDamage(const bool kIsCrit,
+                            const bool kIsGlancing,
+                            const double kTotalDamage,
+                            const double kSpellBaseDamage,
+                            const double kSpellPower,
+                            const double kCritMultiplier,
+                            const double kDamageModifier,
+                            const double kPartialResistMultiplier) const {
   auto msg = name + " ";
 
   if (kIsCrit) {
@@ -880,12 +918,11 @@ void SeedOfCorruption::Damage(bool, bool) {
                                  : base_damage;
   const int kEnemyAmount   = entity.player->settings.enemy_amount - 1;  // Minus one because the enemy that Seed is
                                                                         // being Cast on doesn't get hit
-  const double kSpellPower    = entity.GetSpellPower(spell_school);
-  auto resist_amount          = 0;
-  auto crit_amount            = 0;
-  auto crit_damage_multiplier = 0.0;
-  auto internal_modifier      = GetDamageModifier();
-  auto external_modifier      = 1.0;
+  const double kSpellPower = entity.GetSpellPower(spell_school);
+  auto resist_amount       = 0;
+  auto crit_amount         = 0;
+  auto internal_modifier   = GetDamageModifier();
+  auto external_modifier   = 1.0;
 
   // Remove debuffs from the modifier since they ignore the AOE cap, so we'll
   // add the debuff % modifiers after the Damage has been calculated.
@@ -940,7 +977,6 @@ void SeedOfCorruption::Damage(bool, bool) {
   }
   // Add Damage from Seed crits
   if (crit_amount > 0) {
-    crit_damage_multiplier            = crit_damage_multiplier;
     const double kIndividualSeedCrit  = individual_seed_damage * crit_damage_multiplier;
     const double kBonusDamageFromCrit = kIndividualSeedCrit - individual_seed_damage;
     total_seed_damage += kBonusDamageFromCrit * crit_amount;
@@ -1270,4 +1306,104 @@ Metamorphosis::Metamorphosis(Player& player, std::shared_ptr<Aura> aura) : Spell
   cooldown = 180;
   on_gcd   = false;
   is_item  = true;
+  Spell::Setup();
+}
+
+GnomishLightningGenerator::GnomishLightningGenerator(Player& player) : Spell(player) {
+  name         = "Gnomish Lightning Generator";
+  cooldown     = 60;
+  on_gcd       = false;  // TODO confirm
+  is_item      = true;
+  min_dmg      = 1530;
+  max_dmg      = 1870;
+  does_damage  = true;
+  can_crit     = true;
+  spell_school = SpellSchool::kNature;
+  Spell::Setup();
+}
+
+FigurineSapphireOwl::FigurineSapphireOwl(Player& player, std::shared_ptr<Aura> aura) : Spell(player, std::move(aura)) {
+  name     = "Figurine - Sapphire Owl";
+  cooldown = 300;
+  on_gcd   = false;  // TODO confirm
+  is_item  = true;
+  Spell::Setup();
+}
+
+DarkmoonCardIllusion::DarkmoonCardIllusion(Player& player) : Spell(player) {
+  name              = "Darkmoon Card: Illusion";
+  cooldown          = 300;
+  mana_gain         = 1500;
+  gain_mana_on_cast = true;
+  on_gcd            = false;
+  is_item           = true;
+  Spell::Setup();
+}
+
+MeteoriteCrystal::MeteoriteCrystal(Player& player, std::shared_ptr<Aura> aura) : Spell(player, std::move(aura)) {
+  name     = "Meteorite Crystal";
+  cooldown = 120;
+  on_gcd   = false;
+  is_item  = true;
+  Spell::Setup();
+}
+
+ReignOfTheUnliving::ReignOfTheUnliving(Player& player) : Spell(player) {
+  name         = "Reign of the Unliving";
+  on_gcd       = false;
+  is_item      = true;
+  min_dmg      = 1741;
+  max_dmg      = 2023;
+  can_crit     = true;
+  spell_school = SpellSchool::kFire;
+  does_damage  = true;
+  Spell::Setup();
+}
+
+ReignOfTheUnlivingHeroic::ReignOfTheUnlivingHeroic(Player& player) : Spell(player) {
+  name         = "Reign of the Unliving";
+  on_gcd       = false;
+  is_item      = true;
+  min_dmg      = 1959;
+  max_dmg      = 2275;
+  can_crit     = true;
+  spell_school = SpellSchool::kFire;
+  does_damage  = true;
+  Spell::Setup();
+}
+
+TalismanOfVolatilePower::TalismanOfVolatilePower(Player& player, std::shared_ptr<Aura> aura)
+    : Spell(player, std::move(aura)) {
+  name     = "Talisman of Volatile Power";
+  on_gcd   = false;
+  is_item  = true;
+  cooldown = 120;
+  Spell::Setup();
+}
+
+NevermeltingIceCrystal::NevermeltingIceCrystal(Player& player, std::shared_ptr<Aura> aura)
+    : Spell(player, std::move(aura)) {
+  name     = "Nevermelting Ice Crystal";
+  cooldown = 180;
+  on_gcd   = false;
+  is_item  = true;
+  Spell::Setup();
+}
+
+SliverOfPureIce::SliverOfPureIce(Player& player) : Spell(player) {
+  name              = "Sliver of Pure Ice";
+  cooldown          = 120;
+  on_gcd            = false;
+  is_item           = true;
+  gain_mana_on_cast = true;
+  mana_gain         = 1625;
+}
+
+SliverOfPureIceHeroic::SliverOfPureIceHeroic(Player& player) : Spell(player) {
+  name              = "Sliver of Pure Ice";
+  cooldown          = 120;
+  on_gcd            = false;
+  is_item           = true;
+  gain_mana_on_cast = true;
+  mana_gain         = 1830;
 }

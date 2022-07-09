@@ -26,6 +26,7 @@
 #include "../include/stat.h"
 #include "../include/talents.h"
 #include "../include/trinket.h"
+#include "../on_cast_proc.h"
 
 Player::Player(PlayerSettings& player_settings)
     : Entity(nullptr, player_settings, EntityType::kPlayer),
@@ -96,15 +97,20 @@ Player::Player(PlayerSettings& player_settings)
 }
 
 void Player::Initialize(Simulation* simulation_ptr) {
-  std::vector equipped_trinket_ids{items.trinket_1, items.trinket_2};
-  std::vector equipped_ring_ids{items.finger_1, items.finger_2};
-
   Entity::Initialize(simulation_ptr);
   player = this;
   pet    = std::make_shared<Pet>(*this, settings.selected_pet);
   pet->Initialize(simulation_ptr);
 
-  for (const auto& kTrinketId : equipped_trinket_ids) {
+  InitializeTrinkets();
+  InitializeAuras();
+  InitializeSpells();
+  SendPlayerInfoToCombatLog();
+}
+
+void Player::InitializeTrinkets() {
+  for (const std::vector kEquippedTrinketIds{items.trinket_1, items.trinket_2};
+       const auto& kTrinketId : kEquippedTrinketIds) {
     if (kTrinketId == ItemId::kSkullOfGuldan) {
       trinkets.push_back(SkullOfGuldan(*this));
     }
@@ -112,9 +118,321 @@ void Player::Initialize(Simulation* simulation_ptr) {
     if (kTrinketId == ItemId::kShiftingNaaruSliver) {
       trinkets.push_back(ShiftingNaaruSliver(*this));
     }
-  }
 
-  // Auras
+    if (kTrinketId == ItemId::kTomeOfArcanePhenomena) {
+      trinkets.push_back(TomeOfArcanePhenomena(*this));
+    }
+
+    if (kTrinketId == ItemId::kPendulumOfTelluricCurrents) {
+      spells.pendulum_of_telluric_currents = std::make_shared<PendulumOfTelluricCurrents>(*this);
+    }
+
+    if (kTrinketId == ItemId::kForgeEmber) {
+      trinkets.push_back(ForgeEmber(*this));
+    }
+
+    if (kTrinketId == ItemId::kJeTzesBell) {
+      auras.jetzes_bell = std::make_shared<JeTzesBellAura>(*this);
+    }
+
+    if (kTrinketId == ItemId::kWingedTalisman) {
+      trinkets.push_back(WingedTalisman(*this));
+    }
+
+    if (kTrinketId == ItemId::kMarkOfTheWarPrisoner) {
+      trinkets.push_back(MarkOfTheWarPrisoner(*this));
+    }
+
+    if (kTrinketId == ItemId::kMendicantsCharm) {
+      trinkets.push_back(MendicantsCharm(*this));
+    }
+
+    if (kTrinketId == ItemId::kInsigniaOfBloodyFire) {
+      trinkets.push_back(InsigniaOfBloodyFire(*this));
+    }
+
+    if (kTrinketId == ItemId::kFuturesightRune) {
+      trinkets.push_back(FuturesightRune(*this));
+    }
+
+    if (kTrinketId == ItemId::kRuneOfFiniteVariation) {
+      trinkets.push_back(RuneOfFiniteVariation(*this));
+    }
+
+    if (kTrinketId == ItemId::kRuneOfInfinitePower) {
+      trinkets.push_back(RuneOfInfinitePower(*this));
+    }
+
+    if (kTrinketId == ItemId::kEmbraceOfTheSpider) {
+      auras.embrace_of_the_spider = std::make_shared<EmbraceOfTheSpiderAura>(*this);
+    }
+
+    if (kTrinketId == ItemId::kSpiritWordGlass) {
+      trinkets.push_back(SpiritWordGlass(*this));
+    }
+
+    if (kTrinketId == ItemId::kBadgeOfTheInfiltrator) {
+      trinkets.push_back(BadgeOfTheInfiltrator(*this));
+    }
+
+    if (kTrinketId == ItemId::kSpiritistsFocus) {
+      trinkets.push_back(SpiritistsFocus(*this));
+    }
+
+    if (kTrinketId == ItemId::kDyingCurse) {
+      auras.dying_curse = std::make_shared<DyingCurseAura>(*this);
+    }
+
+    if (kTrinketId == ItemId::kExtractOfNecromanticPower) {
+      spells.extract_of_necromantic_power = std::make_shared<ExtractOfNecromanticPower>(*this);
+    }
+
+    if (kTrinketId == ItemId::kSoulOfTheDead) {
+      spells.soul_of_the_dead = std::make_shared<SoulOfTheDead>(*this);
+    }
+
+    if (kTrinketId == ItemId::kMajesticDragonFigurine) {
+      auras.majestic_dragon_figurine  = std::make_shared<MajesticDragonFigurineAura>(*this);
+      spells.majestic_dragon_figurine = std::make_shared<MajesticDragonFigurine>(*this, auras.majestic_dragon_figurine);
+    }
+
+    if (kTrinketId == ItemId::kIllustrationOfTheDragonSoul) {
+      auras.illustration_of_the_dragon_soul = std::make_shared<IllustrationOfTheDragonSoulAura>(*this);
+      spells.illustration_of_the_dragon_soul =
+          std::make_shared<IllustrationOfTheDragonSoul>(*this, auras.illustration_of_the_dragon_soul);
+    }
+
+    if (kTrinketId == ItemId::kSundialOfTheExiled) {
+      auras.sundial_of_the_exiled  = std::make_shared<SundialOfTheExiledAura>(*this);
+      spells.sundial_of_the_exiled = std::make_shared<SundialOfTheExiled>(*this, auras.sundial_of_the_exiled);
+    }
+
+    if (kTrinketId == ItemId::kGnomishLightningGenerator) {
+      spells.gnomish_lightning_generator = std::make_shared<GnomishLightningGenerator>(*this);
+    }
+
+    if (kTrinketId == ItemId::kFigurineTwilightSerpent) {
+      trinkets.push_back(FigurineTwilightSerpent(*this));
+    }
+
+    if (kTrinketId == ItemId::kFigurineSapphireOwl) {
+      auras.figurine_sapphire_owl  = std::make_shared<FigurineSapphireOwlAura>(*this);
+      spells.figurine_sapphire_owl = std::make_shared<FigurineSapphireOwl>(*this, auras.figurine_sapphire_owl);
+    }
+
+    if (kTrinketId == ItemId::kDarkmoonCardIllusion) {
+      spells.darkmoon_card_illusion = std::make_shared<DarkmoonCardIllusion>(*this);
+    }
+
+    if (kTrinketId == ItemId::kDarkmoonCardBerserker) {
+      auras.darkmoon_card_berserker  = std::make_shared<DarkmoonCardBerserkerAura>(*this);
+      spells.darkmoon_card_berserker = std::make_shared<DarkmoonCardBerserker>(*this, auras.darkmoon_card_berserker);
+    }
+
+    if (kTrinketId == ItemId::kDarkmoonCardDeath) {
+      spells.darkmoon_card_death = std::make_shared<DarkmoonCardDeath>(*this);
+    }
+
+    if (kTrinketId == ItemId::kThornyRoseBrooch) {
+      trinkets.push_back(ThornyRoseBrooch(*this));
+    }
+
+    if (kTrinketId == ItemId::kSoftlyGlowingOrb) {
+      trinkets.push_back(SoftlyGlowingOrb(*this));
+    }
+
+    if (kTrinketId == ItemId::kDarkmoonCardGreatnessIntellect || kTrinketId == ItemId::kDarkmoonCardGreatnessSpirit) {
+      auras.darkmoon_card_greatness  = std::make_shared<DarkmoonCardGreatnessAura>(*this);
+      spells.darkmoon_card_greatness = std::make_shared<DarkmoonCardGreatness>(*this, auras.darkmoon_card_greatness);
+    }
+
+    if (kTrinketId == ItemId::kMercurialAlchemistsStone) {
+      alchemists_stone_effect_active = true;
+    }
+
+    if (kTrinketId == ItemId::kFlowOfKnowledge) {
+      auras.flow_of_knowledge  = std::make_shared<FlowOfKnowledgeAura>(*this);
+      spells.flow_of_knowledge = std::make_shared<FlowOfKnowledge>(*this, auras.flow_of_knowledge);
+    }
+
+    if (kTrinketId == ItemId::kJoustersFuryAlliance || kTrinketId == ItemId::kJoustersFuryHorde) {
+      auras.jousters_fury  = std::make_shared<JoustersFuryAura>(*this);
+      spells.jousters_fury = std::make_shared<JoustersFury>(*this, auras.jousters_fury);
+    }
+
+    if (kTrinketId == ItemId::kLivingFlame) {
+      trinkets.push_back(LivingFlame(*this));
+    }
+
+    if (kTrinketId == ItemId::kEnergySiphon) {
+      trinkets.push_back(EnergySiphon(*this));
+    }
+
+    if (kTrinketId == ItemId::kEyeOfTheBroodmother) {
+      auras.eye_of_the_broodmother  = std::make_shared<EyeOfTheBroodmotherAura>(*this);
+      spells.eye_of_the_broodmother = std::make_shared<EyeOfTheBroodmother>(*this, auras.eye_of_the_broodmother);
+    }
+
+    if (kTrinketId == ItemId::kScaleOfFates) {
+      trinkets.push_back(ScaleOfFates(*this));
+    }
+
+    if (kTrinketId == ItemId::kPandorasPlea) {
+      auras.pandoras_plea  = std::make_shared<PandorasPleaAura>(*this);
+      spells.pandoras_plea = std::make_shared<PandorasPlea>(*this, auras.pandoras_plea);
+    }
+
+    if (kTrinketId == ItemId::kFlareOfTheHeavens) {
+      auras.flare_of_the_heavens  = std::make_shared<FlareOfTheHeavensAura>(*this);
+      spells.flare_of_the_heavens = std::make_shared<FlareOfTheHeavens>(*this, auras.flare_of_the_heavens);
+    }
+
+    if (kTrinketId == ItemId::kShowOfFaith) {
+      auras.show_of_faith  = std::make_shared<ShowOfFaithAura>(*this);
+      spells.show_of_faith = std::make_shared<ShowOfFaith>(*this, auras.show_of_faith);
+    }
+
+    if (kTrinketId == ItemId::kElementalFocusStone) {
+      auras.elemental_focus_stone  = std::make_shared<ElementalFocusStoneAura>(*this);
+      spells.elemental_focus_stone = std::make_shared<ElementalFocusStone>(*this, auras.elemental_focus_stone);
+    }
+
+    if (kTrinketId == ItemId::kSifsRemembrance) {
+      auras.sifs_remembrance  = std::make_shared<SifsRemembranceAura>(*this);
+      spells.sifs_remembrance = std::make_shared<SifsRemembrance>(*this, auras.sifs_remembrance);
+    }
+
+    if (kTrinketId == ItemId::kMeteoriteCrystal) {
+      auras.meteoric_inspiration = std::make_shared<MeteoricInspirationAura>(*this);
+      auras.meteorite_crystal    = std::make_shared<MeteoriteCrystalAura>(*this);
+      spells.meteorite_crystal   = std::make_shared<MeteoriteCrystal>(*this, auras.meteorite_crystal);
+    }
+
+    if (kTrinketId == ItemId::kPlatinumDisksOfSorcery) {
+      trinkets.push_back(PlatinumDisksOfSorcery(*this));
+    }
+
+    if (kTrinketId == ItemId::kPlatinumDisksOfSwiftness) {
+      trinkets.push_back(PlatinumDisksOfSwiftness(*this));
+    }
+
+    if (kTrinketId == ItemId::kSolaceOfTheDefeated || kTrinketId == ItemId::kSolaceOfTheFallen) {
+      auras.solace_of_the_defeated  = std::make_shared<SolaceOfTheDefeatedAura>(*this);
+      spells.solace_of_the_defeated = std::make_shared<SolaceOfTheDefeated>(*this, auras.solace_of_the_defeated);
+    }
+
+    if (kTrinketId == ItemId::kSolaceOfTheDefeatedHeroic || kTrinketId == ItemId::kSolaceOfTheFallenHeroic) {
+      auras.solace_of_the_defeated  = std::make_shared<SolaceOfTheDefeatedHeroicAura>(*this);
+      spells.solace_of_the_defeated = std::make_shared<SolaceOfTheDefeated>(*this, auras.solace_of_the_defeated);
+    }
+
+    if (kTrinketId == ItemId::kReignOfTheUnliving || kTrinketId == ItemId::kReignOfTheDead) {
+      spells.reign_of_the_unliving = std::make_shared<ReignOfTheUnliving>(*this);
+      auras.mote_of_flame          = std::make_shared<MoteOfFlameAura>(*this, spells.reign_of_the_unliving);
+      spells.mote_of_flame         = std::make_shared<MoteOfFlame>(*this, auras.mote_of_flame);
+    }
+
+    if (kTrinketId == ItemId::kReignOfTheUnlivingHeroic || kTrinketId == ItemId::kReignOfTheDeadHeroic) {
+      spells.reign_of_the_unliving = std::make_shared<ReignOfTheUnlivingHeroic>(*this);
+      auras.mote_of_flame          = std::make_shared<MoteOfFlameAura>(*this, spells.reign_of_the_unliving);
+      spells.mote_of_flame         = std::make_shared<MoteOfFlame>(*this, auras.mote_of_flame);
+    }
+
+    if (kTrinketId == ItemId::kAbyssalRune) {
+      auras.abyssal_rune  = std::make_shared<AbyssalRuneAura>(*this);
+      spells.abyssal_rune = std::make_shared<AbyssalRune>(*this, auras.abyssal_rune);
+    }
+
+    if (kTrinketId == ItemId::kTalismanOfVolatilePower || kTrinketId == ItemId::kFetishOfVolatilePower) {
+      auras.talisman_of_volatile_power = std::make_shared<TalismanOfVolatilePowerAura>(*this);
+      spells.talisman_of_volatile_power =
+          std::make_shared<TalismanOfVolatilePower>(*this, auras.talisman_of_volatile_power);
+      auras.volatile_power  = std::make_shared<VolatilePowerAura>(*this);
+      spells.volatile_power = std::make_shared<VolatilePower>(*this, auras.volatile_power);
+    }
+
+    if (kTrinketId == ItemId::kTalismanOfVolatilePowerHeroic || kTrinketId == ItemId::kFetishOfVolatilePowerHeroic) {
+      auras.talisman_of_volatile_power = std::make_shared<TalismanOfVolatilePowerAura>(*this);
+      spells.talisman_of_volatile_power =
+          std::make_shared<TalismanOfVolatilePower>(*this, auras.talisman_of_volatile_power);
+      auras.volatile_power  = std::make_shared<VolatilePowerHeroicAura>(*this);
+      spells.volatile_power = std::make_shared<VolatilePower>(*this, auras.volatile_power);
+    }
+
+    if (kTrinketId == ItemId::kShardOfTheCrystalHeart) {
+      trinkets.push_back(ShardOfTheCrystalHeart(*this));
+    }
+
+    if (kTrinketId == ItemId::kTalismanOfResurgence) {
+      trinkets.push_back(TalismanOfResurgence(*this));
+    }
+
+    if (kTrinketId == ItemId::kMithrilPocketwatch) {
+      auras.mithril_pocketwatch  = std::make_shared<MithrilPocketwatchAura>(*this);
+      spells.mithril_pocketwatch = std::make_shared<MithrilPocketwatch>(*this, auras.mithril_pocketwatch);
+    }
+
+    if (kTrinketId == ItemId::kNevermeltingIceCrystal) {
+      auras.nevermelting_ice_crystal  = std::make_shared<NevermeltingIceCrystalAura>(*this);
+      spells.nevermelting_ice_crystal = std::make_shared<NevermeltingIceCrystal>(*this, auras.nevermelting_ice_crystal);
+    }
+
+    if (kTrinketId == ItemId::kEphemeralSnowflake) {
+      trinkets.push_back(EphemeralSnowflake(*this));
+    }
+
+    if (kTrinketId == ItemId::kSliverOfPureIce) {
+      spells.sliver_of_pure_ice = std::make_shared<SliverOfPureIce>(*this);
+    }
+
+    if (kTrinketId == ItemId::kSliverOfPureIceHeroic) {
+      spells.sliver_of_pure_ice = std::make_shared<SliverOfPureIceHeroic>(*this);
+    }
+
+    if (kTrinketId == ItemId::kDislodgedForeignObject) {
+      auras.dislodged_foreign_object  = std::make_shared<DislodgedForeignObjectAura>(*this, false);
+      spells.dislodged_foreign_object = std::make_shared<DislodgedForeignObject>(*this, auras.dislodged_foreign_object);
+    }
+
+    if (kTrinketId == ItemId::kDislodgedForeignObjectHeroic) {
+      auras.dislodged_foreign_object  = std::make_shared<DislodgedForeignObjectAura>(*this, true);
+      spells.dislodged_foreign_object = std::make_shared<DislodgedForeignObject>(*this, auras.dislodged_foreign_object);
+    }
+
+    if (kTrinketId == ItemId::kMaghiasMisguidedQuill) {
+      trinkets.push_back(MaghiasMisguidedQuill(*this));
+    }
+
+    if (kTrinketId == ItemId::kPurifiedLunarDust) {
+      auras.purified_lunar_dust  = std::make_shared<PurifiedLunarDustAura>(*this);
+      spells.purified_lunar_dust = std::make_shared<PurifiedLunarDust>(*this, auras.purified_lunar_dust);
+    }
+
+    if (kTrinketId == ItemId::kPhylacteryOfTheNamelessLich) {
+      auras.phylactery_of_the_nameless_lich = std::make_shared<PhylacteryOfTheNamelessLichAura>(*this);
+      spells.phylactery_of_the_nameless_lich =
+          std::make_shared<PhylacteryOfTheNamelessLich>(*this, auras.phylactery_of_the_nameless_lich);
+    }
+
+    if (kTrinketId == ItemId::kPhylacteryOfTheNamelessLichHeroic) {
+      auras.phylactery_of_the_nameless_lich = std::make_shared<PhylacteryOfTheNamelessLichHeroicAura>(*this);
+      spells.phylactery_of_the_nameless_lich =
+          std::make_shared<PhylacteryOfTheNamelessLich>(*this, auras.phylactery_of_the_nameless_lich);
+    }
+
+    if (kTrinketId == ItemId::kCharredTwilightScale) {
+      auras.charred_twilight_scale  = std::make_shared<CharredTwilightScaleAura>(*this);
+      spells.charred_twilight_scale = std::make_shared<CharredTwilightScale>(*this, auras.charred_twilight_scale);
+    }
+
+    if (kTrinketId == ItemId::kCharredTwilightScaleHeroic) {
+      auras.charred_twilight_scale  = std::make_shared<CharredTwilightScaleHeroicAura>(*this);
+      spells.charred_twilight_scale = std::make_shared<CharredTwilightScale>(*this, auras.charred_twilight_scale);
+    }
+  }
+}
+
+void Player::InitializeAuras() {
   if (settings.fight_type == EmbindConstant::kSingleTarget) {
     if (talents.improved_shadow_bolt > 0) {
       auras.shadow_mastery = std::make_shared<ShadowMasteryAura>(*this);
@@ -217,13 +535,9 @@ void Player::Initialize(Simulation* simulation_ptr) {
   if (settings.race == EmbindConstant::kOrc) {
     auras.blood_fury = std::make_shared<BloodFuryAura>(*this);
   }
+}
 
-  if (std::find(equipped_trinket_ids.begin(), equipped_trinket_ids.end(), ItemId::kTheLightningCapacitor) !=
-      equipped_trinket_ids.end()) {
-    auras.the_lightning_capacitor = std::make_shared<TheLightningCapacitorAura>(*this);
-  }
-
-  // Spells
+void Player::InitializeSpells() {
   spells.life_tap = std::make_shared<LifeTap>(*this);
 
   if (settings.fight_type == EmbindConstant::kAoe) {
@@ -355,6 +669,18 @@ void Player::Initialize(Simulation* simulation_ptr) {
     }
   }
 
+  if (auras.jetzes_bell != nullptr) {
+    spells.jetzes_bell = std::make_shared<JeTzesBell>(*this, auras.jetzes_bell);
+  }
+
+  if (auras.embrace_of_the_spider != nullptr) {
+    spells.embrace_of_the_spider = std::make_shared<EmbraceOfTheSpider>(*this, auras.embrace_of_the_spider);
+  }
+
+  if (auras.dying_curse != nullptr) {
+    spells.dying_curse = std::make_shared<DyingCurse>(*this, auras.dying_curse);
+  }
+
   // Set the filler property
   if (settings.has_incinerate) {
     filler = spells.incinerate;
@@ -373,8 +699,6 @@ void Player::Initialize(Simulation* simulation_ptr) {
   } else if (spells.curse_of_agony != nullptr) {
     curse_spell = spells.curse_of_agony;
   }
-
-  SendPlayerInfoToCombatLog();
 }
 
 void Player::Reset() {
@@ -383,7 +707,9 @@ void Player::Reset() {
   iteration_damage      = 0;
   power_infusions_ready = settings.power_infusion_amount;
 
-  for (auto& trinket : trinkets) { trinket.Reset(); }
+  for (auto& trinket : trinkets) {
+    trinket.Reset();
+  }
 }
 
 void Player::EndAuras() {
@@ -534,7 +860,9 @@ void Player::ThrowError(const std::string& kError) const {
 }
 
 void Player::SendCombatLogEntries() const {
-  for (const auto& kValue : combat_log_entries) { CombatLogUpdate(kValue.c_str()); }
+  for (const auto& kValue : combat_log_entries) {
+    CombatLogUpdate(kValue.c_str());
+  }
 }
 
 // TODO improve
@@ -594,7 +922,9 @@ double Player::FindTimeUntilNextAction() {
 void Player::Tick(const double kTime) {
   Entity::Tick(kTime);
 
-  for (auto& trinket : trinkets) { trinket.Tick(kTime); }
+  for (auto& trinket : trinkets) {
+    trinket.Tick(kTime);
+  }
 
   if (mp5_timer_remaining <= 0) {
     mp5_timer_remaining = 5;

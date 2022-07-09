@@ -528,7 +528,7 @@ export default function ItemSelection() {
           ))}
         </TableBody>
       </Table>
-      {enchants?.length && items?.length && (
+      {enchants && enchants.length > 0 && items && items.length > 0 && (
         <Table id='enchant-selection-table' data-type='mainhand'>
           <TableHead>
             <TableRow id='enchant-selection-header'>

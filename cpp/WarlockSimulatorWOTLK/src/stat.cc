@@ -146,3 +146,14 @@ ManaPer5::ManaPer5(Entity& entity_param, const double kValue) : Stat(entity_para
   name             = StatName::kMp5;
   calculation_type = CalculationType::kAdditive;
 }
+
+Spirit::Spirit(Entity& entity_param, const double kValue) : Stat(entity_param, entity_param.stats.spirit, kValue) {
+  name             = StatName::kSpirit;
+  calculation_type = CalculationType::kAdditive;
+}
+
+Intellect::Intellect(Entity& entity_param, const double kValue)
+    : Stat(entity_param, entity_param.stats.intellect, kValue) {
+  name             = "Intellect";
+  calculation_type = CalculationType::kAdditive;
+}

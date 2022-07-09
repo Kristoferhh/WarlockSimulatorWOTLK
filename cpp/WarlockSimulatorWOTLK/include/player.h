@@ -32,9 +32,13 @@ struct Player final : Entity {
   double total_fight_duration;
   double iteration_damage;
   int power_infusions_ready;
+  bool alchemists_stone_effect_active = false;
 
   explicit Player(PlayerSettings& player_settings);
   void Initialize(Simulation* simulation_ptr) override;
+  void InitializeTrinkets();
+  void InitializeAuras();
+  void InitializeSpells();
   void Reset() override;
   void EndAuras() override;
   void ThrowError(const std::string& kError) const;

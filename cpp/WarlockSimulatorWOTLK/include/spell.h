@@ -67,8 +67,13 @@ struct Spell {
   bool on_damage_procs_enabled       = true;
   bool procs_on_resist               = false;
   bool on_resist_procs_enabled       = true;
+  bool procs_on_cast                 = false;
+  bool on_cast_procs_enabled         = true;
+  bool is_harmful                    = false;  // TODO set this for harmful spells
+  bool is_damaging_spell             = false;  // TODO set this for damaging spells (Illustration of the Dragon Soul)
 
-  explicit Spell(Entity& entity_param, std::shared_ptr<Aura> aura = nullptr,
+  explicit Spell(Entity& entity_param,
+                 std::shared_ptr<Aura> aura          = nullptr,
                  std::shared_ptr<DamageOverTime> dot = nullptr);
   virtual void Setup();
   virtual void Cast();
@@ -82,6 +87,7 @@ struct Spell {
   void OnResistProcs();
   void OnDamageProcs();
   void OnHitProcs();
+  void OnCastProcs();
   void Tick(double kTime);
   double PredictDamage();
   [[nodiscard]] bool HasEnoughMana() const;
@@ -102,8 +108,14 @@ struct Spell {
   SpellCastResult MagicSpellCast();
   [[nodiscard]] SpellCastResult PhysicalSpellCast() const;
   void OnSpellHit(const SpellCastResult& kSpellCastResult);
-  void CombatLogDamage(bool kIsCrit, bool kIsGlancing, double kTotalDamage, double kSpellBaseDamage, double kSpellPower,
-                       double kCritMultiplier, double kDamageModifier, double kPartialResistMultiplier) const;
+  void CombatLogDamage(bool kIsCrit,
+                       bool kIsGlancing,
+                       double kTotalDamage,
+                       double kSpellBaseDamage,
+                       double kSpellPower,
+                       double kCritMultiplier,
+                       double kDamageModifier,
+                       double kPartialResistMultiplier) const;
   void ManaGainOnCast() const;
 };
 
@@ -238,4 +250,44 @@ struct DemonicEmpowerment final : Spell {
 
 struct Metamorphosis final : Spell {
   explicit Metamorphosis(Player& player, std::shared_ptr<Aura> aura);
+};
+
+struct GnomishLightningGenerator final : Spell {
+  explicit GnomishLightningGenerator(Player& player);
+};
+
+struct FigurineSapphireOwl final : Spell {
+  explicit FigurineSapphireOwl(Player& player, std::shared_ptr<Aura> aura);
+};
+
+struct DarkmoonCardIllusion final : Spell {
+  explicit DarkmoonCardIllusion(Player& player);
+};
+
+struct MeteoriteCrystal final : Spell {
+  explicit MeteoriteCrystal(Player& player, std::shared_ptr<Aura> aura);
+};
+
+struct ReignOfTheUnliving final : Spell {
+  explicit ReignOfTheUnliving(Player& player);
+};
+
+struct ReignOfTheUnlivingHeroic final : Spell {
+  explicit ReignOfTheUnlivingHeroic(Player& player);
+};
+
+struct TalismanOfVolatilePower final : Spell {
+  explicit TalismanOfVolatilePower(Player& player, std::shared_ptr<Aura> aura);
+};
+
+struct NevermeltingIceCrystal final : Spell {
+  explicit NevermeltingIceCrystal(Player& player, std::shared_ptr<Aura> aura);
+};
+
+struct SliverOfPureIce final : Spell {
+  explicit SliverOfPureIce(Player& player);
+};
+
+struct SliverOfPureIceHeroic final : Spell {
+  explicit SliverOfPureIceHeroic(Player& player);
 };

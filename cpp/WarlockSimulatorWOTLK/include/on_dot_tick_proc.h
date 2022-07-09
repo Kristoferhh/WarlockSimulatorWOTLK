@@ -8,3 +8,11 @@ struct OnDotTickProc : SpellProc {
   void Setup() override;
   virtual bool ShouldProc(DamageOverTime* spell);
 };
+
+struct ExtractOfNecromanticPower : OnDotTickProc {
+  explicit ExtractOfNecromanticPower(Player& player);
+};
+
+struct PhylacteryOfTheNamelessLich : OnDotTickProc {
+  explicit PhylacteryOfTheNamelessLich(Player& player, std::shared_ptr<Aura> kAura);
+};

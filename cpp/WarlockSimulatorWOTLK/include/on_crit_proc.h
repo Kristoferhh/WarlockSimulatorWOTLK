@@ -19,3 +19,11 @@ struct Pyroclasm final : OnCritProc {
 struct EmpoweredImp final : OnCritProc {
   explicit EmpoweredImp(Pet& pet, std::shared_ptr<Aura> aura);
 };
+
+struct SoulOfTheDead final : OnCritProc {
+  explicit SoulOfTheDead(Player& player);
+};
+
+struct MoteOfFlame final : OnCritProc {
+  explicit MoteOfFlame(Player& player, std::shared_ptr<Aura> aura);
+};

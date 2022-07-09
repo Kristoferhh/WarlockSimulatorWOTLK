@@ -4,6 +4,8 @@
 struct Player;
 
 struct ManaPotion : Spell {
+  bool benefits_from_alchemists_stone = true;
+
   explicit ManaPotion(Player& player);
   void Cast() override;
 };

@@ -14,6 +14,12 @@ ManaPotion::ManaPotion(Player& player) : Spell(player) {
   on_gcd                    = false;
   limited_amount_of_casts   = true;
   amount_of_casts_per_fight = 1;
+
+  if (benefits_from_alchemists_stone && player.alchemists_stone_effect_active) {
+    min_mana_gain = static_cast<int>(min_mana_gain * 1.4);
+    max_mana_gain = static_cast<int>(max_mana_gain * 1.4);
+    mana_gain *= 1.4;
+  }
 }
 
 void ManaPotion::Cast() {
@@ -45,9 +51,10 @@ RunicManaPotion::RunicManaPotion(Player& player) : ManaPotion(player) {
 }
 
 DemonicRune::DemonicRune(Player& player) : ManaPotion(player) {
-  name          = SpellName::kDemonicRune;
-  min_mana_gain = 900;
-  max_mana_gain = 1500;
-  cooldown      = 900;
+  name                           = SpellName::kDemonicRune;
+  min_mana_gain                  = 900;
+  max_mana_gain                  = 1500;
+  cooldown                       = 900;
+  benefits_from_alchemists_stone = false;
   Spell::Setup();
 }

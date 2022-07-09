@@ -20,7 +20,7 @@ Entity::Entity(Player* player, PlayerSettings& player_settings, const EntityType
     : player(player),
       settings(player_settings),
       stats(kEntityType == EntityType::kPlayer ? player_settings.stats : CharacterStats()),
-      entity_type(kEntityType),
+      type(kEntityType),
       recording_combat_log_breakdown(player_settings.recording_combat_log_breakdown &&
                                      player_settings.equipped_item_simulation),
       equipped_item_simulation(player_settings.equipped_item_simulation),
@@ -92,7 +92,8 @@ Entity::Entity(Player* player, PlayerSettings& player_settings, const EntityType
 }
 
 void Entity::PostIterationDamageAndMana(const std::string& kSpellName) const {
-  PostCombatLogBreakdownVector(kSpellName.c_str(), combat_log_breakdown.at(kSpellName)->iteration_mana_gain,
+  PostCombatLogBreakdownVector(kSpellName.c_str(),
+                               combat_log_breakdown.at(kSpellName)->iteration_mana_gain,
                                combat_log_breakdown.at(kSpellName)->iteration_damage);
   combat_log_breakdown.at(kSpellName)->iteration_damage    = 0;
   combat_log_breakdown.at(kSpellName)->iteration_mana_gain = 0;
@@ -112,7 +113,9 @@ void Entity::Reset() {
   mp5_timer_remaining              = 5;
   five_second_rule_timer_remaining = 5;
 
-  for (const auto& kSpell : spell_list) { kSpell->Reset(); }
+  for (const auto& kSpell : spell_list) {
+    kSpell->Reset();
+  }
 }
 
 void Entity::Initialize(Simulation* simulation_ptr) {
@@ -125,8 +128,14 @@ void Entity::SendCombatLogBreakdown() const {
       PostIterationDamageAndMana(kSpellName);
     }
 
-    PostCombatLogBreakdown(kSpell->name.c_str(), kSpell->casts, kSpell->crits, kSpell->misses, kSpell->count,
-                           kSpell->uptime_in_seconds, kSpell->dodge, kSpell->glancing_blows);
+    PostCombatLogBreakdown(kSpell->name.c_str(),
+                           kSpell->casts,
+                           kSpell->crits,
+                           kSpell->misses,
+                           kSpell->count,
+                           kSpell->uptime_in_seconds,
+                           kSpell->dodge,
+                           kSpell->glancing_blows);
   }
 }
 

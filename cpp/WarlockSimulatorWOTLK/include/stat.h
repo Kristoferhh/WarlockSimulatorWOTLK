@@ -78,3 +78,11 @@ struct FireModifier : Stat {
 struct ManaPer5 : Stat {
   ManaPer5(Entity& entity_param, double kValue);
 };
+
+struct Spirit : Stat {
+  Spirit(Entity& entity_param, double kValue);
+};
+
+struct Intellect : Stat {
+  Intellect(Entity& entity_param, double kValue);
+};
