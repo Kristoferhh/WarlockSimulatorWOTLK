@@ -5,7 +5,7 @@ import {
   ItemSlot,
   Quality,
   SocketColor,
-  Stat
+  Stat,
 } from '../Types'
 
 export const Items: Item[] = [
