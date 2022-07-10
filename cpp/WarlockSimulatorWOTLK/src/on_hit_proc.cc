@@ -42,6 +42,10 @@ ImprovedShadowBolt::ImprovedShadowBolt(Player& player, std::shared_ptr<Aura> aur
   OnHitProc::Setup();
 }
 
+bool ImprovedShadowBolt::ShouldProc(Spell* spell) {
+  return spell->name == WarlockSimulatorConstants::kShadowBolt;
+}
+
 SoulLeech::SoulLeech(Player& player, std::shared_ptr<Aura> aura) : OnHitProc(player, std::move(aura)) {
   name        = WarlockSimulatorConstants::kSoulLeech;
   proc_chance = 10 * player.talents.soul_leech;

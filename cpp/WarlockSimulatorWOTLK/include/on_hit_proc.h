@@ -16,6 +16,7 @@ struct DemonicFrenzy final : OnHitProc {
 
 struct ImprovedShadowBolt final : OnHitProc {
   explicit ImprovedShadowBolt(Player& player, std::shared_ptr<Aura> aura);
+  bool ShouldProc(Spell* spell) override;
 };
 
 struct SoulLeech final : OnHitProc {
