@@ -69,8 +69,8 @@ struct Spell {
   bool on_resist_procs_enabled       = true;
   bool procs_on_cast                 = false;
   bool on_cast_procs_enabled         = true;
-  bool is_harmful                    = false;  // TODO set this for harmful spells
-  bool is_damaging_spell             = false;  // TODO set this for damaging spells (Illustration of the Dragon Soul)
+  bool is_harmful                    = false;
+  bool is_damaging_spell             = false;
 
   explicit Spell(Entity& entity, std::shared_ptr<Aura> aura = nullptr, std::shared_ptr<DamageOverTime> dot = nullptr);
   virtual void Setup();

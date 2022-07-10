@@ -19,7 +19,7 @@ struct Aura {
   double duration_remaining    = 0;
   bool is_active               = false;
   bool has_duration            = true;
-  bool applies_with_max_stacks = true;
+  bool applies_with_max_stacks = false;
   bool group_wide              = false;  // true if it's an aura that applies to everyone in the group
   // (will apply to pets as well then)
   // dots
@@ -40,7 +40,7 @@ struct Aura {
   virtual void Apply();
   virtual void Fade();
   virtual void DecrementStacks();
-  void IncrementStacks();
+  void IncrementStacks(int kStackAmount = 1);
 };
 
 struct CurseOfTheElementsAura final : Aura {

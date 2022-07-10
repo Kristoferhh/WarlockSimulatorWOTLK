@@ -14,7 +14,7 @@ struct Spell;
 
 struct TestBase {
   static Player SetUpPlayer(std::shared_ptr<PlayerSettings> player_settings = nullptr);
-  static Simulation SetUpSimulation(std::shared_ptr<Player> player,
+  static Simulation SetUpSimulation(std::shared_ptr<Player> kPlayer,
                                     std::shared_ptr<SimulationSettings> simulation_settings = nullptr);
   static PlayerSettings GetDefaultPlayerSettings(std::shared_ptr<AuraSelection> auras  = nullptr,
                                                  std::shared_ptr<Talents> talents      = nullptr,

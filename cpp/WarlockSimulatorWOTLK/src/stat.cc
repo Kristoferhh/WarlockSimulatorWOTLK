@@ -7,8 +7,8 @@
 Stat::Stat(Entity& entity, double& character_stat, const double kValue)
     : entity(entity), character_stat(character_stat), value(kValue) {}
 
-void Stat::AddStat() const {
-  ModifyStat("add");
+void Stat::AddStat(const int kStackAmount) const {
+  ModifyStat("add", kStackAmount);
 }
 
 void Stat::RemoveStat(const int kStacks) const {

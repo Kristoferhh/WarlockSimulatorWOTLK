@@ -116,7 +116,7 @@ TEST_F(PlayerTest, UseCooldowns) {
   ASSERT_NE(_player->spells.flame_cap, nullptr);
   ASSERT_NE(_player->spells.blood_fury, nullptr);
 
-  _player->UseCooldowns(200);
+  _player->UseCooldowns();
   EXPECT_TRUE(_player->auras.flame_cap->is_active);
   EXPECT_EQ(_player->spells.flame_cap->cooldown_remaining, 180);
   EXPECT_TRUE(_player->auras.blood_fury->is_active);
@@ -126,20 +126,21 @@ TEST_F(PlayerTest, UseCooldowns) {
 TEST_F(PlayerTest, UseCooldowns_PI) {
   ASSERT_NE(_player->auras.power_infusion, nullptr);
 
-  _player->UseCooldowns(60);
+  _player->UseCooldowns();
   EXPECT_TRUE(_player->auras.power_infusion->is_active);
-  EXPECT_TRUE(std::count_if(_player->spells.power_infusion.begin(), _player->spells.power_infusion.end(),
+  EXPECT_TRUE(std::count_if(_player->spells.power_infusion.begin(),
+                            _player->spells.power_infusion.end(),
                             [](const std::shared_ptr<Spell>& kPowerInfusion) {
                               return kPowerInfusion->cooldown_remaining > 0;
                             }) == 1);
 }
 
-TEST_F(PlayerTest, UseCooldowns_PI_Bloodlustis_active) {
+TEST_F(PlayerTest, UseCooldowns_PI_BloodlustIsActive) {
   ASSERT_NE(_player->auras.power_infusion, nullptr);
   ASSERT_NE(_player->auras.bloodlust, nullptr);
   _player->auras.bloodlust->Apply();
 
-  _player->UseCooldowns(60);
+  _player->UseCooldowns();
   EXPECT_FALSE(_player->auras.power_infusion->is_active);
 }
 
@@ -147,10 +148,11 @@ TEST_F(PlayerTest, UseCooldowns_Innervate) {
   ASSERT_NE(_player->auras.innervate, nullptr);
   _player->stats.mana = 0;
 
-  _player->UseCooldowns(180);
+  _player->UseCooldowns();
   EXPECT_TRUE(_player->auras.innervate->is_active);
   EXPECT_TRUE(
-      std::count_if(_player->spells.innervate.begin(), _player->spells.innervate.end(),
+      std::count_if(_player->spells.innervate.begin(),
+                    _player->spells.innervate.end(),
                     [](const std::shared_ptr<Spell>& kInnervate) { return kInnervate->cooldown_remaining > 0; }) == 1);
 }
 
@@ -158,7 +160,7 @@ TEST_F(PlayerTest, UseCooldowns_Innervate_TooHighMana) {
   ASSERT_NE(_player->auras.innervate, nullptr);
   ASSERT_TRUE(_player->stats.mana / _player->stats.max_mana > 0.5);
 
-  _player->UseCooldowns(180);
+  _player->UseCooldowns();
   EXPECT_FALSE(_player->auras.innervate->is_active);
 }
 
@@ -167,13 +169,13 @@ TEST_F(PlayerTest, UseCooldowns_Trinket) {
   _player->trinkets.push_back(ShiftingNaaruSliver(*_player));
   ASSERT_EQ(_player->trinkets.size(), 2);
 
-  _player->UseCooldowns(200);
+  _player->UseCooldowns();
   EXPECT_TRUE(_player->trinkets.at(0).is_active);
   EXPECT_EQ(_player->trinkets.at(1).cooldown_remaining, _player->trinkets.at(0).duration);
 
   _player->trinkets.at(0).Reset();
   _player->trinkets.at(1).cooldown_remaining = 5000;
-  _player->UseCooldowns(200);
+  _player->UseCooldowns();
   EXPECT_TRUE(_player->trinkets.at(0).is_active);
   EXPECT_EQ(_player->trinkets.at(1).cooldown_remaining, 5000);
 }
@@ -185,14 +187,14 @@ TEST_F(PlayerTest, UseCooldowns_Trinket_DoesNotShareCooldown) {
   ASSERT_EQ(_player->trinkets.size(), 2);
   ASSERT_TRUE(_player->trinkets.at(1).shares_cooldown);
 
-  _player->UseCooldowns(200);
+  _player->UseCooldowns();
   EXPECT_TRUE(_player->trinkets.at(0).is_active);
   EXPECT_TRUE(_player->trinkets.at(1).is_active);
 
   _player->trinkets.at(0).Reset();
   _player->trinkets.at(0).shares_cooldown = true;
   _player->trinkets.at(1).shares_cooldown = false;
-  _player->UseCooldowns(200);
+  _player->UseCooldowns();
   EXPECT_TRUE(_player->trinkets.at(0).is_active);
   EXPECT_TRUE(_player->trinkets.at(1).is_active);
 }
@@ -277,11 +279,15 @@ TEST_F(PlayerTest, Tick_Trinkets) {
   _player->trinkets.push_back(SkullOfGuldan(*_player));
   _player->trinkets.push_back(ShiftingNaaruSliver(*_player));
 
-  for (auto& trinket : _player->trinkets) { trinket.cooldown_remaining = 50; }
+  for (auto& trinket : _player->trinkets) {
+    trinket.cooldown_remaining = 50;
+  }
 
   _player->Tick(20);
 
-  for (const auto& kTrinket : _player->trinkets) { EXPECT_EQ(kTrinket.cooldown_remaining, 30); }
+  for (const auto& kTrinket : _player->trinkets) {
+    EXPECT_EQ(kTrinket.cooldown_remaining, 30);
+  }
 }
 
 TEST_F(PlayerTest, Tick_MP5) {

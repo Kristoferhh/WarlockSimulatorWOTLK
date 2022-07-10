@@ -53,7 +53,7 @@ void Aura::Apply() {
 
   if (stacks < max_stacks) {
     if (applies_with_max_stacks) {
-      stacks = max_stacks;
+      IncrementStacks(max_stacks);
     } else {
       IncrementStacks();
     }
@@ -98,11 +98,11 @@ void Aura::Fade() {
   stacks    = 0;
 }
 
-void Aura::IncrementStacks() {
-  stacks++;
+void Aura::IncrementStacks(const int kStackAmount) {
+  stacks += kStackAmount;
 
   for (auto& stat : stats_per_stack) {
-    stat.AddStat();
+    stat.AddStat(kStackAmount);
   }
 }
 

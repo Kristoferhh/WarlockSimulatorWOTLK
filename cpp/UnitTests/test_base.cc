@@ -29,11 +29,12 @@ Simulation TestBase::SetUpSimulation(const std::shared_ptr<Player> kPlayer,
     simulation_settings = std::make_shared<SimulationSettings>(GetDefaultSimulationSettings());
   }
 
-  return Simulation(*kPlayer, *simulation_settings);
+  return {*kPlayer, *simulation_settings};
 }
 
 PlayerSettings TestBase::GetDefaultPlayerSettings(std::shared_ptr<AuraSelection> auras,
-                                                  std::shared_ptr<Talents> talents, std::shared_ptr<Sets> sets,
+                                                  std::shared_ptr<Talents> talents,
+                                                  std::shared_ptr<Sets> sets,
                                                   std::shared_ptr<CharacterStats> stats,
                                                   std::shared_ptr<ItemSlot> items) {
   if (auras == nullptr) {

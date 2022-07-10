@@ -68,7 +68,8 @@ TEST_F(AuraTest, Tick_DoesNotHaveDuration) {
 }
 
 TEST_F(AuraTest, Apply) {
-  const auto kStat = SpellPower(_aura->entity, 500);
+  const auto kCurrentSpellPower = _aura->entity.stats.spell_power;
+  const auto kStat              = SpellPower(_aura->entity, 500);
   _aura->stats.push_back(kStat);
   _aura->stats_per_stack.push_back(kStat);
   _aura->duration                              = 20;
@@ -77,16 +78,18 @@ TEST_F(AuraTest, Apply) {
 
   _aura->Apply();
   EXPECT_TRUE(_aura->is_active);
-  EXPECT_EQ(_aura->entity.stats.spell_power, 1000);
+  EXPECT_EQ(_aura->entity.stats.spell_power, kCurrentSpellPower + 1000);
   EXPECT_EQ(_aura->entity.combat_log_breakdown.at(_aura->name)->applied_at,
             _aura->entity.simulation->current_fight_time);
   EXPECT_EQ(_aura->entity.combat_log_breakdown.at(_aura->name)->count, 1);
   EXPECT_EQ(_aura->duration_remaining, 20);
 
-  for (int i = 0; i < 5; i++) { _aura->Apply(); }
+  for (int i = 0; i < 5; i++) {
+    _aura->Apply();
+  }
 
   EXPECT_EQ(_aura->entity.combat_log_breakdown.at(_aura->name)->count, 6);
-  EXPECT_EQ(_aura->entity.stats.spell_power, 3000);
+  EXPECT_EQ(_aura->entity.stats.spell_power, kCurrentSpellPower + 500 * 6);
 }
 
 TEST_F(AuraTest, Fade) {
@@ -112,7 +115,8 @@ TEST_F(AuraTest, Setup) {
 
   aura.Setup();
   EXPECT_NE(aura.entity.combat_log_breakdown.find("Test"), aura.entity.combat_log_breakdown.end());
-  EXPECT_NE(std::find_if(aura.entity.aura_list.begin(), aura.entity.aura_list.end(),
+  EXPECT_NE(std::find_if(aura.entity.aura_list.begin(),
+                         aura.entity.aura_list.end(),
                          [&aura](const Aura* aura_ptr) { return aura_ptr->name == aura.name; }),
             aura.entity.aura_list.end());
 }

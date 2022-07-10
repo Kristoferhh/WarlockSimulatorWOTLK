@@ -12,7 +12,7 @@ struct Stat {
   int combat_log_decimal_places = 0;
 
   Stat(Entity& entity, double& character_stat, double kValue);
-  void AddStat() const;
+  void AddStat(int kStackAmount = 1) const;
   void RemoveStat(int kStacks = 1) const;
 
  private:

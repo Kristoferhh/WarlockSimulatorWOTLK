@@ -79,12 +79,12 @@ Entity::Entity(Player* player, PlayerSettings& player_settings, const EntityType
     stats.stamina += 70 * 0.1 * improved_imp_points;
   }
 
-  if (player->settings.selected_pet == EmbindConstant::kImp) {
-    stats.fire_modifier *= 1 + 0.01 * player->talents.master_demonologist;
-  } else if (player->settings.selected_pet == EmbindConstant::kSuccubus) {
-    stats.shadow_modifier *= 1 + 0.01 * player->talents.master_demonologist;
-  } else if (player->settings.selected_pet == EmbindConstant::kFelguard) {
-    stats.damage_modifier *= 1 + 0.01 * player->talents.master_demonologist;
+  if (player_settings.selected_pet == EmbindConstant::kImp) {
+    stats.fire_modifier *= 1 + 0.01 * player_settings.talents.master_demonologist;
+  } else if (player_settings.selected_pet == EmbindConstant::kSuccubus) {
+    stats.shadow_modifier *= 1 + 0.01 * player_settings.talents.master_demonologist;
+  } else if (player_settings.selected_pet == EmbindConstant::kFelguard) {
+    stats.damage_modifier *= 1 + 0.01 * player_settings.talents.master_demonologist;
   }
 
   stats.shadow_modifier *= 1 + 0.02 * player_settings.talents.demonic_pact;
