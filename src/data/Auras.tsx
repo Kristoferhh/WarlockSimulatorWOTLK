@@ -542,6 +542,6 @@ export const Auras: Aura[] = [
   {
     Name: 'Meteoric Inspiration',
     IconName: 'inv_misc_gem_azuredraenite_01',
-    Id: AuraId.MeteoricInspiration
-  }
+    Id: AuraId.MeteoricInspiration,
+  },
 ]
