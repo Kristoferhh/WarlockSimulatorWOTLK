@@ -101,7 +101,7 @@ export default function TalentTrees() {
     <>
       <Grid container style={{ justifyContent: 'center' }}>
         {PresetTalents.map(talentTemplate => (
-          <Grid item>
+          <Grid item key={nanoid()}>
             <Button
               variant='contained'
               type='button'

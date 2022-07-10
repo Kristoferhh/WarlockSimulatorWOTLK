@@ -25,11 +25,6 @@ struct Trinket {
   void Tick(double kTime);
 };
 
-/*struct GenericOnUseTrinket : Trinket {
-  explicit GenericOnUseTrinket(
-      Player& player_param, const std::string& kName, int kCooldown, int kDuration, const std::vector<Stat>& kStats);
-};*/
-
 struct ShiftingNaaruSliver : Trinket {
   explicit ShiftingNaaruSliver(Player& player_param);
 };

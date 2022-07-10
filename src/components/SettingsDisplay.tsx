@@ -1,5 +1,4 @@
 import {
-  FormControl,
   FormControlLabel,
   FormGroup,
   MenuItem,
@@ -60,7 +59,7 @@ export default function SettingsDisplay() {
   }
 
   return (
-    <FormControl>
+    <>
       <FormGroup row>
         <Select
           size='small'
@@ -364,6 +363,6 @@ export default function SettingsDisplay() {
             />
           )}
       </FormGroup>
-    </FormControl>
+    </>
   )
 }

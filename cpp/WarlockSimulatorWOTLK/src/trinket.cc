@@ -70,23 +70,6 @@ void Trinket::Tick(const double kTime) {
   }
 }
 
-/*GenericOnUseTrinket::GenericOnUseTrinket(Player& player_param,
-                                         const std::string& kName,
-                                         const int kCooldown,
-                                         const int kDuration,
-                                         const std::vector<Stat>& kStats)
-    : Trinket(player_param) {
-  name     = kName;
-  cooldown = kCooldown;
-  duration = kDuration;
-
-  for (const auto& kStat : kStats) {
-    stats.push_back(kStat);
-  }
-
-  Setup();
-}*/
-
 ShiftingNaaruSliver::ShiftingNaaruSliver(Player& player_param) : Trinket(player_param) {
   name     = "Shifting Naaru Sliver";
   cooldown = 90;
