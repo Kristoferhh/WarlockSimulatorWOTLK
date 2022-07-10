@@ -7,7 +7,7 @@
 #include "../include/simulation.h"
 #include "../include/stat.h"
 
-Trinket::Trinket(Player& player_param) : player(player_param) {}
+Trinket::Trinket(Player& player) : player(player) {}
 
 bool Trinket::Ready() const {
   return cooldown_remaining <= 0;
@@ -70,210 +70,210 @@ void Trinket::Tick(const double kTime) {
   }
 }
 
-ShiftingNaaruSliver::ShiftingNaaruSliver(Player& player_param) : Trinket(player_param) {
+ShiftingNaaruSliver::ShiftingNaaruSliver(Player& player) : Trinket(player) {
   name     = "Shifting Naaru Sliver";
   cooldown = 90;
   duration = 15;
-  stats.push_back(SpellPower(player_param, 320));
+  stats.push_back(SpellPower(player, 320));
   Setup();
 }
 
-SkullOfGuldan::SkullOfGuldan(Player& player_param) : Trinket(player_param) {
+SkullOfGuldan::SkullOfGuldan(Player& player) : Trinket(player) {
   name     = "The Skull of Gul'dan";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellHasteRating(player_param, 175));
+  stats.push_back(SpellHasteRating(player, 175));
   Setup();
 }
 
-TomeOfArcanePhenomena::TomeOfArcanePhenomena(Player& player_param) : Trinket(player_param) {
+TomeOfArcanePhenomena::TomeOfArcanePhenomena(Player& player) : Trinket(player) {
   name     = "Tome of Arcane Phenomena";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellHasteRating(player_param, 256));
+  stats.push_back(SpellHasteRating(player, 256));
   Setup();
 }
 
-ForgeEmber::ForgeEmber(Player& player_param) : Trinket(player_param) {
+ForgeEmber::ForgeEmber(Player& player) : Trinket(player) {
   name     = "Forge Ember";
   cooldown = 120;
   duration = 10;
-  stats.push_back(SpellPower(player_param, 512));
+  stats.push_back(SpellPower(player, 512));
   Setup();
 }
 
-WingedTalisman::WingedTalisman(Player& player_param) : Trinket(player_param) {
+WingedTalisman::WingedTalisman(Player& player) : Trinket(player) {
   name     = "Winged Talisman";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellPower(player_param, 346));
+  stats.push_back(SpellPower(player, 346));
   Setup();
 }
 
-MarkOfTheWarPrisoner::MarkOfTheWarPrisoner(Player& player_param) : Trinket(player_param) {
+MarkOfTheWarPrisoner::MarkOfTheWarPrisoner(Player& player) : Trinket(player) {
   name     = "Mark of the War Prisoner";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellPower(player_param, 346));
+  stats.push_back(SpellPower(player, 346));
   Setup();
 }
 
-MendicantsCharm::MendicantsCharm(Player& player_param) : Trinket(player_param) {
+MendicantsCharm::MendicantsCharm(Player& player) : Trinket(player) {
   name     = "Mendicant's Charm";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellPower(player_param, 145));
+  stats.push_back(SpellPower(player, 145));
   Setup();
 }
 
-InsigniaOfBloodyFire::InsigniaOfBloodyFire(Player& player_param) : Trinket(player_param) {
+InsigniaOfBloodyFire::InsigniaOfBloodyFire(Player& player) : Trinket(player) {
   name     = "Insignia of Bloody Fire";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellPower(player_param, 145));
+  stats.push_back(SpellPower(player, 145));
   Setup();
 }
 
-FuturesightRune::FuturesightRune(Player& player_param) : Trinket(player_param) {
+FuturesightRune::FuturesightRune(Player& player) : Trinket(player) {
   name     = "Futuresight Rune";
   cooldown = 120;
   duration = 20;
-  stats.push_back(Spirit(player_param, 184));
+  stats.push_back(Spirit(player, 184));
   Setup();
 }
 
-RuneOfFiniteVariation::RuneOfFiniteVariation(Player& player_param) : Trinket(player_param) {
+RuneOfFiniteVariation::RuneOfFiniteVariation(Player& player) : Trinket(player) {
   name     = "Rune of Finite Variation";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellHasteRating(player_param, 208));
+  stats.push_back(SpellHasteRating(player, 208));
   Setup();
 }
 
-RuneOfInfinitePower::RuneOfInfinitePower(Player& player_param) : Trinket(player_param) {
+RuneOfInfinitePower::RuneOfInfinitePower(Player& player) : Trinket(player) {
   name     = "Rune of Infinite Power";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellPower(player_param, 202));
+  stats.push_back(SpellPower(player, 202));
   Setup();
 }
 
-SpiritWordGlass::SpiritWordGlass(Player& player_param) : Trinket(player_param) {
+SpiritWordGlass::SpiritWordGlass(Player& player) : Trinket(player) {
   name     = "Spirit-Word Glass";
   cooldown = 120;
   duration = 20;
-  stats.push_back(Spirit(player_param, 336));
+  stats.push_back(Spirit(player, 336));
   Setup();
 }
 
-BadgeOfTheInfiltrator::BadgeOfTheInfiltrator(Player& player_param) : Trinket(player_param) {
+BadgeOfTheInfiltrator::BadgeOfTheInfiltrator(Player& player) : Trinket(player) {
   name     = "Badge of the Infiltrator";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellPower(player_param, 183));
+  stats.push_back(SpellPower(player, 183));
   Setup();
 }
 
-SpiritistsFocus::SpiritistsFocus(Player& player_param) : Trinket(player_param) {
+SpiritistsFocus::SpiritistsFocus(Player& player) : Trinket(player) {
   name     = "Spiritist's Focus";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellPower(player_param, 145));
+  stats.push_back(SpellPower(player, 145));
   Setup();
 }
 
-FigurineTwilightSerpent::FigurineTwilightSerpent(Player& player_param) : Trinket(player_param) {
+FigurineTwilightSerpent::FigurineTwilightSerpent(Player& player) : Trinket(player) {
   name     = "Figurine - Twilight Serpent";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellPower(player_param, 292));
+  stats.push_back(SpellPower(player, 292));
   Setup();
 }
 
-ThornyRoseBrooch::ThornyRoseBrooch(Player& player_param) : Trinket(player_param) {
+ThornyRoseBrooch::ThornyRoseBrooch(Player& player) : Trinket(player) {
   name     = "Thorny Rose Brooch";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellHasteRating(player_param, 212));
+  stats.push_back(SpellHasteRating(player, 212));
   Setup();
 }
 
-SoftlyGlowingOrb::SoftlyGlowingOrb(Player& player_param) : Trinket(player_param) {
+SoftlyGlowingOrb::SoftlyGlowingOrb(Player& player) : Trinket(player) {
   name     = "Softly Glowing Orb";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellPower(player_param, 281));
+  stats.push_back(SpellPower(player, 281));
   Setup();
 }
 
-LivingFlame::LivingFlame(Player& player_param) : Trinket(player_param) {
+LivingFlame::LivingFlame(Player& player) : Trinket(player) {
   name     = "Living Flame";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellPower(player_param, 505));
+  stats.push_back(SpellPower(player, 505));
   Setup();
 }
 
-EnergySiphon::EnergySiphon(Player& player_param) : Trinket(player_param) {
+EnergySiphon::EnergySiphon(Player& player) : Trinket(player) {
   name     = "Energy Siphon";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellPower(player_param, 408));
+  stats.push_back(SpellPower(player, 408));
   Setup();
 }
 
-ScaleOfFates::ScaleOfFates(Player& player_param) : Trinket(player_param) {
+ScaleOfFates::ScaleOfFates(Player& player) : Trinket(player) {
   name     = "Scale of Fates";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellHasteRating(player_param, 432));
+  stats.push_back(SpellHasteRating(player, 432));
   Setup();
 }
 
-PlatinumDisksOfSorcery::PlatinumDisksOfSorcery(Player& player_param) : Trinket(player_param) {
+PlatinumDisksOfSorcery::PlatinumDisksOfSorcery(Player& player) : Trinket(player) {
   name     = "Platinum Discs of Sorcery";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellPower(player_param, 440));
+  stats.push_back(SpellPower(player, 440));
   Setup();
 }
 
-PlatinumDisksOfSwiftness::PlatinumDisksOfSwiftness(Player& player_param) : Trinket(player_param) {
+PlatinumDisksOfSwiftness::PlatinumDisksOfSwiftness(Player& player) : Trinket(player) {
   name     = "Platinum Disks of Swiftness";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellHasteRating(player_param, 375));
+  stats.push_back(SpellHasteRating(player, 375));
   Setup();
 }
 
-ShardOfTheCrystalHeart::ShardOfTheCrystalHeart(Player& player_param) : Trinket(player_param) {
+ShardOfTheCrystalHeart::ShardOfTheCrystalHeart(Player& player) : Trinket(player) {
   name     = "Shard of the Crystal Heart";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellHasteRating(player_param, 512));
+  stats.push_back(SpellHasteRating(player, 512));
   Setup();
 }
 
-TalismanOfResurgence::TalismanOfResurgence(Player& player_param) : Trinket(player_param) {
+TalismanOfResurgence::TalismanOfResurgence(Player& player) : Trinket(player) {
   name     = "Talisman of Resurgence";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellPower(player_param, 599));
+  stats.push_back(SpellPower(player, 599));
   Setup();
 }
 
-EphemeralSnowflake::EphemeralSnowflake(Player& player_param) : Trinket(player_param) {
+EphemeralSnowflake::EphemeralSnowflake(Player& player) : Trinket(player) {
   name     = "Ephemeral Snowflake";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellHasteRating(player_param, 464));
+  stats.push_back(SpellHasteRating(player, 464));
   Setup();
 }
 
-MaghiasMisguidedQuill::MaghiasMisguidedQuill(Player& player_param) : Trinket(player_param) {
+MaghiasMisguidedQuill::MaghiasMisguidedQuill(Player& player) : Trinket(player) {
   name     = "Maghia's Misguided Quill";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellPower(player_param, 716));
+  stats.push_back(SpellPower(player, 716));
   Setup();
 }
