@@ -32,7 +32,7 @@ Entity::Entity(Player* player, PlayerSettings& player_settings, const EntityType
       enemy_level_difference_resistance(player_settings.enemy_level >= kLevel + 3 ? 6 * kLevel * 5 / 75 : 0) {
   // Crit chance
   if (kEntityType == EntityType::kPlayer) {
-    stats.spell_crit_chance = StatConstant::kBaseCritChancePercent + player_settings.talents.backlash +
+    stats.spell_crit_chance = WarlockSimulatorConstants::kBaseCritChancePercent + player_settings.talents.backlash +
                               2 * player_settings.talents.demonic_tactics;
   }
 
@@ -46,7 +46,7 @@ Entity::Entity(Player* player, PlayerSettings& player_settings, const EntityType
 
   // Hit chance
   if (kEntityType == EntityType::kPlayer) {
-    stats.extra_spell_hit_chance = stats.spell_hit_rating / StatConstant::kHitRatingPerPercent;
+    stats.extra_spell_hit_chance = stats.spell_hit_rating / WarlockSimulatorConstants::kHitRatingPerPercent;
   }
 
   if (player_settings.auras.totem_of_wrath) {
@@ -222,7 +222,8 @@ double Entity::GetBaseSpellHitChance(const int kEntityLevel, const int kEnemyLev
 }
 
 double Entity::GetMeleeCritChance() {
-  return pet->GetAgility() * 0.04 + 0.65 + stats.melee_crit_chance - StatConstant::kMeleeCritChanceSuppression;
+  return pet->GetAgility() * 0.04 + 0.65 + stats.melee_crit_chance -
+         WarlockSimulatorConstants::kMeleeCritChanceSuppression;
 }
 
 void Entity::Tick(const double kTime) {
@@ -256,7 +257,8 @@ void Entity::Tick(const double kTime) {
   }
 
   for (const auto& kSpell : spell_list) {
-    if (kSpell->name != SpellName::kTheLightningCapacitor && (kSpell->cooldown_remaining > 0 || kSpell->casting)) {
+    if (kSpell->name != WarlockSimulatorConstants::kTheLightningCapacitor &&
+        (kSpell->cooldown_remaining > 0 || kSpell->casting)) {
       kSpell->Tick(kTime);
     }
   }

@@ -203,7 +203,7 @@ void Simulation::CastGcdSpells() const {
 
     // Cast Curse of the Elements if it's the selected curse and it's not active
     if (fight_time_remaining >= 5 && player.gcd_remaining <= 0 && player.curse_spell != nullptr &&
-        player.curse_spell->name == SpellName::kCurseOfTheElements && !player.curse_aura->is_active &&
+        player.curse_spell->name == WarlockSimulatorConstants::kCurseOfTheElements && !player.curse_aura->is_active &&
         player.curse_spell->CanCast()) {
       if (player.curse_spell->HasEnoughMana()) {
         player.curse_spell->StartCast();
@@ -242,17 +242,18 @@ void Simulation::CastGcdSpells() const {
     if (player.gcd_remaining <= 0 && player.auras.curse_of_agony != nullptr &&
         !player.auras.curse_of_agony->is_active && player.spells.curse_of_agony->CanCast() &&
         fight_time_remaining > player.auras.curse_of_agony->duration &&
-        (player.curse_spell->name == SpellName::kCurseOfDoom && !player.auras.curse_of_doom->is_active &&
+        (player.curse_spell->name == WarlockSimulatorConstants::kCurseOfDoom &&
+             !player.auras.curse_of_doom->is_active &&
              (player.spells.curse_of_doom->cooldown_remaining > player.auras.curse_of_agony->duration ||
               fight_time_remaining < 60) ||
-         player.curse_spell->name == SpellName::kCurseOfAgony)) {
+         player.curse_spell->name == WarlockSimulatorConstants::kCurseOfAgony)) {
       SelectedSpellHandler(player.spells.curse_of_agony, predicted_damage_of_spells);
     }
 
     // Cast Curse of Doom if it's the selected curse and there's more
     // than 60 seconds remaining
     if (player.gcd_remaining <= 0 && fight_time_remaining > 60 && player.curse_spell != nullptr &&
-        player.curse_spell->name == SpellName::kCurseOfDoom && !player.auras.curse_of_doom->is_active &&
+        player.curse_spell->name == WarlockSimulatorConstants::kCurseOfDoom && !player.auras.curse_of_doom->is_active &&
         player.spells.curse_of_doom->CanCast()) {
       SelectedSpellHandler(player.spells.curse_of_doom, predicted_damage_of_spells);
     }

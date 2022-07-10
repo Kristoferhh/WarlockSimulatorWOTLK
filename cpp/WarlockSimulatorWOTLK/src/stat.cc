@@ -57,94 +57,94 @@ void Stat::ModifyStat(const std::string& kAction, const int kStacks) const {
 }
 
 SpellPower::SpellPower(Entity& entity, const double kValue) : Stat(entity, entity.stats.spell_power, kValue) {
-  name             = StatName::kSpellPower;
+  name             = WarlockSimulatorConstants::kSpellPower;
   calculation_type = CalculationType::kAdditive;
 }
 
 ShadowPower::ShadowPower(Entity& entity, const double kValue) : Stat(entity, entity.stats.shadow_power, kValue) {
-  name             = StatName::kShadowPower;
+  name             = WarlockSimulatorConstants::kShadowPower;
   calculation_type = CalculationType::kAdditive;
 }
 
 FirePower::FirePower(Entity& entity, const double kValue) : Stat(entity, entity.stats.fire_power, kValue) {
-  name             = StatName::kFirePower;
+  name             = WarlockSimulatorConstants::kFirePower;
   calculation_type = CalculationType::kAdditive;
 }
 
 SpellHasteRating::SpellHasteRating(Entity& entity, const double kValue)
     : Stat(entity, entity.stats.spell_haste_rating, kValue) {
-  name             = StatName::kSpellHasteRating;
+  name             = WarlockSimulatorConstants::kSpellHasteRating;
   calculation_type = CalculationType::kAdditive;
 }
 
 SpellHastePercent::SpellHastePercent(Entity& entity, const double kValue)
     : Stat(entity, entity.stats.spell_haste_percent, kValue) {
-  name                      = StatName::kSpellHastePercent;
+  name                      = WarlockSimulatorConstants::kSpellHastePercent;
   calculation_type          = CalculationType::kMultiplicative;
   combat_log_decimal_places = 4;
 }
 
 MeleeHastePercent::MeleeHastePercent(Entity& entity, const double kValue)
     : Stat(entity, entity.stats.melee_haste_percent, kValue) {
-  name                      = StatName::kMeleeHastePercent;
+  name                      = WarlockSimulatorConstants::kMeleeHastePercent;
   calculation_type          = CalculationType::kMultiplicative;
   combat_log_decimal_places = 4;
 }
 
 ManaCostModifier::ManaCostModifier(Entity& entity, const double kValue)
     : Stat(entity, entity.stats.mana_cost_modifier, kValue) {
-  name                      = StatName::kManaCostModifier;
+  name                      = WarlockSimulatorConstants::kManaCostModifier;
   calculation_type          = CalculationType::kMultiplicative;
   combat_log_decimal_places = 2;
 }
 
 SpellCritChance::SpellCritChance(Entity& entity, const double kValue)
     : Stat(entity, entity.stats.spell_crit_chance, kValue) {
-  name                      = StatName::kSpellCritChance;
+  name                      = WarlockSimulatorConstants::kSpellCritChance;
   calculation_type          = CalculationType::kAdditive;
   combat_log_decimal_places = 2;
 }
 
 SpellCritRating::SpellCritRating(Entity& entity, const double kValue)
     : Stat(entity, entity.stats.spell_crit_rating, kValue) {
-  name             = StatName::kSpellCritRating;
+  name             = WarlockSimulatorConstants::kSpellCritRating;
   calculation_type = CalculationType::kAdditive;
 }
 
 AttackPower::AttackPower(Entity& entity, const double kValue) : Stat(entity, entity.stats.attack_power, kValue) {
-  name             = StatName::kAttackPower;
+  name             = WarlockSimulatorConstants::kAttackPower;
   calculation_type = CalculationType::kAdditive;
 }
 
 AttackPowerModifier::AttackPowerModifier(Entity& entity, const double kValue)
     : Stat(entity, entity.stats.attack_power_modifier, kValue) {
-  name             = StatName::kAttackPowerModifier;
+  name             = WarlockSimulatorConstants::kAttackPowerModifier;
   calculation_type = CalculationType::kMultiplicative;
 }
 
 DamageModifier::DamageModifier(Entity& entity, const double kValue)
     : Stat(entity, entity.stats.damage_modifier, kValue) {
-  name             = StatName::kDamageModifier;
+  name             = WarlockSimulatorConstants::kDamageModifier;
   calculation_type = CalculationType::kMultiplicative;
 }
 
 ShadowModifier::ShadowModifier(Entity& entity, const double kValue)
     : Stat(entity, entity.stats.shadow_modifier, kValue) {
-  name             = StatName::kDamageModifier;
+  name             = WarlockSimulatorConstants::kDamageModifier;
   calculation_type = CalculationType::kMultiplicative;
 }
 FireModifier::FireModifier(Entity& entity, const double kValue) : Stat(entity, entity.stats.fire_modifier, kValue) {
-  name             = StatName::kDamageModifier;
+  name             = WarlockSimulatorConstants::kDamageModifier;
   calculation_type = CalculationType::kMultiplicative;
 }
 
 ManaPer5::ManaPer5(Entity& entity, const double kValue) : Stat(entity, entity.stats.mp5, kValue) {
-  name             = StatName::kMp5;
+  name             = WarlockSimulatorConstants::kMp5;
   calculation_type = CalculationType::kAdditive;
 }
 
 Spirit::Spirit(Entity& entity, const double kValue) : Stat(entity, entity.stats.spirit, kValue) {
-  name             = StatName::kSpirit;
+  name             = WarlockSimulatorConstants::kSpirit;
   calculation_type = CalculationType::kAdditive;
 }
 

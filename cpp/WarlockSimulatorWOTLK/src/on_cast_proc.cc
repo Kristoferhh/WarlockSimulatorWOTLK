@@ -17,7 +17,7 @@ void OnCastProc::Setup() {
 }
 
 JeTzesBell::JeTzesBell(Player& player, std::shared_ptr<Aura> aura) : OnCastProc(player, std::move(aura)) {
-  name        = SpellName::kJeTzesBell;
+  name        = WarlockSimulatorConstants::kJeTzesBell;
   proc_chance = 10;  // TODO confirm
   cooldown    = 90;  // TODO confirm
   OnCastProc::Setup();
@@ -25,14 +25,14 @@ JeTzesBell::JeTzesBell(Player& player, std::shared_ptr<Aura> aura) : OnCastProc(
 
 EmbraceOfTheSpider::EmbraceOfTheSpider(Player& player, std::shared_ptr<Aura> aura)
     : OnCastProc(player, std::move(aura)) {
-  name        = SpellName::kEmbraceOfTheSpider;
+  name        = WarlockSimulatorConstants::kEmbraceOfTheSpider;
   proc_chance = 10;
   cooldown    = 45;
   OnCastProc::Setup();
 }
 
 DyingCurse::DyingCurse(Player& player, std::shared_ptr<Aura> aura) : OnCastProc(player, std::move(aura)) {
-  name        = SpellName::kDyingCurse;
+  name        = WarlockSimulatorConstants::kDyingCurse;
   proc_chance = 10;
   cooldown    = 45;
   OnCastProc::Setup();

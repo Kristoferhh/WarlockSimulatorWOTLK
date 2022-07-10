@@ -11,7 +11,7 @@
 // TODO make a class a parent to life tap and dark pact instead of life tap being a parent to dark pact
 LifeTap::LifeTap(Entity& entity)
     : Spell(entity), mana_return(2400), modifier(1 * (1 + 0.1 * entity.player->talents.improved_life_tap)) {
-  name         = SpellName::kLifeTap;
+  name         = WarlockSimulatorConstants::kLifeTap;
   coefficient  = 0.6;
   spell_school = SpellSchool::kShadow;
   Spell::Setup();
@@ -55,13 +55,13 @@ void LifeTap::Cast() {
     }
   }
 
-  if (name == SpellName::kDarkPact) {
+  if (name == WarlockSimulatorConstants::kDarkPact) {
     entity.pet->stats.mana = std::max(0.0, entity.pet->stats.mana - kManaGain);
   }
 }
 
 DarkPact::DarkPact(Entity& entity) : LifeTap(entity) {
-  name         = SpellName::kDarkPact;
+  name         = WarlockSimulatorConstants::kDarkPact;
   mana_return  = 1200;
   coefficient  = 0.96;
   modifier     = 1;

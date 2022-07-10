@@ -38,7 +38,8 @@ Player::Player(PlayerSettings& player_settings)
   infinite_mana = player_settings.infinite_player_mana;
 
   if (recording_combat_log_breakdown) {
-    combat_log_breakdown.insert({StatName::kMp5, std::make_shared<CombatLogBreakdown>(StatName::kMp5)});
+    combat_log_breakdown.insert(
+        {WarlockSimulatorConstants::kMp5, std::make_shared<CombatLogBreakdown>(WarlockSimulatorConstants::kMp5)});
   }
 
   if (player_settings.custom_stat == EmbindConstant::kStamina) {
@@ -90,9 +91,9 @@ Player::Player(PlayerSettings& player_settings)
   player_settings.enemy_armor = std::max(0, player_settings.enemy_armor);
 
   // Health & Mana
-  stats.health = (stats.health + Entity::GetStamina() * StatConstant::kHealthPerStamina) *
+  stats.health = (stats.health + Entity::GetStamina() * WarlockSimulatorConstants::kHealthPerStamina) *
                  (1 + 0.01 * static_cast<double>(talents.fel_vitality));
-  stats.max_mana = (stats.mana + Entity::GetIntellect() * StatConstant::kManaPerIntellect) *
+  stats.max_mana = (stats.mana + Entity::GetIntellect() * WarlockSimulatorConstants::kManaPerIntellect) *
                    (1 + 0.01 * static_cast<double>(talents.fel_vitality));
 }
 
@@ -741,13 +742,13 @@ double Player::GetHastePercent() {
   if (auras.bloodlust != nullptr && auras.power_infusion != nullptr && auras.bloodlust->is_active &&
       auras.power_infusion->is_active) {
     for (auto& stat : auras.power_infusion->stats) {
-      if (stat.name == StatName::kSpellHastePercent) {
+      if (stat.name == WarlockSimulatorConstants::kSpellHastePercent) {
         haste_percent /= stat.value;
       }
     }
   }
 
-  return haste_percent * (1 + stats.spell_haste_rating / StatConstant::kHasteRatingPerPercent / 100.0);
+  return haste_percent * (1 + stats.spell_haste_rating / WarlockSimulatorConstants::kHasteRatingPerPercent / 100.0);
 }
 
 double Player::GetSpellPower(const SpellSchool kSchool) {
@@ -782,8 +783,8 @@ double Player::GetSpellPower(const SpellSchool kSchool) {
 }
 
 double Player::GetSpellCritChance() {
-  return stats.spell_crit_chance + GetIntellect() * StatConstant::kCritChancePerIntellect +
-         stats.spell_crit_rating / StatConstant::kCritRatingPerPercent;
+  return stats.spell_crit_chance + GetIntellect() * WarlockSimulatorConstants::kCritChancePerIntellect +
+         stats.spell_crit_rating / WarlockSimulatorConstants::kCritRatingPerPercent;
 }
 
 int Player::GetRand() {
@@ -815,6 +816,11 @@ void Player::UseCooldowns() {
         break;
       }
     }
+  }
+
+  if (spells.figurine_sapphire_owl != nullptr && spells.figurine_sapphire_owl->Ready() &&
+      stats.mana <= WarlockSimulatorConstants::kFigurineSapphireOwlTotalManaGain) {
+    spells.figurine_sapphire_owl->StartCast();
   }
 
   if (spells.demonic_empowerment != nullptr &&
@@ -962,8 +968,8 @@ void Player::Tick(const double kTime) {
 
       const double kManaGained = stats.mana - kCurrentPlayerMana;
       if (recording_combat_log_breakdown) {
-        combat_log_breakdown.at(StatName::kMp5)->casts++;
-        combat_log_breakdown.at(StatName::kMp5)->iteration_mana_gain += kManaGained;
+        combat_log_breakdown.at(WarlockSimulatorConstants::kMp5)->casts++;
+        combat_log_breakdown.at(WarlockSimulatorConstants::kMp5)->iteration_mana_gain += kManaGained;
       }
 
       if (ShouldWriteToCombatLog()) {
@@ -989,7 +995,9 @@ void Player::SendPlayerInfoToCombatLog() {
       "Hit Chance: " + DoubleToString(std::min(17.0, round(stats.extra_spell_hit_chance * 100) / 100), 2) + "%");
   combat_log_entries.push_back(
       "Haste: " +
-      DoubleToString(round(stats.spell_haste_rating / StatConstant::kHasteRatingPerPercent * 100) / 100, 2) + "%");
+      DoubleToString(round(stats.spell_haste_rating / WarlockSimulatorConstants::kHasteRatingPerPercent * 100) / 100,
+                     2) +
+      "%");
   combat_log_entries.push_back(
       "Shadow Modifier: " + DoubleToString(stats.shadow_modifier * (1 + 0.03 * talents.shadow_mastery) * 100, 2) + "%");
   combat_log_entries.push_back(
@@ -1012,7 +1020,7 @@ void Player::SendPlayerInfoToCombatLog() {
           "Physical Hit Chance: " + DoubleToString(round(pet->stats.melee_hit_chance * 100) / 100.0, 2) + "%");
       combat_log_entries.push_back(
           "Physical Crit Chance: " + DoubleToString(round(pet->GetMeleeCritChance() * 100) / 100.0, 2) + "% (" +
-          DoubleToString(StatConstant::kMeleeCritChanceSuppression, 2) + "% Crit Suppression Applied)");
+          DoubleToString(WarlockSimulatorConstants::kMeleeCritChanceSuppression, 2) + "% Crit Suppression Applied)");
       combat_log_entries.push_back("Glancing Blow Chance: " + DoubleToString(pet->glancing_blow_chance, 2) + "%");
       combat_log_entries.push_back(
           "Attack Power Modifier: " + DoubleToString(pet->stats.attack_power_modifier * 100, 2) + "%");
@@ -1039,7 +1047,8 @@ void Player::SendPlayerInfoToCombatLog() {
   combat_log_entries.push_back("Fire Resistance: " +
                                std::to_string(std::max(settings.enemy_fire_resist, enemy_level_difference_resistance)));
   if (pet != nullptr && pet->pet_name != PetName::kImp) {
-    combat_log_entries.push_back("Dodge Chance: " + DoubleToString(StatConstant::kBaseEnemyDodgeChance, 2) + "%");
+    combat_log_entries.push_back(
+        "Dodge Chance: " + DoubleToString(WarlockSimulatorConstants::kBaseEnemyDodgeChance, 2) + "%");
     combat_log_entries.push_back("Armor: " + std::to_string(settings.enemy_armor));
     combat_log_entries.push_back(
         "Damage Reduction From Armor: " +

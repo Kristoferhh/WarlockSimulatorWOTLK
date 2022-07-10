@@ -22,7 +22,7 @@ void OnHitProc::Setup() {
 }
 
 JudgementOfWisdom::JudgementOfWisdom(Entity& entity) : OnHitProc(entity) {
-  name              = SpellName::kJudgementOfWisdom;
+  name              = WarlockSimulatorConstants::kJudgementOfWisdom;
   mana_gain         = 74;
   gain_mana_on_cast = true;
   proc_chance       = 50;
@@ -30,7 +30,7 @@ JudgementOfWisdom::JudgementOfWisdom(Entity& entity) : OnHitProc(entity) {
 }
 
 DemonicFrenzy::DemonicFrenzy(Pet& pet, std::shared_ptr<Aura> aura) : OnHitProc(pet, std::move(aura)) {
-  name        = SpellName::kDemonicFrenzy;
+  name        = WarlockSimulatorConstants::kDemonicFrenzy;
   proc_chance = 100;
   OnHitProc::Setup();
 }
@@ -43,20 +43,22 @@ ImprovedShadowBolt::ImprovedShadowBolt(Player& player, std::shared_ptr<Aura> aur
 }
 
 SoulLeech::SoulLeech(Player& player, std::shared_ptr<Aura> aura) : OnHitProc(player, std::move(aura)) {
-  name        = SpellName::kSoulLeech;
+  name        = WarlockSimulatorConstants::kSoulLeech;
   proc_chance = 10 * player.talents.soul_leech;
   OnHitProc::Setup();
 }
 
 bool SoulLeech::ShouldProc(Spell* spell) {
-  return spell->name == SpellName::kShadowBolt || spell->name == SpellName::kShadowburn ||
-         spell->name == SpellName::kChaosBolt || spell->name == SpellName::kSoulFire ||
-         spell->name == SpellName::kIncinerate || spell->name == SpellName::kSearingPain ||
-         spell->name == SpellName::kConflagrate;
+  return spell->name == WarlockSimulatorConstants::kShadowBolt ||
+         spell->name == WarlockSimulatorConstants::kShadowburn ||
+         spell->name == WarlockSimulatorConstants::kChaosBolt || spell->name == WarlockSimulatorConstants::kSoulFire ||
+         spell->name == WarlockSimulatorConstants::kIncinerate ||
+         spell->name == WarlockSimulatorConstants::kSearingPain ||
+         spell->name == WarlockSimulatorConstants::kConflagrate;
 }
 
 PendulumOfTelluricCurrents::PendulumOfTelluricCurrents(Player& player) : OnHitProc(player) {
-  name         = SpellName::kPendulumOfTelluricCurrents;
+  name         = WarlockSimulatorConstants::kPendulumOfTelluricCurrents;
   proc_chance  = 15;
   cooldown     = 45;
   does_damage  = true;

@@ -21,9 +21,9 @@ void DamageOverTime::Setup() {
   }
 
   if (player.talents.pandemic == 1) {
-    if (name == SpellName::kCorruption || name == SpellName::kUnstableAffliction) {
+    if (name == WarlockSimulatorConstants::kCorruption || name == WarlockSimulatorConstants::kUnstableAffliction) {
       crit_damage_multiplier = 2.0;
-    } else if (name == SpellName::kHaunt) {
+    } else if (name == WarlockSimulatorConstants::kHaunt) {
       crit_damage_multiplier -= 1;
       crit_damage_multiplier *= 2;
       crit_damage_multiplier += 1;
@@ -82,11 +82,11 @@ std::vector<double> DamageOverTime::GetConstantDamage() const {
   total_damage += kCurrentSpellPower * coefficient;
   total_damage *= kModifier * kPartialResistMultiplier;
 
-  if (name == SpellName::kDrainSoul && player.simulation->GetEnemyHealthPercent() <= 25) {
+  if (name == WarlockSimulatorConstants::kDrainSoul && player.simulation->GetEnemyHealthPercent() <= 25) {
     total_damage *= 4;
   }
 
-  if (name == SpellName::kCorruption) {
+  if (name == WarlockSimulatorConstants::kCorruption) {
     total_damage *= 1 + 0.02 * player.talents.improved_corruption;
   }
 
@@ -105,7 +105,7 @@ double DamageOverTime::GetDamageModifier() const {
   }
 
   // TODO maybe additive
-  if (name == SpellName::kDrainSoul && player.talents.soul_siphon > 0) {
+  if (name == WarlockSimulatorConstants::kDrainSoul && player.talents.soul_siphon > 0) {
     damage_modifier *= 1 + std::min(0.18, 0.03 * player.GetActiveAfflictionEffectsCount() * player.talents.soul_siphon);
   }
 
@@ -114,7 +114,7 @@ double DamageOverTime::GetDamageModifier() const {
     damage_modifier *= 1 + 0.01 * player.auras.shadow_embrace->stacks * player.talents.shadow_embrace;
   }
 
-  if (name == SpellName::kImmolate && player.talents.aftermath > 0) {
+  if (name == WarlockSimulatorConstants::kImmolate && player.talents.aftermath > 0) {
     damage_modifier *= 1 + 0.03 * player.talents.aftermath;
   }
 
@@ -133,14 +133,14 @@ void DamageOverTime::Tick(const double kTime) {
     const double kPartialResistMultiplier     = kConstantDamage[4];
 
     // Check for Nightfall proc
-    if (name == SpellName::kCorruption && player.talents.nightfall > 0) {
+    if (name == WarlockSimulatorConstants::kCorruption && player.talents.nightfall > 0) {
       if (player.RollRng(player.talents.nightfall * 2)) {
         player.auras.shadow_trance->Apply();
       }
     }
 
     // TODO this can maybe be changed into a OnDotTickProc
-    if (name == SpellName::kCorruption && player.auras.eradication != nullptr && player.RollRng(6)) {
+    if (name == WarlockSimulatorConstants::kCorruption && player.auras.eradication != nullptr && player.RollRng(6)) {
       player.auras.eradication->Apply();
     }
 
@@ -173,7 +173,7 @@ void DamageOverTime::Tick(const double kTime) {
 }
 
 CorruptionDot::CorruptionDot(Player& player) : DamageOverTime(player) {
-  name             = SpellName::kCorruption;
+  name             = WarlockSimulatorConstants::kCorruption;
   duration         = 18;
   tick_timer_total = 3;
   base_damage      = 1080;
@@ -184,7 +184,7 @@ CorruptionDot::CorruptionDot(Player& player) : DamageOverTime(player) {
 }
 
 UnstableAfflictionDot::UnstableAfflictionDot(Player& player) : DamageOverTime(player) {
-  name             = SpellName::kUnstableAffliction;
+  name             = WarlockSimulatorConstants::kUnstableAffliction;
   duration         = 15;
   tick_timer_total = 3;
   base_damage      = 1380;
@@ -194,7 +194,7 @@ UnstableAfflictionDot::UnstableAfflictionDot(Player& player) : DamageOverTime(pl
 }
 
 ImmolateDot::ImmolateDot(Player& player) : DamageOverTime(player) {
-  name             = SpellName::kImmolate;
+  name             = WarlockSimulatorConstants::kImmolate;
   duration         = 15 + 3 * player.talents.molten_core;
   tick_timer_total = 3;
   base_damage      = 785;
@@ -204,7 +204,7 @@ ImmolateDot::ImmolateDot(Player& player) : DamageOverTime(player) {
 }
 
 CurseOfAgonyDot::CurseOfAgonyDot(Player& player) : DamageOverTime(player) {
-  name             = SpellName::kCurseOfAgony;
+  name             = WarlockSimulatorConstants::kCurseOfAgony;
   duration         = 24;
   tick_timer_total = 3;
   base_damage      = 1740;
@@ -214,7 +214,7 @@ CurseOfAgonyDot::CurseOfAgonyDot(Player& player) : DamageOverTime(player) {
 }
 
 CurseOfDoomDot::CurseOfDoomDot(Player& player) : DamageOverTime(player) {
-  name             = SpellName::kCurseOfDoom;
+  name             = WarlockSimulatorConstants::kCurseOfDoom;
   duration         = 60;
   tick_timer_total = 60;
   base_damage      = 7300;
@@ -224,7 +224,7 @@ CurseOfDoomDot::CurseOfDoomDot(Player& player) : DamageOverTime(player) {
 }
 
 ShadowflameDot::ShadowflameDot(Player& player) : DamageOverTime(player) {
-  name             = SpellName::kShadowflame;
+  name             = WarlockSimulatorConstants::kShadowflame;
   duration         = 8;
   tick_timer_total = 2;
   base_damage      = 512;
@@ -234,7 +234,7 @@ ShadowflameDot::ShadowflameDot(Player& player) : DamageOverTime(player) {
 }
 
 ConflagrateDot::ConflagrateDot(Player& player) : DamageOverTime(player) {
-  name             = SpellName::kConflagrate;
+  name             = WarlockSimulatorConstants::kConflagrate;
   duration         = 6;
   tick_timer_total = 2;
   school           = SpellSchool::kFire;
@@ -242,7 +242,7 @@ ConflagrateDot::ConflagrateDot(Player& player) : DamageOverTime(player) {
 }
 
 DrainSoulDot::DrainSoulDot(Player& player) : DamageOverTime(player) {
-  name             = SpellName::kDrainSoul;
+  name             = WarlockSimulatorConstants::kDrainSoul;
   duration         = 15;  // TODO drain soul's duration is reduced with haste
   tick_timer_total = 3;
   base_damage      = 710;

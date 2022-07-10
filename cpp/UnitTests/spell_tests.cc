@@ -58,7 +58,7 @@ TEST_F(SpellTest, StartCast) {
 }
 
 TEST_F(SpellTest, Cast) {
-  _spell->name                                 = SpellName::kPowerInfusion;
+  _spell->name                                 = WarlockSimulatorConstants::kPowerInfusion;
   _spell->entity.player->power_infusions_ready = 1;
   _spell->mana_cost                            = 0.2;
   _spell->cooldown                             = 5;
@@ -166,7 +166,7 @@ TEST_F(SpellTest, Tick) {
 
 TEST_F(SpellTest, Tick_PowerInfusionComingOffCooldown) {
   _spell->entity.player->power_infusions_ready = 1;
-  _spell->name                                 = SpellName::kPowerInfusion;
+  _spell->name                                 = WarlockSimulatorConstants::kPowerInfusion;
   _spell->cooldown                             = 180;
   _spell->Setup();
 

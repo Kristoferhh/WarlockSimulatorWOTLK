@@ -44,14 +44,14 @@ void ManaPotion::Cast() {
 }
 
 RunicManaPotion::RunicManaPotion(Player& player) : ManaPotion(player) {
-  name          = SpellName::kRunicManaPotion;
+  name          = WarlockSimulatorConstants::kRunicManaPotion;
   min_mana_gain = 4200;
   max_mana_gain = 4400;
   Spell::Setup();
 }
 
 DemonicRune::DemonicRune(Player& player) : ManaPotion(player) {
-  name                           = SpellName::kDemonicRune;
+  name                           = WarlockSimulatorConstants::kDemonicRune;
   min_mana_gain                  = 900;
   max_mana_gain                  = 1500;
   cooldown                       = 900;

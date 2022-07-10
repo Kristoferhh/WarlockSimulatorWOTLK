@@ -22,7 +22,7 @@ Pet::Pet(Player& player, const EmbindConstant kSelectedPet)
   infinite_mana = player.settings.infinite_pet_mana;
 
   if (kSelectedPet == EmbindConstant::kImp) {
-    name     = PetNameStr::kImp;
+    name     = WarlockSimulatorConstants::kImp;
     pet_name = PetName::kImp;
     pet_type = PetType::kRanged;
     stats.stamina += 118;
@@ -32,7 +32,7 @@ Pet::Pet(Player& player, const EmbindConstant kSelectedPet)
     stats.agility += 79;
     stats.damage_modifier *= 1 + 0.1 * player.talents.empowered_imp;
   } else if (kSelectedPet == EmbindConstant::kSuccubus) {
-    name     = PetNameStr::kSuccubus;
+    name     = WarlockSimulatorConstants::kSuccubus;
     pet_name = PetName::kSuccubus;
     pet_type = PetType::kMelee;
     stats.stamina += 280;
@@ -41,7 +41,7 @@ Pet::Pet(Player& player, const EmbindConstant kSelectedPet)
     stats.strength += 153;
     stats.agility += 109;
   } else if (kSelectedPet == EmbindConstant::kFelguard) {
-    name     = PetNameStr::kFelguard;
+    name     = WarlockSimulatorConstants::kFelguard;
     pet_type = PetType::kMelee;
     pet_name = PetName::kFelguard;
     stats.stamina += 328;

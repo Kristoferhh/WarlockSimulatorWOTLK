@@ -117,19 +117,19 @@ void Aura::DecrementStacks() {
 }
 
 CurseOfTheElementsAura::CurseOfTheElementsAura(Player& player) : Aura(player) {
-  name     = SpellName::kCurseOfTheElements;
+  name     = WarlockSimulatorConstants::kCurseOfTheElements;
   duration = 300;
   Aura::Setup();
 }
 
 ShadowTranceAura::ShadowTranceAura(Player& player) : Aura(player) {
-  name     = SpellName::kNightfall;
+  name     = WarlockSimulatorConstants::kNightfall;
   duration = 10;
   Aura::Setup();
 }
 
 PowerInfusionAura::PowerInfusionAura(Player& player) : Aura(player) {
-  name     = SpellName::kPowerInfusion;
+  name     = WarlockSimulatorConstants::kPowerInfusion;
   duration = 15;
   stats.push_back(SpellHastePercent(player, 1.2));
   stats.push_back(ManaCostModifier(player, 0.8));
@@ -137,21 +137,21 @@ PowerInfusionAura::PowerInfusionAura(Player& player) : Aura(player) {
 }
 
 FlameCapAura::FlameCapAura(Player& player) : Aura(player) {
-  name     = SpellName::kFlameCap;
+  name     = WarlockSimulatorConstants::kFlameCap;
   duration = 60;
   stats.push_back(FirePower(player, 80));
   Aura::Setup();
 }
 
 BloodFuryAura::BloodFuryAura(Player& player) : Aura(player) {
-  name     = SpellName::kBloodFury;
+  name     = WarlockSimulatorConstants::kBloodFury;
   duration = 15;
   stats.push_back(SpellPower(player, 163));
   Aura::Setup();
 }
 
 BloodlustAura::BloodlustAura(Player& player) : Aura(player) {
-  name       = SpellName::kBloodlust;
+  name       = WarlockSimulatorConstants::kBloodlust;
   duration   = 40;
   group_wide = true;
   stats.push_back(SpellHastePercent(player, 1.3));
@@ -163,27 +163,27 @@ BloodlustAura::BloodlustAura(Player& player) : Aura(player) {
 }
 
 TheLightningCapacitorAura::TheLightningCapacitorAura(Player& player) : Aura(player) {
-  name         = SpellName::kTheLightningCapacitor;
+  name         = WarlockSimulatorConstants::kTheLightningCapacitor;
   has_duration = false;
   max_stacks   = 3;
   Aura::Setup();
 }
 
 InnervateAura::InnervateAura(Player& player) : Aura(player) {
-  name     = SpellName::kInnervate;
+  name     = WarlockSimulatorConstants::kInnervate;
   duration = 20;
   Aura::Setup();
 }
 
 DemonicFrenzyAura::DemonicFrenzyAura(Pet& pet) : Aura(pet) {
-  name       = SpellName::kDemonicFrenzy;
+  name       = WarlockSimulatorConstants::kDemonicFrenzy;
   duration   = 10;
   max_stacks = 10;
   Aura::Setup();
 }
 
 BlackBookAura::BlackBookAura(Pet& pet) : Aura(pet) {
-  name     = SpellName::kBlackBook;
+  name     = WarlockSimulatorConstants::kBlackBook;
   duration = 30;
   stats.push_back(SpellPower(pet, 200));
   stats.push_back(AttackPower(pet, 325));
@@ -191,20 +191,20 @@ BlackBookAura::BlackBookAura(Pet& pet) : Aura(pet) {
 }
 
 HauntAura::HauntAura(Player& player) : Aura(player) {
-  name     = SpellName::kHaunt;
+  name     = WarlockSimulatorConstants::kHaunt;
   duration = 12;
   Aura::Setup();
 }
 
 ShadowEmbraceAura::ShadowEmbraceAura(Player& player) : Aura(player) {
-  name       = SpellName::kShadowEmbrace;
+  name       = WarlockSimulatorConstants::kShadowEmbrace;
   duration   = 12;
   max_stacks = 3;
   Aura::Setup();
 }
 
 EradicationAura::EradicationAura(Player& player) : Aura(player) {
-  name     = SpellName::kEradication;
+  name     = WarlockSimulatorConstants::kEradication;
   duration = 10;
   stats.push_back(SpellHastePercent(player,
                                     player.talents.eradication == 1   ? 1.06
@@ -215,7 +215,7 @@ EradicationAura::EradicationAura(Player& player) : Aura(player) {
 }
 
 MoltenCoreAura::MoltenCoreAura(Player& player) : Aura(player) {
-  name                    = SpellName::kMoltenCore;
+  name                    = WarlockSimulatorConstants::kMoltenCore;
   duration                = 15;
   max_stacks              = 3;
   applies_with_max_stacks = true;
@@ -223,7 +223,7 @@ MoltenCoreAura::MoltenCoreAura(Player& player) : Aura(player) {
 }
 
 DemonicEmpowermentAura::DemonicEmpowermentAura(Pet& pet) : Aura(pet) {
-  name = SpellName::kDemonicEmpowerment;
+  name = WarlockSimulatorConstants::kDemonicEmpowerment;
 
   if (pet.pet_name == PetName::kImp) {
     duration = 30;
@@ -237,20 +237,20 @@ DemonicEmpowermentAura::DemonicEmpowermentAura(Pet& pet) : Aura(pet) {
 }
 
 DecimationAura::DecimationAura(Player& player) : Aura(player) {
-  name     = SpellName::kDecimation;
+  name     = WarlockSimulatorConstants::kDecimation;
   duration = 10;
   Aura::Setup();
 }
 
 // TODO does the pet get the aura
 DemonicPactAura::DemonicPactAura(Player& player) : Aura(player) {
-  name     = SpellName::kDemonicPact;
+  name     = WarlockSimulatorConstants::kDemonicPact;
   duration = 45;
   Aura::Setup();
 }
 
 MetamorphosisAura::MetamorphosisAura(Player& player) : Aura(player) {
-  name     = SpellName::kMetamorphosis;
+  name     = WarlockSimulatorConstants::kMetamorphosis;
   duration = 30;
   stats.push_back(DamageModifier(player, 1.2));
   Aura::Setup();
@@ -265,7 +265,7 @@ ImprovedShadowBoltAura::ImprovedShadowBoltAura(Player& player) : Aura(player) {
 }
 
 PyroclasmAura::PyroclasmAura(Player& player) : Aura(player) {
-  name     = SpellName::kPyroclasm;
+  name     = WarlockSimulatorConstants::kPyroclasm;
   duration = 10;
   stats.push_back(ShadowModifier(player, 1 + 0.02 * player.talents.pyroclasm));
   stats.push_back(FireModifier(player, 1 + 0.02 * player.talents.pyroclasm));
@@ -273,7 +273,7 @@ PyroclasmAura::PyroclasmAura(Player& player) : Aura(player) {
 }
 
 ImprovedSoulLeechAura::ImprovedSoulLeechAura(Player& player) : Aura(player) {
-  name     = SpellName::kImprovedSoulLeech;
+  name     = WarlockSimulatorConstants::kImprovedSoulLeech;
   duration = 15;
   stats.push_back(ManaPer5(player, player.stats.max_mana * 0.01));  // TODO does it also affect pet
   Aura::Setup();
@@ -291,7 +291,7 @@ void ImprovedSoulLeechAura::Apply() {
 }
 
 BackdraftAura::BackdraftAura(Player& player) : Aura(player) {
-  name                    = SpellName::kBackdraft;
+  name                    = WarlockSimulatorConstants::kBackdraft;
   duration                = 15;
   max_stacks              = 3;
   applies_with_max_stacks = true;
@@ -299,27 +299,27 @@ BackdraftAura::BackdraftAura(Player& player) : Aura(player) {
 }
 
 EmpoweredImpAura::EmpoweredImpAura(Player& player) : Aura(player) {
-  name     = SpellName::kEmpoweredImp;
+  name     = WarlockSimulatorConstants::kEmpoweredImp;
   duration = 8;
   Aura::Setup();
 }
 
 JeTzesBellAura::JeTzesBellAura(Player& player) : Aura(player) {
-  name     = SpellName::kJeTzesBell;
+  name     = WarlockSimulatorConstants::kJeTzesBell;
   duration = 15;
   stats.push_back(ManaPer5(player, 125));
   Aura::Setup();
 }
 
 EmbraceOfTheSpiderAura::EmbraceOfTheSpiderAura(Player& player) : Aura(player) {
-  name     = SpellName::kEmbraceOfTheSpider;
+  name     = WarlockSimulatorConstants::kEmbraceOfTheSpider;
   duration = 10;
   stats.push_back(SpellHasteRating(player, 505));
   Aura::Setup();
 }
 
 DyingCurseAura::DyingCurseAura(Player& player) : Aura(player) {
-  name     = SpellName::kDyingCurse;
+  name     = WarlockSimulatorConstants::kDyingCurse;
   duration = 10;
   stats.push_back(SpellPower(player, 765));
   Aura::Setup();

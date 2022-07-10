@@ -54,7 +54,7 @@ double ManaOverTime::GetManaGain() {
 }
 
 ManaTideTotemAura::ManaTideTotemAura(Entity& entity) : ManaOverTime(entity) {
-  name             = SpellName::kManaTideTotem;
+  name             = WarlockSimulatorConstants::kManaTideTotem;
   duration         = 12;
   tick_timer_total = 3;
   group_wide       = true;

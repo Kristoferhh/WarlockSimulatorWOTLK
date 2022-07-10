@@ -23,20 +23,20 @@ void OnCritProc::Setup() {
 }
 
 DemonicPact::DemonicPact(Pet& pet, std::shared_ptr<Aura> aura) : OnCritProc(pet, std::move(aura)) {
-  name        = SpellName::kDemonicPact;
+  name        = WarlockSimulatorConstants::kDemonicPact;
   cooldown    = 20;
   proc_chance = 100;
   OnCritProc::Setup();
 }
 
 Pyroclasm::Pyroclasm(Player& player, std::shared_ptr<Aura> aura) : OnCritProc(player, std::move(aura)) {
-  name        = SpellName::kPyroclasm;
+  name        = WarlockSimulatorConstants::kPyroclasm;
   proc_chance = 100;
   OnCritProc::Setup();
 }
 
 EmpoweredImp::EmpoweredImp(Pet& pet, std::shared_ptr<Aura> aura) : OnCritProc(pet, std::move(aura)) {
-  name        = SpellName::kEmpoweredImp;
+  name        = WarlockSimulatorConstants::kEmpoweredImp;
   proc_chance = pet.player->talents.empowered_imp == 1   ? 33
                 : pet.player->talents.empowered_imp == 2 ? 66
                 : pet.player->talents.empowered_imp == 3 ? 100

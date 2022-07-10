@@ -82,8 +82,9 @@ TEST_F(PlayerTest, EndAuras) {
 }
 
 TEST_F(PlayerTest, GetHastePercent) {
-  _player->stats.spell_haste_rating  = 100;
-  const auto kHastePercentFromRating = _player->stats.spell_haste_rating / StatConstant::kHasteRatingPerPercent / 100.0;
+  _player->stats.spell_haste_rating = 100;
+  const auto kHastePercentFromRating =
+      _player->stats.spell_haste_rating / WarlockSimulatorConstants::kHasteRatingPerPercent / 100.0;
   ASSERT_NE(_player->auras.bloodlust, nullptr);
   ASSERT_NE(_player->auras.power_infusion, nullptr);
   ASSERT_EQ(_player->GetHastePercent(), 1 + kHastePercentFromRating);
@@ -302,8 +303,9 @@ TEST_F(PlayerTest, Tick_MP5) {
 
   EXPECT_EQ(_player->mp5_timer_remaining, 5);
   EXPECT_EQ(static_cast<int>(_player->stats.mana), 30);
-  EXPECT_EQ(_player->combat_log_breakdown.at(StatName::kMp5)->casts, 1);
-  EXPECT_EQ(static_cast<int>(_player->combat_log_breakdown.at(StatName::kMp5)->iteration_mana_gain), 30);
+  EXPECT_EQ(_player->combat_log_breakdown.at(WarlockSimulatorConstants::kMp5)->casts, 1);
+  EXPECT_EQ(static_cast<int>(_player->combat_log_breakdown.at(WarlockSimulatorConstants::kMp5)->iteration_mana_gain),
+            30);
 }
 
 TEST_F(PlayerTest, Tick_MP5_ManaOvercapping) {
@@ -313,7 +315,7 @@ TEST_F(PlayerTest, Tick_MP5_ManaOvercapping) {
   _player->Tick(5);
 
   EXPECT_EQ(_player->stats.mana, _player->stats.max_mana);
-  EXPECT_EQ(_player->combat_log_breakdown.at(StatName::kMp5)->iteration_mana_gain, 10);
+  EXPECT_EQ(_player->combat_log_breakdown.at(WarlockSimulatorConstants::kMp5)->iteration_mana_gain, 10);
 }
 
 TEST_F(PlayerTest, Tick_MP5_Innervate) {}
