@@ -195,7 +195,9 @@ void Spell::Cast() {
   casting                   = false;
   amount_of_casts_this_fight++;
 
-  OnCastProcs();
+  if (!is_proc && !is_non_warlock_ability) {
+    OnCastProcs();
+  }
 
   for (auto& spell_name : shared_cooldown_spells) {
     for (const auto& kPlayerSpell : entity.spell_list) {

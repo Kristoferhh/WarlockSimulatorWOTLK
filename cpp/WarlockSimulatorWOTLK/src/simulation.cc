@@ -389,8 +389,8 @@ void Simulation::IterationEnd() {
   }
 
   if (iteration % static_cast<int>(std::floor(kSettings.iterations / 100.0)) == 0) {
-    SimulationUpdate(iteration, kSettings.iterations, Median(dps_vector), player.settings.item_id,
-                     player.custom_stat.c_str());
+    SimulationUpdate(
+        iteration, kSettings.iterations, Median(dps_vector), player.settings.item_id, player.custom_stat.c_str());
   }
 }
 
@@ -409,8 +409,14 @@ void Simulation::SimulationEnd(const long long kSimulationDuration) const {
     }
   }
 
-  SendSimulationResults(Median(dps_vector), min_dps, max_dps, player.settings.item_id, kSettings.iterations,
-                        static_cast<int>(player.total_fight_duration), player.custom_stat.c_str(), kSimulationDuration);
+  SendSimulationResults(Median(dps_vector),
+                        min_dps,
+                        max_dps,
+                        player.settings.item_id,
+                        kSettings.iterations,
+                        static_cast<int>(player.total_fight_duration),
+                        player.custom_stat.c_str(),
+                        kSimulationDuration);
 }
 
 // TODO :-)
