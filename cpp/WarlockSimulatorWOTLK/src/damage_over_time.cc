@@ -1,3 +1,4 @@
+// ReSharper disable CppClangTidyClangDiagnosticShadowField
 #include "../include/damage_over_time.h"
 
 #include "../include/aura.h"
@@ -10,7 +11,7 @@
 #include "../include/simulation.h"
 #include "../include/talents.h"
 
-DamageOverTime::DamageOverTime(Player& player_param) : player(player_param), school(SpellSchool::kNoSchool) {}
+DamageOverTime::DamageOverTime(Player& player) : player(player), school(SpellSchool::kNoSchool) {}
 
 void DamageOverTime::Setup() {
   ticks_total = duration / tick_timer_total;
@@ -171,30 +172,30 @@ void DamageOverTime::Tick(const double kTime) {
   }
 }
 
-CorruptionDot::CorruptionDot(Player& player_param) : DamageOverTime(player_param) {
+CorruptionDot::CorruptionDot(Player& player) : DamageOverTime(player) {
   name             = SpellName::kCorruption;
   duration         = 18;
   tick_timer_total = 3;
   base_damage      = 1080;
   school           = SpellSchool::kShadow;
-  coefficient      = 3.0 / 15.0 + 0.12 * player_param.talents.empowered_corruption +
-                0.01 * player_param.talents.everlasting_affliction + 0.05 * player_param.talents.siphon_life;
+  coefficient = 3.0 / 15.0 + 0.12 * player.talents.empowered_corruption + 0.01 * player.talents.everlasting_affliction +
+                0.05 * player.talents.siphon_life;
   Setup();
 }
 
-UnstableAfflictionDot::UnstableAfflictionDot(Player& player_param) : DamageOverTime(player_param) {
+UnstableAfflictionDot::UnstableAfflictionDot(Player& player) : DamageOverTime(player) {
   name             = SpellName::kUnstableAffliction;
   duration         = 15;
   tick_timer_total = 3;
   base_damage      = 1380;
   school           = SpellSchool::kShadow;
-  coefficient      = 1.2 + 0.01 * player_param.talents.everlasting_affliction + 0.05 * player_param.talents.siphon_life;
+  coefficient      = 1.2 + 0.01 * player.talents.everlasting_affliction + 0.05 * player.talents.siphon_life;
   Setup();
 }
 
-ImmolateDot::ImmolateDot(Player& player_param) : DamageOverTime(player_param) {
+ImmolateDot::ImmolateDot(Player& player) : DamageOverTime(player) {
   name             = SpellName::kImmolate;
-  duration         = 15 + 3 * player_param.talents.molten_core;
+  duration         = 15 + 3 * player.talents.molten_core;
   tick_timer_total = 3;
   base_damage      = 785;
   school           = SpellSchool::kFire;
@@ -202,7 +203,7 @@ ImmolateDot::ImmolateDot(Player& player_param) : DamageOverTime(player_param) {
   Setup();
 }
 
-CurseOfAgonyDot::CurseOfAgonyDot(Player& player_param) : DamageOverTime(player_param) {
+CurseOfAgonyDot::CurseOfAgonyDot(Player& player) : DamageOverTime(player) {
   name             = SpellName::kCurseOfAgony;
   duration         = 24;
   tick_timer_total = 3;
@@ -212,7 +213,7 @@ CurseOfAgonyDot::CurseOfAgonyDot(Player& player_param) : DamageOverTime(player_p
   Setup();
 }
 
-CurseOfDoomDot::CurseOfDoomDot(Player& player_param) : DamageOverTime(player_param) {
+CurseOfDoomDot::CurseOfDoomDot(Player& player) : DamageOverTime(player) {
   name             = SpellName::kCurseOfDoom;
   duration         = 60;
   tick_timer_total = 60;
@@ -222,7 +223,7 @@ CurseOfDoomDot::CurseOfDoomDot(Player& player_param) : DamageOverTime(player_par
   Setup();
 }
 
-ShadowflameDot::ShadowflameDot(Player& player_param) : DamageOverTime(player_param) {
+ShadowflameDot::ShadowflameDot(Player& player) : DamageOverTime(player) {
   name             = SpellName::kShadowflame;
   duration         = 8;
   tick_timer_total = 2;
@@ -232,7 +233,7 @@ ShadowflameDot::ShadowflameDot(Player& player_param) : DamageOverTime(player_par
   Setup();
 }
 
-ConflagrateDot::ConflagrateDot(Player& player_param) : DamageOverTime(player_param) {
+ConflagrateDot::ConflagrateDot(Player& player) : DamageOverTime(player) {
   name             = SpellName::kConflagrate;
   duration         = 6;
   tick_timer_total = 2;
@@ -240,7 +241,7 @@ ConflagrateDot::ConflagrateDot(Player& player_param) : DamageOverTime(player_par
   Setup();
 }
 
-DrainSoulDot::DrainSoulDot(Player& player_param) : DamageOverTime(player_param) {
+DrainSoulDot::DrainSoulDot(Player& player) : DamageOverTime(player) {
   name             = SpellName::kDrainSoul;
   duration         = 15;  // TODO drain soul's duration is reduced with haste
   tick_timer_total = 3;

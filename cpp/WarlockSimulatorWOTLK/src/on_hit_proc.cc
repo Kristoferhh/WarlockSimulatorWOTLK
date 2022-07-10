@@ -1,3 +1,4 @@
+// ReSharper disable CppClangTidyClangDiagnosticShadowField
 #include "../include/on_hit_proc.h"
 
 #include <utility>
@@ -8,7 +9,7 @@
 #include "../include/sets.h"
 #include "../include/talents.h"
 
-OnHitProc::OnHitProc(Entity& entity_param, std::shared_ptr<Aura> aura) : SpellProc(entity_param, std::move(aura)) {
+OnHitProc::OnHitProc(Entity& entity, std::shared_ptr<Aura> aura) : SpellProc(entity, std::move(aura)) {
   procs_on_hit = true;
 }
 
@@ -20,7 +21,7 @@ void OnHitProc::Setup() {
   }
 }
 
-JudgementOfWisdom::JudgementOfWisdom(Entity& entity_param) : OnHitProc(entity_param) {
+JudgementOfWisdom::JudgementOfWisdom(Entity& entity) : OnHitProc(entity) {
   name              = SpellName::kJudgementOfWisdom;
   mana_gain         = 74;
   gain_mana_on_cast = true;

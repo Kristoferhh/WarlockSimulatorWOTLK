@@ -4,7 +4,7 @@
 struct Player;
 
 struct OnCritProc : SpellProc {
-  explicit OnCritProc(Entity& entity_param, std::shared_ptr<Aura> aura = nullptr);
+  explicit OnCritProc(Entity& entity, std::shared_ptr<Aura> aura = nullptr);
   void Setup() override;
 };
 

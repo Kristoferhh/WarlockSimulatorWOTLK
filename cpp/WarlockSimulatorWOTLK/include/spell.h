@@ -72,9 +72,7 @@ struct Spell {
   bool is_harmful                    = false;  // TODO set this for harmful spells
   bool is_damaging_spell             = false;  // TODO set this for damaging spells (Illustration of the Dragon Soul)
 
-  explicit Spell(Entity& entity_param,
-                 std::shared_ptr<Aura> aura          = nullptr,
-                 std::shared_ptr<DamageOverTime> dot = nullptr);
+  explicit Spell(Entity& entity, std::shared_ptr<Aura> aura = nullptr, std::shared_ptr<DamageOverTime> dot = nullptr);
   virtual void Setup();
   virtual void Cast();
   virtual bool CanCast();

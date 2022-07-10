@@ -12,7 +12,7 @@ struct Pet final : Entity, std::enable_shared_from_this<Pet> {
   double glancing_blow_chance;
   double enemy_damage_reduction_from_armor = 0;  // TODO move to an enemy struct
 
-  Pet(Player& player_param, EmbindConstant kSelectedPet);
+  Pet(Player& player, EmbindConstant kSelectedPet);
   void Initialize(Simulation* simulation_ptr) override;
   void CalculateStatsFromAuras();
   void Setup();

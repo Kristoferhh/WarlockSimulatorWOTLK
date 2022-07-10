@@ -1,3 +1,4 @@
+// ReSharper disable CppClangTidyClangDiagnosticShadowField
 #include "../include/pet.h"
 
 #include <iostream>
@@ -14,11 +15,11 @@
 #include "../include/stat.h"
 #include "../include/talents.h"
 
-Pet::Pet(Player& player_param, const EmbindConstant kSelectedPet)
-    : Entity(&player_param, player_param.settings, EntityType::kPet),
-      glancing_blow_multiplier(1 - (0.1 + (player_param.settings.enemy_level * 5 - kLevel * 5) / 100.0)),
-      glancing_blow_chance(std::max(0.0, 6 + (player_param.settings.enemy_level * 5 - kLevel * 5) * 1.2)) {
-  infinite_mana = player_param.settings.infinite_pet_mana;
+Pet::Pet(Player& player, const EmbindConstant kSelectedPet)
+    : Entity(&player, player.settings, EntityType::kPet),
+      glancing_blow_multiplier(1 - (0.1 + (player.settings.enemy_level * 5 - kLevel * 5) / 100.0)),
+      glancing_blow_chance(std::max(0.0, 6 + (player.settings.enemy_level * 5 - kLevel * 5) * 1.2)) {
+  infinite_mana = player.settings.infinite_pet_mana;
 
   if (kSelectedPet == EmbindConstant::kImp) {
     name     = PetNameStr::kImp;
@@ -29,7 +30,7 @@ Pet::Pet(Player& player_param, const EmbindConstant kSelectedPet)
     stats.spirit += 367;
     stats.strength += 297;
     stats.agility += 79;
-    stats.damage_modifier *= 1 + 0.1 * player_param.talents.empowered_imp;
+    stats.damage_modifier *= 1 + 0.1 * player.talents.empowered_imp;
   } else if (kSelectedPet == EmbindConstant::kSuccubus) {
     name     = PetNameStr::kSuccubus;
     pet_name = PetName::kSuccubus;

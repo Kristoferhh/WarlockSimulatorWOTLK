@@ -13,6 +13,7 @@
 #include "../include/life_tap.h"
 #include "../include/mana_over_time.h"
 #include "../include/mana_potion.h"
+#include "../include/on_cast_proc.h"
 #include "../include/on_crit_proc.h"
 #include "../include/on_damage_proc.h"
 #include "../include/on_dot_tick_proc.h"
@@ -26,7 +27,6 @@
 #include "../include/stat.h"
 #include "../include/talents.h"
 #include "../include/trinket.h"
-#include "../on_cast_proc.h"
 
 Player::Player(PlayerSettings& player_settings)
     : Entity(nullptr, player_settings, EntityType::kPlayer),

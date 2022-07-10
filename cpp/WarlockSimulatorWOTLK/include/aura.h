@@ -34,7 +34,7 @@ struct Aura {
   // Bloodlust
   double haste_modifier = 0;
 
-  explicit Aura(Entity& entity_param);
+  explicit Aura(Entity& entity);
   virtual void Setup();
   virtual void Tick(double kTime);
   virtual void Apply();

@@ -10,6 +10,7 @@
 #include "../include/damage_over_time.h"
 #include "../include/entity.h"
 #include "../include/item_slot.h"
+#include "../include/on_cast_proc.h"
 #include "../include/on_crit_proc.h"
 #include "../include/on_damage_proc.h"
 #include "../include/on_hit_proc.h"
@@ -20,10 +21,9 @@
 #include "../include/sets.h"
 #include "../include/simulation.h"
 #include "../include/talents.h"
-#include "../on_cast_proc.h"
 
-Spell::Spell(Entity& entity_param, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
-    : entity(entity_param),
+Spell::Spell(Entity& entity, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot)
+    : entity(entity),
       aura_effect(std::move(aura)),
       dot_effect(std::move(dot)),
       spell_school(SpellSchool::kNoSchool),

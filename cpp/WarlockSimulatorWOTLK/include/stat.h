@@ -11,7 +11,7 @@ struct Stat {
   double value;
   int combat_log_decimal_places = 0;
 
-  Stat(Entity& entity_param, double& character_stat, double kValue);
+  Stat(Entity& entity, double& character_stat, double kValue);
   void AddStat() const;
   void RemoveStat(int kStacks = 1) const;
 
@@ -20,69 +20,69 @@ struct Stat {
 };
 
 struct SpellPower : Stat {
-  SpellPower(Entity& entity_param, double kValue);
+  SpellPower(Entity& entity, double kValue);
 };
 
 struct ShadowPower : Stat {
-  ShadowPower(Entity& entity_param, double kValue);
+  ShadowPower(Entity& entity, double kValue);
 };
 
 struct FirePower : Stat {
-  FirePower(Entity& entity_param, double kValue);
+  FirePower(Entity& entity, double kValue);
 };
 
 struct SpellHasteRating : Stat {
-  SpellHasteRating(Entity& entity_param, double kValue);
+  SpellHasteRating(Entity& entity, double kValue);
 };
 
 struct SpellHastePercent : Stat {
-  SpellHastePercent(Entity& entity_param, double kValue);
+  SpellHastePercent(Entity& entity, double kValue);
 };
 
 struct MeleeHastePercent : Stat {
-  MeleeHastePercent(Entity& entity_param, double kValue);
+  MeleeHastePercent(Entity& entity, double kValue);
 };
 
 struct ManaCostModifier : Stat {
-  ManaCostModifier(Entity& entity_param, double kValue);
+  ManaCostModifier(Entity& entity, double kValue);
 };
 
 struct SpellCritChance : Stat {
-  SpellCritChance(Entity& entity_param, double kValue);
+  SpellCritChance(Entity& entity, double kValue);
 };
 
 struct SpellCritRating : Stat {
-  SpellCritRating(Entity& entity_param, double kValue);
+  SpellCritRating(Entity& entity, double kValue);
 };
 
 struct AttackPower : Stat {
-  AttackPower(Entity& entity_param, double kValue);
+  AttackPower(Entity& entity, double kValue);
 };
 
 struct AttackPowerModifier : Stat {
-  AttackPowerModifier(Entity& entity_param, double kValue);
+  AttackPowerModifier(Entity& entity, double kValue);
 };
 
 struct DamageModifier : Stat {
-  DamageModifier(Entity& entity_param, double kValue);
+  DamageModifier(Entity& entity, double kValue);
 };
 
 struct ShadowModifier : Stat {
-  ShadowModifier(Entity& entity_param, double kValue);
+  ShadowModifier(Entity& entity, double kValue);
 };
 
 struct FireModifier : Stat {
-  FireModifier(Entity& entity_param, double kValue);
+  FireModifier(Entity& entity, double kValue);
 };
 
 struct ManaPer5 : Stat {
-  ManaPer5(Entity& entity_param, double kValue);
+  ManaPer5(Entity& entity, double kValue);
 };
 
 struct Spirit : Stat {
-  Spirit(Entity& entity_param, double kValue);
+  Spirit(Entity& entity, double kValue);
 };
 
 struct Intellect : Stat {
-  Intellect(Entity& entity_param, double kValue);
+  Intellect(Entity& entity, double kValue);
 };

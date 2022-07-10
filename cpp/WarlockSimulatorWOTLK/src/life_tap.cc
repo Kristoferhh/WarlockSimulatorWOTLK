@@ -1,3 +1,4 @@
+// ReSharper disable CppClangTidyClangDiagnosticShadowField
 #include "../include/life_tap.h"
 
 #include "../include/combat_log_breakdown.h"
@@ -8,8 +9,8 @@
 #include "../include/talents.h"
 
 // TODO make a class a parent to life tap and dark pact instead of life tap being a parent to dark pact
-LifeTap::LifeTap(Entity& entity_param)
-    : Spell(entity_param), mana_return(2400), modifier(1 * (1 + 0.1 * entity_param.player->talents.improved_life_tap)) {
+LifeTap::LifeTap(Entity& entity)
+    : Spell(entity), mana_return(2400), modifier(1 * (1 + 0.1 * entity.player->talents.improved_life_tap)) {
   name         = SpellName::kLifeTap;
   coefficient  = 0.6;
   spell_school = SpellSchool::kShadow;
@@ -59,7 +60,7 @@ void LifeTap::Cast() {
   }
 }
 
-DarkPact::DarkPact(Entity& entity_param) : LifeTap(entity_param) {
+DarkPact::DarkPact(Entity& entity) : LifeTap(entity) {
   name         = SpellName::kDarkPact;
   mana_return  = 1200;
   coefficient  = 0.96;

@@ -1,3 +1,4 @@
+// ReSharper disable CppClangTidyClangDiagnosticShadowField
 #include "../include/trinket.h"
 
 #include <memory>

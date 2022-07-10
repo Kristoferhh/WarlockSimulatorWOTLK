@@ -1,3 +1,4 @@
+// ReSharper disable CppClangTidyClangDiagnosticShadowField
 #include "../include/mana_over_time.h"
 
 #include "../include/combat_log_breakdown.h"
@@ -6,7 +7,7 @@
 #include "../include/player.h"
 #include "../include/stat.h"
 
-ManaOverTime::ManaOverTime(Entity& entity_param) : Aura(entity_param), mana_per_tick(0) {}
+ManaOverTime::ManaOverTime(Entity& entity) : Aura(entity), mana_per_tick(0) {}
 
 void ManaOverTime::Setup() {
   ticks_total = duration / tick_timer_total;
@@ -52,7 +53,7 @@ double ManaOverTime::GetManaGain() {
   return mana_per_tick;
 }
 
-ManaTideTotemAura::ManaTideTotemAura(Entity& entity_param) : ManaOverTime(entity_param) {
+ManaTideTotemAura::ManaTideTotemAura(Entity& entity) : ManaOverTime(entity) {
   name             = SpellName::kManaTideTotem;
   duration         = 12;
   tick_timer_total = 3;

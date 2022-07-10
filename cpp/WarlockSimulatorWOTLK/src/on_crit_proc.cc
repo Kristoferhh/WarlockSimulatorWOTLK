@@ -1,3 +1,4 @@
+// ReSharper disable CppClangTidyClangDiagnosticShadowField
 #include "../include/on_crit_proc.h"
 
 #include <utility>
@@ -9,7 +10,7 @@
 #include "../include/player_settings.h"
 #include "../include/talents.h"
 
-OnCritProc::OnCritProc(Entity& entity_param, std::shared_ptr<Aura> aura) : SpellProc(entity_param, std::move(aura)) {
+OnCritProc::OnCritProc(Entity& entity, std::shared_ptr<Aura> aura) : SpellProc(entity, std::move(aura)) {
   procs_on_crit = true;
 }
 

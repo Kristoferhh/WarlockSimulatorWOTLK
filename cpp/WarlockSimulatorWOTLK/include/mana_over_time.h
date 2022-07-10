@@ -4,7 +4,7 @@
 struct ManaOverTime : Aura {
   double mana_per_tick;
 
-  explicit ManaOverTime(Entity& entity_param);
+  explicit ManaOverTime(Entity& entity);
   void Apply() override;
   void Tick(double kTime) override;
   void Setup() override;
@@ -12,7 +12,7 @@ struct ManaOverTime : Aura {
 };
 
 struct ManaTideTotemAura final : ManaOverTime {
-  explicit ManaTideTotemAura(Entity& entity_param);
+  explicit ManaTideTotemAura(Entity& entity);
   double GetManaGain() override;
 };
 

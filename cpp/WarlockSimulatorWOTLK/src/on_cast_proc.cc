@@ -1,9 +1,10 @@
-#include "on_cast_proc.h"
+// ReSharper disable CppClangTidyClangDiagnosticShadowField
+#include "../include/on_cast_proc.h"
 
-#include "include/entity.h"
-#include "include/player.h"
+#include "../include/entity.h"
+#include "../include/player.h"
 
-OnCastProc::OnCastProc(Entity& entity_param, std::shared_ptr<Aura> aura) : SpellProc(entity_param, std::move(aura)) {
+OnCastProc::OnCastProc(Entity& entity, std::shared_ptr<Aura> aura) : SpellProc(entity, std::move(aura)) {
   procs_on_cast = true;
 }
 

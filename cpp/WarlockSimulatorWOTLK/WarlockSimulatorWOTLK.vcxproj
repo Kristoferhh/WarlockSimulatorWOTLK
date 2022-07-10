@@ -142,7 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="on_cast_proc.cc" />
+    <ClCompile Include="src\on_cast_proc.cc" />
     <ClCompile Include="src\aura.cc" />
     <ClCompile Include="src\bindings.cc" />
     <ClCompile Include="src\common.cc" />
@@ -201,7 +201,7 @@
     <ClInclude Include="include\stat.h" />
     <ClInclude Include="include\talents.h" />
     <ClInclude Include="include\trinket.h" />
-    <ClInclude Include="on_cast_proc.h" />
+    <ClInclude Include="include\on_cast_proc.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

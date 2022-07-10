@@ -25,7 +25,7 @@ struct DamageOverTime {
   double crit_damage_multiplier = 1.5;
   std::string name;
 
-  explicit DamageOverTime(Player& player_param);
+  explicit DamageOverTime(Player& player);
   void Setup();
   virtual void Apply();
   void Fade();
@@ -36,34 +36,34 @@ struct DamageOverTime {
 };
 
 struct CorruptionDot final : DamageOverTime {
-  explicit CorruptionDot(Player& player_param);
+  explicit CorruptionDot(Player& player);
 };
 
 struct UnstableAfflictionDot final : DamageOverTime {
-  explicit UnstableAfflictionDot(Player& player_param);
+  explicit UnstableAfflictionDot(Player& player);
 };
 
 struct ImmolateDot final : DamageOverTime {
-  explicit ImmolateDot(Player& player_param);
+  explicit ImmolateDot(Player& player);
 };
 
 struct CurseOfAgonyDot final : DamageOverTime {
-  explicit CurseOfAgonyDot(Player& player_param);
+  explicit CurseOfAgonyDot(Player& player);
 };
 
 struct CurseOfDoomDot final : DamageOverTime {
-  explicit CurseOfDoomDot(Player& player_param);
+  explicit CurseOfDoomDot(Player& player);
 };
 
 struct ShadowflameDot final : DamageOverTime {
-  explicit ShadowflameDot(Player& player_param);
+  explicit ShadowflameDot(Player& player);
 };
 
 struct ConflagrateDot final : DamageOverTime {
-  explicit ConflagrateDot(Player& player_param);
+  explicit ConflagrateDot(Player& player);
 };
 
 // TODO turn this into a channeled spell or something instead of being a dot
 struct DrainSoulDot final : DamageOverTime {
-  explicit DrainSoulDot(Player& player_param);
+  explicit DrainSoulDot(Player& player);
 };

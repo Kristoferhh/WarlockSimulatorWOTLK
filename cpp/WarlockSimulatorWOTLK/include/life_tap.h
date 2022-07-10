@@ -5,12 +5,12 @@ struct LifeTap : Spell {
   int mana_return;
   double modifier;
 
-  explicit LifeTap(Entity& entity_param);
+  explicit LifeTap(Entity& entity);
   [[nodiscard]] double ManaGain() const;
   void Cast() override;
 };
 
 struct DarkPact final : LifeTap {
-  explicit DarkPact(Entity& entity_param);
+  explicit DarkPact(Entity& entity);
   bool Ready() override;
 };
