@@ -604,3 +604,10 @@ CharredTwilightScaleHeroicAura::CharredTwilightScaleHeroicAura(Player& player) :
   stats.push_back(SpellPower(player, 861));
   Aura::Setup();
 }
+
+SparkOfLifeAura::SparkOfLifeAura(Player& player) : Aura(player) {
+  name     = "Spark of Life";
+  duration = 15;
+  stats.push_back(ManaPer5(player, 220));
+  Aura::Setup();
+}

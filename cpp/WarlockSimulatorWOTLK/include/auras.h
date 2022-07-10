@@ -66,4 +66,5 @@ struct Auras {
   std::shared_ptr<Aura> purified_lunar_dust;
   std::shared_ptr<Aura> phylactery_of_the_nameless_lich;
   std::shared_ptr<Aura> charred_twilight_scale;
+  std::shared_ptr<Aura> spark_of_life;
 };

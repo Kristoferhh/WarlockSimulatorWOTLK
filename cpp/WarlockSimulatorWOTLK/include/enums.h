@@ -119,6 +119,7 @@ constexpr double kBaseEnemyDodgeChance       = 6.5;
 }  // namespace StatConstant
 
 namespace ItemId {
+constexpr int kSparkOfLife                       = 37657;
 constexpr int kCharredTwilightScaleHeroic        = 54588;
 constexpr int kCharredTwilightScale              = 54572;
 constexpr int kPhylacteryOfTheNamelessLichHeroic = 50365;

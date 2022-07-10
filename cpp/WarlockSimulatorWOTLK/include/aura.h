@@ -285,3 +285,7 @@ struct CharredTwilightScaleAura final : Aura {
 struct CharredTwilightScaleHeroicAura final : Aura {
   explicit CharredTwilightScaleHeroicAura(Player& player);
 };
+
+struct SparkOfLifeAura final : Aura {
+  explicit SparkOfLifeAura(Player& player);
+};

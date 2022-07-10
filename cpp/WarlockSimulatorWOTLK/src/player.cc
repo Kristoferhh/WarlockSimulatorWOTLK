@@ -429,6 +429,11 @@ void Player::InitializeTrinkets() {
       auras.charred_twilight_scale  = std::make_shared<CharredTwilightScaleHeroicAura>(*this);
       spells.charred_twilight_scale = std::make_shared<CharredTwilightScale>(*this, auras.charred_twilight_scale);
     }
+
+    if (kTrinketId == ItemId::kSparkOfLife) {
+      auras.spark_of_life  = std::make_shared<SparkOfLifeAura>(*this);
+      spells.spark_of_life = std::make_shared<SparkOfLife>(*this, auras.spark_of_life);
+    }
   }
 }
 

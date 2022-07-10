@@ -196,3 +196,14 @@ CharredTwilightScale::CharredTwilightScale(Player& player, std::shared_ptr<Aura>
   cooldown    = 45;
   OnCastProc::Setup();
 }
+
+SparkOfLife::SparkOfLife(Player& player, std::shared_ptr<Aura> aura) : OnCastProc(player, std::move(aura)) {
+  name        = "Spark of Life";
+  proc_chance = 10;
+  cooldown    = 50;
+  OnCastProc::Setup();
+}
+
+bool SparkOfLife::ShouldProc(Spell* spell) {
+  return spell->is_damaging_spell;
+}

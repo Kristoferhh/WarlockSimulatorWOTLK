@@ -94,3 +94,8 @@ struct PurifiedLunarDust final : OnCastProc {
 struct CharredTwilightScale final : OnCastProc {
   explicit CharredTwilightScale(Player& player, std::shared_ptr<Aura> aura);
 };
+
+struct SparkOfLife final : OnCastProc {
+  explicit SparkOfLife(Player& player, std::shared_ptr<Aura> aura);
+  bool ShouldProc(Spell* spell) override;
+};
