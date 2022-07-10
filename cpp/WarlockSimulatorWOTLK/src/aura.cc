@@ -256,8 +256,8 @@ MetamorphosisAura::MetamorphosisAura(Player& player) : Aura(player) {
   Aura::Setup();
 }
 
-ShadowMasteryAura::ShadowMasteryAura(Player& player) : Aura(player) {
-  name     = SpellName::kShadowMastery;
+ImprovedShadowBoltAura::ImprovedShadowBoltAura(Player& player) : Aura(player) {
+  name     = "Improved Shadow Bolt";
   duration = 30;
   stats.push_back(SpellCritChance(player, 5));
   stats.push_back(SpellCritChance(*player.pet, 5));

@@ -37,7 +37,7 @@ DemonicFrenzy::DemonicFrenzy(Pet& pet, std::shared_ptr<Aura> aura) : OnHitProc(p
 
 ImprovedShadowBolt::ImprovedShadowBolt(Player& player, std::shared_ptr<Aura> aura)
     : OnHitProc(player, std::move(aura)) {
-  name        = SpellName::kImprovedShadowBolt;
+  name        = "Improved Shadow Bolt";
   proc_chance = 20 * player.talents.improved_shadow_bolt;
   OnHitProc::Setup();
 }

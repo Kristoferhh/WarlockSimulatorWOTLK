@@ -115,8 +115,8 @@ struct MetamorphosisAura final : Aura {
   explicit MetamorphosisAura(Player& player);
 };
 
-struct ShadowMasteryAura final : Aura {
-  explicit ShadowMasteryAura(Player& player);
+struct ImprovedShadowBoltAura final : Aura {
+  explicit ImprovedShadowBoltAura(Player& player);
 };
 
 struct PyroclasmAura final : Aura {

@@ -31,7 +31,7 @@ struct Auras {
   std::shared_ptr<Aura> decimation;
   std::shared_ptr<Aura> demonic_pact;
   std::shared_ptr<Aura> metamorphosis;
-  std::shared_ptr<Aura> shadow_mastery;
+  std::shared_ptr<Aura> improved_shadow_bolt;
   std::shared_ptr<Aura> pyroclasm;
   std::shared_ptr<Aura> improved_soul_leech;
   std::shared_ptr<Aura> backdraft;

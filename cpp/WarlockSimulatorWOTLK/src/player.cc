@@ -440,7 +440,7 @@ void Player::InitializeTrinkets() {
 void Player::InitializeAuras() {
   if (settings.fight_type == EmbindConstant::kSingleTarget) {
     if (talents.improved_shadow_bolt > 0) {
-      auras.shadow_mastery = std::make_shared<ShadowMasteryAura>(*this);
+      auras.improved_shadow_bolt = std::make_shared<ImprovedShadowBoltAura>(*this);
     }
 
     if (settings.has_corruption || settings.rotation_option == EmbindConstant::kSimChooses) {
@@ -613,8 +613,8 @@ void Player::InitializeSpells() {
       auras.drain_soul->parent_spell = spells.drain_soul;
     }
 
-    if (auras.shadow_mastery != nullptr) {
-      spells.improved_shadow_bolt = std::make_shared<ImprovedShadowBolt>(*this, auras.shadow_mastery);
+    if (auras.improved_shadow_bolt != nullptr) {
+      spells.improved_shadow_bolt = std::make_shared<ImprovedShadowBolt>(*this, auras.improved_shadow_bolt);
     }
 
     if (auras.pyroclasm != nullptr) {
