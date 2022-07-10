@@ -167,8 +167,8 @@ void Player::InitializeTrinkets() {
       auras.embrace_of_the_spider = std::make_shared<EmbraceOfTheSpiderAura>(*this);
     }
 
-    if (kTrinketId == ItemId::kSpiritWordGlass) {
-      trinkets.push_back(SpiritWordGlass(*this));
+    if (kTrinketId == ItemId::kSpiritWorldGlass) {
+      trinkets.push_back(SpiritWorldGlass(*this));
     }
 
     if (kTrinketId == ItemId::kBadgeOfTheInfiltrator) {

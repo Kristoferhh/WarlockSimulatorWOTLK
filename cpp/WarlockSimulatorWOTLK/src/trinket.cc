@@ -159,8 +159,8 @@ RuneOfInfinitePower::RuneOfInfinitePower(Player& player) : Trinket(player) {
   Setup();
 }
 
-SpiritWordGlass::SpiritWordGlass(Player& player) : Trinket(player) {
-  name     = "Spirit-Word Glass";
+SpiritWorldGlass::SpiritWorldGlass(Player& player) : Trinket(player) {
+  name     = "Spirit-World Glass";
   cooldown = 120;
   duration = 20;
   stats.push_back(Spirit(player, 336));

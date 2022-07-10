@@ -69,8 +69,8 @@ struct RuneOfInfinitePower : Trinket {
   explicit RuneOfInfinitePower(Player& player);
 };
 
-struct SpiritWordGlass : Trinket {
-  explicit SpiritWordGlass(Player& player);
+struct SpiritWorldGlass : Trinket {
+  explicit SpiritWorldGlass(Player& player);
 };
 
 struct BadgeOfTheInfiltrator : Trinket {
