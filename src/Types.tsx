@@ -757,6 +757,7 @@ export enum SpellId {
 }
 
 export enum AuraId {
+  MeteoricInspiration = 64999,
   ScrollOfStamina = 33081,
   ScrollOfIntellect = 33078,
   UnleashedRage = 30811,

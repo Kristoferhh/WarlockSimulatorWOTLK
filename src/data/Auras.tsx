@@ -540,13 +540,8 @@ export const Auras: Aura[] = [
 
   // Noncategorized
   {
-    Name: 'Nightfall',
-    IconName: 'spell_shadow_twilight',
-    Id: 17941,
-  },
-  {
-    Name: 'Improved Shadow Bolt',
-    IconName: 'spell_shadow_shadowbolt',
-    Id: 17800,
-  },
+    Name: 'Meteoric Inspiration',
+    IconName: 'inv_misc_gem_azuredraenite_01',
+    Id: AuraId.MeteoricInspiration
+  }
 ]
