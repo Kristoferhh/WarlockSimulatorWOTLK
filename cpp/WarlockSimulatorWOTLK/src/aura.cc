@@ -357,7 +357,7 @@ DarkmoonCardBerserkerAura::DarkmoonCardBerserkerAura(Player& player) : Aura(play
 }
 
 DarkmoonCardGreatnessAura::DarkmoonCardGreatnessAura(Player& player) : Aura(player) {
-  name     = "Darkmoon Card: Crusade";
+  name     = "Darkmoon Card: Greatness";
   duration = 15;
   Aura::Setup();
 }
