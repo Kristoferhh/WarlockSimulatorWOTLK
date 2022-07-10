@@ -437,6 +437,7 @@ MeteoriteCrystalAura::MeteoriteCrystalAura(Player& player) : Aura(player) {
 }
 
 void MeteoriteCrystalAura::Fade() {
+  Aura::Fade();
   entity.auras.meteoric_inspiration->Fade();
 }
 

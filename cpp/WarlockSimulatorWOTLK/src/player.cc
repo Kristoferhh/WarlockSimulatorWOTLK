@@ -829,6 +829,10 @@ void Player::UseCooldowns() {
     spells.demonic_empowerment->StartCast();
   }
 
+  if (spells.meteorite_crystal != nullptr && spells.meteorite_crystal->Ready()) {
+    spells.meteorite_crystal->StartCast();
+  }
+
   if (spells.flame_cap != nullptr && spells.flame_cap->Ready()) {
     spells.flame_cap->StartCast();
   }
