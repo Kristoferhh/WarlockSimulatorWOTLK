@@ -16,14 +16,19 @@ import { Auras } from '../data/Auras'
 import { Gems } from '../data/Gems'
 import { Items } from '../data/Items'
 import { Spells } from '../data/Spells'
+import { Talents } from '../data/Talents'
 import i18n from '../i18n/config'
 import { RootState } from '../redux/Store'
+import { TalentStore } from '../Types'
 
 function formatPercentage(num: number) {
   return (Math.round(num * 10000) / 100).toFixed(2)
 }
 
-function findSpellByName(name: string):
+function findSpellByName(
+  name: string,
+  playerTalents: TalentStore
+):
   | {
       iconName: string
       id: number
@@ -75,12 +80,30 @@ function findSpellByName(name: string):
       Name: gemObj.Name,
     }
   }
+
+  for (const talentTree of Talents) {
+    for (const row of talentTree.Rows) {
+      for (const talent of row) {
+        if (talent.Name === name) {
+          const pointsInTalent = playerTalents[talent.Name] || 0
+
+          return {
+            iconName: talent.IconName!,
+            id: talent.RankIds![Math.max(0, pointsInTalent - 1)],
+            wowheadType: 'spell',
+            Name: talent.Name,
+          }
+        }
+      }
+    }
+  }
 }
 
 export default function BreakdownTables() {
   const breakdownObj = useSelector(
     (state: RootState) => state.ui.CombatLogBreakdown
   )
+  const talents = useSelector((state: RootState) => state.player.Talents)
   const { t } = useTranslation()
 
   return (
@@ -142,7 +165,7 @@ export default function BreakdownTables() {
                 breakdownObj.SpellDamageDict[e.name] &&
                 breakdownObj.SpellDamageDict[e.name] > 0
             ).map(spell => {
-              const spellObj = findSpellByName(spell.name)
+              const spellObj = findSpellByName(spell.name, talents)
 
               return (
                 <TableRow key={nanoid()} className='spell-damage-information'>
@@ -272,7 +295,7 @@ export default function BreakdownTables() {
                 breakdownObj.SpellManaGainDict[e.name] &&
                 breakdownObj.SpellManaGainDict[e.name] > 0
             ).map(spell => {
-              const spellObj = findSpellByName(spell.name)
+              const spellObj = findSpellByName(spell.name, talents)
 
               return (
                 <TableRow key={nanoid()} className='spell-damage-information'>
@@ -366,7 +389,7 @@ export default function BreakdownTables() {
           <TableBody>
             {breakdownObj.Data.filter(e => e.uptime_in_seconds > 0).map(
               spell => {
-                const spellObj = findSpellByName(spell.name)
+                const spellObj = findSpellByName(spell.name, talents)
 
                 return (
                   <TableRow key={nanoid()} className='spell-damage-information'>
