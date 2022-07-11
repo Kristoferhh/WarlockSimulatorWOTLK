@@ -29,7 +29,7 @@ export default function Sidebar() {
       <Typography align='center'>{`${race && t(race.Name)} ${t(
         'Warlock'
       )}`}</Typography>
-      <Typography align='center'>{`${t('Level')} 70`}</Typography>
+      <Typography align='center'>{`${t('Level')} 80`}</Typography>
       <StatsDisplay />
       <List id='sidebar-sets'>
         {Object.entries(playerState.Sets).find(set =>
