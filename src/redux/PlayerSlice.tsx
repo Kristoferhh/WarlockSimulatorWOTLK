@@ -24,7 +24,7 @@ import {
   Spell,
   SpellId,
   StatsCollection,
-  TalentStore
+  TalentStore,
 } from '../Types'
 
 const initialPlayerState: PlayerState = {
@@ -158,7 +158,16 @@ export const PlayerSlice = createSlice({
       localStorage.setItem('wotlk_settings', JSON.stringify(state.Settings))
     },
     setProfile: (state, action: PayloadAction<ProfileContainer>) => {
-      state.Profiles.push(action.payload)
+      var existingProfile = state.Profiles.find(
+        x => x.Name === action.payload.Name
+      )
+
+      if (existingProfile) {
+        existingProfile.Profile = action.payload.Profile
+      } else {
+        state.Profiles.push(action.payload)
+      }
+
       localStorage.setItem('wotlk_profiles', JSON.stringify(state.Profiles))
     },
     setSelectedGems: (state, action: PayloadAction<SelectedGemsStruct>) => {
