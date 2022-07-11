@@ -3,6 +3,7 @@ import {
   CombatLogBreakdown,
   GemSelectionTableStruct,
   InitialGemSelectionTableValue,
+  InitialGlyphSelectionTableValue,
   ItemSlot,
   ItemSlotDetailed,
   Phase,
@@ -61,6 +62,7 @@ const initialUiState: UiState = {
       [Stat.Mp5]: 0,
     },
   },
+  GlyphSelectionTable: InitialGlyphSelectionTableValue,
 }
 
 export const UiSlice = createSlice({
@@ -218,6 +220,15 @@ export const UiSlice = createSlice({
     setSimulationInProgressStatus: (state, action: PayloadAction<boolean>) => {
       state.SimulationInProgress = action.payload
     },
+    setGlyphSelectionTableVisibility: (
+      state,
+      action: PayloadAction<boolean>
+    ) => {
+      state.GlyphSelectionTable.Visible = action.payload
+    },
+    setGlyphSelectionTableGlyphSlot: (state, action: PayloadAction<number>) => {
+      state.GlyphSelectionTable.GlyphSlot = action.payload
+    },
   },
 })
 
@@ -243,5 +254,7 @@ export const {
   setGemSelectionTable,
   favoriteGem,
   hideGem,
+  setGlyphSelectionTableGlyphSlot,
+  setGlyphSelectionTableVisibility,
 } = UiSlice.actions
 export default UiSlice.reducer

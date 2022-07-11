@@ -2,6 +2,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { getRemainingTalentPoints } from '../Common'
 import {
   AuraId,
+  GlyphId,
+  GlyphType,
+  InitialGlyphs,
   InitialPlayerStats,
   InitialRotation,
   InitialSelectedGems,
@@ -21,7 +24,7 @@ import {
   Spell,
   SpellId,
   StatsCollection,
-  TalentStore,
+  TalentStore
 } from '../Types'
 
 const initialPlayerState: PlayerState = {
@@ -58,6 +61,9 @@ const initialPlayerState: PlayerState = {
   ),
   Profiles: JSON.parse(localStorage.getItem('wotlk_profiles') || '[]'),
   Sets: InitialSetCounts,
+  Glyphs: JSON.parse(
+    localStorage.getItem('wotlk_glyphs') || JSON.stringify(InitialGlyphs)
+  ),
 }
 
 export const PlayerSlice = createSlice({
@@ -191,6 +197,13 @@ export const PlayerSlice = createSlice({
       state.Settings = action.payload
       localStorage.setItem('wotlk_settings', JSON.stringify(action.payload))
     },
+    setGlyphSlotId: (
+      state,
+      action: PayloadAction<{ slot: number; id: GlyphId | undefined }>
+    ) => {
+      state.Glyphs[GlyphType.Major][action.payload.slot] = action.payload.id
+      localStorage.setItem('wotlk_glyphs', JSON.stringify(state.Glyphs))
+    },
   },
 })
 
@@ -215,5 +228,6 @@ export const {
   modifySettingValue,
   setProfile,
   setTalentsStats,
+  setGlyphSlotId,
 } = PlayerSlice.actions
 export default PlayerSlice.reducer

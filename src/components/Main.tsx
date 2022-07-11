@@ -2,7 +2,10 @@ import { Grid, Link, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import packageJson from '../../package.json'
 import { RootState } from '../redux/Store'
-import { setGemSelectionTable } from '../redux/UiSlice'
+import {
+  setGemSelectionTable,
+  setGlyphSelectionTableVisibility,
+} from '../redux/UiSlice'
 import { InitialGemSelectionTableValue } from '../Types'
 import AuraSelection from './AuraSelection'
 import BreakdownTables from './BreakdownTables'
@@ -10,6 +13,8 @@ import CombatLog from './CombatLog'
 import DpsHistogram from './DpsHistogram'
 import EquippedItemsDisplay from './EquippedItemsDisplay'
 import GemSelection from './GemSelection'
+import GlyphSelection from './GlyphSelection'
+import GlyphTable from './GlyphTable'
 import ImportExport from './ImportExport'
 import ItemSelection from './ItemSelection'
 import LanguageSelection from './LanguageSelection'
@@ -26,9 +31,10 @@ export default function Main() {
   return (
     <Grid
       id='main'
-      onClick={() =>
+      onClick={() => {
         dispatch(setGemSelectionTable(InitialGemSelectionTableValue))
-      }
+        dispatch(setGlyphSelectionTableVisibility(false))
+      }}
     >
       <Grid id='header'>
         <LanguageSelection />
@@ -57,6 +63,8 @@ export default function Main() {
         <Grid item xs>
           <AuraSelection />
           <RotationSelection />
+          <GlyphSelection />
+          <GlyphTable />
         </Grid>
         <Grid item xs={3}>
           <SettingsDisplay />

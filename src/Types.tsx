@@ -70,6 +70,37 @@ export interface Enchant {
   Phase: Phase
 }
 
+export interface Glyph {
+  Name: string
+  Id: GlyphId
+  IconName: string
+  Type: GlyphType
+}
+
+export enum GlyphType {
+  Major = 'Major',
+  Minor = 'Minor',
+}
+
+export enum GlyphId {
+  QuickDecay = 50077,
+  LifeTap = 45785,
+  Haunt = 45779,
+  CurseOfAgony = 42456,
+  Corruption = 42455,
+  ShadowBolt = 42467,
+  UnstableAffliction = 42472,
+  Felguard = 42459,
+  Immolate = 42464,
+  Imp = 42465,
+  Incinerate = 42453,
+  Metamorphosis = 45780,
+  SearingPain = 42466,
+  Shadowburn = 42468,
+  ChaosBolt = 45781,
+  Conflagrate = 42454,
+}
+
 export interface Aura {
   Name: string
   Group?: AuraGroup
@@ -286,8 +317,16 @@ export const InitialSettings: { [key in Setting]: string } = {
   [Setting.ferociousInspirationAmount]: '1',
 }
 
+export const InitialGlyphs: GlyphStore = {
+  [GlyphType.Major]: [undefined, undefined, undefined],
+}
+
 export type TalentStore = {
   [key in TalentName]: number
+}
+
+export type GlyphStore = {
+  [GlyphType.Major]: (GlyphId | undefined)[]
 }
 
 export type ItemSlotDetailedStruct = {
@@ -426,6 +465,7 @@ export interface PlayerState {
   Settings: Settings
   Profiles: ProfileContainer[]
   Sets: SetsStruct
+  Glyphs: GlyphStore
 }
 
 export enum MouseButtonClick {
@@ -485,7 +525,8 @@ export interface UiState {
   StatWeights: {
     Visible: boolean
     StatValues: { [key in Stat]?: number }
-  }
+  },
+  GlyphSelectionTable: GlyphSelectionTableStruct
 }
 
 export interface StatWeightStats {
@@ -552,6 +593,11 @@ export interface GemSelectionTableStruct {
   ItemSubSlot?: string
 }
 
+export interface GlyphSelectionTableStruct {
+  Visible: boolean,
+  GlyphSlot: number
+}
+
 export enum SocketColor {
   Meta = 'Meta',
   Red = 'Red',
@@ -565,6 +611,11 @@ export const InitialGemSelectionTableValue = {
   ItemSlot: ItemSlot.Weapon,
   ItemId: '0',
   SocketColor: SocketColor.Meta,
+}
+
+export const InitialGlyphSelectionTableValue = {
+  Visible: false,
+  GlyphSlot: 0
 }
 
 export enum GemColor {

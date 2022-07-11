@@ -676,7 +676,8 @@ table.dataTable.no-footer {
   margin-bottom: 5px;
 }
 
-#gem-options-window {
+#gem-options-window,
+#glyph-selection-table {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -719,6 +720,14 @@ table.dataTable.no-footer {
 }
 
 .gem-options-gem[data-checked='true'] {
+  background-color: gray;
+}
+
+.glyph-table-glyph p {
+  color: white;
+}
+
+.glyph-table-glyph:hover {
   background-color: gray;
 }
 
