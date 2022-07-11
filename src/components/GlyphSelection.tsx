@@ -80,7 +80,7 @@ export default function GlyphSelection() {
   const player = useSelector((state: RootState) => state.player)
 
   return (
-    <Grid container style={{paddingLeft: '3px'}}>
+    <Grid container style={{ paddingLeft: '3px' }}>
       <fieldset>
         <legend>
           <Typography>Glyphs</Typography>

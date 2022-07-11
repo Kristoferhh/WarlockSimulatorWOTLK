@@ -525,7 +525,7 @@ export interface UiState {
   StatWeights: {
     Visible: boolean
     StatValues: { [key in Stat]?: number }
-  },
+  }
   GlyphSelectionTable: GlyphSelectionTableStruct
 }
 
@@ -594,7 +594,7 @@ export interface GemSelectionTableStruct {
 }
 
 export interface GlyphSelectionTableStruct {
-  Visible: boolean,
+  Visible: boolean
   GlyphSlot: number
 }
 
@@ -615,7 +615,7 @@ export const InitialGemSelectionTableValue = {
 
 export const InitialGlyphSelectionTableValue = {
   Visible: false,
-  GlyphSlot: 0
+  GlyphSlot: 0,
 }
 
 export enum GemColor {
