@@ -31,28 +31,24 @@ struct FirePower : Stat {
   FirePower(Entity& entity, double kValue);
 };
 
-struct SpellHasteRating : Stat {
-  SpellHasteRating(Entity& entity, double kValue);
+struct HasteRating : Stat {
+  HasteRating(Entity& entity, double kValue);
 };
 
-struct SpellHastePercent : Stat {
-  SpellHastePercent(Entity& entity, double kValue);
-};
-
-struct MeleeHastePercent : Stat {
-  MeleeHastePercent(Entity& entity, double kValue);
+struct HastePercent : Stat {
+  HastePercent(Entity& entity, double kValue);
 };
 
 struct ManaCostModifier : Stat {
   ManaCostModifier(Entity& entity, double kValue);
 };
 
-struct SpellCritChance : Stat {
-  SpellCritChance(Entity& entity, double kValue);
+struct CritChance : Stat {
+  CritChance(Entity& entity, double kValue);
 };
 
-struct SpellCritRating : Stat {
-  SpellCritRating(Entity& entity, double kValue);
+struct CritRating : Stat {
+  CritRating(Entity& entity, double kValue);
 };
 
 struct AttackPower : Stat {

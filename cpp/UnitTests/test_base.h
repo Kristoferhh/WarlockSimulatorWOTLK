@@ -20,7 +20,8 @@ struct TestBase {
                                                  std::shared_ptr<Talents> talents      = nullptr,
                                                  std::shared_ptr<Sets> sets            = nullptr,
                                                  std::shared_ptr<CharacterStats> stats = nullptr,
-                                                 std::shared_ptr<ItemSlot> items       = nullptr);
+                                                 std::shared_ptr<ItemSlot> items       = nullptr,
+                                                 std::vector<int> glyphs               = std::vector<int>());
   static SimulationSettings GetDefaultSimulationSettings();
   static AuraSelection GetDefaultAuras();
   static Talents GetDefaultTalents();

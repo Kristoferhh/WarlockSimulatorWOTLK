@@ -148,7 +148,7 @@ TEST_F(SpellTest, GetCastTime) {
   _spell->cast_time = 3;
   EXPECT_EQ(_spell->GetCastTime(), 3);
 
-  _spell->entity.stats.spell_haste_percent = 1.5;
+  _spell->entity.stats.haste_percent = 1.5;
   EXPECT_EQ(_spell->GetCastTime(), 2);
 }
 

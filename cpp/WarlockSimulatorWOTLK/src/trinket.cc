@@ -34,7 +34,9 @@ void Trinket::Use() {
     player.combat_log_breakdown.at(name)->count++;
   }
 
-  for (auto& stat : stats) { stat.AddStat(); }
+  for (auto& stat : stats) {
+    stat.AddStat();
+  }
 
   is_active          = true;
   duration_remaining = duration;
@@ -51,7 +53,9 @@ void Trinket::Fade() {
         player.simulation->current_fight_time - player.combat_log_breakdown.at(name)->applied_at;
   }
 
-  for (auto& stat : stats) { stat.RemoveStat(); }
+  for (auto& stat : stats) {
+    stat.RemoveStat();
+  }
 
   is_active = false;
 }
@@ -79,7 +83,7 @@ SkullOfGuldan::SkullOfGuldan(Player& player) : Trinket(player) {
   name     = "The Skull of Gul'dan";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellHasteRating(player, 175));
+  stats.push_back(HasteRating(player, 175));
   Setup();
 }
 
@@ -87,7 +91,7 @@ TomeOfArcanePhenomena::TomeOfArcanePhenomena(Player& player) : Trinket(player) {
   name     = "Tome of Arcane Phenomena";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellHasteRating(player, 256));
+  stats.push_back(HasteRating(player, 256));
   Setup();
 }
 
@@ -143,7 +147,7 @@ RuneOfFiniteVariation::RuneOfFiniteVariation(Player& player) : Trinket(player) {
   name     = "Rune of Finite Variation";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellHasteRating(player, 208));
+  stats.push_back(HasteRating(player, 208));
   Setup();
 }
 
@@ -191,7 +195,7 @@ ThornyRoseBrooch::ThornyRoseBrooch(Player& player) : Trinket(player) {
   name     = "Thorny Rose Brooch";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellHasteRating(player, 212));
+  stats.push_back(HasteRating(player, 212));
   Setup();
 }
 
@@ -223,7 +227,7 @@ ScaleOfFates::ScaleOfFates(Player& player) : Trinket(player) {
   name     = "Scale of Fates";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellHasteRating(player, 432));
+  stats.push_back(HasteRating(player, 432));
   Setup();
 }
 
@@ -239,7 +243,7 @@ PlatinumDisksOfSwiftness::PlatinumDisksOfSwiftness(Player& player) : Trinket(pla
   name     = "Platinum Disks of Swiftness";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellHasteRating(player, 375));
+  stats.push_back(HasteRating(player, 375));
   Setup();
 }
 
@@ -247,7 +251,7 @@ ShardOfTheCrystalHeart::ShardOfTheCrystalHeart(Player& player) : Trinket(player)
   name     = "Shard of the Crystal Heart";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellHasteRating(player, 512));
+  stats.push_back(HasteRating(player, 512));
   Setup();
 }
 
@@ -263,7 +267,7 @@ EphemeralSnowflake::EphemeralSnowflake(Player& player) : Trinket(player) {
   name     = "Ephemeral Snowflake";
   cooldown = 120;
   duration = 20;
-  stats.push_back(SpellHasteRating(player, 464));
+  stats.push_back(HasteRating(player, 464));
   Setup();
 }
 

@@ -539,11 +539,11 @@ bool Spell::IsHit() const {
 
 double Spell::GetHitChance() const {
   if (attack_type == AttackType::kMagical) {
-    return entity.stats.spell_hit_chance + entity.stats.extra_spell_hit_chance;
+    return entity.stats.hit_chance + entity.stats.extra_hit_chance;
   }
 
   if (attack_type == AttackType::kPhysical) {
-    return entity.stats.melee_hit_chance;
+    return entity.stats.hit_chance;
   }
 
   return 0;
@@ -635,7 +635,7 @@ SpellCastResult Spell::PhysicalSpellCast() const {
   const auto kDodgeChance =
       kCritChance + static_cast<int>(WarlockSimulatorConstants::kBaseEnemyDodgeChance * entity.kFloatNumberMultiplier);
   const auto kMissChance =
-      kDodgeChance + static_cast<int>((100 - entity.stats.melee_hit_chance) * entity.kFloatNumberMultiplier);
+      kDodgeChance + static_cast<int>((100 - entity.stats.hit_chance) * entity.kFloatNumberMultiplier);
   auto glancing_chance = kMissChance;
 
   // Only check for a glancing if it's a normal melee attack

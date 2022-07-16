@@ -14,7 +14,7 @@
 DamageOverTime::DamageOverTime(Player& player) : player(player), school(SpellSchool::kNoSchool) {}
 
 void DamageOverTime::Setup() {
-  ticks_total = duration / tick_timer_total;
+  ticks_total = static_cast<int>(duration) / static_cast<int>(tick_timer_total);
 
   if (player.recording_combat_log_breakdown && !player.combat_log_breakdown.contains(name)) {
     player.combat_log_breakdown.insert({name, std::make_shared<CombatLogBreakdown>(name)});

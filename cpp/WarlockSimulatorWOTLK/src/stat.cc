@@ -71,22 +71,13 @@ FirePower::FirePower(Entity& entity, const double kValue) : Stat(entity, entity.
   calculation_type = CalculationType::kAdditive;
 }
 
-SpellHasteRating::SpellHasteRating(Entity& entity, const double kValue)
-    : Stat(entity, entity.stats.spell_haste_rating, kValue) {
-  name             = WarlockSimulatorConstants::kSpellHasteRating;
+HasteRating::HasteRating(Entity& entity, const double kValue) : Stat(entity, entity.stats.haste_rating, kValue) {
+  name             = WarlockSimulatorConstants::kHasteRating;
   calculation_type = CalculationType::kAdditive;
 }
 
-SpellHastePercent::SpellHastePercent(Entity& entity, const double kValue)
-    : Stat(entity, entity.stats.spell_haste_percent, kValue) {
-  name                      = WarlockSimulatorConstants::kSpellHastePercent;
-  calculation_type          = CalculationType::kMultiplicative;
-  combat_log_decimal_places = 4;
-}
-
-MeleeHastePercent::MeleeHastePercent(Entity& entity, const double kValue)
-    : Stat(entity, entity.stats.melee_haste_percent, kValue) {
-  name                      = WarlockSimulatorConstants::kMeleeHastePercent;
+HastePercent::HastePercent(Entity& entity, const double kValue) : Stat(entity, entity.stats.haste_percent, kValue) {
+  name                      = WarlockSimulatorConstants::kHastePercent;
   calculation_type          = CalculationType::kMultiplicative;
   combat_log_decimal_places = 4;
 }
@@ -98,16 +89,14 @@ ManaCostModifier::ManaCostModifier(Entity& entity, const double kValue)
   combat_log_decimal_places = 2;
 }
 
-SpellCritChance::SpellCritChance(Entity& entity, const double kValue)
-    : Stat(entity, entity.stats.spell_crit_chance, kValue) {
-  name                      = WarlockSimulatorConstants::kSpellCritChance;
+CritChance::CritChance(Entity& entity, const double kValue) : Stat(entity, entity.stats.crit_chance, kValue) {
+  name                      = WarlockSimulatorConstants::kCritChance;
   calculation_type          = CalculationType::kAdditive;
   combat_log_decimal_places = 2;
 }
 
-SpellCritRating::SpellCritRating(Entity& entity, const double kValue)
-    : Stat(entity, entity.stats.spell_crit_rating, kValue) {
-  name             = WarlockSimulatorConstants::kSpellCritRating;
+CritRating::CritRating(Entity& entity, const double kValue) : Stat(entity, entity.stats.crit_rating, kValue) {
+  name             = WarlockSimulatorConstants::kCritRating;
   calculation_type = CalculationType::kAdditive;
 }
 
@@ -133,6 +122,7 @@ ShadowModifier::ShadowModifier(Entity& entity, const double kValue)
   name             = WarlockSimulatorConstants::kDamageModifier;
   calculation_type = CalculationType::kMultiplicative;
 }
+
 FireModifier::FireModifier(Entity& entity, const double kValue) : Stat(entity, entity.stats.fire_modifier, kValue) {
   name             = WarlockSimulatorConstants::kDamageModifier;
   calculation_type = CalculationType::kMultiplicative;

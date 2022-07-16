@@ -150,7 +150,9 @@ std::vector<uint32_t> AllocRandomSeeds(const int kAmountOfSeeds, const uint32_t 
   srand(kRandSeed);
   std::vector<uint32_t> seeds(kAmountOfSeeds);
 
-  for (int i = 0; i < kAmountOfSeeds; i++) { seeds[i] = rand(); }
+  for (int i = 0; i < kAmountOfSeeds; i++) {
+    seeds[i] = rand();
+  }
 
   return seeds;
 }
@@ -293,11 +295,11 @@ EMSCRIPTEN_BINDINGS(module) {
       .property("spellPower", &CharacterStats::spell_power)
       .property("shadowPower", &CharacterStats::shadow_power)
       .property("firePower", &CharacterStats::fire_power)
-      .property("hasteRating", &CharacterStats::spell_haste_rating)
-      .property("hastePercent", &CharacterStats::spell_haste_percent)
-      .property("hitRating", &CharacterStats::spell_hit_rating)
-      .property("critRating", &CharacterStats::spell_crit_rating)
-      .property("critChance", &CharacterStats::spell_crit_chance)
+      .property("hasteRating", &CharacterStats::haste_rating)
+      .property("hastePercent", &CharacterStats::haste_percent)
+      .property("hitRating", &CharacterStats::hit_rating)
+      .property("critRating", &CharacterStats::crit_rating)
+      .property("critChance", &CharacterStats::crit_chance)
       .property("mp5", &CharacterStats::mp5)
       .property("manaCostModifier", &CharacterStats::mana_cost_modifier)
       .property("spellPenetration", &CharacterStats::spell_penetration)

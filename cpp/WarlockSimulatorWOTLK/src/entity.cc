@@ -32,32 +32,32 @@ Entity::Entity(Player* player, PlayerSettings& player_settings, const EntityType
       enemy_level_difference_resistance(player_settings.enemy_level >= kLevel + 3 ? 6 * kLevel * 5 / 75 : 0) {
   // Crit chance
   if (kEntityType == EntityType::kPlayer) {
-    stats.spell_crit_chance = WarlockSimulatorConstants::kBaseCritChancePercent + player_settings.talents.backlash +
-                              2 * player_settings.talents.demonic_tactics;
+    stats.crit_chance = WarlockSimulatorConstants::kBaseCritChancePercent + player_settings.talents.backlash +
+                        2 * player_settings.talents.demonic_tactics;
   }
 
   if (player_settings.auras.moonkin_aura) {
-    stats.spell_crit_chance += 5;
+    stats.crit_chance += 5;
   }
 
   if (player_settings.auras.totem_of_wrath) {
-    stats.spell_crit_chance += 3;
+    stats.crit_chance += 3;
   }
 
   // Hit chance
   if (kEntityType == EntityType::kPlayer) {
-    stats.extra_spell_hit_chance = stats.spell_hit_rating / WarlockSimulatorConstants::kHitRatingPerPercent;
+    stats.extra_hit_chance = stats.hit_rating / WarlockSimulatorConstants::kHitRatingPerPercent;
   }
 
   if (player_settings.auras.totem_of_wrath) {
-    stats.extra_spell_hit_chance += 3;
+    stats.extra_hit_chance += 3;
   }
 
   if (player_settings.auras.inspiring_presence) {
-    stats.extra_spell_hit_chance++;
+    stats.extra_hit_chance++;
   }
 
-  stats.spell_hit_chance = GetBaseSpellHitChance(kLevel, settings.enemy_level);
+  stats.hit_chance = GetBaseSpellHitChance(kLevel, settings.enemy_level);
 
   // TODO does this still stack
   if (player_settings.auras.ferocious_inspiration) {
@@ -113,7 +113,9 @@ void Entity::Reset() {
   mp5_timer_remaining              = 5;
   five_second_rule_timer_remaining = 5;
 
-  for (const auto& kSpell : spell_list) { kSpell->Reset(); }
+  for (const auto& kSpell : spell_list) {
+    kSpell->Reset();
+  }
 }
 
 void Entity::Initialize(Simulation* simulation_ptr) {
@@ -220,8 +222,7 @@ double Entity::GetBaseSpellHitChance(const int kEntityLevel, const int kEnemyLev
 }
 
 double Entity::GetMeleeCritChance() {
-  return pet->GetAgility() * 0.04 + 0.65 + stats.melee_crit_chance -
-         WarlockSimulatorConstants::kMeleeCritChanceSuppression;
+  return pet->GetAgility() * 0.04 + 0.65 + stats.crit_chance - WarlockSimulatorConstants::kMeleeCritChanceSuppression;
 }
 
 void Entity::Tick(const double kTime) {

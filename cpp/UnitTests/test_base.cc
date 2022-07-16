@@ -36,7 +36,8 @@ PlayerSettings TestBase::GetDefaultPlayerSettings(std::shared_ptr<AuraSelection>
                                                   std::shared_ptr<Talents> talents,
                                                   std::shared_ptr<Sets> sets,
                                                   std::shared_ptr<CharacterStats> stats,
-                                                  std::shared_ptr<ItemSlot> items) {
+                                                  std::shared_ptr<ItemSlot> items,
+                                                  std::vector<int> glyphs) {
   if (auras == nullptr) {
     auras = std::make_shared<AuraSelection>(GetDefaultAuras());
   }
@@ -57,7 +58,11 @@ PlayerSettings TestBase::GetDefaultPlayerSettings(std::shared_ptr<AuraSelection>
     items = std::make_shared<ItemSlot>(GetDefaultItems());
   }
 
-  auto player_settings                           = PlayerSettings(*auras, *talents, *sets, *stats, *items);
+  if (glyphs.empty()) {
+    glyphs = std::vector<int>{GlyphId::kQuickDecay, GlyphId::kLifeTap, GlyphId::kHaunt};
+  }
+
+  auto player_settings                           = PlayerSettings(*auras, *talents, *sets, *stats, *items, glyphs);
   player_settings.enemy_amount                   = 5;
   player_settings.enemy_armor                    = 7700;
   player_settings.enemy_level                    = 83;

@@ -51,10 +51,10 @@ int main() {
   stats.spell_power        = 1451;
   stats.shadow_power       = 134;
   stats.fire_power         = 80;
-  stats.spell_haste_rating = 227;
-  stats.spell_hit_rating   = 163;
-  stats.spell_crit_rating  = 316;
-  stats.spell_crit_chance  = 0;
+  stats.haste_rating       = 227;
+  stats.hit_rating         = 163;
+  stats.crit_rating        = 316;
+  stats.crit_chance        = 0;
   stats.mp5                = 50;
   stats.mana_cost_modifier = 1;
   stats.spell_penetration  = 88;
@@ -82,8 +82,10 @@ int main() {
   items.weapon    = 32374;
   items.wand      = 29982;
 
+  auto glyphs = std::vector{GlyphId::kQuickDecay, GlyphId::kLifeTap, GlyphId::kHaunt};
+
   auto iterations                                = 1000;
-  auto player_settings                           = PlayerSettings(auras, talents, sets, stats, items);
+  auto player_settings                           = PlayerSettings(auras, talents, sets, stats, items, glyphs);
   player_settings.equipped_item_simulation       = true;
   player_settings.random_seeds                   = AllocRandomSeeds(iterations);
   player_settings.selected_pet                   = EmbindConstant::kFelhunter;

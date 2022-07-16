@@ -759,7 +759,9 @@ void Player::Reset() {
   iteration_damage      = 0;
   power_infusions_ready = settings.power_infusion_amount;
 
-  for (auto& trinket : trinkets) { trinket.Reset(); }
+  for (auto& trinket : trinkets) {
+    trinket.Reset();
+  }
 }
 
 void Player::EndAuras() {
@@ -779,20 +781,20 @@ void Player::EndAuras() {
 }
 
 double Player::GetHastePercent() {
-  auto haste_percent = stats.spell_haste_percent;
+  auto haste_percent = stats.haste_percent;
 
   // If both Bloodlust and Power Infusion are active then remove the 20% PI
   // bonus since they don't stack
   if (auras.bloodlust != nullptr && auras.power_infusion != nullptr && auras.bloodlust->is_active &&
       auras.power_infusion->is_active) {
     for (auto& stat : auras.power_infusion->stats) {
-      if (stat.name == WarlockSimulatorConstants::kSpellHastePercent) {
+      if (stat.name == WarlockSimulatorConstants::kHastePercent) {
         haste_percent /= stat.value;
       }
     }
   }
 
-  return haste_percent * (1 + stats.spell_haste_rating / WarlockSimulatorConstants::kHasteRatingPerPercent / 100.0);
+  return haste_percent * (1 + stats.haste_rating / WarlockSimulatorConstants::kHasteRatingPerPercent / 100.0);
 }
 
 double Player::GetSpellPower(const SpellSchool kSchool) {
@@ -827,8 +829,8 @@ double Player::GetSpellPower(const SpellSchool kSchool) {
 }
 
 double Player::GetSpellCritChance() {
-  return stats.spell_crit_chance + GetIntellect() * WarlockSimulatorConstants::kCritChancePerIntellect +
-         stats.spell_crit_rating / WarlockSimulatorConstants::kCritRatingPerPercent;
+  return stats.crit_chance + GetIntellect() * WarlockSimulatorConstants::kCritChancePerIntellect +
+         stats.crit_rating / WarlockSimulatorConstants::kCritRatingPerPercent;
 }
 
 int Player::GetRand() {
@@ -919,7 +921,9 @@ void Player::ThrowError(const std::string& kError) const {
 }
 
 void Player::SendCombatLogEntries() const {
-  for (const auto& kValue : combat_log_entries) { CombatLogUpdate(kValue.c_str()); }
+  for (const auto& kValue : combat_log_entries) {
+    CombatLogUpdate(kValue.c_str());
+  }
 }
 
 // TODO improve
@@ -979,7 +983,9 @@ double Player::FindTimeUntilNextAction() {
 void Player::Tick(const double kTime) {
   Entity::Tick(kTime);
 
-  for (auto& trinket : trinkets) { trinket.Tick(kTime); }
+  for (auto& trinket : trinkets) {
+    trinket.Tick(kTime);
+  }
 
   if (mp5_timer_remaining <= 0) {
     mp5_timer_remaining = 5;
@@ -1036,11 +1042,10 @@ void Player::SendPlayerInfoToCombatLog() {
   combat_log_entries.push_back(
       "Crit Chance: " + DoubleToString(round((GetSpellCritChance() + 5 * talents.devastation) * 100) / 100, 2) + "%");
   combat_log_entries.push_back(
-      "Hit Chance: " + DoubleToString(std::min(17.0, round(stats.extra_spell_hit_chance * 100) / 100), 2) + "%");
+      "Hit Chance: " + DoubleToString(std::min(17.0, round(stats.extra_hit_chance * 100) / 100), 2) + "%");
   combat_log_entries.push_back(
       "Haste: " +
-      DoubleToString(round(stats.spell_haste_rating / WarlockSimulatorConstants::kHasteRatingPerPercent * 100) / 100,
-                     2) +
+      DoubleToString(round(stats.haste_rating / WarlockSimulatorConstants::kHasteRatingPerPercent * 100) / 100, 2) +
       "%");
   combat_log_entries.push_back(
       "Shadow Modifier: " + DoubleToString(stats.shadow_modifier * (1 + 0.03 * talents.shadow_mastery) * 100, 2) + "%");
@@ -1061,7 +1066,7 @@ void Player::SendPlayerInfoToCombatLog() {
     combat_log_entries.push_back("MP5: " + DoubleToString(pet->stats.mp5));
     if (pet->pet_type == PetType::kMelee) {
       combat_log_entries.push_back(
-          "Physical Hit Chance: " + DoubleToString(round(pet->stats.melee_hit_chance * 100) / 100.0, 2) + "%");
+          "Physical Hit Chance: " + DoubleToString(round(pet->stats.hit_chance * 100) / 100.0, 2) + "%");
       combat_log_entries.push_back(
           "Physical Crit Chance: " + DoubleToString(round(pet->GetMeleeCritChance() * 100) / 100.0, 2) + "% (" +
           DoubleToString(WarlockSimulatorConstants::kMeleeCritChanceSuppression, 2) + "% Crit Suppression Applied)");

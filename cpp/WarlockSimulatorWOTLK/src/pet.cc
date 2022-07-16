@@ -93,12 +93,12 @@ void Pet::CalculateStatsFromAuras() {
   // Calculate melee hit chance
   // Formula from https://wowwiki-archive.fandom.com/wiki/Hit?oldid=1584399
   const int kLevelDifference = player->settings.enemy_level - player->kLevel;
-  stats.melee_hit_chance     = 100;
+  stats.hit_chance           = 100;
 
   if (kLevelDifference <= 2) {
-    stats.melee_hit_chance -= 5 + kLevelDifference * 0.5;
+    stats.hit_chance -= 5 + kLevelDifference * 0.5;
   } else {
-    stats.melee_hit_chance -= 7 + (kLevelDifference - 2) * 2;
+    stats.hit_chance -= 7 + (kLevelDifference - 2) * 2;
   }
 
   // Auras
@@ -141,8 +141,8 @@ void Pet::CalculateStatsFromAuras() {
     stats.physical_modifier *= 1.04;
   }
 
-  stats.spell_crit_chance += 2 * player->talents.demonic_tactics;
-  stats.melee_crit_chance += 2 * player->talents.demonic_tactics;
+  stats.crit_chance += 2 * player->talents.demonic_tactics;
+  stats.crit_chance += 2 * player->talents.demonic_tactics;
   stats.attack_power += GetDebuffAttackPower();
 
   // todo improved motw
@@ -169,11 +169,11 @@ void Pet::CalculateStatsFromAuras() {
   }
 
   if (player->selected_auras.faerie_fire && player->settings.improved_faerie_fire) {
-    stats.melee_hit_chance += 3;
+    stats.hit_chance += 3;
   }
 
   if (player->selected_auras.pet_heroic_presence) {
-    stats.melee_hit_chance++;
+    stats.hit_chance++;
   }
 
   if (player->selected_auras.pet_blessing_of_might) {
@@ -193,7 +193,7 @@ void Pet::CalculateStatsFromAuras() {
   }
 
   if (player->selected_auras.pet_leader_of_the_pack) {
-    stats.melee_crit_chance += 5;
+    stats.crit_chance += 5;
   }
 
   if (player->selected_auras.pet_unleashed_rage) {
@@ -309,7 +309,7 @@ void Pet::Reset() {
 }
 
 double Pet::GetSpellCritChance() {
-  return 0.0125 * GetIntellect() + 0.91 + stats.spell_crit_chance;
+  return 0.0125 * GetIntellect() + 0.91 + stats.crit_chance;
 }
 
 double Pet::GetMeleeCritChance() {
@@ -324,10 +324,10 @@ double Pet::GetMeleeCritChance() {
 
 double Pet::GetHastePercent() {
   if (pet_type == PetType::kMelee) {
-    return stats.melee_haste_percent;
+    return stats.haste_percent;
   }
 
-  return stats.spell_haste_percent;
+  return stats.haste_percent;
 }
 
 double Pet::GetAttackPower() const {

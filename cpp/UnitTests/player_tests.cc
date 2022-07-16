@@ -82,9 +82,9 @@ TEST_F(PlayerTest, EndAuras) {
 }
 
 TEST_F(PlayerTest, GetHastePercent) {
-  _player->stats.spell_haste_rating = 100;
+  _player->stats.haste_rating = 100;
   const auto kHastePercentFromRating =
-      _player->stats.spell_haste_rating / WarlockSimulatorConstants::kHasteRatingPerPercent / 100.0;
+      _player->stats.haste_rating / WarlockSimulatorConstants::kHasteRatingPerPercent / 100.0;
   ASSERT_NE(_player->auras.bloodlust, nullptr);
   ASSERT_NE(_player->auras.power_infusion, nullptr);
   ASSERT_EQ(_player->GetHastePercent(), 1 + kHastePercentFromRating);
@@ -280,11 +280,15 @@ TEST_F(PlayerTest, Tick_Trinkets) {
   _player->trinkets.push_back(SkullOfGuldan(*_player));
   _player->trinkets.push_back(ShiftingNaaruSliver(*_player));
 
-  for (auto& trinket : _player->trinkets) { trinket.cooldown_remaining = 50; }
+  for (auto& trinket : _player->trinkets) {
+    trinket.cooldown_remaining = 50;
+  }
 
   _player->Tick(20);
 
-  for (const auto& kTrinket : _player->trinkets) { EXPECT_EQ(kTrinket.cooldown_remaining, 30); }
+  for (const auto& kTrinket : _player->trinkets) {
+    EXPECT_EQ(kTrinket.cooldown_remaining, 30);
+  }
 }
 
 TEST_F(PlayerTest, Tick_MP5) {
