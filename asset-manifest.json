@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/WarlockSimulatorWOTLK/static/css/main.dbac7bb8.css",
-    "main.js": "/WarlockSimulatorWOTLK/static/js/main.cabf6429.js",
+    "main.js": "/WarlockSimulatorWOTLK/static/js/main.f052bd4b.js",
     "index.html": "/WarlockSimulatorWOTLK/index.html",
     "main.dbac7bb8.css.map": "/WarlockSimulatorWOTLK/static/css/main.dbac7bb8.css.map",
-    "main.cabf6429.js.map": "/WarlockSimulatorWOTLK/static/js/main.cabf6429.js.map"
+    "main.f052bd4b.js.map": "/WarlockSimulatorWOTLK/static/js/main.f052bd4b.js.map"
   },
   "entrypoints": [
     "static/css/main.dbac7bb8.css",
-    "static/js/main.cabf6429.js"
+    "static/js/main.f052bd4b.js"
   ]
 }
