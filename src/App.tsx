@@ -4,7 +4,10 @@ import Main from './components/Main'
 import Session from './components/Session'
 import Sidebar from './components/Sidebar'
 import './css/App.css'
-import { setGemSelectionTable, setGlyphSelectionTableVisibility } from './redux/UiSlice'
+import {
+  setGemSelectionTable,
+  setGlyphSelectionTableVisibility,
+} from './redux/UiSlice'
 import { InitialGemSelectionTableValue } from './Types'
 
 const linearGradient =
