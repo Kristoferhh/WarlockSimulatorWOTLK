@@ -771,12 +771,12 @@ export enum TalentName {
 export const StatConstant = {
   HealthPerStamina: 10,
   ManaPerIntellect: 15,
-  HitRatingPerPercent: 12.62,
-  CritRatingPerPercent: 22.08,
-  HasteRatingPerPercent: 15.77,
+  HitRatingPerPercent: 26.232,
+  CritRatingPerPercent: 45.91,
+  HasteRatingPerPercent: 32.79,
   CritPercentPerIntellect: 1 / 166.6,
   BaseCritChancePercent: 1.70458,
-  HitPercentCap: 16,
+  HitPercentCap: 17,
 }
 
 export enum SpellId {

@@ -35,16 +35,16 @@ const std::string kSpellCritRating       = "Spell Crit Rating";
 const std::string kAttackPower           = "Attack Power";
 const std::string kMp5                   = "Mp5";
 const std::string kAttackPowerModifier   = "Attack Power Modifier";
-constexpr double kHitRatingPerPercent    = 12.62;
-constexpr double kCritRatingPerPercent   = 22.08;
-constexpr double kHasteRatingPerPercent  = 15.77;
+constexpr double kHitRatingPerPercent    = 26.232;
+constexpr double kCritRatingPerPercent   = 45.91;
+constexpr double kHasteRatingPerPercent  = 32.79;
 constexpr double kManaPerIntellect       = 15;
 constexpr double kHealthPerStamina       = 10;
 constexpr double kCritChancePerIntellect = 1 / 166.6;
 constexpr double kBaseCritChancePercent  = 1.70458;
 constexpr double kMeleeCritChanceSuppression =
-    4.73;  // Source: Fierywind from Warlock discord and maybe Fight Club discord
-constexpr double kBaseEnemyDodgeChance          = 6.5;
+    4.73;  // Source: Fierywind from Warlock discord and maybe Fight Club discord // TODO needs to be updated for WOTLK
+constexpr double kBaseEnemyDodgeChance          = 6.5;  // TODO update for WOTLK
 const std::string kImp                          = "Imp";
 const std::string kSuccubus                     = "Succubus";
 const std::string kFelguard                     = "Felguard";
