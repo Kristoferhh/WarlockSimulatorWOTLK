@@ -666,6 +666,8 @@ export enum TalentTree {
 }
 
 export enum ItemSource {
+  JewelcraftingBoE = 'Jewelcrafting BoE',
+  Jewelcrafting = 'Jewelcrafting',
   Blacksmithing = 'Blacksmithing',
   Enchanting = 'Enchanting',
   Tailoring = 'Tailoring',
