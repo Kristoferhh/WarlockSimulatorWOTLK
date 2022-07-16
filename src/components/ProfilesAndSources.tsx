@@ -26,8 +26,8 @@ import {
   setSelectedEnchants,
   setSelectedGems,
   setSelectedItems,
+  setSelectedTalents,
   setSettingsState,
-  setTalentsState,
 } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
 import {
@@ -86,7 +86,7 @@ export default function ProfilesAndSources() {
     dispatch(setSelectedAuras(params.Profile.Auras))
     dispatch(setSelectedGems(params.Profile.Gems))
     dispatch(setSelectedItems(params.Profile.Items))
-    dispatch(setTalentsState(params.Profile.Talents))
+    dispatch(setSelectedTalents(params.Profile.Talents))
     dispatch(setRotationState(params.Profile.Rotation))
     dispatch(setSelectedEnchants(params.Profile.Enchants))
     dispatch(setSettingsState(params.Profile.Settings))

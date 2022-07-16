@@ -194,10 +194,6 @@ export const PlayerSlice = createSlice({
       localStorage.setItem('wotlk_profiles', JSON.stringify(state.Profiles))
       localStorage.setItem('wotlk_selectedProfile', action.payload.newName)
     },
-    setTalentsState: (state, action: PayloadAction<TalentStore>) => {
-      state.Talents = action.payload
-      localStorage.setItem('wotlk_talents', JSON.stringify(action.payload))
-    },
     setRotationState: (state, action: PayloadAction<RotationStruct>) => {
       state.Rotation = action.payload
       localStorage.setItem('wotlk_rotation', JSON.stringify(action.payload))
@@ -219,7 +215,6 @@ export const PlayerSlice = createSlice({
 export const {
   setSettingsState,
   setRotationState,
-  setTalentsState,
   setSelectedGems,
   setSelectedEnchants,
   setSelectedItems,

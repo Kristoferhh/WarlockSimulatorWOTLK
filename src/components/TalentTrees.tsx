@@ -19,7 +19,7 @@ import {
 import { PresetTalents } from '../data/PresetTalents'
 import { Talents, TalentTreeStruct } from '../data/Talents'
 import i18n from '../i18n/config'
-import { setTalentsState, setTalentsStats } from '../redux/PlayerSlice'
+import { setSelectedTalents, setTalentsStats } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
 import { MouseButtonClick, Talent, TalentName, TalentStore } from '../Types'
 
@@ -93,7 +93,7 @@ export default function TalentTrees() {
   }
 
   function SaveTalents(talents: TalentStore) {
-    dispatch(setTalentsState(talents))
+    dispatch(setSelectedTalents(talents))
     dispatch(setTalentsStats(GetTalentsStats(talents, playerState.Settings)))
   }
 

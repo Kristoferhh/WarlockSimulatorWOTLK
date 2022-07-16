@@ -21,8 +21,8 @@ import {
   setSelectedEnchants,
   setSelectedGems,
   setSelectedItems,
+  setSelectedTalents,
   setSettingsState,
-  setTalentsState,
 } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
 import { setImportExportWindowVisibility } from '../redux/UiSlice'
@@ -116,7 +116,7 @@ export default function ImportExport() {
       }
 
       if (data.Talents) {
-        dispatch(setTalentsState(data.Talents))
+        dispatch(setSelectedTalents(data.Talents))
       }
 
       if (data.Rotation) {
