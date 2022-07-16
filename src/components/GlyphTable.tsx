@@ -1,4 +1,5 @@
 import { Link, List, ListItem, Typography } from '@mui/material'
+import { nanoid } from 'nanoid'
 import { useDispatch, useSelector } from 'react-redux'
 import { getBaseWowheadUrl } from '../Common'
 import { Glyphs } from '../data/Glyphs'
@@ -29,6 +30,7 @@ export default function GlyphTable() {
         glyph =>
           !player.Glyphs[GlyphType.Major].includes(glyph.Id) && (
             <ListItem
+              key={nanoid()}
               className='glyph-table-glyph'
               data-checked={glyphInSlot?.Id === glyph.Id}
               onClick={e => {
