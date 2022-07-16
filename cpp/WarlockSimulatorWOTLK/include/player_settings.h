@@ -13,6 +13,7 @@ struct PlayerSettings {
   Sets& sets;
   CharacterStats stats;
   ItemSlot& items;
+  std::vector<int>& glyphs;
   EmbindConstant custom_stat     = EmbindConstant::kUnused;
   EmbindConstant selected_pet    = EmbindConstant::kUnused;
   EmbindConstant fight_type      = EmbindConstant::kUnused;
@@ -46,6 +47,7 @@ struct PlayerSettings {
   bool has_shadow_bolt                = false;
   bool has_incinerate                 = false;
   bool has_seed_of_corruption         = false;
+  bool has_chaos_bolt                 = false;
   bool has_hellfire                   = false;
   bool has_rain_of_fire               = false;
   bool has_curse_of_the_elements      = false;
@@ -58,6 +60,11 @@ struct PlayerSettings {
   bool has_dark_pact                  = false;
   bool has_drain_soul                 = false;
 
-  PlayerSettings(AuraSelection& auras, Talents& talents, Sets& sets, const CharacterStats& kStats, ItemSlot& items)
-      : auras(auras), talents(talents), sets(sets), stats(kStats), items(items) {}
+  PlayerSettings(AuraSelection& auras,
+                 Talents& talents,
+                 Sets& sets,
+                 const CharacterStats& kStats,
+                 ItemSlot& items,
+                 std::vector<int>& glyphs)
+      : auras(auras), talents(talents), sets(sets), stats(kStats), items(items), glyphs(glyphs) {}
 };

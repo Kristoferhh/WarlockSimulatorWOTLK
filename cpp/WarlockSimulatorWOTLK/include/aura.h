@@ -289,3 +289,8 @@ struct CharredTwilightScaleHeroicAura final : Aura {
 struct SparkOfLifeAura final : Aura {
   explicit SparkOfLifeAura(Player& player);
 };
+
+struct GlyphOfLifeTapAura final : Aura {
+  explicit GlyphOfLifeTapAura(Player& player);
+  void Apply() override;
+};

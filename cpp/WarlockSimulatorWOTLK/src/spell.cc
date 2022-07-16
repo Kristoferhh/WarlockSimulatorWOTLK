@@ -99,6 +99,9 @@ void Spell::Setup() {
       // the 54.5% is being doubled
       crit_damage_multiplier -= 1;
       crit_damage_multiplier *= 1 + 0.2 * entity.player->talents.ruin;
+      crit_damage_multiplier *= entity.type == EntityType::kPlayer && entity.player->has_glyph_of_searing_pain
+                                    ? 1.2
+                                    : 1;  // TODO additive or multiplicative?
       crit_damage_multiplier += 1;
     }
 
@@ -214,9 +217,8 @@ void Spell::Cast() {
     entity.player->power_infusions_ready--;
   }
 
-  if (name == WarlockSimulatorConstants::kIncinerate || name == WarlockSimulatorConstants::kSoulFire &&
-                                                            entity.player->auras.molten_core != nullptr &&
-                                                            entity.player->auras.molten_core->is_active) {
+  if ((name == WarlockSimulatorConstants::kIncinerate || name == WarlockSimulatorConstants::kSoulFire) &&
+      entity.player->auras.molten_core != nullptr && entity.player->auras.molten_core->is_active) {
     entity.player->auras.molten_core->DecrementStacks();
   }
 
@@ -226,7 +228,8 @@ void Spell::Cast() {
     entity.player->auras.decimation->Apply();
   }
 
-  if (aura_effect == nullptr && entity.recording_combat_log_breakdown) {
+  // TODO
+  if (/*aura_effect == nullptr && */ entity.recording_combat_log_breakdown) {
     entity.combat_log_breakdown.at(name)->casts++;
   }
 
@@ -428,8 +431,7 @@ void Spell::OnHitProcs() {
        name == WarlockSimulatorConstants::kHaunt) &&
       entity.auras.corruption != nullptr && entity.auras.corruption->is_active &&
       entity.player->RollRng(20 * entity.player->talents.everlasting_affliction)) {
-    entity.auras.corruption->ticks_remaining      = entity.auras.corruption->ticks_total;
-    entity.auras.corruption->tick_timer_remaining = entity.auras.corruption->tick_timer_total;
+    entity.player->auras.corruption->should_reset_duration_on_next_tick = true;
   }
 }
 
@@ -521,7 +523,14 @@ bool Spell::IsCrit() const {
     return true;
   }
 
-  return entity.player->RollRng(GetCritChance());
+  auto crit_chance = GetCritChance();
+
+  if (name == WarlockSimulatorConstants::kShadowburn && entity.player->has_glyph_of_shadowburn &&
+      entity.simulation->GetEnemyHealthPercent() < 35) {
+    crit_chance += 20;
+  }
+
+  return entity.player->RollRng(crit_chance);
 }
 
 bool Spell::IsHit() const {
@@ -765,7 +774,7 @@ void Spell::ManaGainOnCast() const {
 ShadowBolt::ShadowBolt(Player& player) : Spell(player) {
   name         = WarlockSimulatorConstants::kShadowBolt;
   cast_time    = CalculateCastTime();
-  mana_cost    = 0.17;
+  mana_cost    = 0.17 * (player.has_glyph_of_shadow_bolt ? 0.9 : 1);
   coefficient  = 3 / 3.5 + 0.04 * player.talents.shadow_and_flame;
   min_dmg      = 690;
   max_dmg      = 770;
@@ -801,6 +810,10 @@ double ShadowBolt::CalculateCastTime() const {
 }
 
 Incinerate::Incinerate(Player& player) : Spell(player) {
+  if (player.has_glyph_of_incinerate) {
+    additive_modifier += 0.05;  // TODO additive or multiplicative?
+  }
+
   name                           = WarlockSimulatorConstants::kIncinerate;
   cast_time                      = 2.5 - 0.05 * player.talents.emberstorm;
   mana_cost                      = 0.14;
@@ -1058,7 +1071,7 @@ UnstableAffliction::UnstableAffliction(Player& player, std::shared_ptr<Aura> aur
     : Spell(player, std::move(aura), std::move(dot)) {
   name         = WarlockSimulatorConstants::kUnstableAffliction;
   mana_cost    = 0.15;
-  cast_time    = 1.5;
+  cast_time    = 1.5 - (player.has_glyph_of_unstable_affliction ? 0.2 : 0);
   spell_school = SpellSchool::kShadow;
   spell_type   = SpellType::kAffliction;
   can_miss     = true;
@@ -1151,7 +1164,10 @@ bool Conflagrate::CanCast() {
 
 void Conflagrate::Cast() {
   Spell::Cast();
-  entity.player->auras.immolate->Fade();
+
+  if (!entity.player->has_glyph_of_conflagrate) {
+    entity.player->auras.immolate->Fade();
+  }
 
   if (entity.player->auras.backdraft != nullptr) {
     entity.player->auras.backdraft->Apply();
@@ -1207,6 +1223,10 @@ ManaTideTotem::ManaTideTotem(Player& player, std::shared_ptr<Aura> aura) : Spell
 }
 
 ImpFirebolt::ImpFirebolt(Pet& pet) : Spell(pet) {
+  if (pet.player->has_glyph_of_imp) {
+    additive_modifier += 0.2;
+  }
+
   name              = WarlockSimulatorConstants::kFirebolt;
   cast_time         = 2.5 - 0.25 * pet.player->talents.demonic_power;
   mana_cost         = 180;
@@ -1279,7 +1299,7 @@ SuccubusLashOfPain::SuccubusLashOfPain(Pet& pet) : Spell(pet) {
 
 ChaosBolt::ChaosBolt(Player& player) : Spell(player) {
   name              = WarlockSimulatorConstants::kChaosBolt;
-  cooldown          = 12;
+  cooldown          = 12 - (player.has_glyph_of_chaos_bolt ? 2 : 0);
   cast_time         = 2.5 - 0.1 * player.talents.bane;
   mana_cost         = 0.07;
   min_dmg           = 1429;

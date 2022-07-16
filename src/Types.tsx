@@ -83,22 +83,22 @@ export enum GlyphType {
 }
 
 export enum GlyphId {
-  QuickDecay = 50077,
-  LifeTap = 45785,
-  Haunt = 45779,
-  CurseOfAgony = 42456,
-  Corruption = 42455,
-  ShadowBolt = 42467,
-  UnstableAffliction = 42472,
-  Felguard = 42459,
-  Immolate = 42464,
-  Imp = 42465,
-  Incinerate = 42453,
-  Metamorphosis = 45780,
-  SearingPain = 42466,
-  Shadowburn = 42468,
-  ChaosBolt = 45781,
-  Conflagrate = 42454,
+  QuickDecay = 70948,
+  LifeTap = 63941,
+  Haunt = 63930,
+  CurseOfAgony = 56282,
+  Corruption = 56271,
+  ShadowBolt = 56294,
+  UnstableAffliction = 56301,
+  Felguard = 56285,
+  Immolate = 56291,
+  Imp = 56292,
+  Incinerate = 56268,
+  Metamorphosis = 63932,
+  SearingPain = 56293,
+  Shadowburn = 56295,
+  ChaosBolt = 63933,
+  Conflagrate = 56270,
 }
 
 export interface Aura {
@@ -564,6 +564,7 @@ export interface WorkerParams {
     Sets: SetsStruct
     Settings: Settings
     MetaGemId: number
+    Glyphs: GlyphId[]
   }
   SimulationSettings: {
     Iterations: number
@@ -802,7 +803,7 @@ export enum SpellId {
   Shadowburn = 17877,
   Conflagrate = 17962,
   Shadowfury = 30283,
-  ChaosBolt = 50796,
+  ChaosBolt = 59172,
   DarkPact = 59092,
   CurseOfRecklessness = 16231,
 }

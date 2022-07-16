@@ -251,7 +251,7 @@ DemonicPactAura::DemonicPactAura(Player& player) : Aura(player) {
 
 MetamorphosisAura::MetamorphosisAura(Player& player) : Aura(player) {
   name     = WarlockSimulatorConstants::kMetamorphosis;
-  duration = 30;
+  duration = 30 + (player.has_glyph_of_metamorphosis ? 6 : 0);
   stats.push_back(DamageModifier(player, 1.2));
   Aura::Setup();
 }
@@ -611,4 +611,19 @@ SparkOfLifeAura::SparkOfLifeAura(Player& player) : Aura(player) {
   duration = 15;
   stats.push_back(ManaPer5(player, 220));
   Aura::Setup();
+}
+
+GlyphOfLifeTapAura::GlyphOfLifeTapAura(Player& player) : Aura(player) {
+  name     = "Glyph of Life Tap";
+  duration = 40;
+  Aura::Setup();
+}
+
+void GlyphOfLifeTapAura::Apply() {
+  if (is_active) {
+    Aura::Fade();
+  }
+
+  stats = std::vector<Stat>{SpellPower(entity, entity.stats.spirit * 0.2)};
+  Aura::Apply();
 }

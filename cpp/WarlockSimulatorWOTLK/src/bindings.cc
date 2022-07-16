@@ -32,12 +32,20 @@ void PostCombatLogBreakdownVector(const char* name, double mana_gain, double dam
           postMessage({event : "combatLogVector", data : {name : UTF8ToString($0), manaGain : $1, damage : $2}}
           )
   },
-      name, mana_gain, damage);
+      name,
+      mana_gain,
+      damage);
 #endif
 }
 
-void PostCombatLogBreakdown(const char* name, uint32_t casts, uint32_t crits, uint32_t misses, uint32_t count,
-                            double uptime_in_seconds, uint32_t dodges, uint32_t glancing_blows) {
+void PostCombatLogBreakdown(const char* name,
+                            uint32_t casts,
+                            uint32_t crits,
+                            uint32_t misses,
+                            uint32_t count,
+                            double uptime_in_seconds,
+                            uint32_t dodges,
+                            uint32_t glancing_blows) {
 #ifdef EMSCRIPTEN
   EM_ASM(
       {
@@ -58,7 +66,14 @@ void PostCombatLogBreakdown(const char* name, uint32_t casts, uint32_t crits, ui
           }
           )
   },
-      name, casts, crits, misses, count, uptime_in_seconds, dodges, glancing_blows);
+      name,
+      casts,
+      crits,
+      misses,
+      count,
+      uptime_in_seconds,
+      dodges,
+      glancing_blows);
 #endif
 }
 
@@ -80,15 +95,25 @@ void SimulationUpdate(int iteration, int iteration_amount, double median_dps, in
           }
           )
   },
-      median_dps, iteration, iteration_amount, item_id, custom_stat);
+      median_dps,
+      iteration,
+      iteration_amount,
+      item_id,
+      custom_stat);
 #else
   /*std::cout << "Iteration: " << std::to_string(iteration) << "/" << std::to_string(iteration_amount)
             << ". Median DPS: " << std::to_string(median_dps) << std::endl;*/
 #endif
 }
 
-void SendSimulationResults(double median_dps, double min_dps, double max_dps, int item_id, int iteration_amount,
-                           int total_fight_duration, const char* custom_stat, long long simulation_duration) {
+void SendSimulationResults(double median_dps,
+                           double min_dps,
+                           double max_dps,
+                           int item_id,
+                           int iteration_amount,
+                           int total_fight_duration,
+                           const char* custom_stat,
+                           long long simulation_duration) {
 #ifdef EMSCRIPTEN
   EM_ASM(
       {
@@ -106,7 +131,13 @@ void SendSimulationResults(double median_dps, double min_dps, double max_dps, in
           }
           )
   },
-      median_dps, min_dps, max_dps, item_id, iteration_amount, total_fight_duration, custom_stat);
+      median_dps,
+      min_dps,
+      max_dps,
+      item_id,
+      iteration_amount,
+      total_fight_duration,
+      custom_stat);
 #else
   std::cout << "Median DPS: " << std::to_string(median_dps) << ". Min DPS: " << std::to_string(min_dps)
             << ". Max DPS: " << std::to_string(max_dps) << std::endl;
@@ -119,7 +150,9 @@ std::vector<uint32_t> AllocRandomSeeds(const int kAmountOfSeeds, const uint32_t 
   srand(kRandSeed);
   std::vector<uint32_t> seeds(kAmountOfSeeds);
 
-  for (int i = 0; i < kAmountOfSeeds; i++) { seeds[i] = rand(); }
+  for (int i = 0; i < kAmountOfSeeds; i++) {
+    seeds[i] = rand();
+  }
 
   return seeds;
 }
@@ -144,9 +177,17 @@ CharacterStats AllocStats() {
   return {};
 }
 
-PlayerSettings AllocPlayerSettings(AuraSelection& auras, Talents& talents, Sets& sets, CharacterStats& stats,
-                                   ItemSlot& items) {
-  return {auras, talents, sets, stats, items};
+std::vector<int> AllocIntVector() {
+  return {};
+}
+
+PlayerSettings AllocPlayerSettings(AuraSelection& auras,
+                                   Talents& talents,
+                                   Sets& sets,
+                                   CharacterStats& stats,
+                                   ItemSlot& items,
+                                   std::vector<int>& glyphs) {
+  return {auras, talents, sets, stats, items, glyphs};
 }
 
 Player AllocPlayer(PlayerSettings& settings) {
@@ -345,7 +386,7 @@ EMSCRIPTEN_BINDINGS(module) {
       .property("t10", &Sets::t10);
 
   emscripten::class_<PlayerSettings>("PlayerSettings")
-      .constructor<AuraSelection&, Talents&, Sets&, CharacterStats&, ItemSlot&>()
+      .constructor<AuraSelection&, Talents&, Sets&, CharacterStats&, ItemSlot&, std::vector<int>&>()
       .property("randomSeeds", &PlayerSettings::random_seeds)
       .property("itemId", &PlayerSettings::item_id)
       .property("metaGemId", &PlayerSettings::meta_gem_id)
@@ -375,6 +416,7 @@ EMSCRIPTEN_BINDINGS(module) {
       .property("hasCorruption", &PlayerSettings::has_corruption)
       .property("hasUnstableAffliction", &PlayerSettings::has_unstable_affliction)
       .property("hasHaunt", &PlayerSettings::has_haunt)
+      .property("hasChaosBolt", &PlayerSettings::has_chaos_bolt)
       .property("hasSearingPain", &PlayerSettings::has_searing_pain)
       .property("hasShadowBolt", &PlayerSettings::has_shadow_bolt)
       .property("hasIncinerate", &PlayerSettings::has_incinerate)
@@ -432,6 +474,7 @@ EMSCRIPTEN_BINDINGS(module) {
       .value("aggressive", EmbindConstant::kAggressive);
 
   emscripten::function("allocRandomSeeds", &AllocRandomSeeds);
+  emscripten::function("allocIntVector", &AllocIntVector);
   emscripten::function("allocItems", &AllocItems);
   emscripten::function("allocAuras", &AllocAuras);
   emscripten::function("allocTalents", &AllocTalents);
@@ -444,6 +487,7 @@ EMSCRIPTEN_BINDINGS(module) {
   emscripten::function("getExceptionMessage", &GetExceptionMessage);
 
   emscripten::register_vector<uint32_t>("vector<uint32_t>");
+  emscripten::register_vector<int>("vector<int>");
 }
 #endif
 

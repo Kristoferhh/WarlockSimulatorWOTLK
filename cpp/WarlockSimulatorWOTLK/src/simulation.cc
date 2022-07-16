@@ -183,12 +183,6 @@ void Simulation::CastGcdSpells() const {
       }
     }
 
-    // Cast Conflagrate if there's not enough time for another filler
-    // and Immolate is up
-    if (kNotEnoughTimeForFillerSpell && player.spells.conflagrate != nullptr && player.spells.conflagrate->CanCast()) {
-      SelectedSpellHandler(player.spells.conflagrate, predicted_damage_of_spells);
-    }
-
     // Cast Shadowburn if there's not enough time for another filler
     if (player.gcd_remaining <= 0 && kNotEnoughTimeForFillerSpell && player.spells.shadowburn != nullptr &&
         player.spells.shadowburn->CanCast()) {
@@ -210,6 +204,11 @@ void Simulation::CastGcdSpells() const {
       } else {
         player.CastLifeTapOrDarkPact();
       }
+    }
+
+    // Cast Conflagrate if Immolate is up
+    if (player.spells.conflagrate != nullptr && player.spells.conflagrate->CanCast()) {
+      SelectedSpellHandler(player.spells.conflagrate, predicted_damage_of_spells);
     }
 
     // Cast Haunt if it's ready and there's at least 12 sec left of the fight
@@ -268,13 +267,17 @@ void Simulation::CastGcdSpells() const {
     }
 
     // Cast Immolate if it's not up or about to expire
-    /*if (player.gcd_remaining <= 0 && player.spells.immolate != nullptr && player.spells.immolate->CanCast() &&
+    if (player.gcd_remaining <= 0 && player.spells.immolate != nullptr && player.spells.immolate->CanCast() &&
         (!player.auras.immolate->is_active ||
          player.auras.immolate->ticks_remaining == 1 &&
              player.auras.immolate->tick_timer_remaining < player.spells.immolate->GetCastTime()) &&
         fight_time_remaining - player.spells.immolate->GetCastTime() >= player.auras.immolate->duration) {
       SelectedSpellHandler(player.spells.immolate, predicted_damage_of_spells);
-    }*/
+    }
+
+    if (player.gcd_remaining <= 0 && player.spells.chaos_bolt != nullptr && player.spells.chaos_bolt->CanCast()) {
+      SelectedSpellHandler(player.spells.chaos_bolt, predicted_damage_of_spells);
+    }
 
     // Cast Shadow Bolt if Shadow Trance (Nightfall) is active
     if (player.gcd_remaining <= 0 && player.spells.shadow_bolt != nullptr && player.auras.shadow_trance != nullptr &&

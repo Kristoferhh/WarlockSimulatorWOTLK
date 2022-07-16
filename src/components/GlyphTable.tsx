@@ -46,7 +46,7 @@ export default function GlyphTable() {
                 style={{ width: '100%' }}
                 target='_blank'
                 rel='noreferrer'
-                href={`${getBaseWowheadUrl(i18n.language)}/item=${glyph.Id}`}
+                href={`${getBaseWowheadUrl(i18n.language)}/spell=${glyph.Id}`}
               >
                 <img
                   width={32}

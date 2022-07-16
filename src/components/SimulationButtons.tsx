@@ -30,6 +30,8 @@ import { SimWorker } from '../SimWorker.js'
 import {
   CombatLogBreakdownData,
   GemColor,
+  GlyphId,
+  GlyphType,
   ItemSlot,
   ItemSlotDetailed,
   ItemSlotDetailedStruct,
@@ -207,6 +209,9 @@ export function SimulationButtons() {
           customPlayerState.SelectedItems,
           customPlayerState.SelectedGems
         ),
+        Glyphs: customPlayerState.Glyphs[GlyphType.Major].filter(
+          x => x != null
+        ) as GlyphId[],
       },
       SimulationSettings: {
         Iterations: iterationAmount,

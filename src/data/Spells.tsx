@@ -96,18 +96,18 @@ export const Spells: Spell[] = [
   },
   {
     Group: RotationGroup.Finishers,
-    Name: 'Conflagrate',
-    IconName: 'spell_fire_fireball',
-    Id: SpellId.Conflagrate,
-  },
-  {
-    Group: RotationGroup.Finishers,
     Name: 'Drain Soul',
     IconName: 'spell_shadow_haunting',
     Id: 47855,
   },
 
   // Other
+  {
+    Group: RotationGroup.Other,
+    Name: 'Conflagrate',
+    IconName: 'spell_fire_fireball',
+    Id: SpellId.Conflagrate,
+  },
   {
     Group: RotationGroup.Other,
     Name: 'Shadowfury',
@@ -125,6 +125,12 @@ export const Spells: Spell[] = [
     Name: 'Haunt',
     IconName: 'ability_warlock_haunt',
     Id: SpellId.Haunt,
+  },
+  {
+    Group: RotationGroup.Other,
+    Name: 'Chaos Bolt',
+    IconName: 'ability_warlock_chaosbolt',
+    Id: SpellId.ChaosBolt,
   },
 
   // Uncategorized

@@ -236,6 +236,11 @@ void Pet::CalculateStatsFromAuras() {
     stats.attack_power_modifier *= 1.05;
   }
 
+  // TODO correct?
+  if (pet_name == PetName::kFelguard && player->has_glyph_of_felguard) {
+    stats.attack_power_modifier *= 1.2;
+  }
+
   // Calculate armor
   if (pet_type == PetType::kMelee) {
     // Formula from

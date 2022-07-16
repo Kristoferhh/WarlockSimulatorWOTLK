@@ -32,7 +32,23 @@ struct Player final : Entity {
   double total_fight_duration;
   double iteration_damage;
   int power_infusions_ready;
-  bool alchemists_stone_effect_active = false;
+  bool alchemists_stone_effect_active   = false;
+  bool has_glyph_of_quick_decay         = false;
+  bool has_glyph_of_life_tap            = false;
+  bool has_glyph_of_haunt               = false;
+  bool has_glyph_of_curse_of_agony      = false;
+  bool has_glyph_of_corruption          = false;
+  bool has_glyph_of_shadow_bolt         = false;
+  bool has_glyph_of_unstable_affliction = false;
+  bool has_glyph_of_felguard            = false;
+  bool has_glyph_of_immolate            = false;
+  bool has_glyph_of_imp                 = false;
+  bool has_glyph_of_incinerate          = false;
+  bool has_glyph_of_metamorphosis       = false;
+  bool has_glyph_of_searing_pain        = false;
+  bool has_glyph_of_shadowburn          = false;
+  bool has_glyph_of_chaos_bolt          = false;
+  bool has_glyph_of_conflagrate         = false;
 
   explicit Player(PlayerSettings& player_settings);
   void Initialize(Simulation* simulation_ptr) override;

@@ -42,6 +42,38 @@ Player::Player(PlayerSettings& player_settings)
         {WarlockSimulatorConstants::kMp5, std::make_shared<CombatLogBreakdown>(WarlockSimulatorConstants::kMp5)});
   }
 
+  has_glyph_of_quick_decay =
+      std::find(settings.glyphs.begin(), settings.glyphs.end(), GlyphId::kQuickDecay) != settings.glyphs.end();
+  has_glyph_of_life_tap =
+      std::find(settings.glyphs.begin(), settings.glyphs.end(), GlyphId::kLifeTap) != settings.glyphs.end();
+  has_glyph_of_haunt =
+      std::find(settings.glyphs.begin(), settings.glyphs.end(), GlyphId::kHaunt) != settings.glyphs.end();
+  has_glyph_of_curse_of_agony =
+      std::find(settings.glyphs.begin(), settings.glyphs.end(), GlyphId::kCurseOfAgony) != settings.glyphs.end();
+  has_glyph_of_corruption =
+      std::find(settings.glyphs.begin(), settings.glyphs.end(), GlyphId::kCorruption) != settings.glyphs.end();
+  has_glyph_of_shadow_bolt =
+      std::find(settings.glyphs.begin(), settings.glyphs.end(), GlyphId::kShadowBolt) != settings.glyphs.end();
+  has_glyph_of_unstable_affliction =
+      std::find(settings.glyphs.begin(), settings.glyphs.end(), GlyphId::kUnstableAffliction) != settings.glyphs.end();
+  has_glyph_of_felguard =
+      std::find(settings.glyphs.begin(), settings.glyphs.end(), GlyphId::kFelguard) != settings.glyphs.end();
+  has_glyph_of_immolate =
+      std::find(settings.glyphs.begin(), settings.glyphs.end(), GlyphId::kImmolate) != settings.glyphs.end();
+  has_glyph_of_imp = std::find(settings.glyphs.begin(), settings.glyphs.end(), GlyphId::kImp) != settings.glyphs.end();
+  has_glyph_of_incinerate =
+      std::find(settings.glyphs.begin(), settings.glyphs.end(), GlyphId::kIncinerate) != settings.glyphs.end();
+  has_glyph_of_metamorphosis =
+      std::find(settings.glyphs.begin(), settings.glyphs.end(), GlyphId::kMetamorphosis) != settings.glyphs.end();
+  has_glyph_of_searing_pain =
+      std::find(settings.glyphs.begin(), settings.glyphs.end(), GlyphId::kSearingPain) != settings.glyphs.end();
+  has_glyph_of_shadowburn =
+      std::find(settings.glyphs.begin(), settings.glyphs.end(), GlyphId::kShadowburn) != settings.glyphs.end();
+  has_glyph_of_chaos_bolt =
+      std::find(settings.glyphs.begin(), settings.glyphs.end(), GlyphId::kChaosBolt) != settings.glyphs.end();
+  has_glyph_of_conflagrate =
+      std::find(settings.glyphs.begin(), settings.glyphs.end(), GlyphId::kConflagrate) != settings.glyphs.end();
+
   if (player_settings.custom_stat == EmbindConstant::kStamina) {
     custom_stat = "stamina";
   } else if (player_settings.custom_stat == EmbindConstant::kIntellect) {
@@ -469,10 +501,6 @@ void Player::InitializeAuras() {
       auras.curse_of_doom = std::make_shared<CurseOfDoomDot>(*this);
     }
 
-    if (talents.nightfall > 0) {
-      auras.shadow_trance = std::make_shared<ShadowTranceAura>(*this);
-    }
-
     if (settings.has_drain_soul || settings.rotation_option == EmbindConstant::kSimChooses) {
       auras.drain_soul = std::make_shared<DrainSoulDot>(*this);
     }
@@ -510,6 +538,10 @@ void Player::InitializeAuras() {
     }
   }
 
+  if (talents.nightfall > 0 || has_glyph_of_corruption) {
+    auras.shadow_trance = std::make_shared<ShadowTranceAura>(*this);
+  }
+
   if (talents.metamorphosis == 1) {
     auras.metamorphosis = std::make_shared<MetamorphosisAura>(*this);
   }
@@ -541,6 +573,10 @@ void Player::InitializeAuras() {
   if (settings.race == EmbindConstant::kOrc) {
     auras.blood_fury = std::make_shared<BloodFuryAura>(*this);
   }
+
+  if (has_glyph_of_life_tap) {
+    auras.glyph_of_life_tap = std::make_shared<GlyphOfLifeTapAura>(*this);
+  }
 }
 
 void Player::InitializeSpells() {
@@ -551,6 +587,11 @@ void Player::InitializeSpells() {
   } else {
     if (settings.has_shadow_bolt || talents.nightfall > 0 || settings.rotation_option == EmbindConstant::kSimChooses) {
       spells.shadow_bolt = std::make_shared<ShadowBolt>(*this);
+    }
+
+    if ((settings.has_chaos_bolt || settings.rotation_option == EmbindConstant::kSimChooses) &&
+        settings.talents.chaos_bolt == 1) {
+      spells.chaos_bolt = std::make_shared<ChaosBolt>(*this);
     }
 
     if (settings.has_incinerate || settings.rotation_option == EmbindConstant::kSimChooses) {
@@ -573,6 +614,11 @@ void Player::InitializeSpells() {
     if (talents.shadowburn == 1 &&
         (settings.has_shadow_burn || settings.rotation_option == EmbindConstant::kSimChooses)) {
       spells.shadowburn = std::make_shared<Shadowburn>(*this);
+    }
+
+    if (settings.has_haunt || settings.rotation_option == EmbindConstant::kSimChooses) {
+      auras.haunt  = std::make_shared<HauntAura>(*this);
+      spells.haunt = std::make_shared<Haunt>(*this, auras.haunt);
     }
 
     if (talents.shadowfury == 1 &&

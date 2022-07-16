@@ -1,6 +1,9 @@
 // ReSharper disable CppClangTidyClangDiagnosticShadowField
 #include "../include/life_tap.h"
 
+#include <iostream>
+
+#include "../include/aura.h"
 #include "../include/combat_log_breakdown.h"
 #include "../include/common.h"
 #include "../include/entity.h"
@@ -57,6 +60,10 @@ void LifeTap::Cast() {
 
   if (name == WarlockSimulatorConstants::kDarkPact) {
     entity.pet->stats.mana = std::max(0.0, entity.pet->stats.mana - kManaGain);
+  }
+
+  if (entity.player->auras.glyph_of_life_tap != nullptr) {
+    entity.player->auras.glyph_of_life_tap->Apply();
   }
 }
 

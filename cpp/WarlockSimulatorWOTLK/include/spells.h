@@ -84,4 +84,5 @@ struct Spells {
   std::shared_ptr<Spell> phylactery_of_the_nameless_lich;
   std::shared_ptr<Spell> charred_twilight_scale;
   std::shared_ptr<Spell> spark_of_life;
+  std::shared_ptr<Spell> chaos_bolt;
 };

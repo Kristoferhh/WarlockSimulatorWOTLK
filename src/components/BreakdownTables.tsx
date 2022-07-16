@@ -14,6 +14,7 @@ import { getBaseWowheadUrl } from '../Common'
 import { AuraGroups } from '../data/AuraGroups'
 import { Auras } from '../data/Auras'
 import { Gems } from '../data/Gems'
+import { Glyphs } from '../data/Glyphs'
 import { Items } from '../data/Items'
 import { Spells } from '../data/Spells'
 import { Talents } from '../data/Talents'
@@ -30,9 +31,9 @@ function findSpellByName(
   playerTalents: TalentStore
 ):
   | {
-      iconName: string
-      id: number
-      wowheadType: 'spell' | 'item'
+      IconName: string
+      Id: number
+      WowheadType: 'spell' | 'item'
       Name: string
     }
   | undefined {
@@ -40,9 +41,9 @@ function findSpellByName(
 
   if (spellObj) {
     return {
-      iconName: spellObj.IconName,
-      id: spellObj.Id,
-      wowheadType: 'spell',
+      IconName: spellObj.IconName,
+      Id: spellObj.Id,
+      WowheadType: 'spell',
       Name: spellObj.Name,
     }
   }
@@ -51,9 +52,9 @@ function findSpellByName(
 
   if (auraObj) {
     return {
-      iconName: auraObj.IconName,
-      id: auraObj.Id,
-      wowheadType:
+      IconName: auraObj.IconName,
+      Id: auraObj.Id,
+      WowheadType:
         AuraGroups.find(e => e.Heading === auraObj.Group)?.Type || 'spell',
       Name: auraObj.Name,
     }
@@ -63,9 +64,9 @@ function findSpellByName(
 
   if (itemObj) {
     return {
-      iconName: itemObj.IconName,
-      id: itemObj.Id,
-      wowheadType: 'item',
+      IconName: itemObj.IconName,
+      Id: itemObj.Id,
+      WowheadType: 'item',
       Name: itemObj.Name,
     }
   }
@@ -74,9 +75,9 @@ function findSpellByName(
 
   if (gemObj) {
     return {
-      iconName: gemObj.IconName,
-      id: gemObj.Id,
-      wowheadType: 'item',
+      IconName: gemObj.IconName,
+      Id: gemObj.Id,
+      WowheadType: 'item',
       Name: gemObj.Name,
     }
   }
@@ -88,13 +89,24 @@ function findSpellByName(
           const pointsInTalent = playerTalents[talent.Name] || 0
 
           return {
-            iconName: talent.IconName!,
-            id: talent.RankIds![Math.max(0, pointsInTalent - 1)],
-            wowheadType: 'spell',
+            IconName: talent.IconName!,
+            Id: talent.RankIds![Math.max(0, pointsInTalent - 1)],
+            WowheadType: 'spell',
             Name: talent.Name,
           }
         }
       }
+    }
+  }
+
+  const glyphObj = Glyphs.find(x => x.Name === name)
+
+  if (glyphObj) {
+    return {
+      IconName: glyphObj.IconName,
+      Id: glyphObj.Id,
+      WowheadType: 'spell',
+      Name: glyphObj.Name,
     }
   }
 }
@@ -170,11 +182,11 @@ export default function BreakdownTables() {
               return (
                 <TableRow key={nanoid()} className='spell-damage-information'>
                   <TableCell>
-                    {spellObj?.iconName && spellObj.iconName.length > 0 && (
+                    {spellObj?.IconName && spellObj.IconName.length > 0 && (
                       <img
                         alt={spellObj.Name}
                         className='breakdown-table-spell-icon'
-                        src={`${process.env.PUBLIC_URL}/img/${spellObj?.iconName}.jpg`}
+                        src={`${process.env.PUBLIC_URL}/img/${spellObj?.IconName}.jpg`}
                       />
                     )}
                     <Link
@@ -182,10 +194,10 @@ export default function BreakdownTables() {
                       target='_blank'
                       rel='noreferrer'
                       href={
-                        spellObj && spellObj.id !== 0
+                        spellObj && spellObj.Id !== 0
                           ? `${getBaseWowheadUrl(i18n.language)}/${
-                              spellObj.wowheadType
-                            }=${spellObj.id}`
+                              spellObj.WowheadType
+                            }=${spellObj.Id}`
                           : ''
                       }
                     >
@@ -300,11 +312,11 @@ export default function BreakdownTables() {
               return (
                 <TableRow key={nanoid()} className='spell-damage-information'>
                   <TableCell>
-                    {spellObj?.iconName && spellObj.iconName.length > 0 && (
+                    {spellObj?.IconName && spellObj.IconName.length > 0 && (
                       <img
                         alt={spellObj.Name}
                         className='breakdown-table-spell-icon'
-                        src={`${process.env.PUBLIC_URL}/img/${spellObj?.iconName}.jpg`}
+                        src={`${process.env.PUBLIC_URL}/img/${spellObj?.IconName}.jpg`}
                       />
                     )}
                     <Link
@@ -312,10 +324,10 @@ export default function BreakdownTables() {
                       target='_blank'
                       rel='noreferrer'
                       href={
-                        spellObj && spellObj.id !== 0
+                        spellObj && spellObj.Id !== 0
                           ? `${getBaseWowheadUrl(i18n.language)}/${
-                              spellObj.wowheadType
-                            }=${spellObj.id}`
+                              spellObj.WowheadType
+                            }=${spellObj.Id}`
                           : ''
                       }
                     >
@@ -394,11 +406,11 @@ export default function BreakdownTables() {
                 return (
                   <TableRow key={nanoid()} className='spell-damage-information'>
                     <TableCell>
-                      {spellObj?.iconName && spellObj.iconName.length > 0 && (
+                      {spellObj?.IconName && spellObj.IconName.length > 0 && (
                         <img
                           alt={spellObj.Name}
                           className='breakdown-table-spell-icon'
-                          src={`${process.env.PUBLIC_URL}/img/${spellObj?.iconName}.jpg`}
+                          src={`${process.env.PUBLIC_URL}/img/${spellObj?.IconName}.jpg`}
                         />
                       )}
                       <Link
@@ -406,10 +418,10 @@ export default function BreakdownTables() {
                         target='_blank'
                         rel='noreferrer'
                         href={
-                          spellObj && spellObj.id !== 0
+                          spellObj && spellObj.Id !== 0
                             ? `${getBaseWowheadUrl(i18n.language)}/${
-                                spellObj.wowheadType
-                              }=${spellObj.id}`
+                                spellObj.WowheadType
+                              }=${spellObj.Id}`
                             : ''
                         }
                       >

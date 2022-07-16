@@ -101,7 +101,11 @@ double DamageOverTime::GetDamageModifier() const {
   auto damage_modifier = parent_spell->GetDamageModifier();
 
   if (school == SpellSchool::kShadow && player.auras.haunt != nullptr && player.auras.haunt->is_active) {
-    damage_modifier *= 1.2;
+    damage_modifier *= 1.2 + (player.has_glyph_of_haunt ? 0.03 : 0);  // TODO additive or multiplicative?
+  }
+
+  if (name == WarlockSimulatorConstants::kImmolate && player.has_glyph_of_immolate) {
+    damage_modifier *= 1.1;  // TODO additive or multiplicative?
   }
 
   // TODO maybe additive
@@ -133,8 +137,15 @@ void DamageOverTime::Tick(const double kTime) {
     const double kPartialResistMultiplier     = kConstantDamage[4];
 
     // Check for Nightfall proc
+    // TODO OnDotTickProc
     if (name == WarlockSimulatorConstants::kCorruption && player.talents.nightfall > 0) {
       if (player.RollRng(player.talents.nightfall * 2)) {
+        player.auras.shadow_trance->Apply();
+      }
+    }
+
+    if (name == WarlockSimulatorConstants::kCorruption && player.has_glyph_of_corruption) {
+      if (player.RollRng(WarlockSimulatorConstants::GlyphOfCorruptionProcChance)) {
         player.auras.shadow_trance->Apply();
       }
     }
@@ -172,7 +183,8 @@ void DamageOverTime::Tick(const double kTime) {
   }
 }
 
-CorruptionDot::CorruptionDot(Player& player) : DamageOverTime(player) {
+CorruptionDot::CorruptionDot(Player& player)
+    : DamageOverTime(player), original_duration(18), original_tick_timer_total(3) {
   name             = WarlockSimulatorConstants::kCorruption;
   duration         = 18;
   tick_timer_total = 3;
@@ -181,6 +193,28 @@ CorruptionDot::CorruptionDot(Player& player) : DamageOverTime(player) {
   coefficient = 3.0 / 15.0 + 0.12 * player.talents.empowered_corruption + 0.01 * player.talents.everlasting_affliction +
                 0.05 * player.talents.siphon_life;
   Setup();
+}
+
+void CorruptionDot::Tick(const double kTime) {
+  DamageOverTime::Tick(kTime);
+
+  if (should_reset_duration_on_next_tick) {
+    should_reset_duration_on_next_tick = false;
+    ticks_remaining                    = ticks_total;
+  }
+}
+
+void CorruptionDot::Apply() {
+  if (player.has_glyph_of_quick_decay) {
+    duration = original_duration / player.GetHastePercent();
+    CalculateTickTimerTotal();
+  }
+
+  DamageOverTime::Apply();
+}
+
+void CorruptionDot::CalculateTickTimerTotal() {
+  tick_timer_total = duration / (static_cast<double>(original_duration) / original_tick_timer_total);
 }
 
 UnstableAfflictionDot::UnstableAfflictionDot(Player& player) : DamageOverTime(player) {
@@ -205,7 +239,7 @@ ImmolateDot::ImmolateDot(Player& player) : DamageOverTime(player) {
 
 CurseOfAgonyDot::CurseOfAgonyDot(Player& player) : DamageOverTime(player) {
   name             = WarlockSimulatorConstants::kCurseOfAgony;
-  duration         = 24;
+  duration         = 24 + (player.has_glyph_of_curse_of_agony ? 4 : 0);
   tick_timer_total = 3;
   base_damage      = 1740;
   school           = SpellSchool::kShadow;

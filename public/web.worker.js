@@ -218,12 +218,18 @@ onmessage = event => {
         stats.intellectModifier = parseFloat(playerData.Stats.IntellectModifier)
         stats.spiritModifier = parseFloat(playerData.Stats.SpiritModifier)
 
+        const glyphs = module.allocIntVector()
+        for (var glyphId of playerData.Glyphs) {
+          glyphs.push_back(parseInt(glyphId))
+        }
+
         const playerSettings = module.allocPlayerSettings(
           auras,
           talents,
           sets,
           stats,
-          items
+          items,
+          glyphs
         )
         playerSettings.randomSeeds = module.allocRandomSeeds(
           simulationData.Iterations,
@@ -288,7 +294,6 @@ onmessage = event => {
           playerData.Settings.rotationOption === 'simChooses'
             ? module.EmbindConstant.simChooses
             : module.EmbindConstant.userChooses
-        playerSettings.hasHaunt = playerData.Rotation.Dots.includes(48181)
         playerSettings.hasImmolate = playerData.Rotation.Dots.includes(47811)
         playerSettings.hasCorruption = playerData.Rotation.Dots.includes(47813)
         playerSettings.hasUnstableAffliction =
@@ -309,12 +314,14 @@ onmessage = event => {
           playerData.Rotation.Finishers.includes(47860)
         playerSettings.hasShadowburn =
           playerData.Rotation.Finishers.includes(17877)
-        playerSettings.hasConflagrate =
-          playerData.Rotation.Finishers.includes(17962)
         playerSettings.hasDrainSoul =
           playerData.Rotation.Finishers.includes(47855)
+        playerSettings.hasConflagrate =
+          playerData.Rotation.Other.includes(17962)
         playerSettings.hasShadowfury = playerData.Rotation.Other.includes(30283)
         playerSettings.hasDarkPact = playerData.Rotation.Other.includes(59092)
+        playerSettings.hasHaunt = playerData.Rotation.Other.includes(48181)
+        playerSettings.hasChaosBolt = playerData.Rotation.Other.includes(59172)
 
         const simulationSettings = module.allocSimSettings()
         simulationSettings.iterations = parseInt(simulationData.Iterations)

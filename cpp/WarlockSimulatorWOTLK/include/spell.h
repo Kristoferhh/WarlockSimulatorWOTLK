@@ -94,15 +94,15 @@ struct Spell {
   [[nodiscard]] double GetDamageModifier() const;
   [[nodiscard]] double GetPartialResistMultiplier() const;
 
- protected:
+protected:
   [[nodiscard]] bool IsCrit() const;
   [[nodiscard]] bool IsHit() const;
 
- private:
+private:
   virtual double GetCooldown();
   virtual void Damage(bool kIsCrit = false, bool kIsGlancing = false);
   [[nodiscard]] double GetManaCost() const;
-  std::vector<double> GetConstantDamage();
+  virtual std::vector<double> GetConstantDamage();
   SpellCastResult MagicSpellCast();
   [[nodiscard]] SpellCastResult PhysicalSpellCast() const;
   void OnSpellHit(const SpellCastResult& kSpellCastResult);
@@ -185,6 +185,7 @@ struct Conflagrate final : Spell {
   explicit Conflagrate(Player& player);
   void Cast() override;
   bool CanCast() override;
+
 };
 
 struct FlameCap final : Spell {

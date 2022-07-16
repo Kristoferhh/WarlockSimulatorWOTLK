@@ -12,8 +12,8 @@ struct DamageOverTime {
   Player& player;
   std::shared_ptr<Spell> parent_spell;
   SpellSchool school;
-  int duration         = 0;  // Total duration of the dot
-  int tick_timer_total = 3;  // Total duration of each tick (default is 3 seconds
+  double duration         = 0.0;  // Total duration of the dot
+  double tick_timer_total = 3.0;  // Total duration of each tick (default is 3 seconds
   // between ticks)
   double tick_timer_remaining   = 0;  // Time until next tick
   int ticks_remaining           = 0;  // Amount of ticks remaining before the dot expires
@@ -24,19 +24,26 @@ struct DamageOverTime {
   bool is_active                = false;
   double crit_damage_multiplier = 1.5;
   std::string name;
+  bool should_reset_duration_on_next_tick = false;  // Corruption - Everlasting Affliction
 
   explicit DamageOverTime(Player& player);
   void Setup();
   virtual void Apply();
   void Fade();
-  void Tick(double kTime);
+  virtual void Tick(double kTime);
   [[nodiscard]] std::vector<double> GetConstantDamage() const;
   [[nodiscard]] double PredictDamage() const;
-  double GetDamageModifier() const;
+  [[nodiscard]] double GetDamageModifier() const;
 };
 
 struct CorruptionDot final : DamageOverTime {
+  int original_duration;
+  int original_tick_timer_total;
+
   explicit CorruptionDot(Player& player);
+  void Tick(double kTime) override;
+  void Apply() override;
+  void CalculateTickTimerTotal();
 };
 
 struct UnstableAfflictionDot final : DamageOverTime {
@@ -63,7 +70,7 @@ struct ConflagrateDot final : DamageOverTime {
   explicit ConflagrateDot(Player& player);
 };
 
-// TODO turn this into a channeled spell or something instead of being a dot
+// TODO turn this into a channeled spell or something instead of being a dot, maybe
 struct DrainSoulDot final : DamageOverTime {
   explicit DrainSoulDot(Player& player);
 };

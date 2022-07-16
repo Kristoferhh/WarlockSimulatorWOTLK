@@ -37,7 +37,7 @@ function Glyph(glyphId: GlyphId | undefined, glyphSlot: number) {
         rel='noreferrer'
         href={
           glyphId !== null
-            ? `${getBaseWowheadUrl(i18n.language)}/item=${glyphId}`
+            ? `${getBaseWowheadUrl(i18n.language)}/spell=${glyphId}`
             : ''
         }
         style={{ display: 'block', height: '100%' }}

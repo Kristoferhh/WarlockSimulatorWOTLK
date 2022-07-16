@@ -106,6 +106,7 @@ const std::string kShadowflame                  = "Shadowflame";
 const std::string kDrainSoul                    = "Drain Soul";
 const std::string kRunicManaPotion              = "Runic Mana Potion";
 constexpr int kFigurineSapphireOwlTotalManaGain = 2340;
+constexpr int GlyphOfCorruptionProcChance       = 4;
 }  // namespace WarlockSimulatorConstants
 
 namespace ItemId {
@@ -190,3 +191,22 @@ constexpr int kFigurineSapphireOwl               = 42413;
 constexpr int kDarkmoonCardIllusion              = 42988;
 constexpr int kDarkmoonCardBerserker             = 42989;
 }  // namespace ItemId
+
+namespace GlyphId {
+constexpr int kQuickDecay         = 70948;
+constexpr int kLifeTap            = 63941;
+constexpr int kHaunt              = 63930;
+constexpr int kCurseOfAgony       = 56282;
+constexpr int kCorruption         = 56271;
+constexpr int kShadowBolt         = 56294;
+constexpr int kUnstableAffliction = 56301;
+constexpr int kFelguard           = 56285;
+constexpr int kImmolate           = 56291;
+constexpr int kImp                = 56292;
+constexpr int kIncinerate         = 56268;
+constexpr int kMetamorphosis      = 63932;
+constexpr int kSearingPain        = 56293;
+constexpr int kShadowburn         = 56295;
+constexpr int kChaosBolt          = 63933;
+constexpr int kConflagrate        = 56270;
+}  // namespace GlyphId
