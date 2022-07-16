@@ -544,4 +544,9 @@ export const Auras: Aura[] = [
     IconName: 'inv_misc_gem_azuredraenite_01',
     Id: AuraId.MeteoricInspiration,
   },
+  {
+    Name: 'Demonic Frenzy',
+    IconName: 'spell_shadow_deathpact',
+    Id: 32850,
+  },
 ]

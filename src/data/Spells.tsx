@@ -144,4 +144,20 @@ export const Spells: Spell[] = [
     IconName: 'spell_shadow_burningspirit',
     Id: 57946,
   },
+  { Name: 'Melee', IconName: 'ability_meleedamage', Id: 0 },
+  {
+    Name: 'Cleave',
+    IconName: 'ability_warrior_cleave',
+    Id: 30224,
+  },
+  {
+    Name: 'Lash of Pain',
+    IconName: 'spell_shadow_curse',
+    Id: 47992,
+  },
+  {
+    Name: 'Firebolt',
+    IconName: 'spell_fire_firebolt',
+    Id: 47964,
+  },
 ]

@@ -297,7 +297,7 @@ onmessage = event => {
         playerSettings.hasImmolate = playerData.Rotation.Dots.includes(47811)
         playerSettings.hasCorruption = playerData.Rotation.Dots.includes(47813)
         playerSettings.hasUnstableAffliction =
-          playerData.Rotation.Dots.includes(30108)
+          playerData.Rotation.Dots.includes(47843)
         playerSettings.hasSearingPain =
           playerData.Rotation.Filler.includes(47815)
         playerSettings.hasShadowBolt =
@@ -313,14 +313,14 @@ onmessage = event => {
         playerSettings.hasDeathCoil =
           playerData.Rotation.Finishers.includes(47860)
         playerSettings.hasShadowburn =
-          playerData.Rotation.Finishers.includes(17877)
+          playerData.Rotation.Finishers.includes(47827)
         playerSettings.hasDrainSoul =
           playerData.Rotation.Finishers.includes(47855)
         playerSettings.hasConflagrate =
           playerData.Rotation.Other.includes(17962)
-        playerSettings.hasShadowfury = playerData.Rotation.Other.includes(30283)
+        playerSettings.hasShadowfury = playerData.Rotation.Other.includes(47847)
         playerSettings.hasDarkPact = playerData.Rotation.Other.includes(59092)
-        playerSettings.hasHaunt = playerData.Rotation.Other.includes(48181)
+        playerSettings.hasHaunt = playerData.Rotation.Other.includes(59164)
         playerSettings.hasChaosBolt = playerData.Rotation.Other.includes(59172)
 
         const simulationSettings = module.allocSimSettings()
