@@ -40,9 +40,7 @@ void Aura::Apply() {
       entity.combat_log_breakdown.at(name)->applied_at = entity.simulation->current_fight_time;
     }
 
-    for (auto& stat : stats) {
-      stat.AddStat();
-    }
+    for (auto& stat : stats) { stat.AddStat(); }
 
     if (entity.ShouldWriteToCombatLog()) {
       entity.CombatLog(name + " applied");
@@ -75,9 +73,7 @@ void Aura::Fade() {
     entity.player->ThrowError("Attempting to fade " + name + " when it isn't is_active");
   }
 
-  for (auto& stat : stats) {
-    stat.RemoveStat();
-  }
+  for (auto& stat : stats) { stat.RemoveStat(); }
 
   if (entity.ShouldWriteToCombatLog()) {
     entity.CombatLog(name + " faded");
@@ -89,9 +85,7 @@ void Aura::Fade() {
   }
 
   if (stacks > 0) {
-    for (auto& stat : stats_per_stack) {
-      stat.RemoveStat(stacks);
-    }
+    for (auto& stat : stats_per_stack) { stat.RemoveStat(stacks); }
   }
 
   is_active = false;
@@ -101,9 +95,7 @@ void Aura::Fade() {
 void Aura::IncrementStacks(const int kStackAmount) {
   stacks += kStackAmount;
 
-  for (auto& stat : stats_per_stack) {
-    stat.AddStat(kStackAmount);
-  }
+  for (auto& stat : stats_per_stack) { stat.AddStat(kStackAmount); }
 }
 
 void Aura::DecrementStacks() {
