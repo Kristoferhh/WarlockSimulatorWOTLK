@@ -1,12 +1,7 @@
 import { Grid, Link, Typography } from '@mui/material'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import packageJson from '../../package.json'
 import { RootState } from '../redux/Store'
-import {
-  setGemSelectionTable,
-  setGlyphSelectionTableVisibility,
-} from '../redux/UiSlice'
-import { InitialGemSelectionTableValue } from '../Types'
 import AuraSelection from './AuraSelection'
 import BreakdownTables from './BreakdownTables'
 import CombatLog from './CombatLog'
@@ -25,17 +20,10 @@ import StatWeights from './StatWeights'
 import TalentTrees from './TalentTrees'
 
 export default function Main() {
-  const dispatch = useDispatch()
   const uiState = useSelector((state: RootState) => state.ui)
 
   return (
-    <Grid
-      id='main'
-      onClick={() => {
-        dispatch(setGemSelectionTable(InitialGemSelectionTableValue))
-        dispatch(setGlyphSelectionTableVisibility(false))
-      }}
-    >
+    <Grid id='main'>
       <Grid id='header'>
         <LanguageSelection />
         <Typography style={{ marginRight: 'auto' }}>
