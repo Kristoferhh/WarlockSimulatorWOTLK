@@ -35,11 +35,11 @@ Pet::Pet(Player& player, const EmbindConstant kSelectedPet)
     name     = WarlockSimulatorConstants::kSuccubus;
     pet_name = PetName::kSuccubus;
     pet_type = PetType::kMelee;
-    stats.stamina += 280;
-    stats.intellect += 133;
-    stats.spirit += 122;
-    stats.strength += 153;
-    stats.agility += 109;
+    stats.stamina += 328;
+    stats.intellect += 150;
+    stats.spirit += 209;
+    stats.strength += 314;
+    stats.agility += 90;
   } else if (kSelectedPet == EmbindConstant::kFelguard) {
     name     = WarlockSimulatorConstants::kFelguard;
     pet_type = PetType::kMelee;
@@ -48,6 +48,14 @@ Pet::Pet(Player& player, const EmbindConstant kSelectedPet)
     stats.strength += 314;
     stats.agility += 90;
     stats.intellect += 150;
+    stats.spirit += 209;
+  } else if (kSelectedPet == EmbindConstant::kFelhunter) {
+    pet_type = PetType::kMelee;
+    pet_name = PetName::kFelhunter;
+    stats.stamina += 328;
+    stats.intellect += 150;
+    stats.agility += 90;
+    stats.strength += 314;
     stats.spirit += 209;
   }
 }
