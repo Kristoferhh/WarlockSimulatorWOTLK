@@ -25,39 +25,44 @@ export default function GlyphTable() {
         width: '20%',
       }}
     >
-      {Glyphs.map(glyph => (
-        <ListItem
-          className='glyph-table-glyph'
-          data-checked={glyphInSlot?.Id === glyph.Id}
-          onClick={e => {
-            dispatch(
-              setGlyphSlotId({
-                slot: ui.GlyphSelectionTable.GlyphSlot,
-                id: glyph.Id,
-              })
-            )
-            dispatch(setGlyphSelectionTableVisibility(false))
-            e.preventDefault()
-          }}
-        >
-          <Link
-            style={{ width: '100%' }}
-            target='_blank'
-            rel='noreferrer'
-            href={`${getBaseWowheadUrl(i18n.language)}/item=${glyph.Id}`}
-          >
-            <img
-              width={32}
-              height={32}
-              alt={glyph.Name}
-              src={`${process.env.PUBLIC_URL}/img/${glyph.IconName}.jpg`}
-            />
-            <Typography style={{ marginLeft: '8px', display: 'inline-block' }}>
-              {glyph.Name}
-            </Typography>
-          </Link>
-        </ListItem>
-      ))}
+      {Glyphs.map(
+        glyph =>
+          !player.Glyphs[GlyphType.Major].includes(glyph.Id) && (
+            <ListItem
+              className='glyph-table-glyph'
+              data-checked={glyphInSlot?.Id === glyph.Id}
+              onClick={e => {
+                dispatch(
+                  setGlyphSlotId({
+                    slot: ui.GlyphSelectionTable.GlyphSlot,
+                    id: glyph.Id,
+                  })
+                )
+                dispatch(setGlyphSelectionTableVisibility(false))
+                e.preventDefault()
+              }}
+            >
+              <Link
+                style={{ width: '100%' }}
+                target='_blank'
+                rel='noreferrer'
+                href={`${getBaseWowheadUrl(i18n.language)}/item=${glyph.Id}`}
+              >
+                <img
+                  width={32}
+                  height={32}
+                  alt={glyph.Name}
+                  src={`${process.env.PUBLIC_URL}/img/${glyph.IconName}.jpg`}
+                />
+                <Typography
+                  style={{ marginLeft: '8px', display: 'inline-block' }}
+                >
+                  {glyph.Name}
+                </Typography>
+              </Link>
+            </ListItem>
+          )
+      )}
     </List>
   )
 }
