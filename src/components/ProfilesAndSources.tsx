@@ -11,7 +11,7 @@ import {
   GetItemSetCounts,
   GetItemsStats,
 } from '../Common'
-import { Sources } from '../data/Sources'
+import { UiSources } from '../data/Sources'
 import {
   DeleteProfile,
   RenameProfile,
@@ -226,7 +226,7 @@ export default function ProfilesAndSources() {
           <Typography>{t('Sources')}</Typography>
         </legend>
         <Grid container id='source-list'>
-          {Sources.map(source => (
+          {UiSources.map(source => (
             <Grid
               item
               key={nanoid()}

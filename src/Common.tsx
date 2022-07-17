@@ -5,7 +5,7 @@ import { Items } from './data/Items'
 import { ItemSources } from './data/ItemSource'
 import { Races } from './data/Races'
 import { Sockets } from './data/Sockets'
-import { Sources } from './data/Sources'
+import { UiSources } from './data/Sources'
 import { TalentTreeStruct } from './data/Talents'
 import {
   AuraId,
@@ -20,6 +20,7 @@ import {
   ItemSourceName,
   Languages,
   Pet,
+  Phase,
   PlayerState,
   Quality,
   Race,
@@ -220,23 +221,30 @@ export function CanGemColorBeInsertedIntoSocketColor(
   )
 }
 
-export function DoesItemSourceMeetSourcesCriteria(
-  sourceName: ItemSourceName,
-  selectedSources: SourcesStruct
+export function DoesItemMeetSourcesCriteria(
+  itemSource: ItemSourceName,
+  itemPhase: Phase,
+  selectedUiSources: SourcesStruct
 ): boolean {
-  const itemSource = ItemSources.find(x => x.Name === sourceName)
+  debugger
+  const itemSourceObj = ItemSources.find(x => x.Name === itemSource)
 
-  for (const source of Sources) {
-    if (
-      selectedSources.find(x => x === source.Name) &&
-      itemSource?.Instance?.Type === InstanceType.Dungeon &&
-      source.Dungeon
-    ) {
-      return true
+  for (const uiSource of UiSources) {
+    if (!selectedUiSources.some(x => x === uiSource.Name)) {
+      if (itemPhase === uiSource.Phase) {
+        return false
+      }
+
+      if (
+        itemSourceObj?.Instance?.Type === InstanceType.Dungeon &&
+        uiSource.Dungeon
+      ) {
+        return false
+      }
     }
   }
 
-  return false
+  return true
 }
 
 /**
@@ -267,7 +275,7 @@ export function GetItemTableItems(
       selectedItems[itemSlotDetailed] === e.Id ||
       (e.ItemSlot === itemSlot &&
         (e.Faction === undefined || playerRace?.Faction === e.Faction) &&
-        DoesItemSourceMeetSourcesCriteria(e.Source!, sources) &&
+        DoesItemMeetSourcesCriteria(e.Source!, e.Phase, sources) &&
         (!hiddenItems.includes(e.Id) || hidingItems) &&
         (!e.Unique ||
           secondRingOrTrinket !== e.Id ||

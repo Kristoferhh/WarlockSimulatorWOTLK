@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  DoesItemSourceMeetSourcesCriteria,
+  DoesItemMeetSourcesCriteria,
   GetBaseWowheadUrl,
   GetEnchantsStats,
   GetGemsStats,
@@ -128,7 +128,7 @@ export default function ItemSelection() {
             e =>
               e.ItemSlot === ui.SelectedItemSlot &&
               e.Source &&
-              DoesItemSourceMeetSourcesCriteria(e.Source, ui.Sources)
+              DoesItemMeetSourcesCriteria(e.Source, e.Phase, ui.Sources)
           )
         : undefined
     )
