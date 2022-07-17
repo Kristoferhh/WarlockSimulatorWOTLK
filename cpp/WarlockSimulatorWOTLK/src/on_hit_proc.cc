@@ -9,47 +9,37 @@
 #include "../include/sets.h"
 #include "../include/talents.h"
 
-OnHitProc::OnHitProc(Entity& entity, std::shared_ptr<Aura> aura) : SpellProc(entity, std::move(aura)) {
+OnHitProc::OnHitProc(Entity& entity, const std::string& kName, std::shared_ptr<Aura> aura)
+    : SpellProc(entity, kName, std::move(aura)) {
+  if (on_hit_procs_enabled) {
+    entity.on_hit_procs.push_back(this);
+  }
+
   procs_on_hit = true;
 }
 
-void OnHitProc::Setup() {
-  SpellProc::Setup();
-
-  if (procs_on_hit && on_hit_procs_enabled) {
-    entity.on_hit_procs.push_back(this);
-  }
-}
-
-JudgementOfWisdom::JudgementOfWisdom(Entity& entity) : OnHitProc(entity) {
-  name              = WarlockSimulatorConstants::kJudgementOfWisdom;
+JudgementOfWisdom::JudgementOfWisdom(Entity& entity) : OnHitProc(entity, "Judgement of Wisdom") {
   mana_gain         = 74;
   gain_mana_on_cast = true;
   proc_chance       = 50;
-  OnHitProc::Setup();
 }
 
-DemonicFrenzy::DemonicFrenzy(Pet& pet, std::shared_ptr<Aura> aura) : OnHitProc(pet, std::move(aura)) {
-  name        = WarlockSimulatorConstants::kDemonicFrenzy;
+DemonicFrenzy::DemonicFrenzy(Pet& pet, std::shared_ptr<Aura> aura) : OnHitProc(pet, "Demonic Frenzy", std::move(aura)) {
   proc_chance = 100;
-  OnHitProc::Setup();
 }
 
 ImprovedShadowBolt::ImprovedShadowBolt(Player& player, std::shared_ptr<Aura> aura)
-    : OnHitProc(player, std::move(aura)) {
+    : OnHitProc(player, "Improved Shadow Bolt", std::move(aura)) {
   name        = "Improved Shadow Bolt";
   proc_chance = 20 * player.talents.improved_shadow_bolt;
-  OnHitProc::Setup();
 }
 
 bool ImprovedShadowBolt::ShouldProc(Spell* spell) {
   return spell->name == WarlockSimulatorConstants::kShadowBolt;
 }
 
-SoulLeech::SoulLeech(Player& player, std::shared_ptr<Aura> aura) : OnHitProc(player, std::move(aura)) {
-  name        = WarlockSimulatorConstants::kSoulLeech;
+SoulLeech::SoulLeech(Player& player, std::shared_ptr<Aura> aura) : OnHitProc(player, "Soul Leech", std::move(aura)) {
   proc_chance = 10 * player.talents.soul_leech;
-  OnHitProc::Setup();
 }
 
 bool SoulLeech::ShouldProc(Spell* spell) {
@@ -61,8 +51,8 @@ bool SoulLeech::ShouldProc(Spell* spell) {
          spell->name == WarlockSimulatorConstants::kConflagrate;
 }
 
-PendulumOfTelluricCurrents::PendulumOfTelluricCurrents(Player& player) : OnHitProc(player) {
-  name         = WarlockSimulatorConstants::kPendulumOfTelluricCurrents;
+PendulumOfTelluricCurrents::PendulumOfTelluricCurrents(Player& player)
+    : OnHitProc(player, "Pendulum of Telluric Currents") {
   proc_chance  = 15;
   cooldown     = 45;
   does_damage  = true;
@@ -72,16 +62,14 @@ PendulumOfTelluricCurrents::PendulumOfTelluricCurrents(Player& player) : OnHitPr
   can_crit     = true;
   spell_school = SpellSchool::kShadow;
   attack_type  = AttackType::kMagical;
-  OnHitProc::Setup();
 }
 
 bool PendulumOfTelluricCurrents::ShouldProc(Spell* spell) {
   return spell->is_harmful;
 }
 
-JoustersFury::JoustersFury(Player& player, std::shared_ptr<Aura> aura) : OnHitProc(player, std::move(aura)) {
-  name        = "Jouster's Fury";
+JoustersFury::JoustersFury(Player& player, std::shared_ptr<Aura> aura)
+    : OnHitProc(player, "Jouster's Fury", std::move(aura)) {
   proc_chance = 10;
   cooldown    = 45;
-  OnHitProc::Setup();
 }

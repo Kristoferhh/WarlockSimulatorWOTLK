@@ -139,5 +139,5 @@ std::unique_ptr<Spell> TestBase::CreateSpell() {
   const auto kPlayerSettings = std::make_shared<PlayerSettings>(GetDefaultPlayerSettings());
   const auto kPlayer         = std::make_shared<Player>(*kPlayerSettings);
 
-  return std::make_unique<Spell>(*kPlayer);
+  return std::make_unique<Spell>(*kPlayer, "Dummy Spell");
 }

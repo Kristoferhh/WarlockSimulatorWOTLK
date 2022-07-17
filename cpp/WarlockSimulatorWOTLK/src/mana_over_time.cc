@@ -7,11 +7,11 @@
 #include "../include/player.h"
 #include "../include/stat.h"
 
-ManaOverTime::ManaOverTime(Entity& entity) : Aura(entity), mana_per_tick(0) {}
-
-void ManaOverTime::Setup() {
-  ticks_total = duration / tick_timer_total;
-  Aura::Setup();
+ManaOverTime::ManaOverTime(Entity& entity, const std::string& kName, const int kDuration, const int kTickTimerTotal)
+    : Aura(entity, kName), mana_per_tick(0) {
+  duration         = kDuration;
+  tick_timer_total = kTickTimerTotal;
+  ticks_total      = kDuration / kTickTimerTotal;
 }
 
 void ManaOverTime::Apply() {
@@ -53,22 +53,15 @@ double ManaOverTime::GetManaGain() {
   return mana_per_tick;
 }
 
-ManaTideTotemAura::ManaTideTotemAura(Entity& entity) : ManaOverTime(entity) {
-  name             = WarlockSimulatorConstants::kManaTideTotem;
-  duration         = 12;
-  tick_timer_total = 3;
-  group_wide       = true;
-  ManaOverTime::Setup();
+ManaTideTotemAura::ManaTideTotemAura(Entity& entity) : ManaOverTime(entity, "Mana Tide Totem", 12, 3) {
+  group_wide = true;
 }
 
 double ManaTideTotemAura::GetManaGain() {
   return entity.stats.max_mana * 0.06;
 }
 
-FigurineSapphireOwlAura::FigurineSapphireOwlAura(Player& player) : ManaOverTime(player) {
-  name             = "Figurine - Sapphire Owl";
-  duration         = 12;
-  tick_timer_total = 1;
-  mana_per_tick    = 195;
-  ManaOverTime::Setup();
+FigurineSapphireOwlAura::FigurineSapphireOwlAura(Player& player)
+    : ManaOverTime(player, "Figurine - Sapphire Owl", 12, 1) {
+  mana_per_tick = 195;
 }

@@ -2,8 +2,10 @@
 #include "spell_proc.h"
 
 struct OnCastProc : SpellProc {
-  explicit OnCastProc(Entity& entity, std::shared_ptr<Aura> aura = nullptr);
-  void Setup() override;
+  explicit OnCastProc(Entity& entity,
+                      const std::string& kName,
+                      std::shared_ptr<Aura> aura = nullptr,
+                      int kCooldown              = 0);
 };
 
 struct JeTzesBell final : OnCastProc {

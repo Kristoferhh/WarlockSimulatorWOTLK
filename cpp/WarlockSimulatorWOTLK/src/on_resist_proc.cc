@@ -4,14 +4,11 @@
 
 #include "../include/player.h"
 
-OnResistProc::OnResistProc(Player& player, std::shared_ptr<Aura> aura) : SpellProc(player, std::move(aura)) {
-  procs_on_resist = true;
-}
-
-void OnResistProc::Setup() {
-  SpellProc::Setup();
-
-  if (procs_on_resist && on_resist_procs_enabled) {
+OnResistProc::OnResistProc(Player& player, const std::string& kName, std::shared_ptr<Aura> aura)
+    : SpellProc(player, kName, std::move(aura)) {
+  if (on_resist_procs_enabled) {
     entity.on_resist_procs.push_back(this);
   }
+
+  procs_on_resist = true;
 }

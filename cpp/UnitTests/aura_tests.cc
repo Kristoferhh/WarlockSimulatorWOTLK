@@ -40,9 +40,7 @@ class AuraTest : public ::testing::Test {
     _simulation_settings = std::make_shared<SimulationSettings>(TestBase::GetDefaultSimulationSettings());
     _simulation          = std::make_shared<Simulation>(*_player, *_simulation_settings);
     _player->Initialize(_simulation.get());
-    _aura       = std::make_unique<Aura>(*_player);
-    _aura->name = "Dummy Aura";
-    _aura->Setup();
+    _aura = std::make_unique<Aura>(*_player, "Dummy Aura");
   }
 };
 
@@ -84,7 +82,9 @@ TEST_F(AuraTest, Apply) {
   EXPECT_EQ(_aura->entity.combat_log_breakdown.at(_aura->name)->count, 1);
   EXPECT_EQ(_aura->duration_remaining, 20);
 
-  for (int i = 0; i < 5; i++) { _aura->Apply(); }
+  for (int i = 0; i < 5; i++) {
+    _aura->Apply();
+  }
 
   EXPECT_EQ(_aura->entity.combat_log_breakdown.at(_aura->name)->count, 6);
   EXPECT_EQ(_aura->entity.stats.spell_power, kCurrentSpellPower + 500 * 6);
@@ -108,10 +108,8 @@ TEST_F(AuraTest, Fade) {
 }
 
 TEST_F(AuraTest, Setup) {
-  auto aura = Aura(*_player);
-  aura.name = "Test";
+  auto aura = Aura(*_player, "Test");
 
-  aura.Setup();
   EXPECT_NE(aura.entity.combat_log_breakdown.find("Test"), aura.entity.combat_log_breakdown.end());
   EXPECT_NE(std::find_if(aura.entity.aura_list.begin(),
                          aura.entity.aura_list.end(),

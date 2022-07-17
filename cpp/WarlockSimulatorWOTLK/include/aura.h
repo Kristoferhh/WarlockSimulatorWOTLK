@@ -34,8 +34,7 @@ struct Aura {
   // Bloodlust
   double haste_modifier = 0;
 
-  explicit Aura(Entity& entity);
-  virtual void Setup();
+  explicit Aura(Entity& entity, const std::string& kName);
   virtual void Tick(double kTime);
   virtual void Apply();
   virtual void Fade();
@@ -65,10 +64,6 @@ struct BloodFuryAura final : Aura {
 
 struct BloodlustAura final : Aura {
   explicit BloodlustAura(Player& player);
-};
-
-struct TheLightningCapacitorAura final : Aura {
-  explicit TheLightningCapacitorAura(Player& player);
 };
 
 struct InnervateAura final : Aura {

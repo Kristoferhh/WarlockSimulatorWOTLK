@@ -15,7 +15,6 @@ struct Pet final : Entity, std::enable_shared_from_this<Pet> {
   Pet(Player& player, EmbindConstant kSelectedPet);
   void Initialize(Simulation* simulation_ptr) override;
   void CalculateStatsFromAuras();
-  void Setup();
   void Reset() override;
   void Tick(double kTime) override;
   double GetAttackPower() const;

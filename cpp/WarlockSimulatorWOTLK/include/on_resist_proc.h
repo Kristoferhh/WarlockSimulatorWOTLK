@@ -4,6 +4,5 @@
 struct Player;
 
 struct OnResistProc : SpellProc {
-  explicit OnResistProc(Player& player, std::shared_ptr<Aura> aura = nullptr);
-  void Setup() override;
+  explicit OnResistProc(Player& player, const std::string& kName, std::shared_ptr<Aura> aura = nullptr);
 };

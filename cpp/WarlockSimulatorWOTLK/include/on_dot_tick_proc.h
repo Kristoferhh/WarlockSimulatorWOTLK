@@ -4,8 +4,7 @@
 struct Player;
 
 struct OnDotTickProc : SpellProc {
-  explicit OnDotTickProc(Player& player, const std::shared_ptr<Aura>& kAura = nullptr);
-  void Setup() override;
+  explicit OnDotTickProc(Player& player, const std::string& kName, const std::shared_ptr<Aura>& kAura = nullptr);
   virtual bool ShouldProc(DamageOverTime* spell);
 };
 

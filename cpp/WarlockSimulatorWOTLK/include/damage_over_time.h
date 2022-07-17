@@ -26,8 +26,8 @@ struct DamageOverTime {
   std::string name;
   bool should_reset_duration_on_next_tick = false;  // Corruption - Everlasting Affliction
 
-  explicit DamageOverTime(Player& player);
-  void Setup();
+  explicit DamageOverTime(
+      Player& player, const std::string& kName, SpellSchool kSpellSchool, double kDuration, double kTickTimerTotal);
   virtual void Apply();
   void Fade();
   virtual void Tick(double kTime);

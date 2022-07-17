@@ -12,12 +12,11 @@
 #include "../include/talents.h"
 
 // TODO make a class a parent to life tap and dark pact instead of life tap being a parent to dark pact
-LifeTap::LifeTap(Entity& entity)
-    : Spell(entity), mana_return(2400), modifier(1 * (1 + 0.1 * entity.player->talents.improved_life_tap)) {
-  name         = WarlockSimulatorConstants::kLifeTap;
-  coefficient  = 0.6;
-  spell_school = SpellSchool::kShadow;
-  Spell::Setup();
+LifeTap::LifeTap(Entity& entity, const std::string& kName)
+    : Spell(entity, kName, nullptr, nullptr, 0, 0, 0, 0, 0, 0, SpellSchool::kShadow),
+      mana_return(2400),
+      modifier(1 * (1 + 0.1 * entity.player->talents.improved_life_tap)) {
+  coefficient = 0.6;
 }
 
 double LifeTap::ManaGain() const {
@@ -67,13 +66,10 @@ void LifeTap::Cast() {
   }
 }
 
-DarkPact::DarkPact(Entity& entity) : LifeTap(entity) {
-  name         = WarlockSimulatorConstants::kDarkPact;
-  mana_return  = 1200;
-  coefficient  = 0.96;
-  modifier     = 1;
-  spell_school = SpellSchool::kShadow;
-  Spell::Setup();
+DarkPact::DarkPact(Entity& entity) : LifeTap(entity, WarlockSimulatorConstants::kDarkPact) {
+  mana_return = 1200;
+  coefficient = 0.96;
+  modifier    = 1;
 }
 
 bool DarkPact::Ready() {

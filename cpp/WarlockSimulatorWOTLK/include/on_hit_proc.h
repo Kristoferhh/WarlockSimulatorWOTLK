@@ -2,8 +2,7 @@
 #include "spell_proc.h"
 
 struct OnHitProc : SpellProc {
-  explicit OnHitProc(Entity& entity, std::shared_ptr<Aura> aura = nullptr);
-  void Setup() override;
+  explicit OnHitProc(Entity& entity, const std::string& kName, std::shared_ptr<Aura> aura = nullptr);
 };
 
 struct JudgementOfWisdom final : OnHitProc {

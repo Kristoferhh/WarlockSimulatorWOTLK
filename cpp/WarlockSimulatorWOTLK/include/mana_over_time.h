@@ -4,10 +4,9 @@
 struct ManaOverTime : Aura {
   double mana_per_tick;
 
-  explicit ManaOverTime(Entity& entity);
+  explicit ManaOverTime(Entity& entity, const std::string& kName, int kDuration, int kTickTimerTotal);
   void Apply() override;
   void Tick(double kTime) override;
-  void Setup() override;
   virtual double GetManaGain();
 };
 

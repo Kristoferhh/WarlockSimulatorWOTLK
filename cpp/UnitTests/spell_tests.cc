@@ -39,53 +39,84 @@ class SpellTest : public ::testing::Test {
     _simulation_settings = std::make_shared<SimulationSettings>(TestBase::GetDefaultSimulationSettings());
     _simulation          = std::make_shared<Simulation>(*_player, *_simulation_settings);
     _player->Initialize(_simulation.get());
-    _spell       = std::make_unique<Spell>(*_player);
-    _spell->name = "Dummy Spell";
-    _spell->Setup();
+    _spell = std::make_unique<Spell>(*_player, "Dummy Spell");
   }
 };
 
 TEST_F(SpellTest, StartCast) {
-  _spell->cast_time = 3;
+  auto spell      = Spell(*_player, "spell");
+  spell.cast_time = 3;
 
-  _spell->StartCast();
-  EXPECT_EQ(_spell->entity.cast_time_remaining, 3);
-  EXPECT_TRUE(_spell->casting);
+  spell.StartCast();
+  EXPECT_EQ(spell.entity.cast_time_remaining, 3);
+  EXPECT_TRUE(spell.casting);
 
-  _spell->entity.Tick(3);
-  EXPECT_EQ(_spell->entity.cast_time_remaining, 0);
-  EXPECT_FALSE(_spell->casting);
+  spell.entity.Tick(3);
+  EXPECT_EQ(spell.entity.cast_time_remaining, 0);
+  EXPECT_FALSE(spell.casting);
 }
 
 TEST_F(SpellTest, Cast) {
-  _spell->name                                 = WarlockSimulatorConstants::kPowerInfusion;
-  _spell->entity.player->power_infusions_ready = 1;
-  _spell->mana_cost                            = 0.2;
-  _spell->cooldown                             = 5;
-  _spell->gain_mana_on_cast                    = true;
-  _spell->mana_gain                            = 200;
-  _spell->Setup();
+  auto spell = Spell(*_player, WarlockSimulatorConstants::kPowerInfusion, nullptr, nullptr, 0, 0, 200, 200, 0.2, 5);
+  spell.entity.player->power_infusions_ready = 1;
+  spell.gain_mana_on_cast                    = true;
 
-  _spell->Cast();
-  EXPECT_EQ(_spell->entity.stats.mana, _spell->entity.stats.max_mana - _spell->mana_cost + _spell->mana_gain);
-  EXPECT_EQ(_spell->cooldown_remaining, 5);
-  EXPECT_EQ(_spell->entity.five_second_rule_timer_remaining, 5);
-  EXPECT_FALSE(_spell->casting);
-  EXPECT_EQ(_spell->amount_of_casts_this_fight, 1);
-  EXPECT_EQ(_spell->entity.player->power_infusions_ready, 0);
+  spell.Cast();
+  EXPECT_TRUE(spell.entity.stats.mana < spell.entity.stats.max_mana);
+  EXPECT_EQ(spell.entity.stats.mana, spell.entity.stats.max_mana - spell.mana_cost + spell.mana_gain);
+  EXPECT_EQ(spell.cooldown_remaining, 5);
+  EXPECT_EQ(spell.entity.five_second_rule_timer_remaining, 5);
+  EXPECT_FALSE(spell.casting);
+  EXPECT_EQ(spell.amount_of_casts_this_fight, 1);
+  EXPECT_EQ(spell.entity.player->power_infusions_ready, 0);
 }
 
-TEST_F(SpellTest, Setup) {
-  _spell->min_dmg       = 100;
-  _spell->max_dmg       = 200;
-  _spell->min_mana_gain = 200;
-  _spell->max_mana_gain = 300;
-  _spell->mana_cost     = 0.5;
-  _spell->Setup();
-  EXPECT_EQ(_spell->base_damage, 150);
-  EXPECT_EQ(_spell->mana_gain, 250);
-  EXPECT_NE(_spell->entity.combat_log_breakdown.find(_spell->name), _spell->entity.combat_log_breakdown.end());
-  EXPECT_EQ(_spell->mana_cost, 0.5 * _spell->entity.kBaseMana);
+TEST_F(SpellTest, Constructor) {
+  const auto kSpell = Spell(*_player,
+                            "test spell",
+                            nullptr,
+                            nullptr,
+                            100,
+                            200,
+                            200,
+                            300,
+                            0.5,
+                            12,
+                            SpellSchool::kShadow,
+                            AttackType::kMagical,
+                            SpellType::kDestruction);
+  EXPECT_EQ(kSpell.min_dmg, 100);
+  EXPECT_EQ(kSpell.max_dmg, 200);
+  EXPECT_EQ(kSpell.base_damage, 150);
+  EXPECT_EQ(kSpell.min_mana_gain, 200);
+  EXPECT_EQ(kSpell.max_mana_gain, 300);
+  EXPECT_EQ(kSpell.mana_gain, 250);
+  EXPECT_NE(kSpell.entity.combat_log_breakdown.find(kSpell.name), kSpell.entity.combat_log_breakdown.end());
+  EXPECT_EQ(kSpell.mana_cost, 0.5 * kSpell.entity.kBaseMana);
+  EXPECT_EQ(kSpell.cooldown, 12);
+  EXPECT_EQ(kSpell.spell_school, SpellSchool::kShadow);
+  EXPECT_EQ(kSpell.attack_type, AttackType::kMagical);
+  EXPECT_EQ(kSpell.spell_type, SpellType::kDestruction);
+}
+
+TEST_F(SpellTest, ShadowBoltConstructor) {
+  const auto kShadowBolt = ShadowBolt(*_player);
+  EXPECT_EQ(kShadowBolt.name, WarlockSimulatorConstants::kShadowBolt);
+  EXPECT_EQ(kShadowBolt.min_dmg, 690);
+  EXPECT_EQ(kShadowBolt.max_dmg, 770);
+  EXPECT_EQ(kShadowBolt.base_damage, 730);
+  EXPECT_TRUE(kShadowBolt.mana_cost > 0);
+  EXPECT_EQ(kShadowBolt.spell_school, SpellSchool::kShadow);
+  EXPECT_EQ(kShadowBolt.attack_type, AttackType::kMagical);
+  EXPECT_EQ(kShadowBolt.spell_type, SpellType::kDestruction);
+  EXPECT_EQ(kShadowBolt.cast_time, 3 - 0.1 * _player->talents.bane);
+  EXPECT_EQ(kShadowBolt.coefficient, 3 / 3.5 + 0.04 * _player->talents.shadow_and_flame);
+  EXPECT_TRUE(kShadowBolt.does_damage);
+  EXPECT_TRUE(kShadowBolt.can_crit);
+  EXPECT_TRUE(kShadowBolt.can_miss);
+  EXPECT_EQ(kShadowBolt.additive_modifier, 1 + 0.02 * _player->talents.improved_shadow_bolt);
+  EXPECT_TRUE(kShadowBolt.is_harmful);
+  EXPECT_TRUE(kShadowBolt.is_damaging_spell);
 }
 
 TEST_F(SpellTest, Reset) {
@@ -168,7 +199,6 @@ TEST_F(SpellTest, Tick_PowerInfusionComingOffCooldown) {
   _spell->entity.player->power_infusions_ready = 1;
   _spell->name                                 = WarlockSimulatorConstants::kPowerInfusion;
   _spell->cooldown                             = 180;
-  _spell->Setup();
 
   _spell->Cast();
   EXPECT_EQ(_spell->entity.player->power_infusions_ready, 0);

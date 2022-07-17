@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "enums.h"
 #include "spell_cast_result.h"
 
 struct Pet;
@@ -24,8 +25,8 @@ struct Spell {
   AttackType attack_type;
   SpellType spell_type;
   std::string name;
-  int min_dmg                        = 0;
-  int max_dmg                        = 0;
+  double min_dmg                     = 0;
+  double max_dmg                     = 0;
   double base_damage                 = 0;
   bool casting                       = false;
   bool can_crit                      = false;
@@ -72,8 +73,19 @@ struct Spell {
   bool is_harmful                    = false;
   bool is_damaging_spell             = false;
 
-  explicit Spell(Entity& entity, std::shared_ptr<Aura> aura = nullptr, std::shared_ptr<DamageOverTime> dot = nullptr);
-  virtual void Setup();
+  explicit Spell(Entity& entity,
+                 const std::string& kName,
+                 std::shared_ptr<Aura> aura          = nullptr,
+                 std::shared_ptr<DamageOverTime> dot = nullptr,
+                 double kMinDmg                      = 0,
+                 double kMaxDmg                      = 0,
+                 int kMinManaGain                    = 0,
+                 int kMaxManaGain                    = 0,
+                 double kManaCost                    = 0,
+                 int kCooldown                       = 0,
+                 SpellSchool spell_school            = SpellSchool::kNoSchool,
+                 AttackType attack_type              = AttackType::kNoAttackType,
+                 SpellType spell_type                = SpellType::kNoSpellType);
   virtual void Cast();
   virtual bool CanCast();
   virtual double GetBaseDamage();
@@ -154,31 +166,35 @@ struct SeedOfCorruption final : Spell {
 };
 
 struct Corruption final : Spell {
-  explicit Corruption(Player& player, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot);
+  explicit Corruption(Player& player, const std::shared_ptr<Aura>& kAura, const std::shared_ptr<DamageOverTime>& kDot);
 };
 
 struct UnstableAffliction final : Spell {
-  explicit UnstableAffliction(Player& player, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot);
+  explicit UnstableAffliction(Player& player,
+                              const std::shared_ptr<Aura>& kAura,
+                              const std::shared_ptr<DamageOverTime>& kDot);
 };
 
 struct Haunt final : Spell {
-  explicit Haunt(Player& player, std::shared_ptr<Aura> aura);
+  explicit Haunt(Player& player, const std::shared_ptr<Aura>& kAura);
 };
 
 struct Immolate final : Spell {
-  explicit Immolate(Player& player, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot);
+  explicit Immolate(Player& player, const std::shared_ptr<Aura>& kAura, const std::shared_ptr<DamageOverTime>& kDot);
 };
 
 struct CurseOfAgony final : Spell {
-  explicit CurseOfAgony(Player& player, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot);
+  explicit CurseOfAgony(Player& player,
+                        const std::shared_ptr<Aura>& kAura,
+                        const std::shared_ptr<DamageOverTime>& kDot);
 };
 
 struct CurseOfTheElements final : Spell {
-  explicit CurseOfTheElements(Player& player, std::shared_ptr<Aura> aura);
+  explicit CurseOfTheElements(Player& player, const std::shared_ptr<Aura>& kAura);
 };
 
 struct CurseOfDoom final : Spell {
-  explicit CurseOfDoom(Player& player, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot);
+  explicit CurseOfDoom(Player& player, const std::shared_ptr<Aura>& kAura, const std::shared_ptr<DamageOverTime>& kDot);
 };
 
 struct Conflagrate final : Spell {
@@ -188,27 +204,27 @@ struct Conflagrate final : Spell {
 };
 
 struct FlameCap final : Spell {
-  explicit FlameCap(Player& player, std::shared_ptr<Aura> aura);
+  explicit FlameCap(Player& player, const std::shared_ptr<Aura>& kAura);
 };
 
 struct BloodFury final : Spell {
-  explicit BloodFury(Player& player, std::shared_ptr<Aura> aura);
+  explicit BloodFury(Player& player, const std::shared_ptr<Aura>& kAura);
 };
 
 struct Bloodlust final : Spell {
-  explicit Bloodlust(Player& player, std::shared_ptr<Aura> aura);
+  explicit Bloodlust(Player& player, const std::shared_ptr<Aura>& kAura);
 };
 
 struct PowerInfusion final : Spell {
-  explicit PowerInfusion(Player& player, std::shared_ptr<Aura> aura);
+  explicit PowerInfusion(Player& player, const std::shared_ptr<Aura>& kAura);
 };
 
 struct Innervate final : Spell {
-  explicit Innervate(Player& player, std::shared_ptr<Aura> aura);
+  explicit Innervate(Player& player, const std::shared_ptr<Aura>& kAura);
 };
 
 struct ManaTideTotem final : Spell {
-  explicit ManaTideTotem(Player& player, std::shared_ptr<Aura> aura);
+  explicit ManaTideTotem(Player& player, const std::shared_ptr<Aura>& kAura);
 };
 
 struct PetMelee final : Spell {
@@ -235,19 +251,19 @@ struct ChaosBolt final : Spell {
 };
 
 struct Shadowflame final : Spell {
-  explicit Shadowflame(Player& player, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot);
+  explicit Shadowflame(Player& player, const std::shared_ptr<Aura>& kAura, const std::shared_ptr<DamageOverTime>& kDot);
 };
 
 struct DrainSoul final : Spell {
-  explicit DrainSoul(Player& player, std::shared_ptr<Aura> aura, std::shared_ptr<DamageOverTime> dot);
+  explicit DrainSoul(Player& player, const std::shared_ptr<Aura>& kAura, const std::shared_ptr<DamageOverTime>& kDot);
 };
 
 struct DemonicEmpowerment final : Spell {
-  explicit DemonicEmpowerment(Player& player, std::shared_ptr<Aura> aura);
+  explicit DemonicEmpowerment(Player& player, const std::shared_ptr<Aura>& kAura);
 };
 
 struct Metamorphosis final : Spell {
-  explicit Metamorphosis(Player& player, std::shared_ptr<Aura> aura);
+  explicit Metamorphosis(Player& player, const std::shared_ptr<Aura>& kAura);
 };
 
 struct GnomishLightningGenerator final : Spell {
@@ -255,7 +271,7 @@ struct GnomishLightningGenerator final : Spell {
 };
 
 struct FigurineSapphireOwl final : Spell {
-  explicit FigurineSapphireOwl(Player& player, std::shared_ptr<Aura> aura);
+  explicit FigurineSapphireOwl(Player& player, const std::shared_ptr<Aura>& kAura);
 };
 
 struct DarkmoonCardIllusion final : Spell {
@@ -263,7 +279,7 @@ struct DarkmoonCardIllusion final : Spell {
 };
 
 struct MeteoriteCrystal final : Spell {
-  explicit MeteoriteCrystal(Player& player, std::shared_ptr<Aura> aura);
+  explicit MeteoriteCrystal(Player& player, const std::shared_ptr<Aura>& kAura);
 };
 
 struct ReignOfTheUnliving final : Spell {
@@ -275,11 +291,11 @@ struct ReignOfTheUnlivingHeroic final : Spell {
 };
 
 struct TalismanOfVolatilePower final : Spell {
-  explicit TalismanOfVolatilePower(Player& player, std::shared_ptr<Aura> aura);
+  explicit TalismanOfVolatilePower(Player& player, const std::shared_ptr<Aura>& kAura);
 };
 
 struct NevermeltingIceCrystal final : Spell {
-  explicit NevermeltingIceCrystal(Player& player, std::shared_ptr<Aura> aura);
+  explicit NevermeltingIceCrystal(Player& player, const std::shared_ptr<Aura>& kAura);
 };
 
 struct SliverOfPureIce final : Spell {

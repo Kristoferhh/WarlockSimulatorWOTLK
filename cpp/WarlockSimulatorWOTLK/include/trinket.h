@@ -16,10 +16,9 @@ struct Trinket {
   bool shares_cooldown      = true;
   std::string name;
 
-  explicit Trinket(Player& player);
+  explicit Trinket(Player& player, const std::string& kName);
   [[nodiscard]] bool Ready() const;
   void Reset();
-  void Setup();
   void Use();
   void Fade();
   void Tick(double kTime);

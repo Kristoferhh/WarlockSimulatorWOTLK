@@ -4,52 +4,38 @@
 #include "../include/entity.h"
 #include "../include/player.h"
 
-OnCastProc::OnCastProc(Entity& entity, std::shared_ptr<Aura> aura) : SpellProc(entity, std::move(aura)) {
+OnCastProc::OnCastProc(Entity& entity, const std::string& kName, std::shared_ptr<Aura> aura, const int kCooldown)
+    : SpellProc(entity, kName, std::move(aura), nullptr, 0, 0, 0, 0, 0, kCooldown) {
+  if (on_cast_procs_enabled) {
+    entity.on_cast_procs.push_back(this);
+  }
+
   procs_on_cast = true;
 }
 
-void OnCastProc::Setup() {
-  SpellProc::Setup();
-
-  if (procs_on_cast && on_cast_procs_enabled) {
-    entity.on_cast_procs.push_back(this);
-  }
-}
-
-JeTzesBell::JeTzesBell(Player& player, std::shared_ptr<Aura> aura) : OnCastProc(player, std::move(aura)) {
-  name        = WarlockSimulatorConstants::kJeTzesBell;
+JeTzesBell::JeTzesBell(Player& player, std::shared_ptr<Aura> aura)
+    : OnCastProc(player, "Je'Tze's Bell", std::move(aura), 90) {
   proc_chance = 10;  // TODO confirm
-  cooldown    = 90;  // TODO confirm
-  OnCastProc::Setup();
 }
 
 EmbraceOfTheSpider::EmbraceOfTheSpider(Player& player, std::shared_ptr<Aura> aura)
-    : OnCastProc(player, std::move(aura)) {
-  name        = WarlockSimulatorConstants::kEmbraceOfTheSpider;
+    : OnCastProc(player, "Embrace of the Spider", std::move(aura), 45) {
   proc_chance = 10;
-  cooldown    = 45;
-  OnCastProc::Setup();
 }
 
-DyingCurse::DyingCurse(Player& player, std::shared_ptr<Aura> aura) : OnCastProc(player, std::move(aura)) {
-  name        = WarlockSimulatorConstants::kDyingCurse;
+DyingCurse::DyingCurse(Player& player, std::shared_ptr<Aura> aura)
+    : OnCastProc(player, "Dying Curse", std::move(aura), 45) {
   proc_chance = 10;
-  cooldown    = 45;
-  OnCastProc::Setup();
 }
 
 MajesticDragonFigurine::MajesticDragonFigurine(Player& player, std::shared_ptr<Aura> aura)
-    : OnCastProc(player, std::move(aura)) {
-  name        = "Majestic Dragon Figurine";
+    : OnCastProc(player, "Majestic Dragon Figurine", std::move(aura)) {
   proc_chance = 100;
-  OnCastProc::Setup();
 }
 
 IllustrationOfTheDragonSoul::IllustrationOfTheDragonSoul(Player& player, std::shared_ptr<Aura> aura)
-    : OnCastProc(player, std::move(aura)) {
-  name        = "Illustration of the Dragon Soul";
+    : OnCastProc(player, "Illustration of the Dragon Soul", std::move(aura)) {
   proc_chance = 100;
-  OnCastProc::Setup();
 }
 
 bool IllustrationOfTheDragonSoul::ShouldProc(Spell* spell) {
@@ -57,101 +43,78 @@ bool IllustrationOfTheDragonSoul::ShouldProc(Spell* spell) {
 }
 
 SundialOfTheExiled::SundialOfTheExiled(Player& player, std::shared_ptr<Aura> aura)
-    : OnCastProc(player, std::move(aura)) {
-  name        = "Sundial of the Exiled";
+    : OnCastProc(player, "Sundial of the Exiled", std::move(aura), 45) {
   proc_chance = 10;
-  cooldown    = 45;
-  OnCastProc::Setup();
 }
 
 bool SundialOfTheExiled::ShouldProc(Spell* spell) {
   return spell->is_harmful;
 }
 
-FlowOfKnowledge::FlowOfKnowledge(Player& player, std::shared_ptr<Aura> aura) : OnCastProc(player, std::move(aura)) {
-  name        = "Flow of Knowledge";
+FlowOfKnowledge::FlowOfKnowledge(Player& player, std::shared_ptr<Aura> aura)
+    : OnCastProc(player, "Flow of Knowledge", std::move(aura), 45) {
   proc_chance = 10;
-  cooldown    = 45;
-  OnCastProc::Setup();
 }
 
 EyeOfTheBroodmother::EyeOfTheBroodmother(Player& player, std::shared_ptr<Aura> aura)
-    : OnCastProc(player, std::move(aura)) {
-  name        = "Eye of the Broodmother";
+    : OnCastProc(player, "Eye of the Broodmother", std::move(aura)) {
   proc_chance = 100;
-  OnCastProc::Setup();
 }
 
 bool EyeOfTheBroodmother::ShouldProc(Spell* spell) {
   return spell->is_damaging_spell;
 }
 
-PandorasPlea::PandorasPlea(Player& player, std::shared_ptr<Aura> aura) : OnCastProc(player, std::move(aura)) {
-  name        = "Pandora's Plea";
+PandorasPlea::PandorasPlea(Player& player, std::shared_ptr<Aura> aura)
+    : OnCastProc(player, "Pandora's Plea", std::move(aura), 45) {
   proc_chance = 10;
-  cooldown    = 45;
-  OnCastProc::Setup();
 }
 
-FlareOfTheHeavens::FlareOfTheHeavens(Player& player, std::shared_ptr<Aura> aura) : OnCastProc(player, std::move(aura)) {
-  name        = "Flare of the Heavens";
+FlareOfTheHeavens::FlareOfTheHeavens(Player& player, std::shared_ptr<Aura> aura)
+    : OnCastProc(player, "Flare of the Heavens", std::move(aura), 45) {
   proc_chance = 10;
-  cooldown    = 45;
-  OnCastProc::Setup();
 }
 
 bool FlareOfTheHeavens::ShouldProc(Spell* spell) {
   return spell->is_harmful;
 }
 
-ShowOfFaith::ShowOfFaith(Player& player, std::shared_ptr<Aura> aura) : OnCastProc(player, std::move(aura)) {
-  name        = "Show of Faith";
+ShowOfFaith::ShowOfFaith(Player& player, std::shared_ptr<Aura> aura)
+    : OnCastProc(player, "Show of Faith", std::move(aura), 45) {
   proc_chance = 10;
-  cooldown    = 45;
-  OnCastProc::Setup();
 }
 
 ElementalFocusStone::ElementalFocusStone(Player& player, std::shared_ptr<Aura> aura)
-    : OnCastProc(player, std::move(aura)) {
-  name        = "Elemental Focus Stone";
+    : OnCastProc(player, "Elemental Focus Stone", std::move(aura), 45) {
   proc_chance = 10;
-  cooldown    = 45;
-  OnCastProc::Setup();
 }
 
 bool ElementalFocusStone::ShouldProc(Spell* spell) {
   return spell->is_harmful;
 }
 
-SifsRemembrance::SifsRemembrance(Player& player, std::shared_ptr<Aura> aura) : OnCastProc(player, std::move(aura)) {
-  name        = "Sif's Remembrance";
+SifsRemembrance::SifsRemembrance(Player& player, std::shared_ptr<Aura> aura)
+    : OnCastProc(player, "Sif's Remembrance", std::move(aura), 45) {
   proc_chance = 10;
-  cooldown    = 45;
-  OnCastProc::Setup();
 }
 
 SolaceOfTheDefeated::SolaceOfTheDefeated(Player& player, std::shared_ptr<Aura> aura)
-    : OnCastProc(player, std::move(aura)) {
-  name        = "Solace of the Defeated";
+    : OnCastProc(player, "Solace of the Defeated", std::move(aura)) {
   proc_chance = 100;
-  OnCastProc::Setup();
 }
 
-AbyssalRune::AbyssalRune(Player& player, std::shared_ptr<Aura> aura) : OnCastProc(player, std::move(aura)) {
-  name        = "Abyssal Rune";
+AbyssalRune::AbyssalRune(Player& player, std::shared_ptr<Aura> aura)
+    : OnCastProc(player, "Abyssal Rune", std::move(aura), 45) {
   proc_chance = 25;
-  cooldown    = 45;
-  OnCastProc::Setup();
 }
 
 bool AbyssalRune::ShouldProc(Spell* spell) {
   return spell->is_harmful;
 }
 
-VolatilePower::VolatilePower(Player& player, std::shared_ptr<Aura> aura) : OnCastProc(player, std::move(aura)) {
-  name        = "Volatile Power";
+VolatilePower::VolatilePower(Player& player, std::shared_ptr<Aura> aura)
+    : OnCastProc(player, "Volatile Power", std::move(aura)) {
   proc_chance = 100;
-  OnCastProc::Setup();
 }
 
 bool VolatilePower::ShouldProc(Spell* spell) {
@@ -159,11 +122,8 @@ bool VolatilePower::ShouldProc(Spell* spell) {
 }
 
 MithrilPocketwatch::MithrilPocketwatch(Player& player, std::shared_ptr<Aura> aura)
-    : OnCastProc(player, std::move(aura)) {
-  name        = "Mithril Pocketwatch";
+    : OnCastProc(player, "Mithril Pocketwatch", std::move(aura), 45) {
   proc_chance = 10;
-  cooldown    = 45;
-  OnCastProc::Setup();
 }
 
 bool MithrilPocketwatch::ShouldProc(Spell* spell) {
@@ -171,37 +131,27 @@ bool MithrilPocketwatch::ShouldProc(Spell* spell) {
 }
 
 DislodgedForeignObject::DislodgedForeignObject(Player& player, std::shared_ptr<Aura> aura)
-    : OnCastProc(player, std::move(aura)) {
-  name        = "Dislodged Foreign Object";
+    : OnCastProc(player, "Dislodged Foreign Object", std::move(aura), 45) {
   proc_chance = 10;
-  cooldown    = 45;
-  OnCastProc::Setup();
 }
 
 bool DislodgedForeignObject::ShouldProc(Spell* spell) {
   return spell->is_harmful;
 }
 
-PurifiedLunarDust::PurifiedLunarDust(Player& player, std::shared_ptr<Aura> aura) : OnCastProc(player, std::move(aura)) {
-  name        = "Purified Lunar Dust";
+PurifiedLunarDust::PurifiedLunarDust(Player& player, std::shared_ptr<Aura> aura)
+    : OnCastProc(player, "Purified Lunar Dust", std::move(aura), 45) {
   proc_chance = 10;
-  cooldown    = 45;
-  OnCastProc::Setup();
 }
 
 CharredTwilightScale::CharredTwilightScale(Player& player, std::shared_ptr<Aura> aura)
-    : OnCastProc(player, std::move(aura)) {
-  name        = "Charred Twilight Scale";
+    : OnCastProc(player, "Charred Twilight Scale", std::move(aura), 45) {
   proc_chance = 10;
-  cooldown    = 45;
-  OnCastProc::Setup();
 }
 
-SparkOfLife::SparkOfLife(Player& player, std::shared_ptr<Aura> aura) : OnCastProc(player, std::move(aura)) {
-  name        = "Spark of Life";
+SparkOfLife::SparkOfLife(Player& player, std::shared_ptr<Aura> aura)
+    : OnCastProc(player, "Spark of Life", std::move(aura), 50) {
   proc_chance = 10;
-  cooldown    = 50;
-  OnCastProc::Setup();
 }
 
 bool SparkOfLife::ShouldProc(Spell* spell) {

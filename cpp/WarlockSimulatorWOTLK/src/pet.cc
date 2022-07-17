@@ -22,7 +22,7 @@ Pet::Pet(Player& player, const EmbindConstant kSelectedPet)
   infinite_mana = player.settings.infinite_pet_mana;
 
   if (kSelectedPet == EmbindConstant::kImp) {
-    name     = WarlockSimulatorConstants::kImp;
+    name     = "Imp";
     pet_name = PetName::kImp;
     pet_type = PetType::kRanged;
     stats.stamina += 118;
@@ -32,7 +32,7 @@ Pet::Pet(Player& player, const EmbindConstant kSelectedPet)
     stats.agility += 79;
     stats.damage_modifier *= 1 + 0.1 * player.talents.empowered_imp;
   } else if (kSelectedPet == EmbindConstant::kSuccubus) {
-    name     = WarlockSimulatorConstants::kSuccubus;
+    name     = "Succubus";
     pet_name = PetName::kSuccubus;
     pet_type = PetType::kMelee;
     stats.stamina += 328;
@@ -41,7 +41,7 @@ Pet::Pet(Player& player, const EmbindConstant kSelectedPet)
     stats.strength += 314;
     stats.agility += 90;
   } else if (kSelectedPet == EmbindConstant::kFelguard) {
-    name     = WarlockSimulatorConstants::kFelguard;
+    name     = "Felguard";
     pet_type = PetType::kMelee;
     pet_name = PetName::kFelguard;
     stats.stamina += 328;
@@ -50,6 +50,7 @@ Pet::Pet(Player& player, const EmbindConstant kSelectedPet)
     stats.intellect += 150;
     stats.spirit += 209;
   } else if (kSelectedPet == EmbindConstant::kFelhunter) {
+    name     = "Felhunter";
     pet_type = PetType::kMelee;
     pet_name = PetName::kFelhunter;
     stats.stamina += 328;
@@ -58,12 +59,13 @@ Pet::Pet(Player& player, const EmbindConstant kSelectedPet)
     stats.strength += 314;
     stats.spirit += 209;
   }
+
+  CalculateStatsFromAuras();
 }
 
 void Pet::Initialize(Simulation* simulation_ptr) {
   Entity::Initialize(simulation_ptr);
   pet = shared_from_this();
-  Setup();
 
   if (pet_name == PetName::kImp) {
     spells.firebolt = std::make_shared<ImpFirebolt>(*this);
@@ -305,10 +307,6 @@ double Pet::CalculateMaxMana() {
   }
 
   return max_mana;
-}
-
-void Pet::Setup() {
-  CalculateStatsFromAuras();
 }
 
 void Pet::Reset() {

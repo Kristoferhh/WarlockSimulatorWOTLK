@@ -11,19 +11,25 @@
 #include "../include/simulation.h"
 #include "../include/talents.h"
 
-DamageOverTime::DamageOverTime(Player& player) : player(player), school(SpellSchool::kNoSchool) {}
-
-void DamageOverTime::Setup() {
-  ticks_total = static_cast<int>(duration) / static_cast<int>(tick_timer_total);
-
-  if (player.recording_combat_log_breakdown && !player.combat_log_breakdown.contains(name)) {
-    player.combat_log_breakdown.insert({name, std::make_shared<CombatLogBreakdown>(name)});
+DamageOverTime::DamageOverTime(Player& player,
+                               const std::string& kName,
+                               const SpellSchool kSpellSchool,
+                               const double kDuration,
+                               const double kTickTimerTotal)
+    : player(player),
+      school(kSpellSchool),
+      duration(kDuration),
+      tick_timer_total(kTickTimerTotal),
+      ticks_total(static_cast<int>(kDuration) / static_cast<int>(kTickTimerTotal)),
+      name(kName) {
+  if (player.recording_combat_log_breakdown && !player.combat_log_breakdown.contains(kName)) {
+    player.combat_log_breakdown.insert({kName, std::make_shared<CombatLogBreakdown>(kName)});
   }
 
   if (player.talents.pandemic == 1) {
-    if (name == WarlockSimulatorConstants::kCorruption || name == WarlockSimulatorConstants::kUnstableAffliction) {
+    if (kName == WarlockSimulatorConstants::kCorruption || kName == WarlockSimulatorConstants::kUnstableAffliction) {
       crit_damage_multiplier = 2.0;
-    } else if (name == WarlockSimulatorConstants::kHaunt) {
+    } else if (kName == WarlockSimulatorConstants::kHaunt) {
       crit_damage_multiplier -= 1;
       crit_damage_multiplier *= 2;
       crit_damage_multiplier += 1;
@@ -184,15 +190,12 @@ void DamageOverTime::Tick(const double kTime) {
 }
 
 CorruptionDot::CorruptionDot(Player& player)
-    : DamageOverTime(player), original_duration(18), original_tick_timer_total(3) {
-  name             = WarlockSimulatorConstants::kCorruption;
-  duration         = 18;
-  tick_timer_total = 3;
-  base_damage      = 1080;
-  school           = SpellSchool::kShadow;
+    : DamageOverTime(player, WarlockSimulatorConstants::kCorruption, SpellSchool::kShadow, 18, 3),
+      original_duration(18),
+      original_tick_timer_total(3) {
+  base_damage = 1080;
   coefficient = 3.0 / 15.0 + 0.12 * player.talents.empowered_corruption + 0.01 * player.talents.everlasting_affliction +
                 0.05 * player.talents.siphon_life;
-  Setup();
 }
 
 void CorruptionDot::Tick(const double kTime) {
@@ -217,70 +220,46 @@ void CorruptionDot::CalculateTickTimerTotal() {
   tick_timer_total = duration / (static_cast<double>(original_duration) / original_tick_timer_total);
 }
 
-UnstableAfflictionDot::UnstableAfflictionDot(Player& player) : DamageOverTime(player) {
-  name             = WarlockSimulatorConstants::kUnstableAffliction;
-  duration         = 15;
-  tick_timer_total = 3;
-  base_damage      = 1380;
-  school           = SpellSchool::kShadow;
-  coefficient      = 1.2 + 0.01 * player.talents.everlasting_affliction + 0.05 * player.talents.siphon_life;
-  Setup();
+UnstableAfflictionDot::UnstableAfflictionDot(Player& player)
+    : DamageOverTime(player, WarlockSimulatorConstants::kUnstableAffliction, SpellSchool::kShadow, 15, 3) {
+  base_damage = 1380;
+  coefficient = 1.2 + 0.01 * player.talents.everlasting_affliction + 0.05 * player.talents.siphon_life;
 }
 
-ImmolateDot::ImmolateDot(Player& player) : DamageOverTime(player) {
-  name             = WarlockSimulatorConstants::kImmolate;
-  duration         = 15 + 3 * player.talents.molten_core;
-  tick_timer_total = 3;
-  base_damage      = 785;
-  school           = SpellSchool::kFire;
-  coefficient      = 0.2;
-  Setup();
+ImmolateDot::ImmolateDot(Player& player)
+    : DamageOverTime(
+          player, WarlockSimulatorConstants::kImmolate, SpellSchool::kFire, 15 + 3 * player.talents.molten_core, 3) {
+  base_damage = 785;
+  coefficient = 0.2;
 }
 
-CurseOfAgonyDot::CurseOfAgonyDot(Player& player) : DamageOverTime(player) {
-  name             = WarlockSimulatorConstants::kCurseOfAgony;
-  duration         = 24 + (player.has_glyph_of_curse_of_agony ? 4 : 0);
-  tick_timer_total = 3;
-  base_damage      = 1740;
-  school           = SpellSchool::kShadow;
-  coefficient      = 1.2;
-  Setup();
+CurseOfAgonyDot::CurseOfAgonyDot(Player& player)
+    : DamageOverTime(player,
+                     WarlockSimulatorConstants::kCurseOfAgony,
+                     SpellSchool::kShadow,
+                     24 + (player.has_glyph_of_curse_of_agony ? 4 : 0),
+                     3) {
+  base_damage = 1740;
+  coefficient = 1.2;
 }
 
-CurseOfDoomDot::CurseOfDoomDot(Player& player) : DamageOverTime(player) {
-  name             = WarlockSimulatorConstants::kCurseOfDoom;
-  duration         = 60;
-  tick_timer_total = 60;
-  base_damage      = 7300;
-  school           = SpellSchool::kShadow;
-  coefficient      = 2;
-  Setup();
+CurseOfDoomDot::CurseOfDoomDot(Player& player)
+    : DamageOverTime(player, WarlockSimulatorConstants::kCurseOfDoom, SpellSchool::kShadow, 60, 60) {
+  base_damage = 7300;
+  coefficient = 2;
 }
 
-ShadowflameDot::ShadowflameDot(Player& player) : DamageOverTime(player) {
-  name             = WarlockSimulatorConstants::kShadowflame;
-  duration         = 8;
-  tick_timer_total = 2;
-  base_damage      = 512;
-  school           = SpellSchool::kFire;
-  coefficient      = 1.0 / 15.0;
-  Setup();
+ShadowflameDot::ShadowflameDot(Player& player) : DamageOverTime(player, "Shadowflame", SpellSchool::kFire, 8, 2) {
+  base_damage = 512;
+  coefficient = 1.0 / 15.0;
 }
 
-ConflagrateDot::ConflagrateDot(Player& player) : DamageOverTime(player) {
-  name             = WarlockSimulatorConstants::kConflagrate;
-  duration         = 6;
-  tick_timer_total = 2;
-  school           = SpellSchool::kFire;
-  Setup();
-}
+ConflagrateDot::ConflagrateDot(Player& player)
+    : DamageOverTime(player, WarlockSimulatorConstants::kConflagrate, SpellSchool::kFire, 6, 2) {}
 
-DrainSoulDot::DrainSoulDot(Player& player) : DamageOverTime(player) {
-  name             = WarlockSimulatorConstants::kDrainSoul;
-  duration         = 15;  // TODO drain soul's duration is reduced with haste
-  tick_timer_total = 3;
-  base_damage      = 710;
-  coefficient      = 0.429;
-  school           = SpellSchool::kShadow;
-  Setup();
+// TODO drain soul's duration is reduced with haste
+DrainSoulDot::DrainSoulDot(Player& player)
+    : DamageOverTime(player, WarlockSimulatorConstants::kDrainSoul, SpellSchool::kShadow, 15, 3) {
+  base_damage = 710;
+  coefficient = 0.429;
 }

@@ -1,25 +1,35 @@
 #include "../include/mana_potion.h"
 
-#include <iostream>
-
 #include "../include/combat_log_breakdown.h"
 #include "../include/common.h"
 #include "../include/player.h"
 #include "../include/player_settings.h"
 
 // TODO create a Potion class and inherit from that
-ManaPotion::ManaPotion(Player& player) : Spell(player) {
-  cooldown                  = 60;
+ManaPotion::ManaPotion(Player& player,
+                       const std::string& kName,
+                       const int kMinManaGain,
+                       const int kMaxManaGain,
+                       const int kCooldown,
+                       const bool kBenefitsFromAlchemistsStone)
+    : Spell(player,
+            kName,
+            nullptr,
+            nullptr,
+            0,
+            0,
+            static_cast<int>(kMinManaGain * (kBenefitsFromAlchemistsStone && player.alchemists_stone_effect_active
+                                                 ? WarlockSimulatorConstants::kAlchemistsStoneModifier
+                                                 : 1)),
+            static_cast<int>(kMaxManaGain * (kBenefitsFromAlchemistsStone && player.alchemists_stone_effect_active
+                                                 ? WarlockSimulatorConstants::kAlchemistsStoneModifier
+                                                 : 1)),
+            0,
+            kCooldown) {
   is_item                   = true;
   on_gcd                    = false;
   limited_amount_of_casts   = true;
   amount_of_casts_per_fight = 1;
-
-  if (benefits_from_alchemists_stone && player.alchemists_stone_effect_active) {
-    min_mana_gain = static_cast<int>(min_mana_gain * 1.4);
-    max_mana_gain = static_cast<int>(max_mana_gain * 1.4);
-    mana_gain *= 1.4;
-  }
 }
 
 void ManaPotion::Cast() {
@@ -43,18 +53,6 @@ void ManaPotion::Cast() {
   }
 }
 
-RunicManaPotion::RunicManaPotion(Player& player) : ManaPotion(player) {
-  name          = WarlockSimulatorConstants::kRunicManaPotion;
-  min_mana_gain = 4200;
-  max_mana_gain = 4400;
-  Spell::Setup();
-}
+RunicManaPotion::RunicManaPotion(Player& player) : ManaPotion(player, "Runic Mana Potion", 4200, 4400) {}
 
-DemonicRune::DemonicRune(Player& player) : ManaPotion(player) {
-  name                           = WarlockSimulatorConstants::kDemonicRune;
-  min_mana_gain                  = 900;
-  max_mana_gain                  = 1500;
-  cooldown                       = 900;
-  benefits_from_alchemists_stone = false;
-  Spell::Setup();
-}
+DemonicRune::DemonicRune(Player& player) : ManaPotion(player, "Demonic Rune", 900, 1500, 900, false) {}

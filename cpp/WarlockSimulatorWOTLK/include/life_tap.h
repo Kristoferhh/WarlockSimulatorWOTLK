@@ -5,7 +5,7 @@ struct LifeTap : Spell {
   int mana_return;
   double modifier;
 
-  explicit LifeTap(Entity& entity);
+  explicit LifeTap(Entity& entity, const std::string& kName);
   [[nodiscard]] double ManaGain() const;
   void Cast() override;
 };

@@ -33,7 +33,10 @@ Player::Player(PlayerSettings& player_settings)
       selected_auras(player_settings.auras),
       talents(player_settings.talents),
       sets(player_settings.sets),
-      items(player_settings.items) {
+      items(player_settings.items),
+      total_fight_duration(0),
+      iteration_damage(0),
+      power_infusions_ready(0) {
   name          = "Player";
   infinite_mana = player_settings.infinite_player_mana;
 
@@ -120,6 +123,7 @@ Player::Player(PlayerSettings& player_settings)
   if (selected_auras.annihilator) {
     player_settings.enemy_armor -= 600;
   }
+
   player_settings.enemy_armor = std::max(0, player_settings.enemy_armor);
 
   // Health & Mana
@@ -580,7 +584,7 @@ void Player::InitializeAuras() {
 }
 
 void Player::InitializeSpells() {
-  spells.life_tap = std::make_shared<LifeTap>(*this);
+  spells.life_tap = std::make_shared<LifeTap>(*this, WarlockSimulatorConstants::kLifeTap);
 
   if (settings.fight_type == EmbindConstant::kAoe) {
     spells.seed_of_corruption = std::make_shared<SeedOfCorruption>(*this);
@@ -759,7 +763,9 @@ void Player::Reset() {
   iteration_damage      = 0;
   power_infusions_ready = settings.power_infusion_amount;
 
-  for (auto& trinket : trinkets) { trinket.Reset(); }
+  for (auto& trinket : trinkets) {
+    trinket.Reset();
+  }
 }
 
 void Player::EndAuras() {
@@ -919,7 +925,9 @@ void Player::ThrowError(const std::string& kError) const {
 }
 
 void Player::SendCombatLogEntries() const {
-  for (const auto& kValue : combat_log_entries) { CombatLogUpdate(kValue.c_str()); }
+  for (const auto& kValue : combat_log_entries) {
+    CombatLogUpdate(kValue.c_str());
+  }
 }
 
 // TODO improve
@@ -979,7 +987,9 @@ double Player::FindTimeUntilNextAction() {
 void Player::Tick(const double kTime) {
   Entity::Tick(kTime);
 
-  for (auto& trinket : trinkets) { trinket.Tick(kTime); }
+  for (auto& trinket : trinkets) {
+    trinket.Tick(kTime);
+  }
 
   if (mp5_timer_remaining <= 0) {
     mp5_timer_remaining = 5;
