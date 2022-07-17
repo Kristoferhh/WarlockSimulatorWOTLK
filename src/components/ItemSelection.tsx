@@ -132,7 +132,7 @@ export default function ItemSelection() {
     )
   }, [items, ui.HiddenItems, ui.SelectedItemSlot, ui.Sources])
 
-  function changeEquippedItemId(itemSlot: ItemSlotDetailed, newItemId: number) {
+  function ChangeEquippedItemId(itemSlot: ItemSlotDetailed, newItemId: number) {
     if (player.SelectedItems[itemSlot] === newItemId) {
       return
     }
@@ -159,14 +159,14 @@ export default function ItemSelection() {
     dispatch(setItemSetCounts(GetItemSetCounts(newSelectedItems)))
   }
 
-  function itemClickHandler(item: Item, itemSlot: ItemSlotDetailed) {
-    changeEquippedItemId(
+  function ItemClickHandler(item: Item, itemSlot: ItemSlotDetailed) {
+    ChangeEquippedItemId(
       itemSlot,
       player.SelectedItems[itemSlot] === item.Id ? 0 : item.Id
     )
   }
 
-  function enchantClickHandler(enchant: Enchant, itemSlot: ItemSlotDetailed) {
+  function EnchantClickHandler(enchant: Enchant, itemSlot: ItemSlotDetailed) {
     let newSelectedEnchants = JSON.parse(
       JSON.stringify(player.SelectedEnchants)
     )
@@ -180,12 +180,12 @@ export default function ItemSelection() {
     )
   }
 
-  function itemSlotClickHandler(slot: ItemSlot, subSlot: SubSlotValue) {
+  function ItemSlotClickHandler(slot: ItemSlot, subSlot: SubSlotValue) {
     dispatch(setSelectedItemSlot(slot))
     dispatch(setSelectedItemSubSlot(subSlot))
   }
 
-  function itemSocketClickHandler(
+  function ItemSocketClickHandler(
     itemId: string,
     socketNumber: number,
     socketColor: SocketColor
@@ -202,7 +202,7 @@ export default function ItemSelection() {
     )
   }
 
-  function removeGemFromSocket(itemId: string, socketNumber: number) {
+  function RemoveGemFromSocket(itemId: string, socketNumber: number) {
     let newSelectedGems: SelectedGemsStruct = JSON.parse(
       JSON.stringify(player.SelectedGems)
     )
@@ -219,7 +219,7 @@ export default function ItemSelection() {
     }
   }
 
-  function shouldDisplayMissingEnchantWarning(
+  function ShouldDisplayMissingEnchantWarning(
     itemSlot: ItemSlot,
     subSlot: SubSlotValue
   ): boolean {
@@ -254,7 +254,7 @@ export default function ItemSelection() {
             }}
           >
             <Typography
-              onClick={() => itemSlotClickHandler(slot.ItemSlot, slot.SubSlot)}
+              onClick={() => ItemSlotClickHandler(slot.ItemSlot, slot.SubSlot)}
               data-selected={
                 ui.SelectedItemSlot === slot.ItemSlot &&
                 (!slot.SubSlot || ui.SelectedItemSubSlot === slot.SubSlot)
@@ -262,7 +262,7 @@ export default function ItemSelection() {
             >
               {t(slot.Name)}
             </Typography>
-            {shouldDisplayMissingEnchantWarning(
+            {ShouldDisplayMissingEnchantWarning(
               slot.ItemSlot,
               slot.SubSlot
             ) && <WarningIcon titleAccess='Missing enchant!'></WarningIcon>}
@@ -410,7 +410,7 @@ export default function ItemSelection() {
               }
               data-hidden={ui.HiddenItems.includes(item.Id)}
               onClick={() =>
-                itemClickHandler(
+                ItemClickHandler(
                   item,
                   ItemSlotToItemSlotDetailed(
                     ui.SelectedItemSlot,
@@ -464,8 +464,8 @@ export default function ItemSelection() {
                   <ItemSocketDisplay
                     item={item}
                     itemSlot={ui.SelectedItemSlot}
-                    itemSocketClickHandler={itemSocketClickHandler}
-                    removeGemFromSocket={removeGemFromSocket}
+                    itemSocketClickHandler={ItemSocketClickHandler}
+                    removeGemFromSocket={RemoveGemFromSocket}
                   />
                 }
               </TableCell>
@@ -611,7 +611,7 @@ export default function ItemSelection() {
                   ] === enchant.Id
                 }
                 onClick={() =>
-                  enchantClickHandler(
+                  EnchantClickHandler(
                     enchant,
                     ItemSlotToItemSlotDetailed(
                       ui.SelectedItemSlot,

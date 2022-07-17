@@ -26,7 +26,7 @@ export default function LanguageSelection() {
     setOpen(currentState => !currentState)
   }
 
-  function languageClickHandler(languageIsoCode: string): void {
+  function LanguageClickHandler(languageIsoCode: string): void {
     setCurrentLanguage(Languages.find(e => e.Iso === languageIsoCode)?.Name)
     i18n.changeLanguage(languageIsoCode)
     localStorage.setItem('language', languageIsoCode)
@@ -44,7 +44,7 @@ export default function LanguageSelection() {
     setOpen(false)
   }
 
-  function handleListKeyDown(event: React.KeyboardEvent) {
+  function HandleListKeyDown(event: React.KeyboardEvent) {
     if (event.key === 'Tab') {
       event.preventDefault()
       setOpen(false)
@@ -103,13 +103,13 @@ export default function LanguageSelection() {
                     autoFocusItem={open}
                     id='composition-menu'
                     aria-labelledby='composition-button'
-                    onKeyDown={handleListKeyDown}
+                    onKeyDown={HandleListKeyDown}
                   >
                     {Languages.map(language => (
                       <MenuItem
                         key={nanoid()}
                         className='language-item'
-                        onClick={() => languageClickHandler(language.Iso)}
+                        onClick={() => LanguageClickHandler(language.Iso)}
                       >
                         {language.Name}
                       </MenuItem>

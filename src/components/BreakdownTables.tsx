@@ -23,11 +23,11 @@ import i18n from '../i18n/config'
 import { RootState } from '../redux/Store'
 import { TalentStore } from '../Types'
 
-function formatPercentage(num: number) {
+function FormatPercentage(num: number) {
   return (Math.round(num * 10000) / 100).toFixed(2)
 }
 
-function findSpellByName(
+function FindSpellByName(
   name: string,
   playerTalents: TalentStore
 ):
@@ -192,7 +192,7 @@ export default function BreakdownTables() {
                 breakdownObj.SpellDamageDict[e.name] &&
                 breakdownObj.SpellDamageDict[e.name] > 0
             ).map(spell => {
-              const spellObj = findSpellByName(spell.name, talents)
+              const spellObj = FindSpellByName(spell.name, talents)
 
               return (
                 <TableRow key={nanoid()} className='spell-damage-information'>
@@ -242,7 +242,7 @@ export default function BreakdownTables() {
                         style={{ marginLeft: '5px' }}
                       >
                         {breakdownObj.SpellDamageDict[spell.name]
-                          ? formatPercentage(
+                          ? FormatPercentage(
                               breakdownObj.SpellDamageDict[spell.name] /
                                 breakdownObj.TotalDamageDone
                             )
@@ -279,11 +279,11 @@ export default function BreakdownTables() {
                   </TableCell>
                   <TableCell style={{ color: 'white' }} className='number'>
                     <Typography noWrap variant='inherit'>
-                      {`${formatPercentage(spell.crits / spell.casts)}%`}
+                      {`${FormatPercentage(spell.crits / spell.casts)}%`}
                     </Typography>
                   </TableCell>
                   <TableCell style={{ color: 'white' }} className='number'>
-                    <Typography noWrap variant='inherit'>{`${formatPercentage(
+                    <Typography noWrap variant='inherit'>{`${FormatPercentage(
                       spell.misses / spell.casts
                     )}%`}</Typography>
                   </TableCell>
@@ -293,7 +293,7 @@ export default function BreakdownTables() {
                         <Typography
                           noWrap
                           variant='inherit'
-                        >{`${formatPercentage(
+                        >{`${FormatPercentage(
                           spell.dodges / spell.casts
                         )}%`}</Typography>
                       </TableCell>
@@ -301,7 +301,7 @@ export default function BreakdownTables() {
                         <Typography
                           noWrap
                           variant='inherit'
-                        >{`${formatPercentage(
+                        >{`${FormatPercentage(
                           spell.glancingBlows / spell.casts
                         )}%`}</Typography>
                       </TableCell>
@@ -366,7 +366,7 @@ export default function BreakdownTables() {
                 breakdownObj.SpellManaGainDict[e.name] &&
                 breakdownObj.SpellManaGainDict[e.name] > 0
             ).map(spell => {
-              const spellObj = findSpellByName(spell.name, talents)
+              const spellObj = FindSpellByName(spell.name, talents)
 
               return (
                 <TableRow key={nanoid()} className='spell-damage-information'>
@@ -416,7 +416,7 @@ export default function BreakdownTables() {
                         style={{ marginLeft: '5px' }}
                       >
                         {breakdownObj.SpellManaGainDict[spell.name]
-                          ? formatPercentage(
+                          ? FormatPercentage(
                               breakdownObj.SpellManaGainDict[spell.name] /
                                 breakdownObj.TotalManaGained
                             )
@@ -487,7 +487,7 @@ export default function BreakdownTables() {
           <TableBody>
             {breakdownObj.Data.filter(e => e.uptime_in_seconds > 0).map(
               spell => {
-                const spellObj = findSpellByName(spell.name, talents)
+                const spellObj = FindSpellByName(spell.name, talents)
 
                 return (
                   <TableRow key={nanoid()} className='spell-damage-information'>
@@ -548,7 +548,7 @@ export default function BreakdownTables() {
                           variant='inherit'
                           style={{ marginLeft: '5px' }}
                         >
-                          {formatPercentage(
+                          {FormatPercentage(
                             spell.uptime_in_seconds /
                               breakdownObj.TotalSimulationFightLength
                           )}

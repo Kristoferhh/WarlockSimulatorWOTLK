@@ -19,11 +19,11 @@ import { Enchants } from '../data/Enchants'
 import { Items } from '../data/Items'
 import i18n from '../i18n/config'
 import { RootState } from '../redux/Store'
-import { setEquippedItemsWindowVisibility } from '../redux/UiSlice'
+import { setEquippedItemsWindowVisibility as SetEquippedItemsWindowVisibility } from '../redux/UiSlice'
 import { Enchant, Item, ItemSlotDetailed } from '../Types'
 import ItemSocketDisplay from './ItemSocketDisplay'
 
-function formatItemSlotName(itemSlot: ItemSlotDetailed): string {
+function FormatItemSlotName(itemSlot: ItemSlotDetailed): string {
   let formattedItemSlot = itemSlot.toString()
 
   // Check if the last char is '1' or '2', if so then it's an item slot
@@ -40,30 +40,30 @@ function formatItemSlotName(itemSlot: ItemSlotDetailed): string {
 }
 
 export default function EquippedItemsDisplay() {
-  const uiState = useSelector((state: RootState) => state.ui)
-  const playerState = useSelector((state: RootState) => state.player)
+  const ui = useSelector((state: RootState) => state.ui)
+  const player = useSelector((state: RootState) => state.player)
   const dispatch = useDispatch()
   const { t } = useTranslation()
 
-  function getEnchantInItemSlot(
+  function GetEnchantInItemSlot(
     itemSlot: ItemSlotDetailed
   ): Enchant | undefined {
     let slot = itemSlot
 
-    return Enchants.find(e => e.Id === playerState.SelectedEnchants[slot])
+    return Enchants.find(e => e.Id === player.SelectedEnchants[slot])
   }
 
-  function getItemInItemSlot(itemSlot: ItemSlotDetailed): Item | undefined {
-    return Items.find(e => e.Id === playerState.SelectedItems[itemSlot])
+  function GetItemInItemSlot(itemSlot: ItemSlotDetailed): Item | undefined {
+    return Items.find(e => e.Id === player.SelectedItems[itemSlot])
   }
 
   return (
     <Grid
       id='currently-equipped-items-container'
-      style={{ display: uiState.EquippedItemsWindowVisible ? '' : 'none' }}
+      style={{ display: ui.EquippedItemsWindowVisible ? '' : 'none' }}
     >
       <Grid id='currently-equipped-items'>
-        <Grid onClick={() => dispatch(setEquippedItemsWindowVisibility(false))}>
+        <Grid onClick={() => dispatch(SetEquippedItemsWindowVisibility(false))}>
           <p className='close' id='currently-equipped-items-close-button'></p>
         </Grid>
         <Table>
@@ -81,7 +81,7 @@ export default function EquippedItemsDisplay() {
               .filter(slot => {
                 if (slot === ItemSlotDetailed.OffHand) {
                   const equippedWeaponId =
-                    playerState.SelectedItems[ItemSlotDetailed.Weapon]
+                    player.SelectedItems[ItemSlotDetailed.Weapon]
                   const equippedWeapon = Items.find(
                     x => x.Id === equippedWeaponId
                   )
@@ -92,15 +92,15 @@ export default function EquippedItemsDisplay() {
                 return true
               })
               .map(slot => {
-                const equippedItem = getItemInItemSlot(slot as ItemSlotDetailed)
-                const equippedEnchant = getEnchantInItemSlot(
+                const equippedItem = GetItemInItemSlot(slot as ItemSlotDetailed)
+                const equippedEnchant = GetEnchantInItemSlot(
                   slot as ItemSlotDetailed
                 )
 
                 return (
                   <TableRow key={nanoid()} className='equipped-item-row'>
                     <TableCell style={{ color: 'white' }}>
-                      {t(formatItemSlotName(slot as ItemSlotDetailed))}
+                      {t(FormatItemSlotName(slot as ItemSlotDetailed))}
                     </TableCell>
                     <TableCell
                       style={{
@@ -131,7 +131,7 @@ export default function EquippedItemsDisplay() {
                       )}
                     </TableCell>
                     <TableCell style={{ color: 'white' }}>
-                      {playerState.SelectedItems[slot as ItemSlotDetailed] &&
+                      {player.SelectedItems[slot as ItemSlotDetailed] &&
                       equippedItem ? (
                         <ItemSocketDisplay
                           item={equippedItem!}

@@ -47,23 +47,21 @@ interface ProfileJsonExport {
 }
 
 export default function ImportExport() {
-  const playerState = useSelector((state: RootState) => state.player)
-  const windowIsVisible = useSelector(
-    (state: RootState) => state.ui.ImportExportWindowVisible
-  )
+  const player = useSelector((state: RootState) => state.player)
+  const ui = useSelector((state: RootState) => state.ui)
   const dispatch = useDispatch()
   const [contentString, setContentString] = useState('')
 
-  function exportProfile() {
+  function ExportProfile() {
     setContentString(
       JSON.stringify({
-        Auras: playerState.Auras,
-        Gems: playerState.SelectedGems,
-        Items: playerState.SelectedItems,
-        Talents: playerState.Talents,
-        Rotation: playerState.Rotation,
-        Enchants: playerState.SelectedEnchants,
-        Settings: playerState.Settings,
+        Auras: player.Auras,
+        Gems: player.SelectedGems,
+        Items: player.SelectedItems,
+        Talents: player.Talents,
+        Rotation: player.Rotation,
+        Enchants: player.SelectedEnchants,
+        Settings: player.Settings,
       } as ProfileJsonExport)
     )
 
@@ -76,7 +74,7 @@ export default function ImportExport() {
     )
   }
 
-  function importProfile() {
+  function ImportProfile() {
     try {
       const data: ProfileJsonExport = JSON.parse(contentString)
 
@@ -96,7 +94,7 @@ export default function ImportExport() {
         dispatch(
           setEnchantsStats(
             GetEnchantsStats(
-              data.Items ? data.Items : playerState.SelectedItems,
+              data.Items ? data.Items : player.SelectedItems,
               data.Enchants
             )
           )
@@ -108,7 +106,7 @@ export default function ImportExport() {
         dispatch(
           setGemsStats(
             GetGemsStats(
-              data.Items ? data.Items : playerState.SelectedItems,
+              data.Items ? data.Items : player.SelectedItems,
               data.Gems
             )
           )
@@ -138,7 +136,7 @@ export default function ImportExport() {
     <Grid
       id='import-export-window'
       className='close-button-target'
-      style={{ display: windowIsVisible ? '' : 'none' }}
+      style={{ display: ui.ImportExportWindowVisible ? '' : 'none' }}
     >
       <textarea
         id='import-export-textarea'
@@ -149,13 +147,13 @@ export default function ImportExport() {
         variant='contained'
         id='import-button'
         onClick={() => {
-          importProfile()
+          ImportProfile()
           setContentString('')
         }}
       >
         Import
       </Button>{' '}
-      <Button variant='contained' id='export-button' onClick={exportProfile}>
+      <Button variant='contained' id='export-button' onClick={ExportProfile}>
         Export
       </Button>{' '}
       <Button

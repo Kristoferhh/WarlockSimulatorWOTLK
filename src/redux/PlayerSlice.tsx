@@ -152,9 +152,9 @@ export const PlayerSlice = createSlice({
     },
     modifySettingValue: (
       state,
-      action: PayloadAction<{ setting: Setting; value: string }>
+      action: PayloadAction<{ Setting: Setting; Value: string }>
     ) => {
-      state.Settings[action.payload.setting] = action.payload.value
+      state.Settings[action.payload.Setting] = action.payload.Value
       localStorage.setItem('wotlk_settings', JSON.stringify(state.Settings))
     },
     setProfile: (state, action: PayloadAction<ProfileContainer>) => {
@@ -186,13 +186,13 @@ export const PlayerSlice = createSlice({
     },
     renameProfile: (
       state,
-      action: PayloadAction<{ oldName: string; newName: string }>
+      action: PayloadAction<{ OldName: string; NewName: string }>
     ) => {
       state.Profiles.find(
-        (x: ProfileContainer) => x.Name === action.payload.oldName
-      )!.Name = action.payload.newName
+        (x: ProfileContainer) => x.Name === action.payload.OldName
+      )!.Name = action.payload.NewName
       localStorage.setItem('wotlk_profiles', JSON.stringify(state.Profiles))
-      localStorage.setItem('wotlk_selectedProfile', action.payload.newName)
+      localStorage.setItem('wotlk_selectedProfile', action.payload.NewName)
     },
     setRotationState: (state, action: PayloadAction<RotationStruct>) => {
       state.Rotation = action.payload

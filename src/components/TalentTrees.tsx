@@ -24,14 +24,14 @@ import { RootState } from '../redux/Store'
 import { MouseButtonClick, Talent, TalentName, TalentStore } from '../Types'
 
 export default function TalentTrees() {
-  const playerState = useSelector((state: RootState) => state.player)
+  const player = useSelector((state: RootState) => state.player)
   const talentPointsRemaining = useSelector(
     (state: RootState) => state.player.TalentPointsRemaining
   )
   const dispatch = useDispatch()
   const { t } = useTranslation()
 
-  function applyTalentTemplate(talentTemplate: {
+  function ApplyTalentTemplate(talentTemplate: {
     [key in TalentName]?: number
   }) {
     var emptyTalents: { [key: string]: number } = {}
@@ -50,9 +50,9 @@ export default function TalentTrees() {
     SaveTalents(newSelectedTalents)
   }
 
-  function talentClickHandler(mouseButton: number, talent: Talent) {
+  function TalentClickHandler(mouseButton: number, talent: Talent) {
     let newSelectedTalents: TalentStore = JSON.parse(
-      JSON.stringify(playerState.Talents)
+      JSON.stringify(player.Talents)
     )
     const currentTalentPointsValue = newSelectedTalents[talent.Name!] || 0
 
@@ -74,9 +74,9 @@ export default function TalentTrees() {
     SaveTalents(newSelectedTalents)
   }
 
-  function clearTalentTree(talentTree: TalentTreeStruct) {
+  function ClearTalentTree(talentTree: TalentTreeStruct) {
     let newSelectedTalents: TalentStore = JSON.parse(
-      JSON.stringify(playerState.Talents)
+      JSON.stringify(player.Talents)
     )
 
     for (const row in talentTree.Rows) {
@@ -94,7 +94,7 @@ export default function TalentTrees() {
 
   function SaveTalents(talents: TalentStore) {
     dispatch(setSelectedTalents(talents))
-    dispatch(setTalentsStats(GetTalentsStats(talents, playerState.Settings)))
+    dispatch(setTalentsStats(GetTalentsStats(talents, player.Settings)))
   }
 
   return (
@@ -106,7 +106,7 @@ export default function TalentTrees() {
               variant='contained'
               type='button'
               key={nanoid()}
-              onClick={() => applyTalentTemplate(talentTemplate.Talents)}
+              onClick={() => ApplyTalentTemplate(talentTemplate.Talents)}
             >
               {t(talentTemplate.Name)}
             </Button>
@@ -142,13 +142,13 @@ export default function TalentTrees() {
                           <Grid
                             id={talent.Name}
                             className='talent-icon'
-                            data-points={playerState.Talents[talent.Name!] || 0}
+                            data-points={player.Talents[talent.Name!] || 0}
                             data-maxpoints={talent.RankIds.length}
                             onClick={e =>
-                              talentClickHandler(e.nativeEvent.button, talent)
+                              TalentClickHandler(e.nativeEvent.button, talent)
                             }
                             onContextMenu={e => {
-                              talentClickHandler(e.nativeEvent.button, talent)
+                              TalentClickHandler(e.nativeEvent.button, talent)
                               e.preventDefault()
                             }}
                           >
@@ -158,7 +158,7 @@ export default function TalentTrees() {
                               )}/spell=${
                                 talent.RankIds[
                                   Math.max(
-                                    playerState.Talents[talent.Name!] - 1,
+                                    player.Talents[talent.Name!] - 1,
                                     0
                                   ) || 0
                                 ]
@@ -172,26 +172,26 @@ export default function TalentTrees() {
                               <span
                                 id={`${talent.Name!}-point-amount`}
                                 className={`talent-point-amount${
-                                  playerState.Talents[talent.Name!] &&
-                                  playerState.Talents[talent.Name!] ===
+                                  player.Talents[talent.Name!] &&
+                                  player.Talents[talent.Name!] ===
                                     talent.RankIds.length
                                     ? ' maxed-talent'
                                     : ''
                                 }${
-                                  playerState.Talents[talent.Name!] &&
-                                  playerState.Talents[talent.Name!] > 0 &&
-                                  playerState.Talents[talent.Name!] <
+                                  player.Talents[talent.Name!] &&
+                                  player.Talents[talent.Name!] > 0 &&
+                                  player.Talents[talent.Name!] <
                                     talent.RankIds.length
                                     ? ' half-full-talent'
                                     : ''
                                 }${
-                                  playerState.Talents[talent.Name!] == null ||
-                                  playerState.Talents[talent.Name!] === 0
+                                  player.Talents[talent.Name!] == null ||
+                                  player.Talents[talent.Name!] === 0
                                     ? ' empty-talent'
                                     : ''
                                 }`}
                               >
-                                {playerState.Talents[talent.Name!] || 0}
+                                {player.Talents[talent.Name!] || 0}
                               </span>
                             </Link>
                           </Grid>
@@ -206,11 +206,11 @@ export default function TalentTrees() {
               <Typography style={{ display: 'inline-block' }}>
                 {`${t(talentTree.Name)} ${
                   GetAllocatedTalentsPointsInTree(
-                    playerState.Talents,
+                    player.Talents,
                     talentTree
                   ) > 0
                     ? `(${GetAllocatedTalentsPointsInTree(
-                        playerState.Talents,
+                        player.Talents,
                         talentTree
                       )})`
                     : ''
@@ -218,7 +218,7 @@ export default function TalentTrees() {
               </Typography>
               <span
                 className='clear-talent-tree'
-                onClick={() => clearTalentTree(talentTree)}
+                onClick={() => ClearTalentTree(talentTree)}
               >
                 ❌
               </span>

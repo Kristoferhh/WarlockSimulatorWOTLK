@@ -47,8 +47,8 @@ const useStyles = makeStyles(() => ({
 }))
 
 export function FillItemSockets() {
-  const uiState = useSelector((state: RootState) => state.ui)
-  const playerState = useSelector((state: RootState) => state.player)
+  const ui = useSelector((state: RootState) => state.ui)
+  const player = useSelector((state: RootState) => state.player)
   const dispatch = useDispatch()
   const [socketColor, setSocketColor] = useState(SocketColor.Red)
   const [selectedGemId, setSelectedGemId] = useState(0)
@@ -59,28 +59,28 @@ export function FillItemSockets() {
   const { t } = useTranslation()
   const mui = useStyles()
 
-  function fillSockets(): void {
+  function FillSockets(): void {
     if (selectedGemId !== 0) {
-      let newSelectedGems = JSON.parse(JSON.stringify(playerState.SelectedGems))
+      let newSelectedGems = JSON.parse(JSON.stringify(player.SelectedGems))
 
       Items.filter(
         item =>
-          (item.ItemSlot === uiState.SelectedItemSlot &&
+          (item.ItemSlot === ui.SelectedItemSlot &&
             itemSlotToFill === 'currentSlot') ||
           itemSlotToFill === 'allSlots'
       ).forEach(item => {
-        fillSocketsInItem(item, newSelectedGems)
+        FillSocketsInItem(item, newSelectedGems)
       })
 
       dispatch(setSelectedGems(newSelectedGems))
       dispatch(
-        setGemsStats(GetGemsStats(playerState.SelectedItems, newSelectedGems))
+        setGemsStats(GetGemsStats(player.SelectedItems, newSelectedGems))
       )
       dispatch(setFillItemSocketsWindowVisibility(false))
     }
   }
 
-  function fillSocketsInItem(
+  function FillSocketsInItem(
     item: Item,
     selectedGemsObj: SelectedGemsStruct
   ): void {
@@ -89,11 +89,11 @@ export function FillItemSockets() {
       // If the item already has a gem array then replace it with the existing one.
       let itemGemArray = Array(item.Sockets.length).fill(['', 0])
       if (
-        playerState.SelectedGems[item.ItemSlot] &&
-        playerState.SelectedGems[item.ItemSlot][item.Id]
+        player.SelectedGems[item.ItemSlot] &&
+        player.SelectedGems[item.ItemSlot][item.Id]
       ) {
         itemGemArray = JSON.parse(
-          JSON.stringify(playerState.SelectedGems[item.ItemSlot][item.Id])
+          JSON.stringify(player.SelectedGems[item.ItemSlot][item.Id])
         )
       }
 
@@ -113,7 +113,7 @@ export function FillItemSockets() {
     }
   }
 
-  function socketColorClickHandler(newColor: SocketColor) {
+  function SocketColorClickHandler(newColor: SocketColor) {
     if (
       (socketColor === SocketColor.Meta && newColor !== SocketColor.Meta) ||
       (socketColor !== SocketColor.Meta && newColor === SocketColor.Meta)
@@ -127,7 +127,7 @@ export function FillItemSockets() {
   return (
     <Grid
       id='gem-options-window'
-      style={{ display: uiState.FillItemSocketsWindowVisible ? '' : 'none' }}
+      style={{ display: ui.FillItemSocketsWindowVisible ? '' : 'none' }}
     >
       <FormControl className={mui.formControl} fullWidth={true}>
         <RadioGroup>
@@ -171,7 +171,7 @@ export function FillItemSockets() {
             <FormControlLabel
               key={nanoid()}
               className={socketColor !== socket.color ? mui.label : ''}
-              onChange={() => socketColorClickHandler(socket.color)}
+              onChange={() => SocketColorClickHandler(socket.color)}
               checked={socketColor === socket.color}
               control={<Radio />}
               label={socket.name}
@@ -209,7 +209,7 @@ export function FillItemSockets() {
       <Button
         variant='contained'
         id='gem-options-apply-button'
-        onClick={() => fillSockets()}
+        onClick={() => FillSockets()}
         disabled={selectedGemId === 0}
       >
         Apply

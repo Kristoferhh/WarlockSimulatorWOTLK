@@ -20,7 +20,7 @@ import StatWeights from './StatWeights'
 import TalentTrees from './TalentTrees'
 
 export default function Main() {
-  const uiState = useSelector((state: RootState) => state.ui)
+  const ui = useSelector((state: RootState) => state.ui)
 
   return (
     <Grid id='main'>
@@ -43,7 +43,7 @@ export default function Main() {
         <Typography id='sim-version-number'>v{packageJson.version}</Typography>
       </Grid>
       <Grid container id='container-1'>
-        {uiState.StatWeights.Visible && (
+        {ui.StatWeights.Visible && (
           <Grid item style={{ width: '200px' }}>
             <StatWeights />
           </Grid>
@@ -60,7 +60,7 @@ export default function Main() {
         <Grid item style={{ width: '618px' }}>
           <TalentTrees />
         </Grid>
-        {uiState.CombatLogBreakdown.Data.length > 0 && (
+        {ui.CombatLogBreakdown.Data.length > 0 && (
           <Grid item xs={12}>
             <BreakdownTables />
           </Grid>

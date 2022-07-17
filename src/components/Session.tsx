@@ -10,48 +10,39 @@ import {
   GetTalentsStats,
 } from '../Common'
 import {
-  setAurasStats,
-  setBaseStats,
-  setEnchantsStats,
-  setGemsStats,
-  setItemSetCounts,
-  setItemsStats,
-  setTalentsStats,
+  setAurasStats as SetAurasStats,
+  setBaseStats as SetBaseStats,
+  setEnchantsStats as SetEnchantsStats,
+  setGemsStats as SetGemsStats,
+  setItemSetCounts as SetItemSetCounts,
+  setItemsStats as SetItemsStats,
+  setTalentsStats as SetTalentsStats,
 } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
 import { RaceType, Setting } from '../Types'
 
 export default function Session() {
-  const playerStore = useSelector((state: RootState) => state.player)
+  const player = useSelector((state: RootState) => state.player)
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(
-      setBaseStats(
-        GetBaseStats(playerStore.Settings[Setting.race] as unknown as RaceType)
+      SetBaseStats(
+        GetBaseStats(player.Settings[Setting.race] as unknown as RaceType)
       )
     )
-    dispatch(setAurasStats(GetAurasStats(playerStore.Auras)))
-    dispatch(setItemsStats(GetItemsStats(playerStore.SelectedItems)))
+    dispatch(SetAurasStats(GetAurasStats(player.Auras)))
+    dispatch(SetItemsStats(GetItemsStats(player.SelectedItems)))
     dispatch(
-      setGemsStats(
-        GetGemsStats(playerStore.SelectedItems, playerStore.SelectedGems)
-      )
+      SetGemsStats(GetGemsStats(player.SelectedItems, player.SelectedGems))
     )
     dispatch(
-      setEnchantsStats(
-        GetEnchantsStats(
-          playerStore.SelectedItems,
-          playerStore.SelectedEnchants
-        )
+      SetEnchantsStats(
+        GetEnchantsStats(player.SelectedItems, player.SelectedEnchants)
       )
     )
-    dispatch(setItemSetCounts(GetItemSetCounts(playerStore.SelectedItems)))
-    dispatch(
-      setTalentsStats(
-        GetTalentsStats(playerStore.Talents, playerStore.Settings)
-      )
-    )
+    dispatch(SetItemSetCounts(GetItemSetCounts(player.SelectedItems)))
+    dispatch(SetTalentsStats(GetTalentsStats(player.Talents, player.Settings)))
     ;($('.tablesorter') as any).tablesorter()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

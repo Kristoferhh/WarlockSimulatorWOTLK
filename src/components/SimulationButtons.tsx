@@ -96,7 +96,7 @@ const statWeightValues: { [key: string]: number } = {
   [Stat.Mp5]: statWeightStatIncrease,
 }
 
-function getEquippedMetaGemId(
+function GetEquippedMetaGemId(
   items: ItemSlotDetailedStruct,
   gems: SelectedGemsStruct
 ): number {
@@ -120,8 +120,8 @@ function getEquippedMetaGemId(
 let lastStatWeightUpdateTime: { [key: string]: number } = {}
 
 export function SimulationButtons() {
-  const playerState = useSelector((state: RootState) => state.player)
-  const uiState = useSelector((state: RootState) => state.ui)
+  const player = useSelector((state: RootState) => state.player)
+  const ui = useSelector((state: RootState) => state.ui)
   const dispatch = useDispatch()
   const [medianDps, setMedianDps] = useState(
     localStorage.getItem('medianDps') || ''
@@ -136,19 +136,17 @@ export function SimulationButtons() {
   const [simulationType, setSimulationType] = useState(SimulationType.Normal)
   let combatLogEntries: string[] = []
 
-  function combatLogButtonIsDisabled(): boolean {
-    return uiState.CombatLog.Data.length === 0
+  function CombatLogButtonIsDisabled(): boolean {
+    return ui.CombatLog.Data.length === 0
   }
 
-  function histogramButtonIsDisabled(): boolean {
-    return uiState.Histogram.Data === undefined
+  function HistogramButtonIsDisabled(): boolean {
+    return ui.Histogram.Data === undefined
   }
 
-  function getWorkerParams(params: IGetWorkerParams): WorkerParams {
-    let customPlayerState: PlayerState = JSON.parse(JSON.stringify(playerState))
-    let iterationAmount = parseInt(
-      customPlayerState.Settings[Setting.iterations]
-    )
+  function GetWorkerParams(params: IGetWorkerParams): WorkerParams {
+    let customPlayer: PlayerState = JSON.parse(JSON.stringify(player))
+    let iterationAmount = parseInt(customPlayer.Settings[Setting.iterations])
 
     if (params.SimulationType === SimulationType.StatWeights) {
       // Set minimum iteration amount to 100,000 for stat weight sims
@@ -160,22 +158,19 @@ export function SimulationButtons() {
     }
 
     if (params.SimulationType !== SimulationType.StatWeights) {
-      customPlayerState.SelectedItems[
-        ItemSlotToItemSlotDetailed(
-          uiState.SelectedItemSlot,
-          uiState.SelectedItemSubSlot
-        )
+      customPlayer.SelectedItems[
+        ItemSlotToItemSlotDetailed(ui.SelectedItemSlot, ui.SelectedItemSubSlot)
       ] = params.ItemId
     }
 
-    let playerStats = CalculatePlayerStats(customPlayerState)
+    let playerStats = CalculatePlayerStats(customPlayer)
 
     if (params.SimulationType === SimulationType.StatWeights) {
       if (params.CustomStat?.Stat && params.CustomStat.Stat !== 'normal') {
         let statValue = params.CustomStat.Value
 
         if (params.CustomStat.Stat === Stat[Stat.HitRating]) {
-          const hitPercent = GetPlayerHitPercent(customPlayerState)
+          const hitPercent = GetPlayerHitPercent(customPlayer)
           // If the user isn't hitcapped but adding the extra hit rating would overcap them
           // then instead remove hit rating instead of adding it so it doesn't get wasted.
           // Using 15.99 instead of 16 because using 16 was causing issues when a player had
@@ -197,32 +192,32 @@ export function SimulationButtons() {
 
     return {
       PlayerSettings: {
-        Auras: customPlayerState.Auras,
-        Items: customPlayerState.SelectedItems,
-        Enchants: customPlayerState.SelectedEnchants,
-        Gems: customPlayerState.SelectedGems,
-        Talents: customPlayerState.Talents,
-        Rotation: customPlayerState.Rotation,
+        Auras: customPlayer.Auras,
+        Items: customPlayer.SelectedItems,
+        Enchants: customPlayer.SelectedEnchants,
+        Gems: customPlayer.SelectedGems,
+        Talents: customPlayer.Talents,
+        Rotation: customPlayer.Rotation,
         Stats: playerStats,
-        Sets: GetItemSetCounts(customPlayerState.SelectedItems),
-        Settings: customPlayerState.Settings,
-        MetaGemId: getEquippedMetaGemId(
-          customPlayerState.SelectedItems,
-          customPlayerState.SelectedGems
+        Sets: GetItemSetCounts(customPlayer.SelectedItems),
+        Settings: customPlayer.Settings,
+        MetaGemId: GetEquippedMetaGemId(
+          customPlayer.SelectedItems,
+          customPlayer.SelectedGems
         ),
-        Glyphs: customPlayerState.Glyphs[GlyphType.Major].filter(
+        Glyphs: customPlayer.Glyphs[GlyphType.Major].filter(
           x => x != null
         ) as GlyphId[],
       },
       SimulationSettings: {
         Iterations: iterationAmount,
-        MinTime: parseInt(customPlayerState.Settings[Setting.minFightLength]),
-        MaxTime: parseInt(customPlayerState.Settings[Setting.maxFightLength]),
+        MinTime: parseInt(customPlayer.Settings[Setting.minFightLength]),
+        MaxTime: parseInt(customPlayer.Settings[Setting.maxFightLength]),
       },
       RandomSeed: params.RandomSeed,
       ItemId: params.ItemId,
       SimulationType: params.SimulationType,
-      ItemSubSlot: uiState.SelectedItemSubSlot,
+      ItemSubSlot: ui.SelectedItemSubSlot,
       CustomStat: params.CustomStat?.Stat || 'normal',
       EquippedItemSimulation:
         params.ItemId === params.EquippedItemId ||
@@ -230,21 +225,21 @@ export function SimulationButtons() {
     }
   }
 
-  function simulate(simulationParams: {
+  function Simulate(simulationParams: {
     type: SimulationType
     itemIdsToSim?: number[]
   }) {
-    if (uiState.SimulationInProgress) {
+    if (ui.SimulationInProgress) {
       return
     }
 
     const maxWorkers = window.navigator.hardwareConcurrency || 8 // Maximum amount of web workers that can be run concurrently.
     const simulations: SimWorker[] = []
     const itemSlot: ItemSlotDetailed = ItemSlotToItemSlotDetailed(
-      uiState.SelectedItemSlot,
-      uiState.SelectedItemSubSlot
+      ui.SelectedItemSlot,
+      ui.SelectedItemSubSlot
     )
-    const equippedItemId = playerState.SelectedItems[itemSlot]
+    const equippedItemId = player.SelectedItems[itemSlot]
     let simulationsFinished = 0
     let simulationsRunning = 0
     let simIndex = 0
@@ -320,8 +315,8 @@ export function SimulationButtons() {
               totalDamageDone += combatLogVector.damage
             },
             (errorCallback: { errorMsg: string }) => {
-              populateCombatLog()
-              errorCallbackHandler(errorCallback)
+              PopulateCombatLog()
+              ErrorCallbackHandler(errorCallback)
             },
             (combatLogUpdate: { combatLogEntry: string }) => {
               combatLogEntries.push(combatLogUpdate.combatLogEntry)
@@ -332,7 +327,7 @@ export function SimulationButtons() {
             (params: SimulationEnd) => {
               const newMedianDps = params.medianDps
               simulationsFinished++
-              findSimulationProgressPercentObject({
+              FindSimulationProgressPercentObject({
                 simulationProgressPercentages: simulationProgressPercentages,
                 simType: simulationParams.type,
                 itemId: params.itemId,
@@ -343,7 +338,7 @@ export function SimulationButtons() {
                 simulationParams.type !== SimulationType.StatWeights ||
                 params.customStat === 'normal'
               ) {
-                setSavedItemDpsValue(
+                SetSavedItemDpsValue(
                   itemSlot,
                   params.itemId,
                   newMedianDps,
@@ -361,19 +356,19 @@ export function SimulationButtons() {
               ) {
                 const newMinDps = Math.round(params.minDps * 100) / 100
                 const newMaxDps = Math.round(params.maxDps * 100) / 100
-                setNewMedianDps(newMedianDps.toString(), true)
-                setNewMinDps(newMinDps.toString(), true)
-                setNewMaxDps(newMaxDps.toString(), true)
+                SetNewMedianDps(newMedianDps.toString(), true)
+                SetNewMinDps(newMinDps.toString(), true)
+                SetNewMaxDps(newMaxDps.toString(), true)
               }
 
               if (simulationParams.type === SimulationType.StatWeights) {
-                updateStatWeightValue(params.customStat, newMedianDps)
+                UpdateStatWeightValue(params.customStat, newMedianDps)
               }
 
               if (simulationsFinished === simWorkerParameters.length) {
                 dispatch(setSimulationInProgressStatus(false))
                 const totalSimDuration = (performance.now() - startTime) / 1000
-                setNewSimulationDuration(
+                SetNewSimulationDuration(
                   (Math.round(totalSimDuration * 10000) / 10000).toString(),
                   true
                 )
@@ -385,7 +380,7 @@ export function SimulationButtons() {
                     simulationParams.type
                   )
                 ) {
-                  populateCombatLog()
+                  PopulateCombatLog()
                 }
 
                 if (simulationParams.type === SimulationType.Normal) {
@@ -393,9 +388,8 @@ export function SimulationButtons() {
                   dispatch(setHistogramData(dpsCount))
 
                   if (
-                    playerState.Settings[
-                      Setting.automaticallyOpenSimDetails
-                    ] === 'true'
+                    player.Settings[Setting.automaticallyOpenSimDetails] ===
+                    'true'
                   ) {
                     dispatch(
                       setCombatLogBreakdownValue({
@@ -427,7 +421,7 @@ export function SimulationButtons() {
                 (params.iteration / params.iterationAmount) * 100
               )
 
-              findSimulationProgressPercentObject({
+              FindSimulationProgressPercentObject({
                 simulationProgressPercentages: simulationProgressPercentages,
                 simType: simulationParams.type,
                 itemId: params.itemId,
@@ -465,7 +459,7 @@ export function SimulationButtons() {
                 (simulationParams.type === SimulationType.StatWeights &&
                   params.customStat === 'normal')
               ) {
-                setNewMedianDps(newMedianDps.toString(), false)
+                SetNewMedianDps(newMedianDps.toString(), false)
               } else if (simulationParams.type === SimulationType.StatWeights) {
                 // Limit the updates to once every 5 seconds
                 const dateNow = Date.now()
@@ -473,12 +467,12 @@ export function SimulationButtons() {
                   !lastStatWeightUpdateTime[params.customStat] ||
                   dateNow - lastStatWeightUpdateTime[params.customStat] > 5000
                 ) {
-                  updateStatWeightValue(params.customStat, params.medianDps)
+                  UpdateStatWeightValue(params.customStat, params.medianDps)
                   lastStatWeightUpdateTime[params.customStat] = dateNow
                 }
               }
             },
-            getWorkerParams({
+            GetWorkerParams({
               RandomSeed: randomSeed,
               ItemId: simWorkerParameter.ItemId,
               EquippedItemId: simWorkerParameter.EquippedItemId,
@@ -504,7 +498,7 @@ export function SimulationButtons() {
     }
   }
 
-  function updateStatWeightValue(stat: string, value: number): void {
+  function UpdateStatWeightValue(stat: string, value: number): void {
     let dpsDifference = Math.abs(
       Math.round(
         ((value - Number(medianDps)) / statWeightStatIncrease) * 1000
@@ -522,7 +516,7 @@ export function SimulationButtons() {
     )
   }
 
-  function findSimulationProgressPercentObject(params: {
+  function FindSimulationProgressPercentObject(params: {
     simulationProgressPercentages: ISimulationProgressPercent[]
     simType: SimulationType
     itemId: number
@@ -536,7 +530,7 @@ export function SimulationButtons() {
     )!
   }
 
-  function setSavedItemDpsValue(
+  function SetSavedItemDpsValue(
     itemSlot: ItemSlotDetailed,
     itemId: number,
     newMedianDps: number,
@@ -552,11 +546,11 @@ export function SimulationButtons() {
     )
   }
 
-  function populateCombatLog(): void {
+  function PopulateCombatLog(): void {
     dispatch(setCombatLogData(combatLogEntries))
   }
 
-  function errorCallbackHandler(errorCallback: { errorMsg: string }): void {
+  function ErrorCallbackHandler(errorCallback: { errorMsg: string }): void {
     alert(
       'Error: ' +
         errorCallback.errorMsg +
@@ -564,28 +558,28 @@ export function SimulationButtons() {
     )
   }
 
-  function setNewMedianDps(newMedianDps: string, savingLocalStorage: boolean) {
+  function SetNewMedianDps(newMedianDps: string, savingLocalStorage: boolean) {
     setMedianDps(newMedianDps)
     if (savingLocalStorage) {
       localStorage.setItem('medianDps', newMedianDps)
     }
   }
 
-  function setNewMinDps(newMinDps: string, savingLocalStorage: boolean) {
+  function SetNewMinDps(newMinDps: string, savingLocalStorage: boolean) {
     setMinDps(newMinDps)
     if (savingLocalStorage) {
       localStorage.setItem('minDps', newMinDps)
     }
   }
 
-  function setNewMaxDps(newMaxDps: string, savingLocalStorage: boolean) {
+  function SetNewMaxDps(newMaxDps: string, savingLocalStorage: boolean) {
     setMaxDps(newMaxDps)
     if (savingLocalStorage) {
       localStorage.setItem('maxDps', newMaxDps)
     }
   }
 
-  function setNewSimulationDuration(
+  function SetNewSimulationDuration(
     newSimulationDuration: string,
     savingLocalStorage: boolean
   ) {
@@ -619,15 +613,15 @@ export function SimulationButtons() {
       <Grid
         className='warlock-btn active-btn'
         onClick={() =>
-          simulate({
+          Simulate({
             itemIdsToSim: [
               Items.find(
                 e =>
                   e.Id ===
-                  playerState.SelectedItems[
+                  player.SelectedItems[
                     ItemSlotToItemSlotDetailed(
-                      uiState.SelectedItemSlot,
-                      uiState.SelectedItemSubSlot
+                      ui.SelectedItemSlot,
+                      ui.SelectedItemSubSlot
                     )
                   ]
               )?.Id || 0,
@@ -637,15 +631,13 @@ export function SimulationButtons() {
         }
         style={{
           background:
-            uiState.SimulationInProgress &&
-            simulationType === SimulationType.Normal
+            ui.SimulationInProgress && simulationType === SimulationType.Normal
               ? `linear-gradient(to right, #9482C9 ${simulationProgressPercent}%, transparent ${simulationProgressPercent}%)`
               : '',
         }}
       >
         <Typography>
-          {uiState.SimulationInProgress &&
-          simulationType === SimulationType.Normal
+          {ui.SimulationInProgress && simulationType === SimulationType.Normal
             ? `${simulationProgressPercent}%`
             : 'Simulate'}
         </Typography>
@@ -653,49 +645,48 @@ export function SimulationButtons() {
       <Grid
         className='warlock-btn active-btn'
         onClick={() =>
-          simulate({
+          Simulate({
             itemIdsToSim: GetItemTableItems(
-              uiState.SelectedItemSlot,
-              uiState.SelectedItemSubSlot,
-              playerState.SelectedItems,
-              uiState.Sources,
-              uiState.HiddenItems,
+              ui.SelectedItemSlot,
+              ui.SelectedItemSubSlot,
+              player.SelectedItems,
+              ui.Sources,
+              ui.HiddenItems,
               false,
-              uiState.SavedItemDps,
+              ui.SavedItemDps,
               true,
-              Races.find(x => x.Type === playerState.Settings[Setting.race])
+              Races.find(x => x.Type === player.Settings[Setting.race])
             ).map(item => item.Id),
             type: SimulationType.AllItems,
           })
         }
         style={{
           background:
-            uiState.SimulationInProgress &&
+            ui.SimulationInProgress &&
             simulationType === SimulationType.AllItems
               ? `linear-gradient(to right, #9482C9 ${simulationProgressPercent}%, transparent ${simulationProgressPercent}%)`
               : '',
         }}
       >
         <Typography>
-          {uiState.SimulationInProgress &&
-          simulationType === SimulationType.AllItems
+          {ui.SimulationInProgress && simulationType === SimulationType.AllItems
             ? `${simulationProgressPercent}%`
             : 'Simulate All Items'}
         </Typography>
       </Grid>
       <Grid
         className='warlock-btn active-btn'
-        onClick={() => simulate({ type: SimulationType.StatWeights })}
+        onClick={() => Simulate({ type: SimulationType.StatWeights })}
         style={{
           background:
-            uiState.SimulationInProgress &&
+            ui.SimulationInProgress &&
             simulationType === SimulationType.StatWeights
               ? `linear-gradient(to right, #9482C9 ${simulationProgressPercent}%, transparent ${simulationProgressPercent}%)`
               : '',
         }}
       >
         <Typography>
-          {uiState.SimulationInProgress &&
+          {ui.SimulationInProgress &&
           simulationType === SimulationType.StatWeights
             ? `${simulationProgressPercent}%`
             : 'Stat Weights'}
@@ -705,11 +696,11 @@ export function SimulationButtons() {
         <Grid
           className={
             'warlock-btn' +
-            (combatLogButtonIsDisabled() ? ' disabled-btn' : ' active-btn')
+            (CombatLogButtonIsDisabled() ? ' disabled-btn' : ' active-btn')
           }
           onClick={() =>
-            !combatLogButtonIsDisabled() &&
-            dispatch(setCombatLogVisibility(!uiState.CombatLog.Visible))
+            !CombatLogButtonIsDisabled() &&
+            dispatch(setCombatLogVisibility(!ui.CombatLog.Visible))
           }
         >
           <Typography>Combat Log</Typography>
@@ -719,11 +710,11 @@ export function SimulationButtons() {
         <Grid
           className={
             'warlock-btn' +
-            (histogramButtonIsDisabled() ? ' disabled-btn' : ' active-btn')
+            (HistogramButtonIsDisabled() ? ' disabled-btn' : ' active-btn')
           }
           onClick={() =>
-            !histogramButtonIsDisabled() &&
-            dispatch(setHistogramVisibility(!uiState.Histogram.Visible))
+            !HistogramButtonIsDisabled() &&
+            dispatch(setHistogramVisibility(!ui.Histogram.Visible))
           }
         >
           <Typography>Histogram</Typography>

@@ -9,8 +9,8 @@ import { setStatWeightVisibility } from '../redux/UiSlice'
 import { Stat, StatWeightStats, TalentTree } from '../Types'
 
 export default function StatWeights() {
-  const playerState = useSelector((state: RootState) => state.player)
-  const uiState = useSelector((state: RootState) => state.ui)
+  const player = useSelector((state: RootState) => state.player)
+  const ui = useSelector((state: RootState) => state.ui)
   const dispatch = useDispatch()
   const { t } = useTranslation()
 
@@ -58,7 +58,7 @@ export default function StatWeights() {
               {stat.DisplayName}
             </Typography>
             <Typography style={{ lineHeight: '1' }}>
-              {uiState.StatWeights.StatValues[stat.Stat as unknown as Stat]}
+              {ui.StatWeights.StatValues[stat.Stat as unknown as Stat]}
             </Typography>
           </ListItem>
         ))}
@@ -66,28 +66,28 @@ export default function StatWeights() {
           variant='contained'
           style={{
             marginTop: '15px',
-            display: uiState.SimulationInProgress ? 'none' : '',
+            display: ui.SimulationInProgress ? 'none' : '',
           }}
           onClick={() => {
             let talentTreePoints: { name: TalentTree; points: number }[] = [
               {
                 name: TalentTree.Affliction,
                 points: GetAllocatedTalentsPointsInTree(
-                  playerState.Talents,
+                  player.Talents,
                   Talents.find(e => e.Name === TalentTree.Affliction)!
                 ),
               },
               {
                 name: TalentTree.Demonology,
                 points: GetAllocatedTalentsPointsInTree(
-                  playerState.Talents,
+                  player.Talents,
                   Talents.find(e => e.Name === TalentTree.Demonology)!
                 ),
               },
               {
                 name: TalentTree.Destruction,
                 points: GetAllocatedTalentsPointsInTree(
-                  playerState.Talents,
+                  player.Talents,
                   Talents.find(e => e.Name === TalentTree.Destruction)!
                 ),
               },
@@ -104,31 +104,31 @@ export default function StatWeights() {
 
             navigator.clipboard.writeText(
               `( Pawn: v1: "${
-                uiState.SelectedProfile || 'Warlock'
+                ui.SelectedProfile || 'Warlock'
               }": Class=Warlock, Spec=${playerSpec}` +
-                `, Stamina=${uiState.StatWeights.StatValues[Stat.Stamina]}` +
+                `, Stamina=${ui.StatWeights.StatValues[Stat.Stamina]}` +
                 `, Intellect=${
-                  uiState.StatWeights.StatValues[Stat.Intellect]
+                  ui.StatWeights.StatValues[Stat.Intellect]
                 }` +
-                `, Spirit=${uiState.StatWeights.StatValues[Stat.Spirit]}` +
+                `, Spirit=${ui.StatWeights.StatValues[Stat.Spirit]}` +
                 `, SpellCritRating=${
-                  uiState.StatWeights.StatValues[Stat.CritRating]
+                  ui.StatWeights.StatValues[Stat.CritRating]
                 }` +
                 `, SpellHitRating=${
-                  uiState.StatWeights.StatValues[Stat.HitRating]
+                  ui.StatWeights.StatValues[Stat.HitRating]
                 }` +
                 `, FireSpellDamage=${
-                  uiState.StatWeights.StatValues[Stat.FirePower]
+                  ui.StatWeights.StatValues[Stat.FirePower]
                 }` +
                 `, ShadowSpellDamage=${
-                  uiState.StatWeights.StatValues[Stat.ShadowPower]
+                  ui.StatWeights.StatValues[Stat.ShadowPower]
                 }` +
                 `, SpellDamage=${
-                  uiState.StatWeights.StatValues[Stat.SpellPower]
+                  ui.StatWeights.StatValues[Stat.SpellPower]
                 }` +
-                `, Mp5=${uiState.StatWeights.StatValues[Stat.Mp5]}` +
+                `, Mp5=${ui.StatWeights.StatValues[Stat.Mp5]}` +
                 `, SpellHasteRating=${
-                  uiState.StatWeights.StatValues[Stat.HasteRating]
+                  ui.StatWeights.StatValues[Stat.HasteRating]
                 })`
             )
           }}

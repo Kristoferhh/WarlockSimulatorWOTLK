@@ -595,20 +595,20 @@ export function CalculatePlayerStats(player: PlayerState): StatsCollection {
   return mainStatsObj
 }
 
-export function GetPlayerHitRating(playerState: PlayerState): number {
-  return Object.values(playerState.Stats)
+export function GetPlayerHitRating(player: PlayerState): number {
+  return Object.values(player.Stats)
     .map(obj => obj[Stat.HitRating] || 0)
     .reduce((a, b) => a + b)
 }
 
 export function GetPlayerHitPercent(
-  playerState: PlayerState,
+  player: PlayerState,
   hitRating?: number
 ): number {
   let hitPercent =
-    (hitRating || GetPlayerHitRating(playerState)) /
+    (hitRating || GetPlayerHitRating(player)) /
       StatConstant.HitRatingPerPercent +
-    Object.values(playerState.Stats)
+    Object.values(player.Stats)
       .map(obj => obj[Stat.HitChance] || 0)
       .reduce((a, b) => a + b)
 

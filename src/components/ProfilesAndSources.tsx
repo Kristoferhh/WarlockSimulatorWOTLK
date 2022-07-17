@@ -12,28 +12,28 @@ import {
   GetItemsStats,
 } from '../Common'
 import {
-  deleteProfile,
-  renameProfile,
-  setAurasStats,
-  setBaseStats,
-  setEnchantsStats,
-  setGemsStats,
-  setItemSetCounts,
-  setItemsStats,
+  deleteProfile as DeleteProfile,
+  renameProfile as RenameProfile,
+  setAurasStats as SetAurasStats,
+  setBaseStats as SetBaseStats,
+  setEnchantsStats as SetEnchantsStats,
+  setGemsStats as SetGemsStats,
+  setItemSetCounts as SetItemSetCounts,
+  setItemsStats as SetItemsStats,
   setProfile,
-  setRotationState,
-  setSelectedAuras,
-  setSelectedEnchants,
-  setSelectedGems,
-  setSelectedItems,
-  setSelectedTalents,
-  setSettingsState,
+  setRotationState as SetRotationState,
+  setSelectedAuras as SetSelectedAuras,
+  setSelectedEnchants as SetSelectedEnchants,
+  setSelectedGems as SetSelectedGems,
+  setSelectedItems as SetSelectedItems,
+  setSelectedTalents as SetSelectedTalents,
+  setSettingsState as SetSettingsState,
 } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
 import {
-  setImportExportWindowVisibility,
-  setSelectedProfile,
-  togglePhase,
+  setImportExportWindowVisibility as SetImportExportWindowVisibility,
+  setSelectedProfile as SetSelectedProfile,
+  togglePhase as TogglePhase,
 } from '../redux/UiSlice'
 import { Phase, ProfileContainer, RaceType, Setting } from '../Types'
 
@@ -46,98 +46,95 @@ const phases: { title: string; phase: Phase }[] = [
 ]
 
 export default function ProfilesAndSources() {
-  const playerStore = useSelector((state: RootState) => state.player)
-  const selectedProfileState = useSelector(
-    (state: RootState) => state.ui.SelectedProfile
-  )
-  const sourcesState = useSelector((state: RootState) => state.ui.Sources)
+  const player = useSelector((state: RootState) => state.player)
+  const ui = useSelector((state: RootState) => state.ui)
   const dispatch = useDispatch()
-  const [profileName, setProfileName] = useState('')
+  const [profileName, SetProfileName] = useState('')
   const selectedProfileExists =
-    playerStore.Profiles.find(x => x.Name === selectedProfileState) != null
+    player.Profiles.find(x => x.Name === ui.SelectedProfile) != null
   const { t } = useTranslation()
 
-  function callSetProfile(newProfile: boolean) {
-    const name = newProfile ? profileName : selectedProfileState
+  function CallSetProfile(newProfile: boolean) {
+    const name = newProfile ? profileName : ui.SelectedProfile
 
     dispatch(
       setProfile({
         Name: name,
         Profile: {
-          Auras: playerStore.Auras,
-          Items: playerStore.SelectedItems,
-          Enchants: playerStore.SelectedEnchants,
-          Gems: playerStore.SelectedGems,
-          Talents: playerStore.Talents,
-          Rotation: playerStore.Rotation,
-          Settings: playerStore.Settings,
+          Auras: player.Auras,
+          Items: player.SelectedItems,
+          Enchants: player.SelectedEnchants,
+          Gems: player.SelectedGems,
+          Talents: player.Talents,
+          Rotation: player.Rotation,
+          Settings: player.Settings,
         },
       })
     )
 
     if (newProfile) {
-      dispatch(setSelectedProfile(name))
-      setProfileName('')
+      dispatch(SetSelectedProfile(name))
+      SetProfileName('')
     }
   }
 
-  function profileClickHandler(params: ProfileContainer) {
-    dispatch(setSelectedProfile(params.Name))
-    dispatch(setSelectedAuras(params.Profile.Auras))
-    dispatch(setSelectedGems(params.Profile.Gems))
-    dispatch(setSelectedItems(params.Profile.Items))
-    dispatch(setSelectedTalents(params.Profile.Talents))
-    dispatch(setRotationState(params.Profile.Rotation))
-    dispatch(setSelectedEnchants(params.Profile.Enchants))
-    dispatch(setSettingsState(params.Profile.Settings))
+  function ProfileClickHandler(params: ProfileContainer) {
+    dispatch(SetSelectedProfile(params.Name))
+    dispatch(SetSelectedAuras(params.Profile.Auras))
+    dispatch(SetSelectedGems(params.Profile.Gems))
+    dispatch(SetSelectedItems(params.Profile.Items))
+    dispatch(SetSelectedTalents(params.Profile.Talents))
+    dispatch(SetRotationState(params.Profile.Rotation))
+    dispatch(SetSelectedEnchants(params.Profile.Enchants))
+    dispatch(SetSettingsState(params.Profile.Settings))
     // Recalculate the player's stats
     dispatch(
-      setBaseStats(
+      SetBaseStats(
         GetBaseStats(
           params.Profile.Settings[Setting.race] as unknown as RaceType
         )
       )
     )
-    dispatch(setAurasStats(GetAurasStats(params.Profile.Auras)))
-    dispatch(setItemsStats(GetItemsStats(params.Profile.Items)))
+    dispatch(SetAurasStats(GetAurasStats(params.Profile.Auras)))
+    dispatch(SetItemsStats(GetItemsStats(params.Profile.Items)))
     dispatch(
-      setGemsStats(GetGemsStats(params.Profile.Items, params.Profile.Gems))
+      SetGemsStats(GetGemsStats(params.Profile.Items, params.Profile.Gems))
     )
     dispatch(
-      setEnchantsStats(
+      SetEnchantsStats(
         GetEnchantsStats(params.Profile.Items, params.Profile.Enchants)
       )
     )
-    dispatch(setItemSetCounts(GetItemSetCounts(params.Profile.Items)))
+    dispatch(SetItemSetCounts(GetItemSetCounts(params.Profile.Items)))
   }
 
-  function deleteProfileHandler() {
+  function DeleteProfileHandler() {
     if (
       window.confirm(
-        `Are you sure you want to delete profile '${selectedProfileState}'?`
+        `Are you sure you want to delete profile '${ui.SelectedProfile}'?`
       )
     ) {
-      dispatch(deleteProfile(selectedProfileState))
+      dispatch(DeleteProfile(ui.SelectedProfile))
     }
   }
 
-  function renameProfileHandler() {
+  function RenameProfileHandler() {
     const newName = prompt(
-      `Enter the new name for profile '${selectedProfileState}'`
+      `Enter the new name for profile '${ui.SelectedProfile}'`
     )
 
     if (
       newName != null &&
       newName.length > 0 &&
-      newName !== selectedProfileState
+      newName !== ui.SelectedProfile
     ) {
       dispatch(
-        renameProfile({
-          oldName: selectedProfileState,
-          newName: newName,
+        RenameProfile({
+          OldName: ui.SelectedProfile,
+          NewName: newName,
         })
       )
-      dispatch(setSelectedProfile(newName))
+      dispatch(SetSelectedProfile(newName))
     }
   }
 
@@ -156,13 +153,13 @@ export default function ProfilesAndSources() {
           placeholder={t('E.g. "P3 Shadow BiS"')}
           id='profile-name-input'
           value={profileName}
-          onChange={e => setProfileName(e.target.value)}
+          onChange={e => SetProfileName(e.target.value)}
           name='profileName'
         />
         <Button
           variant='contained'
           id='save-new-profile-button'
-          onClick={() => callSetProfile(true)}
+          onClick={() => CallSetProfile(true)}
           disabled={profileName.length === 0}
         >
           <Typography>{t('Save New Profile')}</Typography>
@@ -174,7 +171,7 @@ export default function ProfilesAndSources() {
               display: selectedProfileExists ? '' : 'none',
             }}
             id='save-profile-button'
-            onClick={() => callSetProfile(false)}
+            onClick={() => CallSetProfile(false)}
           >
             <Typography>{t('Save')}</Typography>
           </Button>{' '}
@@ -184,7 +181,7 @@ export default function ProfilesAndSources() {
               display: selectedProfileExists ? '' : 'none',
             }}
             id='delete-profile-button'
-            onClick={() => deleteProfileHandler()}
+            onClick={() => DeleteProfileHandler()}
           >
             <Typography>{t('Delete')}</Typography>
           </Button>{' '}
@@ -194,14 +191,14 @@ export default function ProfilesAndSources() {
               display: selectedProfileExists ? '' : 'none',
             }}
             id='rename-profile-button'
-            onClick={() => renameProfileHandler()}
+            onClick={() => RenameProfileHandler()}
           >
             <Typography>{t('Rename')}</Typography>
           </Button>{' '}
           <Button
             variant='contained'
             id='import-export-button'
-            onClick={() => dispatch(setImportExportWindowVisibility(true))}
+            onClick={() => dispatch(SetImportExportWindowVisibility(true))}
           >
             <Typography>{t('Import/Export')}</Typography>
           </Button>
@@ -210,20 +207,20 @@ export default function ProfilesAndSources() {
       <fieldset
         id='saved-profiles'
         style={{
-          display: playerStore.Profiles.length === 0 ? 'none' : '',
+          display: player.Profiles.length === 0 ? 'none' : '',
         }}
       >
         <legend>
           <Typography>{t('Saved Profiles')}</Typography>
         </legend>
         <Grid container id='profile-list'>
-          {playerStore.Profiles.map(profileContainer => (
+          {player.Profiles.map(profileContainer => (
             <Grid
               item
               key={nanoid()}
               className='saved-profile'
-              data-checked={selectedProfileState === profileContainer.Name}
-              onClick={() => profileClickHandler(profileContainer)}
+              data-checked={ui.SelectedProfile === profileContainer.Name}
+              onClick={() => ProfileClickHandler(profileContainer)}
             >
               <Typography>{profileContainer.Name}</Typography>
             </Grid>
@@ -240,9 +237,9 @@ export default function ProfilesAndSources() {
             <Grid
               item
               key={phase.phase}
-              data-checked={sourcesState.includes(phase.phase)}
+              data-checked={ui.Sources.includes(phase.phase)}
               className='phase-btn'
-              onClick={() => dispatch(togglePhase(phase.phase))}
+              onClick={() => dispatch(TogglePhase(phase.phase))}
             >
               <Typography>{t(phase.title)}</Typography>
             </Grid>

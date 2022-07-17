@@ -20,8 +20,8 @@ interface Props {
 }
 
 export default function ItemSocketDisplay(props: Props) {
-  const playerState = useSelector((state: RootState) => state.player)
-  const itemSockets = playerState.SelectedGems[props.itemSlot]
+  const player = useSelector((state: RootState) => state.player)
+  const itemSockets = player.SelectedGems[props.itemSlot]
 
   return (
     <Grid className='item-sockets-container'>

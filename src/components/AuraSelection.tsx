@@ -66,12 +66,12 @@ function DisableAurasWithUniqueProperties(
 }
 
 export default function AuraSelection() {
-  const playerState = useSelector((state: RootState) => state.player)
+  const player = useSelector((state: RootState) => state.player)
   const dispatch = useDispatch()
   const { t } = useTranslation()
 
   function AuraClickHandler(aura: Aura): void {
-    let newAuras = JSON.parse(JSON.stringify(playerState.Auras)) as AuraId[]
+    let newAuras = JSON.parse(JSON.stringify(player.Auras)) as AuraId[]
 
     // If the aura is being toggled on and it's a unique buff like potion/food buff
     // then disable all other auras with that unique property as true.
@@ -97,13 +97,13 @@ export default function AuraSelection() {
             {Auras.filter(
               aura =>
                 aura.Group === auraGroup.Heading &&
-                (!aura.ForPet || IsPetActive(playerState.Settings, true, true))
+                (!aura.ForPet || IsPetActive(player.Settings, true, true))
             ).map(aura => (
               <ListItem
                 key={nanoid()}
                 id={aura.Id.toString()}
                 className='buffs aura'
-                data-checked={playerState.Auras.includes(aura.Id)}
+                data-checked={player.Auras.includes(aura.Id)}
                 onClick={e => {
                   AuraClickHandler(aura)
                   e.preventDefault()

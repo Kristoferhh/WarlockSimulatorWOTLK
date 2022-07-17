@@ -18,9 +18,16 @@ import {
 import { Gems } from '../data/Gems'
 import { Items } from '../data/Items'
 import i18n from '../i18n/config'
-import { setGemsStats, setSelectedGems } from '../redux/PlayerSlice'
+import {
+  setGemsStats as SetGemsStats,
+  setSelectedGems as SetSelectedGems,
+} from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
-import { favoriteGem, hideGem, setGemSelectionTable } from '../redux/UiSlice'
+import {
+  favoriteGem as FavoriteGem,
+  hideGem as HideGem,
+  setGemSelectionTable as SetGemSelectionTable,
+} from '../redux/UiSlice'
 import {
   Gem,
   InitialGemSelectionTableValue,
@@ -28,50 +35,41 @@ import {
 } from '../Types'
 
 export default function GemSelection() {
-  const uiState = useSelector((state: RootState) => state.ui)
-  const selectedGemsState = useSelector(
-    (state: RootState) => state.player.SelectedGems
-  )
-  const selectedItemsState = useSelector(
-    (state: RootState) => state.player.SelectedItems
-  )
+  const ui = useSelector((state: RootState) => state.ui)
+  const player = useSelector((state: RootState) => state.player)
   const dispatch = useDispatch()
-  const [showingHiddenGems, setShowingHiddenGems] = useState(false)
+  const [showingHiddenGems, SetShowingHiddenGems] = useState(false)
   const { t } = useTranslation()
 
-  function gemClickHandler(gem: Gem) {
+  function GemClickHandler(gem: Gem) {
     let newSelectedGems: SelectedGemsStruct = JSON.parse(
-      JSON.stringify(selectedGemsState)
+      JSON.stringify(player.SelectedGems)
     )
-    let selectedGemsInItemSlot =
-      newSelectedGems[uiState.GemSelectionTable.ItemSlot]
+    let selectedGemsInItemSlot = newSelectedGems[ui.GemSelectionTable.ItemSlot]
 
     // If the item doesn't have a socket array yet then initialize it to an array of gem IDs 0
     // The first element is the socket color (not gem color) and the second element is the gem id.
-    let currentItemGemIds =
-      selectedGemsInItemSlot[uiState.GemSelectionTable.ItemId]
+    let currentItemGemIds = selectedGemsInItemSlot[ui.GemSelectionTable.ItemId]
     if (!currentItemGemIds) {
       const itemSocketAmount = Items.find(
-        i => i.Id === parseInt(uiState.GemSelectionTable.ItemId)
+        i => i.Id === parseInt(ui.GemSelectionTable.ItemId)
       )?.Sockets?.length
       currentItemGemIds = Array(itemSocketAmount).fill(0)
     } else {
       currentItemGemIds = JSON.parse(JSON.stringify(currentItemGemIds))
 
       // Return if the clicked gem is the same as the already equipped gem
-      if (
-        currentItemGemIds[uiState.GemSelectionTable.SocketNumber] === gem.Id
-      ) {
+      if (currentItemGemIds[ui.GemSelectionTable.SocketNumber] === gem.Id) {
         return
       }
     }
 
-    currentItemGemIds[uiState.GemSelectionTable.SocketNumber] = gem.Id
-    newSelectedGems[uiState.GemSelectionTable.ItemSlot][
-      uiState.GemSelectionTable.ItemId
+    currentItemGemIds[ui.GemSelectionTable.SocketNumber] = gem.Id
+    newSelectedGems[ui.GemSelectionTable.ItemSlot][
+      ui.GemSelectionTable.ItemId
     ] = currentItemGemIds
-    dispatch(setSelectedGems(newSelectedGems))
-    dispatch(setGemsStats(GetGemsStats(selectedItemsState, newSelectedGems)))
+    dispatch(SetSelectedGems(newSelectedGems))
+    dispatch(SetGemsStats(GetGemsStats(player.SelectedItems, newSelectedGems)))
   }
 
   return (
@@ -82,17 +80,17 @@ export default function GemSelection() {
       style={{
         width: '380px',
         borderCollapse: 'unset',
-        display: uiState.GemSelectionTable.Visible ? '' : 'none',
+        display: ui.GemSelectionTable.Visible ? '' : 'none',
       }}
       onClick={e => e.stopPropagation()}
     >
       <TableBody>
-        {uiState.GemPreferences.hidden.length > 0 && (
+        {ui.GemPreferences.hidden.length > 0 && (
           <TableRow>
             <TableCell style={{ borderBottom: 'none' }}></TableCell>
             <TableCell
               id='show-hidden-gems-button'
-              onClick={() => setShowingHiddenGems(!showingHiddenGems)}
+              onClick={() => SetShowingHiddenGems(!showingHiddenGems)}
             >
               <Typography>
                 {(showingHiddenGems ? 'Hide' : 'Show') + ' Hidden Gems'}
@@ -103,14 +101,14 @@ export default function GemSelection() {
         {Gems.filter(
           gem =>
             CanGemColorBeInsertedIntoSocketColor(
-              uiState.GemSelectionTable.SocketColor,
+              ui.GemSelectionTable.SocketColor,
               gem.Color
-            ) && uiState.Sources.some(phase => phase >= gem.Phase)
+            ) && ui.Sources.some(phase => phase >= gem.Phase)
         )
           .sort(function (a, b) {
             return (
-              Number(uiState.GemPreferences.favorites.includes(b.Id)) -
-              Number(uiState.GemPreferences.favorites.includes(a.Id))
+              Number(ui.GemPreferences.favorites.includes(b.Id)) -
+              Number(ui.GemPreferences.favorites.includes(a.Id))
             )
           })
           .map(gem => (
@@ -120,7 +118,7 @@ export default function GemSelection() {
               data-hidden={false}
               style={{
                 display:
-                  uiState.GemPreferences.hidden.includes(gem.Id) &&
+                  ui.GemPreferences.hidden.includes(gem.Id) &&
                   !showingHiddenGems
                     ? 'none'
                     : '',
@@ -130,14 +128,12 @@ export default function GemSelection() {
                 style={{ borderBottom: 'none' }}
                 className='gem-info gem-favorite-star'
                 title={
-                  uiState.GemPreferences.favorites.includes(gem.Id)
+                  ui.GemPreferences.favorites.includes(gem.Id)
                     ? 'Remove gem from favorites'
                     : 'Add gem to favorites'
                 }
-                data-favorited={uiState.GemPreferences.favorites.includes(
-                  gem.Id
-                )}
-                onClick={() => dispatch(favoriteGem(gem.Id))}
+                data-favorited={ui.GemPreferences.favorites.includes(gem.Id)}
+                onClick={() => dispatch(FavoriteGem(gem.Id))}
               >
                 ★
               </TableCell>
@@ -145,8 +141,8 @@ export default function GemSelection() {
                 style={{ borderBottom: 'none' }}
                 className='gem-info gem-name'
                 onClick={e => {
-                  gemClickHandler(gem)
-                  dispatch(setGemSelectionTable(InitialGemSelectionTableValue))
+                  GemClickHandler(gem)
+                  dispatch(SetGemSelectionTable(InitialGemSelectionTableValue))
                   e.preventDefault()
                 }}
               >
@@ -167,12 +163,12 @@ export default function GemSelection() {
                 style={{ borderBottom: 'none' }}
                 className='gem-info gem-hide'
                 title={
-                  uiState.GemPreferences.hidden.includes(gem.Id)
+                  ui.GemPreferences.hidden.includes(gem.Id)
                     ? 'Show Gem'
                     : 'Hide Gem'
                 }
-                data-hidden={uiState.GemPreferences.hidden.includes(gem.Id)}
-                onClick={() => dispatch(hideGem(gem.Id))}
+                data-hidden={ui.GemPreferences.hidden.includes(gem.Id)}
+                onClick={() => dispatch(HideGem(gem.Id))}
               >
                 ❌
               </TableCell>

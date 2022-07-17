@@ -14,53 +14,53 @@ const useStyles = makeStyles({
 })
 
 export default function StatsDisplay() {
-  const playerState = useSelector((state: RootState) => state.player)
+  const player = useSelector((state: RootState) => state.player)
   const { t } = useTranslation()
   const mui = useStyles()
 
-  function getStamina(): number {
-    let stamina = Object.values(playerState.Stats)
+  function GetStamina(): number {
+    let stamina = Object.values(player.Stats)
       .map(obj => obj[Stat.Stamina] || 0)
       .reduce((a, b) => a + b)
-    let staminaModifier = Object.values(playerState.Stats)
+    let staminaModifier = Object.values(player.Stats)
       .map(obj => obj[Stat.StaminaModifier] || 1)
       .reduce((a, b) => a * b)
 
     if (
-      playerState.Auras.includes(AuraId.BloodPact) &&
-      IsPetActive(playerState.Settings, false, false) &&
-      playerState.Settings[Setting.petChoice] === Pet.Imp
+      player.Auras.includes(AuraId.BloodPact) &&
+      IsPetActive(player.Settings, false, false) &&
+      player.Settings[Setting.petChoice] === Pet.Imp
     ) {
-      stamina += 70 * (0.1 * playerState.Talents['Improved Imp'] || 0)
+      stamina += 70 * (0.1 * player.Talents['Improved Imp'] || 0)
     }
 
     return stamina * staminaModifier
   }
 
-  function getIntellect(): number {
+  function GetIntellect(): number {
     return (
-      Object.values(playerState.Stats)
+      Object.values(player.Stats)
         .map(obj => obj[Stat.Intellect] || 0)
         .reduce((a, b) => a + b) *
-      Object.values(playerState.Stats)
+      Object.values(player.Stats)
         .map(obj => obj[Stat.IntellectModifier] || 1)
         .reduce((a, b) => a * b)
     )
   }
 
-  function getSpellPenetration(): number {
-    return Object.values(playerState.Stats)
+  function GetSpellPenetration(): number {
+    return Object.values(player.Stats)
       .map(obj => obj[Stat.SpellPenetration] || 0)
       .reduce((a, b) => a + b)
   }
 
-  function getSpirit(): number {
-    let spiritModifier = Object.values(playerState.Stats)
+  function GetSpirit(): number {
+    let spiritModifier = Object.values(player.Stats)
       .map(obj => obj[Stat.SpiritModifier] || 1)
       .reduce((a, b) => a * b)
 
     return (
-      Object.values(playerState.Stats)
+      Object.values(player.Stats)
         .map(obj => obj[Stat.Spirit] || 0)
         .reduce((a, b) => a + b) * spiritModifier
     )
@@ -68,11 +68,11 @@ export default function StatsDisplay() {
 
   function GetHealth(): number {
     let health =
-      Object.values(playerState.Stats)
+      Object.values(player.Stats)
         .map(obj => obj[Stat.Health] || 0)
         .reduce((a, b) => a + b) +
-      getStamina() * StatConstant.HealthPerStamina
-    let healthModifier = Object.values(playerState.Stats)
+      GetStamina() * StatConstant.HealthPerStamina
+    let healthModifier = Object.values(player.Stats)
       .map(obj => obj[Stat.HealthModifier] || 0)
       .reduce((a, b) => a * b)
 
@@ -81,53 +81,53 @@ export default function StatsDisplay() {
 
   function GetMana(): number {
     let mana =
-      Object.values(playerState.Stats)
+      Object.values(player.Stats)
         .map(obj => obj[Stat.Mana] || 0)
         .reduce((a, b) => a + b) +
-      getIntellect() * StatConstant.ManaPerIntellect
-    let manaModifier = Object.values(playerState.Stats)
+      GetIntellect() * StatConstant.ManaPerIntellect
+    let manaModifier = Object.values(player.Stats)
       .map(obj => obj[Stat.ManaModifier] || 0)
       .reduce((a, b) => a * b)
 
     return mana * manaModifier
   }
 
-  function getSpellPower(): number {
-    let spellPower = Object.values(playerState.Stats)
+  function GetSpellPower(): number {
+    let spellPower = Object.values(player.Stats)
       .map(obj => obj[Stat.SpellPower] || 0)
       .reduce((a, b) => a + b)
 
     return spellPower
   }
 
-  function getShadowPower(): string {
-    const shadowPower = Object.values(playerState.Stats)
+  function GetShadowPower(): string {
+    const shadowPower = Object.values(player.Stats)
       .map(obj => obj[Stat.ShadowPower] || 0)
       .reduce((a, b) => a + b)
       .toString()
 
     return `${shadowPower} (${
-      parseInt(shadowPower) + Math.round(getSpellPower())
+      parseInt(shadowPower) + Math.round(GetSpellPower())
     })`
   }
 
-  function getFirePower(): string {
-    const firePower = Object.values(playerState.Stats)
+  function GetFirePower(): string {
+    const firePower = Object.values(player.Stats)
       .map(obj => obj[Stat.FirePower] || 0)
       .reduce((a, b) => a + b)
       .toString()
 
-    return `${firePower} (${parseInt(firePower) + Math.round(getSpellPower())})`
+    return `${firePower} (${parseInt(firePower) + Math.round(GetSpellPower())})`
   }
 
-  function getCrit(): string {
+  function GetCrit(): string {
     let critRating = Math.round(
-      Object.values(playerState.Stats)
+      Object.values(player.Stats)
         .map(obj => obj[Stat.CritRating] || 0)
         .reduce((a, b) => a + b)
     )
     let critPercent =
-      Object.values(playerState.Stats)
+      Object.values(player.Stats)
         .map(obj => obj[Stat.CritChance] || 0)
         .reduce((a, b) => a + b) +
       Math.round(
@@ -136,21 +136,21 @@ export default function StatsDisplay() {
           100
       ) /
         100 +
-      getIntellect() * StatConstant.CritPercentPerIntellect
+      GetIntellect() * StatConstant.CritPercentPerIntellect
 
     return `${critRating} (${critPercent.toFixed(2)}%)`
   }
 
-  function getHit(): string {
-    let hitRating = GetPlayerHitRating(playerState)
+  function GetHit(): string {
+    let hitRating = GetPlayerHitRating(player)
     let hitPercent =
-      Math.round(GetPlayerHitPercent(playerState, hitRating) * 100) / 100
+      Math.round(GetPlayerHitPercent(player, hitRating) * 100) / 100
 
     return `${hitRating} (${hitPercent.toFixed(2)}%)`
   }
 
-  function getHaste(): string {
-    let hasteRating = Object.values(playerState.Stats)
+  function GetHaste(): string {
+    let hasteRating = Object.values(player.Stats)
       .map(obj => obj[Stat.HasteRating] || 0)
       .reduce((a, b) => a + b)
     let hastePercent =
@@ -159,48 +159,48 @@ export default function StatsDisplay() {
     return `${hasteRating} (${hastePercent.toFixed(2)}%)`
   }
 
-  function getShadowModifier(): string {
-    let modifier = Object.values(playerState.Stats)
+  function GetShadowModifier(): string {
+    let modifier = Object.values(player.Stats)
       .map(obj => obj[Stat.ShadowModifier] || 1)
       .reduce((a, b) => a * b)
 
     return `${Math.round(modifier * 100)}%`
   }
 
-  function getFireModifier(): string {
-    let modifier = Object.values(playerState.Stats)
+  function GetFireModifier(): string {
+    let modifier = Object.values(player.Stats)
       .map(obj => obj[Stat.FireModifier] || 1)
       .reduce((a, b) => a * b)
 
     return `${Math.round(modifier * 100)}%`
   }
 
-  function getMp5(): number {
-    return Object.values(playerState.Stats)
+  function GetMp5(): number {
+    return Object.values(player.Stats)
       .map(obj => obj[Stat.Mp5] || 0)
       .reduce((a, b) => a + b)
   }
 
-  function getEnemyArmor(): number {
-    let armor = parseInt(playerState.Settings[Setting.enemyArmor])
+  function GetEnemyArmor(): number {
+    let armor = parseInt(player.Settings[Setting.enemyArmor])
 
-    if (playerState.Auras.includes(AuraId.FaerieFire)) {
+    if (player.Auras.includes(AuraId.FaerieFire)) {
       armor -= 610
     }
 
     if (
-      playerState.Auras.includes(AuraId.SunderArmor) ||
-      playerState.Auras.includes(AuraId.ExposeArmor)
+      player.Auras.includes(AuraId.SunderArmor) ||
+      player.Auras.includes(AuraId.ExposeArmor)
     ) {
       // TODO it reduces armor by 20%
       armor -= 2050
     }
 
-    if (playerState.Auras.includes(AuraId.CurseOfRecklessness)) {
+    if (player.Auras.includes(AuraId.CurseOfRecklessness)) {
       armor -= 800
     }
 
-    if (playerState.Auras.includes(AuraId.Annihilator)) {
+    if (player.Auras.includes(AuraId.Annihilator)) {
       armor -= 600
     }
 
@@ -214,30 +214,30 @@ export default function StatsDisplay() {
   }[] = [
     { name: 'Health', value: () => Math.round(GetHealth()).toString() },
     { name: 'Mana', value: () => Math.round(GetMana()).toString() },
-    { name: 'Stamina', value: () => Math.round(getStamina()).toString() },
-    { name: 'Intellect', value: () => Math.round(getIntellect()).toString() },
-    { name: 'Spirit', value: () => Math.round(getSpirit()).toString() },
+    { name: 'Stamina', value: () => Math.round(GetStamina()).toString() },
+    { name: 'Intellect', value: () => Math.round(GetIntellect()).toString() },
+    { name: 'Spirit', value: () => Math.round(GetSpirit()).toString() },
     {
       name: 'Spell Power',
-      value: () => Math.round(getSpellPower()).toString(),
+      value: () => Math.round(GetSpellPower()).toString(),
     },
-    { name: 'Shadow Power', value: () => getShadowPower() },
-    { name: 'Fire Power', value: () => getFirePower() },
-    { name: 'Crit Rating', value: () => getCrit() },
-    { name: 'Hit Rating', value: () => getHit() },
-    { name: 'Haste Rating', value: () => getHaste() },
-    { name: 'Shadow Dmg %', value: () => getShadowModifier() },
-    { name: 'Fire Dmg %', value: () => getFireModifier() },
-    { name: 'MP5', value: () => Math.round(getMp5()).toString() },
+    { name: 'Shadow Power', value: () => GetShadowPower() },
+    { name: 'Fire Power', value: () => GetFirePower() },
+    { name: 'Crit Rating', value: () => GetCrit() },
+    { name: 'Hit Rating', value: () => GetHit() },
+    { name: 'Haste Rating', value: () => GetHaste() },
+    { name: 'Shadow Dmg %', value: () => GetShadowModifier() },
+    { name: 'Fire Dmg %', value: () => GetFireModifier() },
+    { name: 'MP5', value: () => Math.round(GetMp5()).toString() },
     {
       name: 'Spell Penetration',
-      value: () => getSpellPenetration().toString(),
-      condition: () => getSpellPenetration() > 0,
+      value: () => GetSpellPenetration().toString(),
+      condition: () => GetSpellPenetration() > 0,
     },
     {
       name: 'Enemy Armor',
-      value: () => Math.round(getEnemyArmor()).toString(),
-      condition: () => IsPetActive(playerState.Settings, true, true),
+      value: () => Math.round(GetEnemyArmor()).toString(),
+      condition: () => IsPetActive(player.Settings, true, true),
     },
   ]
 

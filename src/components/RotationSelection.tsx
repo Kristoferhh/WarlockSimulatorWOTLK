@@ -10,7 +10,7 @@ import { RootState } from '../redux/Store'
 import { RotationGroup, RotationGroups, Setting } from '../Types'
 
 export default function RotationSelection() {
-  const playerStore = useSelector((state: RootState) => state.player)
+  const player = useSelector((state: RootState) => state.player)
   const dispatch = useDispatch()
   const { t } = useTranslation()
 
@@ -18,7 +18,7 @@ export default function RotationSelection() {
     <Grid container>
       {RotationGroups.filter(group => {
         // If the fight type is AOE then only show aoe spells, otherwise if it's single target, show everything but the aoe spells
-        return playerStore.Settings[Setting.fightType] === 'aoe'
+        return player.Settings[Setting.fightType] === 'aoe'
           ? group.Header === RotationGroup.Aoe
           : group.Header !== RotationGroup.Aoe
       }).map(group => (
@@ -29,7 +29,7 @@ export default function RotationSelection() {
           style={{
             display:
               group.Header !== RotationGroup.Curse &&
-              playerStore.Settings[Setting.rotationOption] === 'simChooses'
+              player.Settings[Setting.rotationOption] === 'simChooses'
                 ? 'none'
                 : '',
           }}
@@ -43,7 +43,7 @@ export default function RotationSelection() {
                 <Grid
                   className='rotation-spell'
                   key={nanoid()}
-                  data-checked={playerStore.Rotation[group.Header].includes(
+                  data-checked={player.Rotation[group.Header].includes(
                     spell.Id
                   )}
                   onClick={e => {

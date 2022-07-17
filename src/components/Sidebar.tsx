@@ -11,18 +11,20 @@ import { Setting } from '../Types'
 import { SimulationButtons } from './SimulationButtons'
 import StatsDisplay from './StatsDisplay'
 
-function setHasActiveBonus(set: [string, number]): boolean {
+function SetHasActiveBonus(set: [string, number]): boolean {
   const setObj = Sets.find(e => e.Set === set[0])
+
   if (setObj) {
     return set[1] >= setObj.Bonuses[0]
   }
+  
   return false
 }
 
 export default function Sidebar() {
-  const playerState = useSelector((state: RootState) => state.player)
+  const player = useSelector((state: RootState) => state.player)
   const { t } = useTranslation()
-  const race = Races.find(e => e.Type === playerState.Settings[Setting.race])
+  const race = Races.find(e => e.Type === player.Settings[Setting.race])
 
   return (
     <Drawer id='sidebar' variant='persistent' open={true}>
@@ -32,15 +34,15 @@ export default function Sidebar() {
       <Typography align='center'>{`${t('Level')} 80`}</Typography>
       <StatsDisplay />
       <List id='sidebar-sets'>
-        {Object.entries(playerState.Sets).find(set =>
-          setHasActiveBonus(set)
+        {Object.entries(player.Sets).find(set =>
+          SetHasActiveBonus(set)
         ) && (
           <ListItem>
             <Typography variant='h6'>{t('Set Bonuses')}</Typography>
           </ListItem>
         )}
-        {Object.entries(playerState.Sets)
-          .filter(set => setHasActiveBonus(set))
+        {Object.entries(player.Sets)
+          .filter(set => SetHasActiveBonus(set))
           .map(set => {
             const setObj = Sets.find(e => e.Set === set[0])
 
