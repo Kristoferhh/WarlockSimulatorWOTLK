@@ -55,7 +55,7 @@ export interface Item {
   Set?: ItemSet
   DisplayId?: number
   Unique?: boolean
-  Source?: ItemSource // TODO make this not nullable
+  Source?: ItemSourceName // TODO make this not nullable
   Phase: Phase
   IsTwoHand?: boolean
 }
@@ -66,7 +66,7 @@ export interface Enchant {
   Quality: Quality
   Stats?: StatsCollection
   Id: number
-  Source: ItemSource
+  Source?: ItemSourceName // TODO make this not nullable
   Phase: Phase
 }
 
@@ -505,7 +505,23 @@ export enum Quality {
   Common = 'Common',
 }
 
-export type SourcesStruct = Phase[]
+export enum ItemSourceUiName {
+  Dungeon = 'Dungeon',
+  P1 = 'P1',
+  P2 = 'P2',
+  P3 = 'P3',
+  P4 = 'P4',
+}
+
+export const InitialSourceState: SourcesStruct = [
+  ItemSourceUiName.Dungeon,
+  ItemSourceUiName.P1,
+  ItemSourceUiName.P2,
+  ItemSourceUiName.P3,
+  ItemSourceUiName.P4,
+]
+
+export type SourcesStruct = ItemSourceUiName[]
 
 export type SavedItemDps = {
   [key in ItemSlotDetailed]: {
@@ -672,7 +688,7 @@ export enum TalentTree {
   Destruction = 'Destruction',
 }
 
-export enum ItemSource {
+export enum ItemSourceName {
   JewelcraftingBoE = 'Jewelcrafting BoE',
   Jewelcrafting = 'Jewelcrafting',
   Blacksmithing = 'Blacksmithing',
@@ -680,7 +696,8 @@ export enum ItemSource {
   Tailoring = 'Tailoring',
   Inscription = 'Inscription',
   HallsOfStoneHeroic = 'Halls of Stone (H)',
-  OculusHeroic = 'Oculus (H)',
+  Oculus = 'The Oculus',
+  OculusHeroic = 'The Oculus (H)',
   Naxxramas25Normal = 'Naxxramas 25m',
   Naxxramas10Normal = 'Naxxramas 10m',
   KirinTorRevered = 'Kirin Tor - Revered',
@@ -689,7 +706,54 @@ export enum ItemSource {
   TheSonsOfHodirExalted = 'The Sons of Hodir - Exalted',
 }
 
-export type Phase = 0 | 1 | 2 | 3 | 4 | 5
+export enum InstanceType {
+  Dungeon,
+  Raid,
+  PvP,
+}
+
+export enum Profession {
+  Enchanting,
+  Tailoring,
+  Jewelcrafting,
+}
+
+export enum InstanceDifficulty {
+  Normal,
+  Heroic,
+}
+
+export enum InstanceSize {
+  Five,
+  Ten,
+  TwentyFive,
+}
+
+export interface Instance {
+  Type: InstanceType
+  Difficulty: InstanceDifficulty
+  Size: InstanceSize
+}
+
+export interface ItemSource {
+  Name: ItemSourceName
+  BindType: BindType
+  Instance?: Instance
+  Profession?: Profession
+}
+
+export interface Source {
+  Name: ItemSourceUiName
+  Phase?: Phase
+  Dungeon?: boolean
+}
+
+export enum BindType {
+  BoP,
+  BoE,
+}
+
+export type Phase = 1 | 2 | 3 | 4 | undefined
 
 export type SubSlotValue = '' | '1' | '2'
 

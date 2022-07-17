@@ -1,4 +1,4 @@
-import { Enchant, ItemSlot, ItemSource, Quality, Stat } from '../Types'
+import { Enchant, ItemSlot, ItemSourceName, Quality, Stat } from '../Types'
 
 export const Enchants: Enchant[] = [
   {
@@ -8,7 +8,7 @@ export const Enchants: Enchant[] = [
     ItemSlot: ItemSlot.Head,
     Quality: Quality.Heirloom,
     Stats: { [Stat.SpellPower]: 30, [Stat.CritRating]: 20 },
-    Source: ItemSource.KirinTorRevered,
+    Source: ItemSourceName.KirinTorRevered,
   },
   {
     Phase: 1,
@@ -17,7 +17,7 @@ export const Enchants: Enchant[] = [
     ItemSlot: ItemSlot.Shoulders,
     Quality: Quality.Uncommon,
     Stats: { [Stat.SpellPower]: 70, [Stat.CritRating]: 15 },
-    Source: ItemSource.Inscription,
+    Source: ItemSourceName.Inscription,
   },
   {
     Phase: 1,
@@ -25,7 +25,7 @@ export const Enchants: Enchant[] = [
     Name: 'Lightweave Embroidery',
     ItemSlot: ItemSlot.Back,
     Quality: Quality.Uncommon,
-    Source: ItemSource.Tailoring,
+    Source: ItemSourceName.Tailoring,
   },
   {
     Phase: 1,
@@ -34,7 +34,7 @@ export const Enchants: Enchant[] = [
     ItemSlot: ItemSlot.Chest,
     Quality: Quality.Uncommon,
     Stats: { [Stat.Stamina]: 10, [Stat.Intellect]: 10, [Stat.Spirit]: 10 },
-    Source: ItemSource.Enchanting,
+    Source: ItemSourceName.Enchanting,
   },
   {
     Phase: 1,
@@ -43,7 +43,7 @@ export const Enchants: Enchant[] = [
     ItemSlot: ItemSlot.Wrist,
     Quality: Quality.Uncommon,
     Stats: { [Stat.SpellPower]: 30 },
-    Source: ItemSource.Enchanting,
+    Source: ItemSourceName.Enchanting,
   },
   {
     Phase: 1,
@@ -52,7 +52,7 @@ export const Enchants: Enchant[] = [
     ItemSlot: ItemSlot.Hands,
     Quality: Quality.Uncommon,
     Stats: { [Stat.SpellPower]: 28 },
-    Source: ItemSource.Enchanting,
+    Source: ItemSourceName.Enchanting,
   },
   {
     Phase: 1,
@@ -60,7 +60,7 @@ export const Enchants: Enchant[] = [
     Name: 'Eternal Belt Buckle',
     ItemSlot: ItemSlot.Waist,
     Quality: Quality.Rare,
-    Source: ItemSource.Blacksmithing,
+    Source: ItemSourceName.Blacksmithing,
   },
   {
     Phase: 1,
@@ -68,7 +68,7 @@ export const Enchants: Enchant[] = [
     Name: 'Brilliant Spellthread',
     ItemSlot: ItemSlot.Legs,
     Quality: Quality.Epic,
-    Source: ItemSource.Tailoring,
+    Source: ItemSourceName.Tailoring,
   },
   {
     Phase: 1,
@@ -76,7 +76,7 @@ export const Enchants: Enchant[] = [
     Name: `Tuskarr's Vitality`,
     ItemSlot: ItemSlot.Feet,
     Quality: Quality.Uncommon,
-    Source: ItemSource.Enchanting,
+    Source: ItemSourceName.Enchanting,
   },
   {
     Phase: 1,
@@ -84,7 +84,7 @@ export const Enchants: Enchant[] = [
     Name: 'Mighty Spellpower',
     ItemSlot: ItemSlot.Weapon,
     Quality: Quality.Rare,
-    Source: ItemSource.Enchanting,
+    Source: ItemSourceName.Enchanting,
   },
   {
     Phase: 1,
@@ -92,7 +92,7 @@ export const Enchants: Enchant[] = [
     Name: 'Greater Inscription of the Storm',
     ItemSlot: ItemSlot.Shoulders,
     Quality: Quality.Heirloom,
-    Source: ItemSource.TheSonsOfHodirExalted,
+    Source: ItemSourceName.TheSonsOfHodirExalted,
     Stats: {
       [Stat.SpellPower]: 24,
       [Stat.CritRating]: 15,
@@ -104,7 +104,7 @@ export const Enchants: Enchant[] = [
     Name: 'Greater Speed',
     ItemSlot: ItemSlot.Back,
     Quality: Quality.Uncommon,
-    Source: ItemSource.Enchanting,
+    Source: ItemSourceName.Enchanting,
     Stats: {
       [Stat.HasteRating]: 23,
     },
@@ -115,7 +115,7 @@ export const Enchants: Enchant[] = [
     Name: 'Major Spirit',
     ItemSlot: ItemSlot.Chest,
     Quality: Quality.Uncommon,
-    Source: ItemSource.Enchanting,
+    Source: ItemSourceName.Enchanting,
     Stats: {
       [Stat.Spirit]: 18,
     },
@@ -126,7 +126,7 @@ export const Enchants: Enchant[] = [
     Name: 'Sanctified Spellthread',
     ItemSlot: ItemSlot.Legs,
     Quality: Quality.Epic,
-    Source: ItemSource.Tailoring,
+    Source: ItemSourceName.Tailoring,
     Stats: {
       [Stat.SpellPower]: 50,
       [Stat.Spirit]: 20,
@@ -138,7 +138,7 @@ export const Enchants: Enchant[] = [
     Name: 'Icewalker',
     ItemSlot: ItemSlot.Feet,
     Quality: Quality.Uncommon,
-    Source: ItemSource.Enchanting,
+    Source: ItemSourceName.Enchanting,
     Stats: {
       [Stat.CritRating]: 12,
       [Stat.HitRating]: 12,
@@ -150,7 +150,7 @@ export const Enchants: Enchant[] = [
     Name: 'Greater Spellpower',
     ItemSlot: ItemSlot.Weapon,
     Quality: Quality.Rare,
-    Source: ItemSource.Enchanting,
+    Source: ItemSourceName.Enchanting,
     Stats: {
       [Stat.SpellPower]: 23,
     },
@@ -161,6 +161,6 @@ export const Enchants: Enchant[] = [
     Name: 'Black Magic',
     ItemSlot: ItemSlot.Weapon,
     Quality: Quality.Rare,
-    Source: ItemSource.Enchanting,
+    Source: ItemSourceName.Enchanting,
   },
 ]

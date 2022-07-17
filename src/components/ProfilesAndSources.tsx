@@ -11,6 +11,7 @@ import {
   GetItemSetCounts,
   GetItemsStats,
 } from '../Common'
+import { Sources } from '../data/Sources'
 import {
   DeleteProfile,
   RenameProfile,
@@ -33,17 +34,9 @@ import { RootState } from '../redux/Store'
 import {
   SetImportExportWindowVisibility,
   SetSelectedProfile,
-  TogglePhase,
+  ToggleSource,
 } from '../redux/UiSlice'
-import { Phase, ProfileContainer, RaceType, Setting } from '../Types'
-
-const phases: { title: string; phase: Phase }[] = [
-  { title: 'TBC', phase: 0 },
-  { title: 'P1', phase: 1 },
-  { title: 'P2', phase: 2 },
-  { title: 'P3', phase: 3 },
-  { title: 'P4', phase: 4 },
-]
+import { ProfileContainer, RaceType, Setting } from '../Types'
 
 export default function ProfilesAndSources() {
   const player = useSelector((state: RootState) => state.player)
@@ -233,15 +226,17 @@ export default function ProfilesAndSources() {
           <Typography>{t('Sources')}</Typography>
         </legend>
         <Grid container id='source-list'>
-          {phases.map(phase => (
+          {Sources.map(source => (
             <Grid
               item
-              key={phase.phase}
-              data-checked={ui.Sources.includes(phase.phase)}
+              key={nanoid()}
+              data-checked={
+                ui.Sources.find(x => x === source.Name) !== undefined
+              }
               className='phase-btn'
-              onClick={() => dispatch(TogglePhase(phase.phase))}
+              onClick={() => dispatch(ToggleSource(source.Name))}
             >
-              <Typography>{t(phase.title)}</Typography>
+              <Typography>{t(source.Name)}</Typography>
             </Grid>
           ))}
         </Grid>

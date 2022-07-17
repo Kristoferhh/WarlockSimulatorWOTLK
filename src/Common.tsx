@@ -2,18 +2,22 @@ import { Auras } from './data/Auras'
 import { Enchants } from './data/Enchants'
 import { Gems } from './data/Gems'
 import { Items } from './data/Items'
+import { ItemSources } from './data/ItemSource'
 import { Races } from './data/Races'
 import { Sockets } from './data/Sockets'
+import { Sources } from './data/Sources'
 import { TalentTreeStruct } from './data/Talents'
 import {
   AuraId,
   GemColor,
   InitialPlayerStats,
   InitialSetCounts,
+  InstanceType,
   Item,
   ItemSlot,
   ItemSlotDetailed,
   ItemSlotDetailedStruct,
+  ItemSourceName,
   Languages,
   Pet,
   PlayerState,
@@ -216,6 +220,25 @@ export function CanGemColorBeInsertedIntoSocketColor(
   )
 }
 
+export function DoesItemSourceMeetSourcesCriteria(
+  sourceName: ItemSourceName,
+  selectedSources: SourcesStruct
+): boolean {
+  const itemSource = ItemSources.find(x => x.Name === sourceName)
+
+  for (const source of Sources) {
+    if (
+      selectedSources.find(x => x === source.Name) &&
+      itemSource?.Instance?.Type === InstanceType.Dungeon &&
+      source.Dungeon
+    ) {
+      return true
+    }
+  }
+
+  return false
+}
+
 /**
  * Returns an array of items meeting the criteria to be displayed in the item selection table.
  * The item needs to be of the specified item slot, the item's phase needs to be selected, it needs to not be hidden unless the player is showing hidden items, or the item needs to be currently equipped in the slot
@@ -244,27 +267,21 @@ export function GetItemTableItems(
       selectedItems[itemSlotDetailed] === e.Id ||
       (e.ItemSlot === itemSlot &&
         (e.Faction === undefined || playerRace?.Faction === e.Faction) &&
-        sources.includes(e.Phase) &&
+        DoesItemSourceMeetSourcesCriteria(e.Source!, sources) &&
         (!hiddenItems.includes(e.Id) || hidingItems) &&
         (!e.Unique ||
           secondRingOrTrinket !== e.Id ||
           (e.Unique && e.ItemSlot === ItemSlot.Weapon)))
     )
   }).sort((a, b) => {
-    // If it's a multi-item simulation then sort by phase from highest to lowest then by id from highest to lowest, otherwise sort by the saved dps
+    // If it's a multi-item simulation then sort by id from highest to lowest, otherwise sort by the saved dps
     if (
       isMultiItemSimulation ||
       !savedItemSlotDpsExists ||
       (!savedItemDps[itemSlotDetailed][a.Id] &&
         !savedItemDps[itemSlotDetailed][b.Id])
     ) {
-      return a.Phase < b.Phase
-        ? 1
-        : b.Phase < a.Phase
-        ? -1
-        : a.Id < b.Id
-        ? 1
-        : -1
+      return a.Id < b.Id ? 1 : -1
     } else if (!savedItemDps[itemSlotDetailed][b.Id]) {
       return -1
     } else if (!savedItemDps[itemSlotDetailed][a.Id]) {

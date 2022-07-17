@@ -17,6 +17,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import {
+  DoesItemSourceMeetSourcesCriteria,
   GetBaseWowheadUrl,
   GetEnchantsStats,
   GetGemsStats,
@@ -125,7 +126,9 @@ export default function ItemSelection() {
       items?.filter(item => !ui.HiddenItems.includes(item.Id))?.length
         ? Enchants.filter(
             e =>
-              e.ItemSlot === ui.SelectedItemSlot && ui.Sources.includes(e.Phase)
+              e.ItemSlot === ui.SelectedItemSlot &&
+              e.Source &&
+              DoesItemSourceMeetSourcesCriteria(e.Source, ui.Sources)
           )
         : undefined
     )
