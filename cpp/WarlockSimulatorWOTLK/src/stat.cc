@@ -113,8 +113,9 @@ AttackPowerModifier::AttackPowerModifier(Entity& entity, const double kValue)
 
 DamageModifier::DamageModifier(Entity& entity, const double kValue)
     : Stat(entity, entity.stats.damage_modifier, kValue) {
-  name             = WarlockSimulatorConstants::kDamageModifier;
-  calculation_type = CalculationType::kMultiplicative;
+  name                      = WarlockSimulatorConstants::kDamageModifier;
+  calculation_type          = CalculationType::kMultiplicative;
+  combat_log_decimal_places = 2;
 }
 
 ShadowModifier::ShadowModifier(Entity& entity, const double kValue)

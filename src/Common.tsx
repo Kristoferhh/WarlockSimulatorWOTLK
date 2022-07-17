@@ -247,14 +247,20 @@ export function getItemTableItems(
         (e.Unique && e.ItemSlot === ItemSlot.Weapon))
     )
   }).sort((a, b) => {
-    // If it's a multi-item simulation then sort by phase from highest to lowest, otherwise sort by the saved dps or by phase as backup
+    // If it's a multi-item simulation then sort by phase from highest to lowest then by id from highest to lowest, otherwise sort by the saved dps
     if (
       isMultiItemSimulation ||
       !savedItemSlotDpsExists ||
       (!savedItemDps[itemSlotDetailed][a.Id] &&
         !savedItemDps[itemSlotDetailed][b.Id])
     ) {
-      return a.Phase < b.Phase ? 1 : -1
+      return a.Phase < b.Phase
+        ? 1
+        : b.Phase < a.Phase
+        ? -1
+        : a.Id < b.Id
+        ? 1
+        : -1
     } else if (!savedItemDps[itemSlotDetailed][b.Id]) {
       return -1
     } else if (!savedItemDps[itemSlotDetailed][a.Id]) {
