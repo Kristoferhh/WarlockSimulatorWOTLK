@@ -1,7 +1,7 @@
 import { Grid, Link, Typography } from '@mui/material'
 import { nanoid } from 'nanoid'
 import { useDispatch, useSelector } from 'react-redux'
-import { getBaseWowheadUrl } from '../Common'
+import { GetBaseWowheadUrl } from '../Common'
 import { Glyphs } from '../data/Glyphs'
 import i18n from '../i18n/config'
 import { setGlyphSlotId } from '../redux/PlayerSlice'
@@ -56,7 +56,7 @@ function Glyph(glyphId: GlyphId | undefined, glyphSlot: number) {
         rel='noreferrer'
         href={
           glyphId !== null
-            ? `${getBaseWowheadUrl(i18n.language)}/spell=${glyphId}`
+            ? `${GetBaseWowheadUrl(i18n.language)}/spell=${glyphId}`
             : ''
         }
       >

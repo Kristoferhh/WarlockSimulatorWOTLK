@@ -2,7 +2,7 @@ import { Grid, Link, List, ListItem, Typography } from '@mui/material'
 import { nanoid } from 'nanoid'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAurasStats, getBaseWowheadUrl, isPetActive } from '../Common'
+import { GetAurasStats, GetBaseWowheadUrl, IsPetActive } from '../Common'
 import { AuraGroups } from '../data/AuraGroups'
 import { Auras } from '../data/Auras'
 import i18n from '../i18n/config'
@@ -83,7 +83,7 @@ export default function AuraSelection() {
     }
 
     dispatch(setSelectedAuras(newAuras))
-    dispatch(setAurasStats(getAurasStats(newAuras)))
+    dispatch(setAurasStats(GetAurasStats(newAuras)))
   }
 
   return (
@@ -97,7 +97,7 @@ export default function AuraSelection() {
             {Auras.filter(
               aura =>
                 aura.Group === auraGroup.Heading &&
-                (!aura.ForPet || isPetActive(playerState.Settings, true, true))
+                (!aura.ForPet || IsPetActive(playerState.Settings, true, true))
             ).map(aura => (
               <ListItem
                 key={nanoid()}
@@ -110,7 +110,7 @@ export default function AuraSelection() {
                 }}
               >
                 <Link
-                  href={`${getBaseWowheadUrl(i18n.language)}/${
+                  href={`${GetBaseWowheadUrl(i18n.language)}/${
                     auraGroup.Type
                   }=${aura.Id}`}
                 >

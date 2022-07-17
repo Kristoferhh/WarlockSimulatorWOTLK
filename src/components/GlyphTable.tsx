@@ -1,7 +1,7 @@
 import { Link, List, ListItem, Typography } from '@mui/material'
 import { nanoid } from 'nanoid'
 import { useDispatch, useSelector } from 'react-redux'
-import { getBaseWowheadUrl } from '../Common'
+import { GetBaseWowheadUrl } from '../Common'
 import { Glyphs } from '../data/Glyphs'
 import i18n from '../i18n/config'
 import { setGlyphSlotId } from '../redux/PlayerSlice'
@@ -48,7 +48,7 @@ export default function GlyphTable() {
                 style={{ width: '100%' }}
                 target='_blank'
                 rel='noreferrer'
-                href={`${getBaseWowheadUrl(i18n.language)}/spell=${glyph.Id}`}
+                href={`${GetBaseWowheadUrl(i18n.language)}/spell=${glyph.Id}`}
               >
                 <img
                   width={32}

@@ -10,9 +10,9 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  canGemColorBeInsertedIntoSocketColor,
-  getBaseWowheadUrl,
-  getGemsStats,
+  CanGemColorBeInsertedIntoSocketColor,
+  GetBaseWowheadUrl,
+  GetGemsStats,
   GetQualityCssColor,
 } from '../Common'
 import { Gems } from '../data/Gems'
@@ -71,7 +71,7 @@ export default function GemSelection() {
       uiState.GemSelectionTable.ItemId
     ] = currentItemGemIds
     dispatch(setSelectedGems(newSelectedGems))
-    dispatch(setGemsStats(getGemsStats(selectedItemsState, newSelectedGems)))
+    dispatch(setGemsStats(GetGemsStats(selectedItemsState, newSelectedGems)))
   }
 
   return (
@@ -102,7 +102,7 @@ export default function GemSelection() {
         )}
         {Gems.filter(
           gem =>
-            canGemColorBeInsertedIntoSocketColor(
+            CanGemColorBeInsertedIntoSocketColor(
               uiState.GemSelectionTable.SocketColor,
               gem.Color
             ) && uiState.Sources.some(phase => phase >= gem.Phase)
@@ -157,7 +157,7 @@ export default function GemSelection() {
                   height={20}
                 />
                 <Link
-                  href={`${getBaseWowheadUrl(i18n.language)}/item=${gem.Id}`}
+                  href={`${GetBaseWowheadUrl(i18n.language)}/item=${gem.Id}`}
                   style={{ color: GetQualityCssColor(gem.Quality) }}
                 >
                   {t(gem.Name)}

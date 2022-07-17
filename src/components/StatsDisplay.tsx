@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles'
 import { nanoid } from 'nanoid'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import { getPlayerHitPercent, getPlayerHitRating, isPetActive } from '../Common'
+import { GetPlayerHitPercent, GetPlayerHitRating, IsPetActive } from '../Common'
 import { RootState } from '../redux/Store'
 import { AuraId, Pet, Setting, Stat, StatConstant } from '../Types'
 
@@ -28,7 +28,7 @@ export default function StatsDisplay() {
 
     if (
       playerState.Auras.includes(AuraId.BloodPact) &&
-      isPetActive(playerState.Settings, false, false) &&
+      IsPetActive(playerState.Settings, false, false) &&
       playerState.Settings[Setting.petChoice] === Pet.Imp
     ) {
       stamina += 70 * (0.1 * playerState.Talents['Improved Imp'] || 0)
@@ -142,9 +142,9 @@ export default function StatsDisplay() {
   }
 
   function getHit(): string {
-    let hitRating = getPlayerHitRating(playerState)
+    let hitRating = GetPlayerHitRating(playerState)
     let hitPercent =
-      Math.round(getPlayerHitPercent(playerState, hitRating) * 100) / 100
+      Math.round(GetPlayerHitPercent(playerState, hitRating) * 100) / 100
 
     return `${hitRating} (${hitPercent.toFixed(2)}%)`
   }
@@ -237,7 +237,7 @@ export default function StatsDisplay() {
     {
       name: 'Enemy Armor',
       value: () => Math.round(getEnemyArmor()).toString(),
-      condition: () => isPetActive(playerState.Settings, true, true),
+      condition: () => IsPetActive(playerState.Settings, true, true),
     },
   ]
 

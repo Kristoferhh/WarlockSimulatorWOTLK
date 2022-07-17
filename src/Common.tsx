@@ -116,12 +116,12 @@ export function ItemSlotDetailedToItemSlot(
   }
 }
 
-export function itemMeetsSocketRequirements(params: {
-  itemId: number
+export function ItemMeetsSocketRequirements(params: {
+  ItemId: number
   selectedGems?: SelectedGemsStruct
-  socketArray?: number[]
+  SocketArray?: number[]
 }): boolean {
-  let socketArray = params.socketArray
+  let socketArray = params.SocketArray
 
   // If the socketArray parameter is undefined then find the array using the selectedGems parameter instead
   if (
@@ -135,8 +135,8 @@ export function itemMeetsSocketRequirements(params: {
       )
       const itemGemArrays = params.selectedGems[itemSlot]
 
-      if (itemGemArrays && itemGemArrays[params.itemId]) {
-        socketArray = itemGemArrays[params.itemId]
+      if (itemGemArrays && itemGemArrays[params.ItemId]) {
+        socketArray = itemGemArrays[params.ItemId]
         break
       }
     }
@@ -152,7 +152,7 @@ export function itemMeetsSocketRequirements(params: {
       }
 
       const gemColor = Gems.find(e => e.Id === currentGemId)?.Color
-      const socketColor = Items.find(e => e.Id === params.itemId)?.Sockets?.at(
+      const socketColor = Items.find(e => e.Id === params.ItemId)?.Sockets?.at(
         i
       )
 
@@ -173,7 +173,7 @@ export function itemMeetsSocketRequirements(params: {
   return false
 }
 
-export function getRemainingTalentPoints(talents: TalentStore): number {
+export function GetRemainingTalentPoints(talents: TalentStore): number {
   return 71 - Object.values<number>(talents).reduce((a, b) => a + b, 0)
 }
 
@@ -194,7 +194,7 @@ export function GetQualityCssColor(quality: Quality): string {
   }
 }
 
-export function isPetActive(
+export function IsPetActive(
   settings: Settings,
   requiresAggressivePet: boolean,
   requiresPhysicalPet: boolean
@@ -205,7 +205,7 @@ export function isPetActive(
   )
 }
 
-export function canGemColorBeInsertedIntoSocketColor(
+export function CanGemColorBeInsertedIntoSocketColor(
   socketColor: SocketColor,
   gemColor: GemColor
 ): boolean {
@@ -217,10 +217,10 @@ export function canGemColorBeInsertedIntoSocketColor(
 
 /**
  * Returns an array of items meeting the criteria to be displayed in the item selection table.
- * The item needs to be of the specified item slot, the item's phase needs to be selected, it needs to not be hidden unless the player is showing hidden items
+ * The item needs to be of the specified item slot, the item's phase needs to be selected, it needs to not be hidden unless the player is showing hidden items, or the item needs to be currently equipped in the slot
  * and the item needs to not be unique unless it is not equipped in the other item slot (only applicable to rings and trinkets).
  */
-export function getItemTableItems(
+export function GetItemTableItems(
   itemSlot: ItemSlot,
   itemSubSlot: SubSlotValue,
   selectedItems: ItemSlotDetailedStruct,
@@ -239,12 +239,13 @@ export function getItemTableItems(
 
   return Items.filter(e => {
     return (
-      e.ItemSlot === itemSlot &&
-      sources.includes(e.Phase) &&
-      (!hiddenItems.includes(e.Id) || hidingItems) &&
-      (!e.Unique ||
-        secondRingOrTrinket !== e.Id ||
-        (e.Unique && e.ItemSlot === ItemSlot.Weapon))
+      (e.ItemSlot === itemSlot &&
+        sources.includes(e.Phase) &&
+        (!hiddenItems.includes(e.Id) || hidingItems) &&
+        (!e.Unique ||
+          secondRingOrTrinket !== e.Id ||
+          (e.Unique && e.ItemSlot === ItemSlot.Weapon))) ||
+      selectedItems[itemSlotDetailed] === e.Id
     )
   }).sort((a, b) => {
     // If it's a multi-item simulation then sort by phase from highest to lowest then by id from highest to lowest, otherwise sort by the saved dps
@@ -274,11 +275,11 @@ export function getItemTableItems(
   })
 }
 
-export function random(min: number, max: number) {
+export function Random(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
-export function getStdev(array: number[]) {
+export function GetStdev(array: number[]) {
   if (!array || array.length === 0) {
     return 0
   }
@@ -289,14 +290,14 @@ export function getStdev(array: number[]) {
   )
 }
 
-export function average(nums?: number[]) {
+export function Average(nums?: number[]) {
   if (nums === undefined || nums.length === 0) {
     return 0
   }
   return nums.reduce((a, b) => a + b) / nums.length
 }
 
-export function getBaseStats(
+export function GetBaseStats(
   race: Race,
   statsObj?: StatsCollection
 ): StatsCollection {
@@ -312,7 +313,7 @@ export function getBaseStats(
   return statsObj || stats
 }
 
-export function getAurasStats(
+export function GetAurasStats(
   auras: AuraId[],
   statsObj?: StatsCollection
 ): StatsCollection {
@@ -335,7 +336,7 @@ export function getAurasStats(
   return statsObj || stats
 }
 
-export function getItemsStats(
+export function GetItemsStats(
   items: ItemSlotDetailedStruct,
   statsObj?: StatsCollection
 ): StatsCollection {
@@ -360,7 +361,7 @@ export function getItemsStats(
   return statsObj || stats
 }
 
-export function getGemsStats(
+export function GetGemsStats(
   items: ItemSlotDetailedStruct,
   gems: SelectedGemsStruct,
   statsObj?: StatsCollection
@@ -391,9 +392,9 @@ export function getGemsStats(
         }
 
         if (
-          itemMeetsSocketRequirements({
-            itemId: item[1],
-            socketArray: itemGemIds,
+          ItemMeetsSocketRequirements({
+            ItemId: item[1],
+            SocketArray: itemGemIds,
           })
         ) {
           const itemObj = Items.find(e => e.Id === item[1])
@@ -415,7 +416,7 @@ export function getGemsStats(
   return statsObj || stats
 }
 
-export function getEnchantsStats(
+export function GetEnchantsStats(
   items: ItemSlotDetailedStruct,
   enchants: ItemSlotDetailedStruct,
   statsObj?: StatsCollection
@@ -546,7 +547,7 @@ export function GetTalentsStats(
   return statsObj || stats
 }
 
-export function getItemSetCounts(items: ItemSlotDetailedStruct): SetsStruct {
+export function GetItemSetCounts(items: ItemSlotDetailedStruct): SetsStruct {
   let sets = JSON.parse(JSON.stringify(InitialSetCounts))
 
   Object.values(items).forEach(itemId => {
@@ -573,25 +574,25 @@ export function AddOrMultiplyStat(
   }
 }
 
-export function calculatePlayerStats(
+export function CalculatePlayerStats(
   playerState: PlayerState
 ): StatsCollection {
   let mainStatsObj: StatsCollection = JSON.parse(
     JSON.stringify(InitialPlayerStats)
   )
 
-  getBaseStats(
+  GetBaseStats(
     playerState.Settings[Setting.race] as unknown as Race,
     mainStatsObj
   )
-  getAurasStats(playerState.Auras, mainStatsObj)
-  getItemsStats(playerState.SelectedItems, mainStatsObj)
-  getGemsStats(
+  GetAurasStats(playerState.Auras, mainStatsObj)
+  GetItemsStats(playerState.SelectedItems, mainStatsObj)
+  GetGemsStats(
     playerState.SelectedItems,
     playerState.SelectedGems,
     mainStatsObj
   )
-  getEnchantsStats(
+  GetEnchantsStats(
     playerState.SelectedItems,
     playerState.SelectedEnchants,
     mainStatsObj
@@ -601,18 +602,18 @@ export function calculatePlayerStats(
   return mainStatsObj
 }
 
-export function getPlayerHitRating(playerState: PlayerState): number {
+export function GetPlayerHitRating(playerState: PlayerState): number {
   return Object.values(playerState.Stats)
     .map(obj => obj[Stat.HitRating] || 0)
     .reduce((a, b) => a + b)
 }
 
-export function getPlayerHitPercent(
+export function GetPlayerHitPercent(
   playerState: PlayerState,
   hitRating?: number
 ): number {
   let hitPercent =
-    (hitRating || getPlayerHitRating(playerState)) /
+    (hitRating || GetPlayerHitRating(playerState)) /
       StatConstant.HitRatingPerPercent +
     Object.values(playerState.Stats)
       .map(obj => obj[Stat.HitChance] || 0)
@@ -621,7 +622,7 @@ export function getPlayerHitPercent(
   return hitPercent
 }
 
-export function getAllocatedTalentsPointsInTree(
+export function GetAllocatedTalentsPointsInTree(
   talentState: TalentStore,
   tree: TalentTreeStruct
 ): number {
@@ -640,8 +641,8 @@ export function getAllocatedTalentsPointsInTree(
   return points
 }
 
-export function getBaseWowheadUrl(language: string): string {
+export function GetBaseWowheadUrl(language: string): string {
   return `https://${
     Languages.find(e => e.Iso === language)?.WowheadPrefix || ''
-  }wowhead.com/wotlk`
+  }wotlkdb.com/`
 }

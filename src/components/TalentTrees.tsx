@@ -12,8 +12,8 @@ import { nanoid } from 'nanoid'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  getAllocatedTalentsPointsInTree,
-  getBaseWowheadUrl,
+  GetAllocatedTalentsPointsInTree,
+  GetBaseWowheadUrl,
   GetTalentsStats,
 } from '../Common'
 import { PresetTalents } from '../data/PresetTalents'
@@ -153,7 +153,7 @@ export default function TalentTrees() {
                             }}
                           >
                             <Link
-                              href={`${getBaseWowheadUrl(
+                              href={`${GetBaseWowheadUrl(
                                 i18n.language
                               )}/spell=${
                                 talent.RankIds[
@@ -205,11 +205,11 @@ export default function TalentTrees() {
             <Grid className='talent-tree-name' style={{ padding: '10px' }}>
               <Typography style={{ display: 'inline-block' }}>
                 {`${t(talentTree.Name)} ${
-                  getAllocatedTalentsPointsInTree(
+                  GetAllocatedTalentsPointsInTree(
                     playerState.Talents,
                     talentTree
                   ) > 0
-                    ? `(${getAllocatedTalentsPointsInTree(
+                    ? `(${GetAllocatedTalentsPointsInTree(
                         playerState.Talents,
                         talentTree
                       )})`

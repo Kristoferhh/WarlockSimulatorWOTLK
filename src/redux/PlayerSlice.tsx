@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { getRemainingTalentPoints } from '../Common'
+import { GetRemainingTalentPoints } from '../Common'
 import {
   AuraId,
   GlyphId,
@@ -29,7 +29,7 @@ import {
 
 const initialPlayerState: PlayerState = {
   Talents: JSON.parse(localStorage.getItem('wotlk_talents') || '{}'),
-  TalentPointsRemaining: getRemainingTalentPoints(
+  TalentPointsRemaining: GetRemainingTalentPoints(
     JSON.parse(localStorage.getItem('wotlk_talents') || '{}')
   ),
   SelectedItems: JSON.parse(
@@ -72,7 +72,7 @@ export const PlayerSlice = createSlice({
   reducers: {
     setSelectedTalents: (state, action: PayloadAction<TalentStore>) => {
       state.Talents = action.payload
-      state.TalentPointsRemaining = getRemainingTalentPoints(state.Talents)
+      state.TalentPointsRemaining = GetRemainingTalentPoints(state.Talents)
       localStorage.setItem('wotlk_talents', JSON.stringify(state.Talents))
     },
     setSelectedItems: (

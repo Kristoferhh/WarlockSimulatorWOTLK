@@ -2,12 +2,12 @@ import { Button, Grid } from '@mui/material'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  getAurasStats,
-  getBaseStats,
-  getEnchantsStats,
-  getGemsStats,
-  getItemSetCounts,
-  getItemsStats,
+  GetAurasStats,
+  GetBaseStats,
+  GetEnchantsStats,
+  GetGemsStats,
+  GetItemSetCounts,
+  GetItemsStats,
 } from '../Common'
 import {
   setAurasStats,
@@ -82,20 +82,20 @@ export default function ImportExport() {
 
       if (data.Auras) {
         dispatch(setSelectedAuras(data.Auras))
-        dispatch(setAurasStats(getAurasStats(data.Auras)))
+        dispatch(setAurasStats(GetAurasStats(data.Auras)))
       }
 
       if (data.Items) {
         dispatch(setSelectedItems(data.Items))
-        dispatch(setItemsStats(getItemsStats(data.Items)))
-        dispatch(setItemSetCounts(getItemSetCounts(data.Items)))
+        dispatch(setItemsStats(GetItemsStats(data.Items)))
+        dispatch(setItemSetCounts(GetItemSetCounts(data.Items)))
       }
 
       if (data.Enchants) {
         dispatch(setSelectedEnchants(data.Enchants))
         dispatch(
           setEnchantsStats(
-            getEnchantsStats(
+            GetEnchantsStats(
               data.Items ? data.Items : playerState.SelectedItems,
               data.Enchants
             )
@@ -107,7 +107,7 @@ export default function ImportExport() {
         dispatch(setSelectedGems(data.Gems))
         dispatch(
           setGemsStats(
-            getGemsStats(
+            GetGemsStats(
               data.Items ? data.Items : playerState.SelectedItems,
               data.Gems
             )
@@ -125,7 +125,7 @@ export default function ImportExport() {
 
       if (data.Settings) {
         dispatch(setSettingsState(data.Settings))
-        dispatch(setBaseStats(getBaseStats(data.Settings.race as Race)))
+        dispatch(setBaseStats(GetBaseStats(data.Settings.race as Race)))
       }
 
       dispatch(setImportExportWindowVisibility(false))

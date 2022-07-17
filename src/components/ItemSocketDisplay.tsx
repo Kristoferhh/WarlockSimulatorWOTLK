@@ -1,7 +1,7 @@
 import { Grid, Link } from '@mui/material'
 import { nanoid } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
-import { getBaseWowheadUrl } from '../Common'
+import { GetBaseWowheadUrl } from '../Common'
 import { Gems } from '../data/Gems'
 import { Sockets } from '../data/Sockets'
 import i18n from '../i18n/config'
@@ -37,7 +37,7 @@ export default function ItemSocketDisplay(props: Props) {
             rel='noreferrer'
             href={
               equippedGemId !== 0
-                ? `${getBaseWowheadUrl(i18n.language)}/item=${equippedGemId}`
+                ? `${GetBaseWowheadUrl(i18n.language)}/item=${equippedGemId}`
                 : ''
             }
             key={nanoid()}

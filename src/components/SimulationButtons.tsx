@@ -2,14 +2,14 @@ import { Grid, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  average,
-  calculatePlayerStats,
-  getItemSetCounts,
-  getItemTableItems,
-  getPlayerHitPercent,
-  getStdev,
+  Average,
+  CalculatePlayerStats,
+  GetItemSetCounts,
+  GetItemTableItems,
+  GetPlayerHitPercent,
+  GetStdev,
   ItemSlotToItemSlotDetailed,
-  random,
+  Random,
 } from '../Common'
 import { Gems } from '../data/Gems'
 import { Items } from '../data/Items'
@@ -167,14 +167,14 @@ export function SimulationButtons() {
       ] = params.ItemId
     }
 
-    let playerStats = calculatePlayerStats(customPlayerState)
+    let playerStats = CalculatePlayerStats(customPlayerState)
 
     if (params.SimulationType === SimulationType.StatWeights) {
       if (params.CustomStat?.Stat && params.CustomStat.Stat !== 'normal') {
         let statValue = params.CustomStat.Value
 
         if (params.CustomStat.Stat === Stat[Stat.HitRating]) {
-          const hitPercent = getPlayerHitPercent(customPlayerState)
+          const hitPercent = GetPlayerHitPercent(customPlayerState)
           // If the user isn't hitcapped but adding the extra hit rating would overcap them
           // then instead remove hit rating instead of adding it so it doesn't get wasted.
           // Using 15.99 instead of 16 because using 16 was causing issues when a player had
@@ -203,7 +203,7 @@ export function SimulationButtons() {
         Talents: customPlayerState.Talents,
         Rotation: customPlayerState.Rotation,
         Stats: playerStats,
-        Sets: getItemSetCounts(customPlayerState.SelectedItems),
+        Sets: GetItemSetCounts(customPlayerState.SelectedItems),
         Settings: customPlayerState.Settings,
         MetaGemId: getEquippedMetaGemId(
           customPlayerState.SelectedItems,
@@ -267,7 +267,7 @@ export function SimulationButtons() {
       dispatch(setStatWeightVisibility(true))
     }
 
-    const randomSeed = random(0, 4294967295)
+    const randomSeed = Random(0, 4294967295)
 
     if (simulationParams.type === SimulationType.StatWeights) {
       Object.entries(statWeightValues).forEach(statWeight => {
@@ -388,7 +388,7 @@ export function SimulationButtons() {
                 }
 
                 if (simulationParams.type === SimulationType.Normal) {
-                  setDpsStdev(Math.round(getStdev(dpsArray)).toString())
+                  setDpsStdev(Math.round(GetStdev(dpsArray)).toString())
                   dispatch(setHistogramData(dpsCount))
 
                   if (
@@ -434,7 +434,7 @@ export function SimulationButtons() {
               }).ProgressPercent = simProgressPercent
               setSimulationProgressPercent(
                 Math.round(
-                  average(
+                  Average(
                     simulationProgressPercentages.map(e => e.ProgressPercent)
                   )
                 )
@@ -653,7 +653,7 @@ export function SimulationButtons() {
         className='warlock-btn active-btn'
         onClick={() =>
           simulate({
-            itemIdsToSim: getItemTableItems(
+            itemIdsToSim: GetItemTableItems(
               uiState.SelectedItemSlot,
               uiState.SelectedItemSubSlot,
               playerState.SelectedItems,

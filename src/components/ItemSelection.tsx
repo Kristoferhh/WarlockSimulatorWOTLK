@@ -17,12 +17,12 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  getBaseWowheadUrl,
-  getEnchantsStats,
-  getGemsStats,
-  getItemSetCounts,
-  getItemsStats,
-  getItemTableItems,
+  GetBaseWowheadUrl,
+  GetEnchantsStats,
+  GetGemsStats,
+  GetItemSetCounts,
+  GetItemsStats,
+  GetItemTableItems,
   GetQualityCssColor,
   ItemSlotToItemSlotDetailed,
 } from '../Common'
@@ -95,7 +95,7 @@ export default function ItemSelection() {
 
   useEffect(() => {
     setItems(
-      getItemTableItems(
+      GetItemTableItems(
         uiStore.SelectedItemSlot,
         uiStore.SelectedItemSubSlot,
         playerStore.SelectedItems,
@@ -145,16 +145,16 @@ export default function ItemSelection() {
     }
 
     dispatch(setSelectedItems(newSelectedItems))
-    dispatch(setItemsStats(getItemsStats(newSelectedItems)))
+    dispatch(setItemsStats(GetItemsStats(newSelectedItems)))
     dispatch(
-      setGemsStats(getGemsStats(newSelectedItems, playerStore.SelectedGems))
+      setGemsStats(GetGemsStats(newSelectedItems, playerStore.SelectedGems))
     )
     dispatch(
       setEnchantsStats(
-        getEnchantsStats(newSelectedItems, playerStore.SelectedEnchants)
+        GetEnchantsStats(newSelectedItems, playerStore.SelectedEnchants)
       )
     )
-    dispatch(setItemSetCounts(getItemSetCounts(newSelectedItems)))
+    dispatch(setItemSetCounts(GetItemSetCounts(newSelectedItems)))
   }
 
   function itemClickHandler(item: Item, itemSlot: ItemSlotDetailed) {
@@ -173,7 +173,7 @@ export default function ItemSelection() {
     dispatch(setSelectedEnchants(newSelectedEnchants))
     dispatch(
       setEnchantsStats(
-        getEnchantsStats(playerStore.SelectedItems, newSelectedEnchants)
+        GetEnchantsStats(playerStore.SelectedItems, newSelectedEnchants)
       )
     )
   }
@@ -212,7 +212,7 @@ export default function ItemSelection() {
       currentItemSocketsValue[socketNumber] = 0
       dispatch(setSelectedGems(newSelectedGems))
       dispatch(
-        setGemsStats(getGemsStats(playerStore.SelectedItems, newSelectedGems))
+        setGemsStats(GetGemsStats(playerStore.SelectedItems, newSelectedGems))
       )
     }
   }
@@ -444,7 +444,7 @@ export default function ItemSelection() {
                 }}
               >
                 <Link
-                  href={`${getBaseWowheadUrl(i18n.language)}/item=${
+                  href={`${GetBaseWowheadUrl(i18n.language)}/?item=${
                     item.DisplayId || item.Id
                   }`}
                   onClick={e => e.preventDefault()}
@@ -625,7 +625,7 @@ export default function ItemSelection() {
                   className={`enchant-row-name`}
                 >
                   <Link
-                    href={`${getBaseWowheadUrl(i18n.language)}/spell=${
+                    href={`${GetBaseWowheadUrl(i18n.language)}/spell=${
                       enchant.Id
                     }`}
                     onClick={e => e.preventDefault()}

@@ -4,12 +4,12 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  getAurasStats,
-  getBaseStats,
-  getEnchantsStats,
-  getGemsStats,
-  getItemSetCounts,
-  getItemsStats,
+  GetAurasStats,
+  GetBaseStats,
+  GetEnchantsStats,
+  GetGemsStats,
+  GetItemSetCounts,
+  GetItemsStats,
 } from '../Common'
 import {
   deleteProfile,
@@ -93,20 +93,20 @@ export default function ProfilesAndSources() {
     // Recalculate the player's stats
     dispatch(
       setBaseStats(
-        getBaseStats(params.Profile.Settings[Setting.race] as unknown as Race)
+        GetBaseStats(params.Profile.Settings[Setting.race] as unknown as Race)
       )
     )
-    dispatch(setAurasStats(getAurasStats(params.Profile.Auras)))
-    dispatch(setItemsStats(getItemsStats(params.Profile.Items)))
+    dispatch(setAurasStats(GetAurasStats(params.Profile.Auras)))
+    dispatch(setItemsStats(GetItemsStats(params.Profile.Items)))
     dispatch(
-      setGemsStats(getGemsStats(params.Profile.Items, params.Profile.Gems))
+      setGemsStats(GetGemsStats(params.Profile.Items, params.Profile.Gems))
     )
     dispatch(
       setEnchantsStats(
-        getEnchantsStats(params.Profile.Items, params.Profile.Enchants)
+        GetEnchantsStats(params.Profile.Items, params.Profile.Enchants)
       )
     )
-    dispatch(setItemSetCounts(getItemSetCounts(params.Profile.Items)))
+    dispatch(setItemSetCounts(GetItemSetCounts(params.Profile.Items)))
   }
 
   function deleteProfileHandler() {

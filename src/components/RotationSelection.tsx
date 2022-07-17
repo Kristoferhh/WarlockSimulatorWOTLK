@@ -2,7 +2,7 @@ import { Grid, Link, Typography } from '@mui/material'
 import { nanoid } from 'nanoid'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { getBaseWowheadUrl } from '../Common'
+import { GetBaseWowheadUrl } from '../Common'
 import { Spells } from '../data/Spells'
 import i18n from '../i18n/config'
 import { toggleRotationSpellSelection } from '../redux/PlayerSlice'
@@ -52,7 +52,7 @@ export default function RotationSelection() {
                   }}
                 >
                   <Link
-                    href={`${getBaseWowheadUrl(i18n.language)}/spell=${
+                    href={`${GetBaseWowheadUrl(i18n.language)}/spell=${
                       spell.Id
                     }`}
                   >

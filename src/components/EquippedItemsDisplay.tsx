@@ -11,7 +11,7 @@ import { nanoid } from '@reduxjs/toolkit'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  getBaseWowheadUrl,
+  GetBaseWowheadUrl,
   GetQualityCssColor,
   ItemSlotDetailedToItemSlot,
 } from '../Common'
@@ -113,7 +113,7 @@ export default function EquippedItemsDisplay() {
                       {equippedItem && (
                         <>
                           <Link
-                            href={`${getBaseWowheadUrl(i18n.language)}/item=${
+                            href={`${GetBaseWowheadUrl(i18n.language)}/item=${
                               equippedItem!.DisplayId || equippedItem!.Id
                             }`}
                             onClick={e => e.preventDefault()}
@@ -154,7 +154,7 @@ export default function EquippedItemsDisplay() {
                       {equippedEnchant && (
                         <>
                           <Link
-                            href={`${getBaseWowheadUrl(i18n.language)}/spell=${
+                            href={`${GetBaseWowheadUrl(i18n.language)}/spell=${
                               equippedEnchant.Id
                             }`}
                             onClick={e => e.preventDefault()}

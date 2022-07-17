@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  getAurasStats,
-  getBaseStats,
-  getEnchantsStats,
-  getGemsStats,
-  getItemSetCounts,
-  getItemsStats,
+  GetAurasStats,
+  GetBaseStats,
+  GetEnchantsStats,
+  GetGemsStats,
+  GetItemSetCounts,
+  GetItemsStats,
   GetTalentsStats,
 } from '../Common'
 import {
@@ -28,25 +28,25 @@ export default function Session() {
   useEffect(() => {
     dispatch(
       setBaseStats(
-        getBaseStats(playerStore.Settings[Setting.race] as unknown as Race)
+        GetBaseStats(playerStore.Settings[Setting.race] as unknown as Race)
       )
     )
-    dispatch(setAurasStats(getAurasStats(playerStore.Auras)))
-    dispatch(setItemsStats(getItemsStats(playerStore.SelectedItems)))
+    dispatch(setAurasStats(GetAurasStats(playerStore.Auras)))
+    dispatch(setItemsStats(GetItemsStats(playerStore.SelectedItems)))
     dispatch(
       setGemsStats(
-        getGemsStats(playerStore.SelectedItems, playerStore.SelectedGems)
+        GetGemsStats(playerStore.SelectedItems, playerStore.SelectedGems)
       )
     )
     dispatch(
       setEnchantsStats(
-        getEnchantsStats(
+        GetEnchantsStats(
           playerStore.SelectedItems,
           playerStore.SelectedEnchants
         )
       )
     )
-    dispatch(setItemSetCounts(getItemSetCounts(playerStore.SelectedItems)))
+    dispatch(setItemSetCounts(GetItemSetCounts(playerStore.SelectedItems)))
     dispatch(
       setTalentsStats(
         GetTalentsStats(playerStore.Talents, playerStore.Settings)

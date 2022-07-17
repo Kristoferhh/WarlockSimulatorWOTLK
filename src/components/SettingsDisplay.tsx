@@ -9,7 +9,7 @@ import {
 import { makeStyles } from '@mui/styles'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { getBaseStats, isPetActive } from '../Common'
+import { GetBaseStats, IsPetActive } from '../Common'
 import { Races } from '../data/Races'
 import { modifySettingValue, setBaseStats } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
@@ -82,7 +82,7 @@ export default function SettingsDisplay() {
             const race = Races.find(race => race.Race === e.target.value)
 
             settingModifiedHandler(Setting.race, e.target.value)
-            race && dispatch(setBaseStats(getBaseStats(race.Race)))
+            race && dispatch(setBaseStats(GetBaseStats(race.Race)))
           }}
         >
           <MenuItem value={Race.Gnome}>{t('Gnome')}</MenuItem>
@@ -197,7 +197,7 @@ export default function SettingsDisplay() {
           <MenuItem value={Pet.Felhunter}>{t(Pet.Felhunter)}</MenuItem>
           <MenuItem value={Pet.Felguard}>{t(Pet.Felguard)}</MenuItem>
         </Select>
-        {isPetActive(playerStore.Settings, true, true) && (
+        {IsPetActive(playerStore.Settings, true, true) && (
           <TextField
             size='small'
             className={`${mui.textField} ${mui.textFieldAndSelect}`}
@@ -314,7 +314,7 @@ export default function SettingsDisplay() {
           }}
           checked={playerStore.Settings[Setting.infinitePetMana] === 'true'}
         />
-        {isPetActive(playerStore.Settings, false, false) && (
+        {IsPetActive(playerStore.Settings, false, false) && (
           <FormControlLabel
             className={mui.label}
             label={t('Aggressive Pet')}
@@ -329,7 +329,7 @@ export default function SettingsDisplay() {
             checked={playerStore.Settings[Setting.petIsAggressive] === 'true'}
           />
         )}
-        {isPetActive(playerStore.Settings, true, false) && (
+        {IsPetActive(playerStore.Settings, true, false) && (
           <FormControlLabel
             className={mui.label}
             label={t('Prepop Black Book')}
@@ -345,7 +345,7 @@ export default function SettingsDisplay() {
           />
         )}
         {playerStore.Auras.includes(AuraId.FaerieFire) &&
-          isPetActive(playerStore.Settings, true, true) && (
+          IsPetActive(playerStore.Settings, true, true) && (
             <FormControlLabel
               className={mui.label}
               label={t('Improved Faerie Fire')}

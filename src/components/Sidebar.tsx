@@ -2,7 +2,7 @@ import { Drawer, Grid, Link, List, ListItem, Typography } from '@mui/material'
 import { nanoid } from 'nanoid'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import { getBaseWowheadUrl } from '../Common'
+import { GetBaseWowheadUrl } from '../Common'
 import { Races } from '../data/Races'
 import { Sets } from '../data/Sets'
 import i18n from '../i18n/config'
@@ -49,7 +49,7 @@ export default function Sidebar() {
                 <Link
                   target='_blank'
                   rel='noreferrer'
-                  href={`${getBaseWowheadUrl(i18n.language)}/item-set=${
+                  href={`${GetBaseWowheadUrl(i18n.language)}/item-set=${
                     setObj?.Set
                   }`}
                   className={setObj?.Quality}

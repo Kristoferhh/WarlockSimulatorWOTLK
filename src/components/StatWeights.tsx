@@ -2,7 +2,7 @@ import { Button, Grid, List, ListItem, Typography } from '@mui/material'
 import { nanoid } from 'nanoid'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllocatedTalentsPointsInTree } from '../Common'
+import { GetAllocatedTalentsPointsInTree } from '../Common'
 import { Talents } from '../data/Talents'
 import { RootState } from '../redux/Store'
 import { setStatWeightVisibility } from '../redux/UiSlice'
@@ -72,21 +72,21 @@ export default function StatWeights() {
             let talentTreePoints: { name: TalentTree; points: number }[] = [
               {
                 name: TalentTree.Affliction,
-                points: getAllocatedTalentsPointsInTree(
+                points: GetAllocatedTalentsPointsInTree(
                   playerState.Talents,
                   Talents.find(e => e.Name === TalentTree.Affliction)!
                 ),
               },
               {
                 name: TalentTree.Demonology,
-                points: getAllocatedTalentsPointsInTree(
+                points: GetAllocatedTalentsPointsInTree(
                   playerState.Talents,
                   Talents.find(e => e.Name === TalentTree.Demonology)!
                 ),
               },
               {
                 name: TalentTree.Destruction,
-                points: getAllocatedTalentsPointsInTree(
+                points: GetAllocatedTalentsPointsInTree(
                   playerState.Talents,
                   Talents.find(e => e.Name === TalentTree.Destruction)!
                 ),

@@ -14,9 +14,9 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  canGemColorBeInsertedIntoSocketColor,
-  getBaseWowheadUrl,
-  getGemsStats,
+  CanGemColorBeInsertedIntoSocketColor,
+  GetBaseWowheadUrl,
+  GetGemsStats,
   GetQualityCssColor,
 } from '../Common'
 import { Gems } from '../data/Gems'
@@ -74,7 +74,7 @@ export function FillItemSockets() {
 
       dispatch(setSelectedGems(newSelectedGems))
       dispatch(
-        setGemsStats(getGemsStats(playerState.SelectedItems, newSelectedGems))
+        setGemsStats(GetGemsStats(playerState.SelectedItems, newSelectedGems))
       )
       dispatch(setFillItemSocketsWindowVisibility(false))
     }
@@ -182,7 +182,7 @@ export function FillItemSockets() {
       <Grid id='gem-options-gem-list'>
         <Grid id='gem-options-gem-list'>
           {Gems.filter(e =>
-            canGemColorBeInsertedIntoSocketColor(socketColor, e.Color)
+            CanGemColorBeInsertedIntoSocketColor(socketColor, e.Color)
           ).map(gem => (
             <Grid
               className='gem-options-gem'
@@ -197,7 +197,7 @@ export function FillItemSockets() {
                 src={`${process.env.PUBLIC_URL}/img/${gem.IconName}.jpg`}
                 alt={t(gem.Name)}
               />
-              <Link href={`${getBaseWowheadUrl(i18n.language)}/item=${gem.Id}`}>
+              <Link href={`${GetBaseWowheadUrl(i18n.language)}/item=${gem.Id}`}>
                 <Typography style={{ color: GetQualityCssColor(gem.Quality) }}>
                   {t(gem.Name)}
                 </Typography>

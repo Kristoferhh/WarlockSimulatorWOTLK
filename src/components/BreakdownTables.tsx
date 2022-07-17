@@ -11,7 +11,7 @@ import {
 import { nanoid } from 'nanoid'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import { getBaseWowheadUrl } from '../Common'
+import { GetBaseWowheadUrl } from '../Common'
 import { AuraGroups } from '../data/AuraGroups'
 import { Auras } from '../data/Auras'
 import { Gems } from '../data/Gems'
@@ -211,7 +211,7 @@ export default function BreakdownTables() {
                         rel='noreferrer'
                         href={
                           spellObj && spellObj.Id !== 0
-                            ? `${getBaseWowheadUrl(i18n.language)}/${
+                            ? `${GetBaseWowheadUrl(i18n.language)}/${
                                 spellObj.WowheadType
                               }=${spellObj.Id}`
                             : ''
@@ -385,7 +385,7 @@ export default function BreakdownTables() {
                         rel='noreferrer'
                         href={
                           spellObj && spellObj.Id !== 0
-                            ? `${getBaseWowheadUrl(i18n.language)}/${
+                            ? `${GetBaseWowheadUrl(i18n.language)}/${
                                 spellObj.WowheadType
                               }=${spellObj.Id}`
                             : ''
@@ -506,7 +506,7 @@ export default function BreakdownTables() {
                           rel='noreferrer'
                           href={
                             spellObj && spellObj.Id !== 0
-                              ? `${getBaseWowheadUrl(i18n.language)}/${
+                              ? `${GetBaseWowheadUrl(i18n.language)}/${
                                   spellObj.WowheadType
                                 }=${spellObj.Id}`
                               : ''
