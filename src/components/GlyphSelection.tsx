@@ -12,6 +12,25 @@ import {
 } from '../redux/UiSlice'
 import { GlyphId, GlyphType } from '../Types'
 
+export default function GlyphSelection() {
+  const player = useSelector((state: RootState) => state.player)
+
+  return (
+    <Grid container style={{ paddingLeft: '3px' }}>
+      <fieldset style={{ width: '100%' }}>
+        <legend>
+          <Typography>Glyphs</Typography>
+        </legend>
+        <Grid container justifyContent='space-between'>
+          {player.Glyphs[GlyphType.Major].map((glyphId, glyphSlot) =>
+            Glyph(glyphId, glyphSlot)
+          )}
+        </Grid>
+      </fieldset>
+    </Grid>
+  )
+}
+
 function Glyph(glyphId: GlyphId | undefined, glyphSlot: number) {
   const dispatch = useDispatch()
   const glyph = Glyphs.find(x => x.Id === glyphId)
@@ -40,17 +59,8 @@ function Glyph(glyphId: GlyphId | undefined, glyphSlot: number) {
             ? `${getBaseWowheadUrl(i18n.language)}/spell=${glyphId}`
             : ''
         }
-        style={{ display: 'block', height: '100%' }}
       >
-        <Grid
-          item
-          xs={2}
-          style={{
-            display: 'inline-block',
-            verticalAlign: 'middle',
-            height: '100%',
-          }}
-        >
+        <Grid container>
           <img
             width={32}
             height={32}
@@ -59,38 +69,15 @@ function Glyph(glyphId: GlyphId | undefined, glyphSlot: number) {
               glyphId != null ? glyph?.IconName : 'inventoryslot_empty'
             }.jpg`}
           />
-        </Grid>
-        <Grid item xs={10} style={{ display: 'inline-block' }}>
           <Typography
-            style={{
-              display: 'inline-block',
-              marginLeft: '10px',
-              color: 'white',
-            }}
+            noWrap
+            paragraph
+            style={{ color: 'white', marginLeft: '5px', maxWidth: '75%' }}
           >
             {glyph?.Name || 'Empty'}
           </Typography>
         </Grid>
       </Link>
-    </Grid>
-  )
-}
-
-export default function GlyphSelection() {
-  const player = useSelector((state: RootState) => state.player)
-
-  return (
-    <Grid container style={{ paddingLeft: '3px' }}>
-      <fieldset>
-        <legend>
-          <Typography>Glyphs</Typography>
-        </legend>
-        <Grid container justifyContent='space-between'>
-          {player.Glyphs[GlyphType.Major].map((glyphId, glyphSlot) =>
-            Glyph(glyphId, glyphSlot)
-          )}
-        </Grid>
-      </fieldset>
     </Grid>
   )
 }

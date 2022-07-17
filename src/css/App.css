@@ -757,43 +757,22 @@ table.dataTable.no-footer {
 }
 
 @media screen and (max-width: 1765px) {
-  #buffs-and-debuffs-section {
-    padding-top: 1px;
-    width: 100%;
-    float: none;
-  }
-
   #language-menu {
     margin-left: 10px;
-  }
-
-  #sim-settings {
-    font-size: 1em;
-    width: 35%;
   }
 
   #profiles-and-sources {
     margin-top: 60px;
   }
-}
 
-@media screen and (max-width: 1530px) {
   #talents-container {
     display: block;
     float: none;
   }
+
   #talents-section {
     width: 100%;
     text-align: center;
-  }
-
-  #buffs-and-debuffs-section {
-    display: inline-block;
-    width: 30%;
-  }
-
-  #sim-settings {
-    width: 50%;
   }
 
   #profiles-and-sources {
