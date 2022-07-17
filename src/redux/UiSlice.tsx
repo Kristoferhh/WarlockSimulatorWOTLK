@@ -69,7 +69,7 @@ export const UiSlice = createSlice({
   name: 'ui',
   initialState: initialUiState,
   reducers: {
-    togglePhase: (state, action: PayloadAction<Phase>) => {
+    TogglePhase: (state, action: PayloadAction<Phase>) => {
       if (state.Sources.includes(action.payload)) {
         state.Sources = state.Sources.filter(
           (e: number) => e !== action.payload
@@ -80,13 +80,13 @@ export const UiSlice = createSlice({
 
       localStorage.setItem('wotlk_sources', JSON.stringify(state.Sources))
     },
-    setGemSelectionTable: (
+    SetGemSelectionTable: (
       state,
       action: PayloadAction<GemSelectionTableStruct>
     ) => {
       state.GemSelectionTable = action.payload
     },
-    favoriteGem: (state, action: PayloadAction<number>) => {
+    FavoriteGem: (state, action: PayloadAction<number>) => {
       if (state.GemPreferences.favorites.includes(action.payload)) {
         state.GemPreferences.favorites = state.GemPreferences.favorites.filter(
           (e: number) => e !== action.payload
@@ -100,7 +100,7 @@ export const UiSlice = createSlice({
         JSON.stringify(state.GemPreferences)
       )
     },
-    hideGem: (state, action: PayloadAction<number>) => {
+    HideGem: (state, action: PayloadAction<number>) => {
       if (state.GemPreferences.hidden.includes(action.payload)) {
         state.GemPreferences.hidden = state.GemPreferences.hidden.filter(
           (e: number) => e !== action.payload
@@ -114,29 +114,29 @@ export const UiSlice = createSlice({
         JSON.stringify(state.GemPreferences)
       )
     },
-    setSelectedProfile: (state, action: PayloadAction<string>) => {
+    SetSelectedProfile: (state, action: PayloadAction<string>) => {
       state.SelectedProfile = action.payload
       localStorage.setItem('wotlk_selectedProfile', action.payload)
     },
-    setImportExportWindowVisibility: (
+    SetImportExportWindowVisibility: (
       state,
       action: PayloadAction<boolean>
     ) => {
       state.ImportExportWindowVisible = action.payload
     },
-    setEquippedItemsWindowVisibility: (
+    SetEquippedItemsWindowVisibility: (
       state,
       action: PayloadAction<boolean>
     ) => {
       state.EquippedItemsWindowVisible = action.payload
     },
-    setFillItemSocketsWindowVisibility: (
+    SetFillItemSocketsWindowVisibility: (
       state,
       action: PayloadAction<boolean>
     ) => {
       state.FillItemSocketsWindowVisible = action.payload
     },
-    toggleHiddenItemId: (state, action: PayloadAction<number>) => {
+    ToggleHiddenItemId: (state, action: PayloadAction<number>) => {
       if (state.HiddenItems.includes(action.payload)) {
         state.HiddenItems = state.HiddenItems.filter(
           (e: number) => e !== action.payload
@@ -150,18 +150,18 @@ export const UiSlice = createSlice({
         JSON.stringify(state.HiddenItems)
       )
     },
-    setSelectedItemSlot: (state, action: PayloadAction<ItemSlot>) => {
+    SetSelectedItemSlot: (state, action: PayloadAction<ItemSlot>) => {
       state.SelectedItemSlot = action.payload
       localStorage.setItem('wotlk_selectedItemSlot', state.SelectedItemSlot)
     },
-    setSelectedItemSubSlot: (state, action: PayloadAction<SubSlotValue>) => {
+    SetSelectedItemSubSlot: (state, action: PayloadAction<SubSlotValue>) => {
       state.SelectedItemSubSlot = action.payload
       localStorage.setItem(
         'wotlk_selectedItemSubSlot',
         state.SelectedItemSubSlot
       )
     },
-    setSavedItemDps: (
+    SetSavedItemDps: (
       state,
       action: PayloadAction<{
         itemSlot: ItemSlotDetailed
@@ -183,78 +183,78 @@ export const UiSlice = createSlice({
         )
       }
     },
-    setCombatLogVisibility: (state, action: PayloadAction<boolean>) => {
+    SetCombatLogVisibility: (state, action: PayloadAction<boolean>) => {
       state.CombatLog.Visible = action.payload
     },
-    setCombatLogData: (state, action: PayloadAction<string[]>) => {
+    SetCombatLogData: (state, action: PayloadAction<string[]>) => {
       state.CombatLog.Data = action.payload
     },
-    setCombatLogBreakdownValue: (
+    SetCombatLogBreakdownValue: (
       state,
       action: PayloadAction<CombatLogBreakdown>
     ) => {
       state.CombatLogBreakdown = action.payload
     },
-    clearSavedItemSlotDps: (state, action: PayloadAction<ItemSlotDetailed>) => {
+    ClearSavedItemSlotDps: (state, action: PayloadAction<ItemSlotDetailed>) => {
       state.SavedItemDps[action.payload] = {}
     },
-    setHistogramVisibility: (state, action: PayloadAction<boolean>) => {
+    SetHistogramVisibility: (state, action: PayloadAction<boolean>) => {
       state.Histogram.Visible = action.payload
     },
-    setHistogramData: (
+    SetHistogramData: (
       state,
       action: PayloadAction<{ [key: string]: number }>
     ) => {
       state.Histogram.Data = action.payload
     },
-    setStatWeightVisibility: (state, action: PayloadAction<boolean>) => {
+    SetStatWeightVisibility: (state, action: PayloadAction<boolean>) => {
       state.StatWeights.Visible = action.payload
     },
-    setStatWeightValue: (
+    SetStatWeightValue: (
       state,
       action: PayloadAction<{ stat: [keyof StatWeightStats]; value: number }>
     ) => {
       state.StatWeights.StatValues[action.payload.stat as unknown as Stat] =
         action.payload.value
     },
-    setSimulationInProgressStatus: (state, action: PayloadAction<boolean>) => {
+    SetSimulationInProgressStatus: (state, action: PayloadAction<boolean>) => {
       state.SimulationInProgress = action.payload
     },
-    setGlyphSelectionTableVisibility: (
+    SetGlyphSelectionTableVisibility: (
       state,
       action: PayloadAction<boolean>
     ) => {
       state.GlyphSelectionTable.Visible = action.payload
     },
-    setGlyphSelectionTableGlyphSlot: (state, action: PayloadAction<number>) => {
+    SetGlyphSelectionTableGlyphSlot: (state, action: PayloadAction<number>) => {
       state.GlyphSelectionTable.GlyphSlot = action.payload
     },
   },
 })
 
 export const {
-  setStatWeightValue,
-  setSimulationInProgressStatus,
-  setStatWeightVisibility,
-  setHistogramData,
-  setHistogramVisibility,
-  clearSavedItemSlotDps,
-  setCombatLogBreakdownValue,
-  setCombatLogData,
-  setCombatLogVisibility,
-  setSavedItemDps,
-  setSelectedItemSubSlot,
-  setSelectedItemSlot,
-  setFillItemSocketsWindowVisibility,
-  setEquippedItemsWindowVisibility,
-  toggleHiddenItemId,
-  setImportExportWindowVisibility,
-  setSelectedProfile,
-  togglePhase,
-  setGemSelectionTable,
-  favoriteGem,
-  hideGem,
-  setGlyphSelectionTableGlyphSlot,
-  setGlyphSelectionTableVisibility,
+  SetStatWeightValue,
+  SetSimulationInProgressStatus,
+  SetStatWeightVisibility,
+  SetHistogramData,
+  SetHistogramVisibility,
+  ClearSavedItemSlotDps,
+  SetCombatLogBreakdownValue,
+  SetCombatLogData,
+  SetCombatLogVisibility,
+  SetSavedItemDps,
+  SetSelectedItemSubSlot,
+  SetSelectedItemSlot,
+  SetFillItemSocketsWindowVisibility,
+  SetEquippedItemsWindowVisibility,
+  ToggleHiddenItemId,
+  SetImportExportWindowVisibility,
+  SetSelectedProfile,
+  TogglePhase,
+  SetGemSelectionTable,
+  FavoriteGem,
+  HideGem,
+  SetGlyphSelectionTableGlyphSlot,
+  SetGlyphSelectionTableVisibility,
 } = UiSlice.actions
 export default UiSlice.reducer

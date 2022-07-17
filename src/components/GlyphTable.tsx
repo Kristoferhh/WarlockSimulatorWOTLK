@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { GetBaseWowheadUrl } from '../Common'
 import { Glyphs } from '../data/Glyphs'
 import i18n from '../i18n/config'
-import { setGlyphSlotId } from '../redux/PlayerSlice'
+import { SetGlyphSlotId } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
-import { setGlyphSelectionTableVisibility } from '../redux/UiSlice'
+import { SetGlyphSelectionTableVisibility } from '../redux/UiSlice'
 import { GlyphType } from '../Types'
 
 export default function GlyphTable() {
@@ -35,12 +35,12 @@ export default function GlyphTable() {
               data-checked={glyphInSlot?.Id === glyph.Id}
               onClick={e => {
                 dispatch(
-                  setGlyphSlotId({
+                  SetGlyphSlotId({
                     slot: ui.GlyphSelectionTable.GlyphSlot,
                     id: glyph.Id,
                   })
                 )
-                dispatch(setGlyphSelectionTableVisibility(false))
+                dispatch(SetGlyphSelectionTableVisibility(false))
                 e.preventDefault()
               }}
             >

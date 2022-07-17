@@ -10,13 +10,13 @@ import {
   GetTalentsStats,
 } from '../Common'
 import {
-  setAurasStats as SetAurasStats,
-  setBaseStats as SetBaseStats,
-  setEnchantsStats as SetEnchantsStats,
-  setGemsStats as SetGemsStats,
-  setItemSetCounts as SetItemSetCounts,
-  setItemsStats as SetItemsStats,
-  setTalentsStats as SetTalentsStats,
+  SetAurasStats,
+  SetBaseStats,
+  SetEnchantsStats,
+  SetGemsStats,
+  SetItemSetCounts,
+  SetItemsStats,
+  SetTalentsStats,
 } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
 import { RaceType, Setting } from '../Types'

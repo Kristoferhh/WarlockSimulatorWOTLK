@@ -10,22 +10,22 @@ import {
   GetItemsStats,
 } from '../Common'
 import {
-  setAurasStats,
-  setBaseStats,
-  setEnchantsStats,
-  setGemsStats,
-  setItemSetCounts,
-  setItemsStats,
-  setRotationState,
-  setSelectedAuras,
-  setSelectedEnchants,
-  setSelectedGems,
-  setSelectedItems,
-  setSelectedTalents,
-  setSettingsState,
+  SetAurasStats,
+  SetBaseStats,
+  SetEnchantsStats,
+  SetGemsStats,
+  SetItemSetCounts,
+  SetItemsStats,
+  SetRotationState,
+  SetSelectedAuras,
+  SetSelectedEnchants,
+  SetSelectedGems,
+  SetSelectedItems,
+  SetSelectedTalents,
+  SetSettingsState,
 } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
-import { setImportExportWindowVisibility } from '../redux/UiSlice'
+import { SetImportExportWindowVisibility } from '../redux/UiSlice'
 import {
   AuraId,
   ItemSlotDetailedStruct,
@@ -79,20 +79,20 @@ export default function ImportExport() {
       const data: ProfileJsonExport = JSON.parse(contentString)
 
       if (data.Auras) {
-        dispatch(setSelectedAuras(data.Auras))
-        dispatch(setAurasStats(GetAurasStats(data.Auras)))
+        dispatch(SetSelectedAuras(data.Auras))
+        dispatch(SetAurasStats(GetAurasStats(data.Auras)))
       }
 
       if (data.Items) {
-        dispatch(setSelectedItems(data.Items))
-        dispatch(setItemsStats(GetItemsStats(data.Items)))
-        dispatch(setItemSetCounts(GetItemSetCounts(data.Items)))
+        dispatch(SetSelectedItems(data.Items))
+        dispatch(SetItemsStats(GetItemsStats(data.Items)))
+        dispatch(SetItemSetCounts(GetItemSetCounts(data.Items)))
       }
 
       if (data.Enchants) {
-        dispatch(setSelectedEnchants(data.Enchants))
+        dispatch(SetSelectedEnchants(data.Enchants))
         dispatch(
-          setEnchantsStats(
+          SetEnchantsStats(
             GetEnchantsStats(
               data.Items ? data.Items : player.SelectedItems,
               data.Enchants
@@ -102,9 +102,9 @@ export default function ImportExport() {
       }
 
       if (data.Gems) {
-        dispatch(setSelectedGems(data.Gems))
+        dispatch(SetSelectedGems(data.Gems))
         dispatch(
-          setGemsStats(
+          SetGemsStats(
             GetGemsStats(
               data.Items ? data.Items : player.SelectedItems,
               data.Gems
@@ -114,19 +114,19 @@ export default function ImportExport() {
       }
 
       if (data.Talents) {
-        dispatch(setSelectedTalents(data.Talents))
+        dispatch(SetSelectedTalents(data.Talents))
       }
 
       if (data.Rotation) {
-        dispatch(setRotationState(data.Rotation))
+        dispatch(SetRotationState(data.Rotation))
       }
 
       if (data.Settings) {
-        dispatch(setSettingsState(data.Settings))
-        dispatch(setBaseStats(GetBaseStats(data.Settings.race as RaceType)))
+        dispatch(SetSettingsState(data.Settings))
+        dispatch(SetBaseStats(GetBaseStats(data.Settings.race as RaceType)))
       }
 
-      dispatch(setImportExportWindowVisibility(false))
+      dispatch(SetImportExportWindowVisibility(false))
     } catch (error) {
       alert(`Error importing profile: ${error}`)
     }
@@ -160,7 +160,7 @@ export default function ImportExport() {
         variant='contained'
         id='export-close-button'
         onClick={() => {
-          dispatch(setImportExportWindowVisibility(false))
+          dispatch(SetImportExportWindowVisibility(false))
           setContentString('')
         }}
       >

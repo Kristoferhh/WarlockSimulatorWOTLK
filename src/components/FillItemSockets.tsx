@@ -22,9 +22,9 @@ import {
 import { Gems } from '../data/Gems'
 import { Items } from '../data/Items'
 import i18n from '../i18n/config'
-import { setGemsStats, setSelectedGems } from '../redux/PlayerSlice'
+import { SetGemsStats, SetSelectedGems } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
-import { setFillItemSocketsWindowVisibility } from '../redux/UiSlice'
+import { SetFillItemSocketsWindowVisibility } from '../redux/UiSlice'
 import { Item, SelectedGemsStruct, SocketColor } from '../Types'
 
 const socketOptions: { name: string; color: SocketColor }[] = [
@@ -72,11 +72,11 @@ export function FillItemSockets() {
         FillSocketsInItem(item, newSelectedGems)
       })
 
-      dispatch(setSelectedGems(newSelectedGems))
+      dispatch(SetSelectedGems(newSelectedGems))
       dispatch(
-        setGemsStats(GetGemsStats(player.SelectedItems, newSelectedGems))
+        SetGemsStats(GetGemsStats(player.SelectedItems, newSelectedGems))
       )
-      dispatch(setFillItemSocketsWindowVisibility(false))
+      dispatch(SetFillItemSocketsWindowVisibility(false))
     }
   }
 
@@ -216,7 +216,7 @@ export function FillItemSockets() {
       </Button>{' '}
       <Button
         variant='contained'
-        onClick={() => dispatch(setFillItemSocketsWindowVisibility(false))}
+        onClick={() => dispatch(SetFillItemSocketsWindowVisibility(false))}
       >
         Close
       </Button>

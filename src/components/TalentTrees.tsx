@@ -19,7 +19,7 @@ import {
 import { PresetTalents } from '../data/PresetTalents'
 import { Talents, TalentTreeStruct } from '../data/Talents'
 import i18n from '../i18n/config'
-import { setSelectedTalents, setTalentsStats } from '../redux/PlayerSlice'
+import { SetSelectedTalents, SetTalentsStats } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
 import { MouseButtonClick, Talent, TalentName, TalentStore } from '../Types'
 
@@ -93,8 +93,8 @@ export default function TalentTrees() {
   }
 
   function SaveTalents(talents: TalentStore) {
-    dispatch(setSelectedTalents(talents))
-    dispatch(setTalentsStats(GetTalentsStats(talents, player.Settings)))
+    dispatch(SetSelectedTalents(talents))
+    dispatch(SetTalentsStats(GetTalentsStats(talents, player.Settings)))
   }
 
   return (
@@ -205,10 +205,8 @@ export default function TalentTrees() {
             <Grid className='talent-tree-name' style={{ padding: '10px' }}>
               <Typography style={{ display: 'inline-block' }}>
                 {`${t(talentTree.Name)} ${
-                  GetAllocatedTalentsPointsInTree(
-                    player.Talents,
-                    talentTree
-                  ) > 0
+                  GetAllocatedTalentsPointsInTree(player.Talents, talentTree) >
+                  0
                     ? `(${GetAllocatedTalentsPointsInTree(
                         player.Talents,
                         talentTree

@@ -6,7 +6,7 @@ import { GetAurasStats, GetBaseWowheadUrl, IsPetActive } from '../Common'
 import { AuraGroups } from '../data/AuraGroups'
 import { Auras } from '../data/Auras'
 import i18n from '../i18n/config'
-import { setAurasStats, setSelectedAuras } from '../redux/PlayerSlice'
+import { SetAurasStats, SetSelectedAuras } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
 import { Aura, AuraId } from '../Types'
 
@@ -82,8 +82,8 @@ export default function AuraSelection() {
       newAuras = newAuras.filter(x => x !== aura.Id)
     }
 
-    dispatch(setSelectedAuras(newAuras))
-    dispatch(setAurasStats(GetAurasStats(newAuras)))
+    dispatch(SetSelectedAuras(newAuras))
+    dispatch(SetAurasStats(GetAurasStats(newAuras)))
   }
 
   return (

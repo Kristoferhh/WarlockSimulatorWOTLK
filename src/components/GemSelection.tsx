@@ -18,16 +18,9 @@ import {
 import { Gems } from '../data/Gems'
 import { Items } from '../data/Items'
 import i18n from '../i18n/config'
-import {
-  setGemsStats as SetGemsStats,
-  setSelectedGems as SetSelectedGems,
-} from '../redux/PlayerSlice'
+import { SetGemsStats, SetSelectedGems } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
-import {
-  favoriteGem as FavoriteGem,
-  hideGem as HideGem,
-  setGemSelectionTable as SetGemSelectionTable,
-} from '../redux/UiSlice'
+import { FavoriteGem, HideGem, SetGemSelectionTable } from '../redux/UiSlice'
 import {
   Gem,
   InitialGemSelectionTableValue,

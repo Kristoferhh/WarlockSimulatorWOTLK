@@ -19,7 +19,7 @@ import { Enchants } from '../data/Enchants'
 import { Items } from '../data/Items'
 import i18n from '../i18n/config'
 import { RootState } from '../redux/Store'
-import { setEquippedItemsWindowVisibility as SetEquippedItemsWindowVisibility } from '../redux/UiSlice'
+import { SetEquippedItemsWindowVisibility } from '../redux/UiSlice'
 import { Enchant, Item, ItemSlotDetailed } from '../Types'
 import ItemSocketDisplay from './ItemSocketDisplay'
 

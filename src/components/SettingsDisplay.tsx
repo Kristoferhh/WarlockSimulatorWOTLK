@@ -12,8 +12,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { GetBaseStats, IsPetActive } from '../Common'
 import { Races } from '../data/Races'
 import {
-  modifySettingValue as ModifySettingValue,
-  setBaseStats,
+  SetBaseStats,
+  SodifySettingValue as ModifySettingValue,
 } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
 import { AuraId, Pet, RaceType, Setting } from '../Types'
@@ -85,7 +85,7 @@ export default function SettingsDisplay() {
             const race = Races.find(race => race.Type === e.target.value)
 
             SettingModifiedHandler(Setting.race, e.target.value)
-            race && dispatch(setBaseStats(GetBaseStats(race.Type)))
+            race && dispatch(SetBaseStats(GetBaseStats(race.Type)))
           }}
         >
           <MenuItem value={RaceType.Gnome}>{t('Gnome')}</MenuItem>

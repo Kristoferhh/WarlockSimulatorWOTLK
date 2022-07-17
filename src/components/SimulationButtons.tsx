@@ -16,16 +16,16 @@ import { Items } from '../data/Items'
 import { Races } from '../data/Races'
 import { RootState } from '../redux/Store'
 import {
-  clearSavedItemSlotDps,
-  setCombatLogBreakdownValue,
-  setCombatLogData,
-  setCombatLogVisibility,
-  setHistogramData,
-  setHistogramVisibility,
-  setSavedItemDps,
-  setSimulationInProgressStatus,
-  setStatWeightValue,
-  setStatWeightVisibility,
+  ClearSavedItemSlotDps,
+  SetCombatLogBreakdownValue,
+  SetCombatLogData,
+  SetCombatLogVisibility,
+  SetHistogramData,
+  SetHistogramVisibility,
+  SetSavedItemDps,
+  SetSimulationInProgressStatus,
+  SetStatWeightValue,
+  SetStatWeightVisibility,
 } from '../redux/UiSlice'
 import { SimWorker } from '../SimWorker.js'
 import {
@@ -255,12 +255,12 @@ export function SimulationButtons() {
     let simWorkerParameters: IGetWorkerParams[] = []
     combatLogEntries = []
 
-    dispatch(setSimulationInProgressStatus(true))
+    dispatch(SetSimulationInProgressStatus(true))
     setSimulationType(simulationParams.type)
     if (simulationParams.type === SimulationType.AllItems) {
-      dispatch(clearSavedItemSlotDps(itemSlot))
+      dispatch(ClearSavedItemSlotDps(itemSlot))
     } else if (simulationParams.type === SimulationType.StatWeights) {
-      dispatch(setStatWeightVisibility(true))
+      dispatch(SetStatWeightVisibility(true))
     }
 
     const randomSeed = Random(0, 4294967295)
@@ -366,7 +366,7 @@ export function SimulationButtons() {
               }
 
               if (simulationsFinished === simWorkerParameters.length) {
-                dispatch(setSimulationInProgressStatus(false))
+                dispatch(SetSimulationInProgressStatus(false))
                 const totalSimDuration = (performance.now() - startTime) / 1000
                 SetNewSimulationDuration(
                   (Math.round(totalSimDuration * 10000) / 10000).toString(),
@@ -385,14 +385,14 @@ export function SimulationButtons() {
 
                 if (simulationParams.type === SimulationType.Normal) {
                   setDpsStdev(Math.round(GetStdev(dpsArray)).toString())
-                  dispatch(setHistogramData(dpsCount))
+                  dispatch(SetHistogramData(dpsCount))
 
                   if (
                     player.Settings[Setting.automaticallyOpenSimDetails] ===
                     'true'
                   ) {
                     dispatch(
-                      setCombatLogBreakdownValue({
+                      SetCombatLogBreakdownValue({
                         TotalDamageDone: totalDamageDone,
                         TotalManaGained: totalManaRegenerated,
                         TotalSimulationFightLength: params.totalDuration,
@@ -493,7 +493,7 @@ export function SimulationButtons() {
         simulationsRunning++
       }
     } catch (error) {
-      dispatch(setSimulationInProgressStatus(false))
+      dispatch(SetSimulationInProgressStatus(false))
       throw new Error('Error when trying to run simulation. ' + error)
     }
   }
@@ -509,7 +509,7 @@ export function SimulationButtons() {
     }
 
     dispatch(
-      setStatWeightValue({
+      SetStatWeightValue({
         stat: stat as unknown as [keyof StatWeightStats],
         value: dpsDifference,
       })
@@ -537,7 +537,7 @@ export function SimulationButtons() {
     saveToLocalStorage: boolean
   ): void {
     dispatch(
-      setSavedItemDps({
+      SetSavedItemDps({
         itemSlot: itemSlot,
         itemId: itemId,
         dps: newMedianDps,
@@ -547,7 +547,7 @@ export function SimulationButtons() {
   }
 
   function PopulateCombatLog(): void {
-    dispatch(setCombatLogData(combatLogEntries))
+    dispatch(SetCombatLogData(combatLogEntries))
   }
 
   function ErrorCallbackHandler(errorCallback: { errorMsg: string }): void {
@@ -700,7 +700,7 @@ export function SimulationButtons() {
           }
           onClick={() =>
             !CombatLogButtonIsDisabled() &&
-            dispatch(setCombatLogVisibility(!ui.CombatLog.Visible))
+            dispatch(SetCombatLogVisibility(!ui.CombatLog.Visible))
           }
         >
           <Typography>Combat Log</Typography>
@@ -714,7 +714,7 @@ export function SimulationButtons() {
           }
           onClick={() =>
             !HistogramButtonIsDisabled() &&
-            dispatch(setHistogramVisibility(!ui.Histogram.Visible))
+            dispatch(SetHistogramVisibility(!ui.Histogram.Visible))
           }
         >
           <Typography>Histogram</Typography>

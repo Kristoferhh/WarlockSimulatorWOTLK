@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { GetBaseWowheadUrl } from '../Common'
 import { Glyphs } from '../data/Glyphs'
 import i18n from '../i18n/config'
-import { setGlyphSlotId } from '../redux/PlayerSlice'
+import { SetGlyphSlotId } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
 import {
-  setGlyphSelectionTableGlyphSlot,
-  setGlyphSelectionTableVisibility,
+  SetGlyphSelectionTableGlyphSlot,
+  SetGlyphSelectionTableVisibility,
 } from '../redux/UiSlice'
 import { GlyphId, GlyphType } from '../Types'
 
@@ -41,13 +41,13 @@ function Glyph(glyphId: GlyphId | undefined, glyphSlot: number) {
       xs={4}
       key={nanoid()}
       onClick={e => {
-        dispatch(setGlyphSelectionTableVisibility(true))
-        dispatch(setGlyphSelectionTableGlyphSlot(glyphSlot))
+        dispatch(SetGlyphSelectionTableVisibility(true))
+        dispatch(SetGlyphSelectionTableGlyphSlot(glyphSlot))
         e.preventDefault()
         e.stopPropagation()
       }}
       onContextMenu={e => {
-        dispatch(setGlyphSlotId({ slot: glyphSlot, id: undefined }))
+        dispatch(SetGlyphSlotId({ slot: glyphSlot, id: undefined }))
         e.preventDefault()
       }}
     >

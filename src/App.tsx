@@ -5,8 +5,8 @@ import Session from './components/Session'
 import Sidebar from './components/Sidebar'
 import './css/App.css'
 import {
-  setGemSelectionTable,
-  setGlyphSelectionTableVisibility,
+  SetGemSelectionTable,
+  SetGlyphSelectionTableVisibility,
 } from './redux/UiSlice'
 import { InitialGemSelectionTableValue } from './Types'
 
@@ -35,8 +35,8 @@ export default function App() {
         backgroundImage: `${linearGradient}, url(${imagePath})`,
       }}
       onClick={() => {
-        dispatch(setGemSelectionTable(InitialGemSelectionTableValue))
-        dispatch(setGlyphSelectionTableVisibility(false))
+        dispatch(SetGemSelectionTable(InitialGemSelectionTableValue))
+        dispatch(SetGlyphSelectionTableVisibility(false))
       }}
     >
       <Sidebar />

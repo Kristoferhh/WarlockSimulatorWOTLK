@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { GetAllocatedTalentsPointsInTree } from '../Common'
 import { Talents } from '../data/Talents'
 import { RootState } from '../redux/Store'
-import { setStatWeightVisibility } from '../redux/UiSlice'
+import { SetStatWeightVisibility } from '../redux/UiSlice'
 import { Stat, StatWeightStats, TalentTree } from '../Types'
 
 export default function StatWeights() {
@@ -41,7 +41,7 @@ export default function StatWeights() {
           className='close'
           id='stat-weight-close-button'
           onClick={e => {
-            dispatch(setStatWeightVisibility(false))
+            dispatch(SetStatWeightVisibility(false))
             e.preventDefault()
           }}
         ></p>
@@ -107,9 +107,7 @@ export default function StatWeights() {
                 ui.SelectedProfile || 'Warlock'
               }": Class=Warlock, Spec=${playerSpec}` +
                 `, Stamina=${ui.StatWeights.StatValues[Stat.Stamina]}` +
-                `, Intellect=${
-                  ui.StatWeights.StatValues[Stat.Intellect]
-                }` +
+                `, Intellect=${ui.StatWeights.StatValues[Stat.Intellect]}` +
                 `, Spirit=${ui.StatWeights.StatValues[Stat.Spirit]}` +
                 `, SpellCritRating=${
                   ui.StatWeights.StatValues[Stat.CritRating]
@@ -123,9 +121,7 @@ export default function StatWeights() {
                 `, ShadowSpellDamage=${
                   ui.StatWeights.StatValues[Stat.ShadowPower]
                 }` +
-                `, SpellDamage=${
-                  ui.StatWeights.StatValues[Stat.SpellPower]
-                }` +
+                `, SpellDamage=${ui.StatWeights.StatValues[Stat.SpellPower]}` +
                 `, Mp5=${ui.StatWeights.StatValues[Stat.Mp5]}` +
                 `, SpellHasteRating=${
                   ui.StatWeights.StatValues[Stat.HasteRating]

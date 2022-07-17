@@ -31,22 +31,22 @@ import { Items } from '../data/Items'
 import { Races } from '../data/Races'
 import i18n from '../i18n/config'
 import {
-  setEnchantsStats,
-  setGemsStats,
-  setItemSetCounts,
-  setItemsStats,
-  setSelectedEnchants,
-  setSelectedGems,
-  setSelectedItems,
+  SetEnchantsStats,
+  SetGemsStats,
+  SetItemSetCounts,
+  SetItemsStats,
+  SetSelectedEnchants,
+  SetSelectedGems,
+  SetSelectedItems,
 } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
 import {
-  setEquippedItemsWindowVisibility,
-  setFillItemSocketsWindowVisibility,
-  setGemSelectionTable,
-  setSelectedItemSlot,
-  setSelectedItemSubSlot,
-  toggleHiddenItemId,
+  SetEquippedItemsWindowVisibility,
+  SetFillItemSocketsWindowVisibility,
+  SetGemSelectionTable,
+  SetSelectedItemSlot,
+  SetSelectedItemSubSlot,
+  ToggleHiddenItemId,
 } from '../redux/UiSlice'
 import {
   Enchant,
@@ -125,8 +125,7 @@ export default function ItemSelection() {
       items?.filter(item => !ui.HiddenItems.includes(item.Id))?.length
         ? Enchants.filter(
             e =>
-              e.ItemSlot === ui.SelectedItemSlot &&
-              ui.Sources.includes(e.Phase)
+              e.ItemSlot === ui.SelectedItemSlot && ui.Sources.includes(e.Phase)
           )
         : undefined
     )
@@ -148,15 +147,15 @@ export default function ItemSelection() {
       }
     }
 
-    dispatch(setSelectedItems(newSelectedItems))
-    dispatch(setItemsStats(GetItemsStats(newSelectedItems)))
-    dispatch(setGemsStats(GetGemsStats(newSelectedItems, player.SelectedGems)))
+    dispatch(SetSelectedItems(newSelectedItems))
+    dispatch(SetItemsStats(GetItemsStats(newSelectedItems)))
+    dispatch(SetGemsStats(GetGemsStats(newSelectedItems, player.SelectedGems)))
     dispatch(
-      setEnchantsStats(
+      SetEnchantsStats(
         GetEnchantsStats(newSelectedItems, player.SelectedEnchants)
       )
     )
-    dispatch(setItemSetCounts(GetItemSetCounts(newSelectedItems)))
+    dispatch(SetItemSetCounts(GetItemSetCounts(newSelectedItems)))
   }
 
   function ItemClickHandler(item: Item, itemSlot: ItemSlotDetailed) {
@@ -172,17 +171,17 @@ export default function ItemSelection() {
     )
     newSelectedEnchants[itemSlot] =
       newSelectedEnchants[itemSlot] === enchant.Id ? 0 : enchant.Id
-    dispatch(setSelectedEnchants(newSelectedEnchants))
+    dispatch(SetSelectedEnchants(newSelectedEnchants))
     dispatch(
-      setEnchantsStats(
+      SetEnchantsStats(
         GetEnchantsStats(player.SelectedItems, newSelectedEnchants)
       )
     )
   }
 
   function ItemSlotClickHandler(slot: ItemSlot, subSlot: SubSlotValue) {
-    dispatch(setSelectedItemSlot(slot))
-    dispatch(setSelectedItemSubSlot(subSlot))
+    dispatch(SetSelectedItemSlot(slot))
+    dispatch(SetSelectedItemSubSlot(subSlot))
   }
 
   function ItemSocketClickHandler(
@@ -191,7 +190,7 @@ export default function ItemSelection() {
     socketColor: SocketColor
   ) {
     dispatch(
-      setGemSelectionTable({
+      SetGemSelectionTable({
         Visible: true,
         ItemId: itemId,
         ItemSlot: ui.SelectedItemSlot,
@@ -207,14 +206,13 @@ export default function ItemSelection() {
       JSON.stringify(player.SelectedGems)
     )
 
-    let currentItemSocketsValue =
-      newSelectedGems[ui.SelectedItemSlot][itemId]
+    let currentItemSocketsValue = newSelectedGems[ui.SelectedItemSlot][itemId]
 
     if (currentItemSocketsValue[socketNumber] !== 0) {
       currentItemSocketsValue[socketNumber] = 0
-      dispatch(setSelectedGems(newSelectedGems))
+      dispatch(SetSelectedGems(newSelectedGems))
       dispatch(
-        setGemsStats(GetGemsStats(player.SelectedItems, newSelectedGems))
+        SetGemsStats(GetGemsStats(player.SelectedItems, newSelectedGems))
       )
     }
   }
@@ -276,9 +274,7 @@ export default function ItemSelection() {
         variant='contained'
         onClick={() =>
           dispatch(
-            setFillItemSocketsWindowVisibility(
-              !ui.FillItemSocketsWindowVisible
-            )
+            SetFillItemSocketsWindowVisibility(!ui.FillItemSocketsWindowVisible)
           )
         }
       >
@@ -288,9 +284,7 @@ export default function ItemSelection() {
         variant='contained'
         onClick={() =>
           dispatch(
-            setEquippedItemsWindowVisibility(
-              !ui.EquippedItemsWindowVisible
-            )
+            SetEquippedItemsWindowVisibility(!ui.EquippedItemsWindowVisible)
           )
         }
       >
@@ -426,12 +420,10 @@ export default function ItemSelection() {
                   color: 'white',
                 }}
                 title={
-                  ui.HiddenItems.includes(item.Id)
-                    ? 'Show Item'
-                    : 'Hide Item'
+                  ui.HiddenItems.includes(item.Id) ? 'Show Item' : 'Hide Item'
                 }
                 onClick={e => {
-                  dispatch(toggleHiddenItemId(item.Id))
+                  dispatch(ToggleHiddenItemId(item.Id))
                   e.stopPropagation()
                 }}
               >

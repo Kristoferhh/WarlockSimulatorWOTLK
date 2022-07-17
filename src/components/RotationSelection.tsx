@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { GetBaseWowheadUrl } from '../Common'
 import { Spells } from '../data/Spells'
 import i18n from '../i18n/config'
-import { toggleRotationSpellSelection } from '../redux/PlayerSlice'
+import { ToggleRotationSpellSelection } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
 import { RotationGroup, RotationGroups, Setting } from '../Types'
 
@@ -47,7 +47,7 @@ export default function RotationSelection() {
                     spell.Id
                   )}
                   onClick={e => {
-                    dispatch(toggleRotationSpellSelection(spell))
+                    dispatch(ToggleRotationSpellSelection(spell))
                     e.preventDefault()
                   }}
                 >

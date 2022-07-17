@@ -70,12 +70,12 @@ export const PlayerSlice = createSlice({
   name: 'player',
   initialState: initialPlayerState,
   reducers: {
-    setSelectedTalents: (state, action: PayloadAction<TalentStore>) => {
+    SetSelectedTalents: (state, action: PayloadAction<TalentStore>) => {
       state.Talents = action.payload
       state.TalentPointsRemaining = GetRemainingTalentPoints(state.Talents)
       localStorage.setItem('wotlk_talents', JSON.stringify(state.Talents))
     },
-    setSelectedItems: (
+    SetSelectedItems: (
       state,
       action: PayloadAction<ItemSlotDetailedStruct>
     ) => {
@@ -85,7 +85,7 @@ export const PlayerSlice = createSlice({
         JSON.stringify(state.SelectedItems)
       )
     },
-    setSelectedEnchants: (
+    SetSelectedEnchants: (
       state,
       action: PayloadAction<ItemSlotDetailedStruct>
     ) => {
@@ -95,11 +95,11 @@ export const PlayerSlice = createSlice({
         JSON.stringify(state.SelectedEnchants)
       )
     },
-    setSelectedAuras: (state, action: PayloadAction<AuraId[]>) => {
+    SetSelectedAuras: (state, action: PayloadAction<AuraId[]>) => {
       state.Auras = action.payload
       localStorage.setItem('wotlk_auras', JSON.stringify(state.Auras))
     },
-    toggleRotationSpellSelection: (state, action: PayloadAction<Spell>) => {
+    ToggleRotationSpellSelection: (state, action: PayloadAction<Spell>) => {
       const rotationGroup = RotationGroups.find(
         e => e.Header === action.payload.Group
       )
@@ -129,35 +129,35 @@ export const PlayerSlice = createSlice({
         localStorage.setItem('wotlk_rotation', JSON.stringify(state.Rotation))
       }
     },
-    setBaseStats: (state, action: PayloadAction<StatsCollection>) => {
+    SetBaseStats: (state, action: PayloadAction<StatsCollection>) => {
       state.Stats.Base = action.payload
     },
-    setAurasStats: (state, action: PayloadAction<StatsCollection>) => {
+    SetAurasStats: (state, action: PayloadAction<StatsCollection>) => {
       state.Stats.Auras = action.payload
     },
-    setItemsStats: (state, action: PayloadAction<StatsCollection>) => {
+    SetItemsStats: (state, action: PayloadAction<StatsCollection>) => {
       state.Stats.Items = action.payload
     },
-    setTalentsStats: (state, action: PayloadAction<StatsCollection>) => {
+    SetTalentsStats: (state, action: PayloadAction<StatsCollection>) => {
       state.Stats.Talents = action.payload
     },
-    setGemsStats: (state, action: PayloadAction<StatsCollection>) => {
+    SetGemsStats: (state, action: PayloadAction<StatsCollection>) => {
       state.Stats.Gems = action.payload
     },
-    setEnchantsStats: (state, action: PayloadAction<StatsCollection>) => {
+    SetEnchantsStats: (state, action: PayloadAction<StatsCollection>) => {
       state.Stats.Enchants = action.payload
     },
-    setItemSetCounts: (state, action: PayloadAction<SetsStruct>) => {
+    SetItemSetCounts: (state, action: PayloadAction<SetsStruct>) => {
       state.Sets = action.payload
     },
-    modifySettingValue: (
+    SodifySettingValue: (
       state,
       action: PayloadAction<{ Setting: Setting; Value: string }>
     ) => {
       state.Settings[action.payload.Setting] = action.payload.Value
       localStorage.setItem('wotlk_settings', JSON.stringify(state.Settings))
     },
-    setProfile: (state, action: PayloadAction<ProfileContainer>) => {
+    SetProfile: (state, action: PayloadAction<ProfileContainer>) => {
       var existingProfile = state.Profiles.find(
         x => x.Name === action.payload.Name
       )
@@ -170,21 +170,21 @@ export const PlayerSlice = createSlice({
 
       localStorage.setItem('wotlk_profiles', JSON.stringify(state.Profiles))
     },
-    setSelectedGems: (state, action: PayloadAction<SelectedGemsStruct>) => {
+    SetSelectedGems: (state, action: PayloadAction<SelectedGemsStruct>) => {
       state.SelectedGems = action.payload
       localStorage.setItem(
         'wotlk_selectedGems',
         JSON.stringify(state.SelectedGems)
       )
     },
-    deleteProfile: (state, action: PayloadAction<string>) => {
+    DeleteProfile: (state, action: PayloadAction<string>) => {
       state.Profiles = state.Profiles.filter(
         (x: ProfileContainer) => x.Name !== action.payload
       )
       localStorage.setItem('wotlk_profiles', JSON.stringify(state.Profiles))
       localStorage.removeItem('wotlk_selectedProfile')
     },
-    renameProfile: (
+    RenameProfile: (
       state,
       action: PayloadAction<{ OldName: string; NewName: string }>
     ) => {
@@ -194,15 +194,15 @@ export const PlayerSlice = createSlice({
       localStorage.setItem('wotlk_profiles', JSON.stringify(state.Profiles))
       localStorage.setItem('wotlk_selectedProfile', action.payload.NewName)
     },
-    setRotationState: (state, action: PayloadAction<RotationStruct>) => {
+    SetRotationState: (state, action: PayloadAction<RotationStruct>) => {
       state.Rotation = action.payload
       localStorage.setItem('wotlk_rotation', JSON.stringify(action.payload))
     },
-    setSettingsState: (state, action: PayloadAction<Settings>) => {
+    SetSettingsState: (state, action: PayloadAction<Settings>) => {
       state.Settings = action.payload
       localStorage.setItem('wotlk_settings', JSON.stringify(action.payload))
     },
-    setGlyphSlotId: (
+    SetGlyphSlotId: (
       state,
       action: PayloadAction<{ slot: number; id: GlyphId | undefined }>
     ) => {
@@ -213,25 +213,25 @@ export const PlayerSlice = createSlice({
 })
 
 export const {
-  setSettingsState,
-  setRotationState,
-  setSelectedGems,
-  setSelectedEnchants,
-  setSelectedItems,
-  setSelectedAuras,
-  setItemSetCounts,
-  setAurasStats,
-  setBaseStats,
-  setEnchantsStats,
-  setGemsStats,
-  setItemsStats,
-  renameProfile,
-  deleteProfile,
-  setSelectedTalents,
-  toggleRotationSpellSelection,
-  modifySettingValue,
-  setProfile,
-  setTalentsStats,
-  setGlyphSlotId,
+  SetSettingsState,
+  SetRotationState,
+  SetSelectedGems,
+  SetSelectedEnchants,
+  SetSelectedItems,
+  SetSelectedAuras,
+  SetItemSetCounts,
+  SetAurasStats,
+  SetBaseStats,
+  SetEnchantsStats,
+  SetGemsStats,
+  SetItemsStats,
+  RenameProfile,
+  DeleteProfile,
+  SetSelectedTalents,
+  ToggleRotationSpellSelection,
+  SodifySettingValue,
+  SetProfile,
+  SetTalentsStats,
+  SetGlyphSlotId,
 } = PlayerSlice.actions
 export default PlayerSlice.reducer

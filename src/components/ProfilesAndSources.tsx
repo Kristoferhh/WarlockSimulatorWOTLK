@@ -12,28 +12,28 @@ import {
   GetItemsStats,
 } from '../Common'
 import {
-  deleteProfile as DeleteProfile,
-  renameProfile as RenameProfile,
-  setAurasStats as SetAurasStats,
-  setBaseStats as SetBaseStats,
-  setEnchantsStats as SetEnchantsStats,
-  setGemsStats as SetGemsStats,
-  setItemSetCounts as SetItemSetCounts,
-  setItemsStats as SetItemsStats,
-  setProfile,
-  setRotationState as SetRotationState,
-  setSelectedAuras as SetSelectedAuras,
-  setSelectedEnchants as SetSelectedEnchants,
-  setSelectedGems as SetSelectedGems,
-  setSelectedItems as SetSelectedItems,
-  setSelectedTalents as SetSelectedTalents,
-  setSettingsState as SetSettingsState,
+  DeleteProfile,
+  RenameProfile,
+  SetAurasStats,
+  SetBaseStats,
+  SetEnchantsStats,
+  SetGemsStats,
+  SetItemSetCounts,
+  SetItemsStats,
+  SetProfile,
+  SetRotationState,
+  SetSelectedAuras,
+  SetSelectedEnchants,
+  SetSelectedGems,
+  SetSelectedItems,
+  SetSelectedTalents,
+  SetSettingsState,
 } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
 import {
-  setImportExportWindowVisibility as SetImportExportWindowVisibility,
-  setSelectedProfile as SetSelectedProfile,
-  togglePhase as TogglePhase,
+  SetImportExportWindowVisibility,
+  SetSelectedProfile,
+  TogglePhase,
 } from '../redux/UiSlice'
 import { Phase, ProfileContainer, RaceType, Setting } from '../Types'
 
@@ -58,7 +58,7 @@ export default function ProfilesAndSources() {
     const name = newProfile ? profileName : ui.SelectedProfile
 
     dispatch(
-      setProfile({
+      SetProfile({
         Name: name,
         Profile: {
           Auras: player.Auras,
