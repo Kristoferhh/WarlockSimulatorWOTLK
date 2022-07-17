@@ -17,7 +17,7 @@ function SetHasActiveBonus(set: [string, number]): boolean {
   if (setObj) {
     return set[1] >= setObj.Bonuses[0]
   }
-  
+
   return false
 }
 
@@ -34,9 +34,7 @@ export default function Sidebar() {
       <Typography align='center'>{`${t('Level')} 80`}</Typography>
       <StatsDisplay />
       <List id='sidebar-sets'>
-        {Object.entries(player.Sets).find(set =>
-          SetHasActiveBonus(set)
-        ) && (
+        {Object.entries(player.Sets).find(set => SetHasActiveBonus(set)) && (
           <ListItem>
             <Typography variant='h6'>{t('Set Bonuses')}</Typography>
           </ListItem>
