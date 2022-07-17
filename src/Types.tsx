@@ -70,6 +70,13 @@ export interface Enchant {
   Phase: Phase
 }
 
+export interface Race {
+  Name: string
+  Type: RaceType
+  Stats: StatsCollection
+  Faction: Faction
+}
+
 export interface Glyph {
   Name: string
   Id: GlyphId
@@ -191,7 +198,7 @@ export enum AuraGroup {
   PetBuffs = 'Pet Buffs (your pet also inherits group-wide auras selected above)',
 }
 
-export enum Race {
+export enum RaceType {
   Gnome = 'Gnome',
   Human = 'Human',
   Orc = 'Orc',
@@ -293,7 +300,7 @@ export type Settings = {
 }
 
 export const InitialSettings: { [key in Setting]: string } = {
-  [Setting.race]: Race.Gnome,
+  [Setting.race]: RaceType.Gnome,
   [Setting.iterations]: '30000',
   [Setting.minFightLength]: '150',
   [Setting.maxFightLength]: '210',

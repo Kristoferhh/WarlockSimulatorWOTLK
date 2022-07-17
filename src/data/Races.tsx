@@ -1,9 +1,9 @@
-import { Faction, Race, Stat, StatsCollection } from '../Types'
+import { Faction, Race, RaceType, Stat } from '../Types'
 
-export const Races: { Name: string; Race: Race; Stats: StatsCollection, Faction: Faction }[] = [
+export const Races: Race[] = [
   {
     Name: 'Gnome',
-    Race: Race.Gnome,
+    Type: RaceType.Gnome,
     Faction: Faction.Alliance,
     Stats: {
       [Stat.Health]: 7164,
@@ -16,7 +16,7 @@ export const Races: { Name: string; Race: Race; Stats: StatsCollection, Faction:
   },
   {
     Name: 'Human',
-    Race: Race.Human,
+    Type: RaceType.Human,
     Faction: Faction.Alliance,
     Stats: {
       [Stat.Health]: 7164,
@@ -29,7 +29,7 @@ export const Races: { Name: string; Race: Race; Stats: StatsCollection, Faction:
   },
   {
     Name: 'Orc',
-    Race: Race.Orc,
+    Type: RaceType.Orc,
     Faction: Faction.Horde,
     Stats: {
       [Stat.Health]: 7164,
@@ -42,7 +42,7 @@ export const Races: { Name: string; Race: Race; Stats: StatsCollection, Faction:
   },
   {
     Name: 'Undead',
-    Race: Race.Undead,
+    Type: RaceType.Undead,
     Faction: Faction.Horde,
     Stats: {
       [Stat.Health]: 7164,
@@ -54,7 +54,7 @@ export const Races: { Name: string; Race: Race; Stats: StatsCollection, Faction:
   },
   {
     Name: 'Blood Elf',
-    Race: Race.BloodElf,
+    Type: RaceType.BloodElf,
     Faction: Faction.Horde,
     Stats: {
       [Stat.Health]: 7164,

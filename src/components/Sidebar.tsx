@@ -22,7 +22,7 @@ function setHasActiveBonus(set: [string, number]): boolean {
 export default function Sidebar() {
   const playerState = useSelector((state: RootState) => state.player)
   const { t } = useTranslation()
-  const race = Races.find(e => e.Race === playerState.Settings[Setting.race])
+  const race = Races.find(e => e.Type === playerState.Settings[Setting.race])
 
   return (
     <Drawer id='sidebar' variant='persistent' open={true}>

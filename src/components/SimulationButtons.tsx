@@ -13,6 +13,7 @@ import {
 } from '../Common'
 import { Gems } from '../data/Gems'
 import { Items } from '../data/Items'
+import { Races } from '../data/Races'
 import { RootState } from '../redux/Store'
 import {
   clearSavedItemSlotDps,
@@ -661,7 +662,8 @@ export function SimulationButtons() {
               uiState.HiddenItems,
               false,
               uiState.SavedItemDps,
-              true
+              true,
+              Races.find(x => x.Type === playerState.Settings[Setting.race])
             ).map(item => item.Id),
             type: SimulationType.AllItems,
           })

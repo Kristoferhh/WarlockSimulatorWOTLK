@@ -35,7 +35,7 @@ import {
   setSelectedProfile,
   togglePhase,
 } from '../redux/UiSlice'
-import { Phase, ProfileContainer, Race, Setting } from '../Types'
+import { Phase, ProfileContainer, RaceType, Setting } from '../Types'
 
 const phases: { title: string; phase: Phase }[] = [
   { title: 'TBC', phase: 0 },
@@ -93,7 +93,9 @@ export default function ProfilesAndSources() {
     // Recalculate the player's stats
     dispatch(
       setBaseStats(
-        GetBaseStats(params.Profile.Settings[Setting.race] as unknown as Race)
+        GetBaseStats(
+          params.Profile.Settings[Setting.race] as unknown as RaceType
+        )
       )
     )
     dispatch(setAurasStats(GetAurasStats(params.Profile.Auras)))

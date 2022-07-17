@@ -29,7 +29,7 @@ import { setImportExportWindowVisibility } from '../redux/UiSlice'
 import {
   AuraId,
   ItemSlotDetailedStruct,
-  Race,
+  RaceType,
   RotationStruct,
   SelectedGemsStruct,
   Settings,
@@ -125,7 +125,7 @@ export default function ImportExport() {
 
       if (data.Settings) {
         dispatch(setSettingsState(data.Settings))
-        dispatch(setBaseStats(GetBaseStats(data.Settings.race as Race)))
+        dispatch(setBaseStats(GetBaseStats(data.Settings.race as RaceType)))
       }
 
       dispatch(setImportExportWindowVisibility(false))

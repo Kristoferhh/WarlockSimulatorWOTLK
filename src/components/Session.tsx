@@ -19,7 +19,7 @@ import {
   setTalentsStats,
 } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
-import { Race, Setting } from '../Types'
+import { RaceType, Setting } from '../Types'
 
 export default function Session() {
   const playerStore = useSelector((state: RootState) => state.player)
@@ -28,7 +28,7 @@ export default function Session() {
   useEffect(() => {
     dispatch(
       setBaseStats(
-        GetBaseStats(playerStore.Settings[Setting.race] as unknown as Race)
+        GetBaseStats(playerStore.Settings[Setting.race] as unknown as RaceType)
       )
     )
     dispatch(setAurasStats(GetAurasStats(playerStore.Auras)))

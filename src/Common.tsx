@@ -19,6 +19,7 @@ import {
   PlayerState,
   Quality,
   Race,
+  RaceType,
   SavedItemDps,
   SelectedGemsStruct,
   SetsStruct,
@@ -228,7 +229,8 @@ export function GetItemTableItems(
   hiddenItems: number[],
   hidingItems: boolean,
   savedItemDps: SavedItemDps,
-  isMultiItemSimulation: boolean
+  isMultiItemSimulation: boolean,
+  playerRace: Race | undefined
 ): Item[] {
   const itemSlotDetailed = ItemSlotToItemSlotDetailed(itemSlot, itemSubSlot)
   const savedItemSlotDpsExists = savedItemDps[itemSlotDetailed] != null
@@ -239,13 +241,14 @@ export function GetItemTableItems(
 
   return Items.filter(e => {
     return (
+      selectedItems[itemSlotDetailed] === e.Id ||
       (e.ItemSlot === itemSlot &&
+        (e.Faction === undefined || playerRace?.Faction === e.Faction) &&
         sources.includes(e.Phase) &&
         (!hiddenItems.includes(e.Id) || hidingItems) &&
         (!e.Unique ||
           secondRingOrTrinket !== e.Id ||
-          (e.Unique && e.ItemSlot === ItemSlot.Weapon))) ||
-      selectedItems[itemSlotDetailed] === e.Id
+          (e.Unique && e.ItemSlot === ItemSlot.Weapon)))
     )
   }).sort((a, b) => {
     // If it's a multi-item simulation then sort by phase from highest to lowest then by id from highest to lowest, otherwise sort by the saved dps
@@ -298,11 +301,11 @@ export function Average(nums?: number[]) {
 }
 
 export function GetBaseStats(
-  race: Race,
+  race: RaceType,
   statsObj?: StatsCollection
 ): StatsCollection {
   let stats = JSON.parse(JSON.stringify(InitialPlayerStats))
-  const raceObj = Races.find(e => e.Race === race)
+  const raceObj = Races.find(e => e.Type === race)
 
   if (raceObj && raceObj.Stats) {
     Object.entries(raceObj.Stats).forEach(stat => {
@@ -574,30 +577,20 @@ export function AddOrMultiplyStat(
   }
 }
 
-export function CalculatePlayerStats(
-  playerState: PlayerState
-): StatsCollection {
+export function CalculatePlayerStats(player: PlayerState): StatsCollection {
   let mainStatsObj: StatsCollection = JSON.parse(
     JSON.stringify(InitialPlayerStats)
   )
 
   GetBaseStats(
-    playerState.Settings[Setting.race] as unknown as Race,
+    player.Settings[Setting.race] as unknown as RaceType,
     mainStatsObj
   )
-  GetAurasStats(playerState.Auras, mainStatsObj)
-  GetItemsStats(playerState.SelectedItems, mainStatsObj)
-  GetGemsStats(
-    playerState.SelectedItems,
-    playerState.SelectedGems,
-    mainStatsObj
-  )
-  GetEnchantsStats(
-    playerState.SelectedItems,
-    playerState.SelectedEnchants,
-    mainStatsObj
-  )
-  GetTalentsStats(playerState.Talents, playerState.Settings, mainStatsObj)
+  GetAurasStats(player.Auras, mainStatsObj)
+  GetItemsStats(player.SelectedItems, mainStatsObj)
+  GetGemsStats(player.SelectedItems, player.SelectedGems, mainStatsObj)
+  GetEnchantsStats(player.SelectedItems, player.SelectedEnchants, mainStatsObj)
+  GetTalentsStats(player.Talents, player.Settings, mainStatsObj)
 
   return mainStatsObj
 }

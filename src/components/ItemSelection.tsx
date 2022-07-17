@@ -28,6 +28,7 @@ import {
 } from '../Common'
 import { Enchants } from '../data/Enchants'
 import { Items } from '../data/Items'
+import { Races } from '../data/Races'
 import i18n from '../i18n/config'
 import {
   setEnchantsStats,
@@ -53,6 +54,7 @@ import {
   ItemSlot,
   ItemSlotDetailed,
   SelectedGemsStruct,
+  Setting,
   SocketColor,
   Stat,
   SubSlotValue,
@@ -86,8 +88,8 @@ const itemSlotInformation: {
 
 export default function ItemSelection() {
   const [hidingItems, setHidingItems] = useState(false)
-  const playerStore = useSelector((state: RootState) => state.player)
-  const uiStore = useSelector((state: RootState) => state.ui)
+  const player = useSelector((state: RootState) => state.player)
+  const ui = useSelector((state: RootState) => state.ui)
   const dispatch = useDispatch()
   const { t } = useTranslation()
   const [items, setItems] = useState<Item[] | undefined>()
@@ -96,44 +98,46 @@ export default function ItemSelection() {
   useEffect(() => {
     setItems(
       GetItemTableItems(
-        uiStore.SelectedItemSlot,
-        uiStore.SelectedItemSubSlot,
-        playerStore.SelectedItems,
-        uiStore.Sources,
-        uiStore.HiddenItems,
+        ui.SelectedItemSlot,
+        ui.SelectedItemSubSlot,
+        player.SelectedItems,
+        ui.Sources,
+        ui.HiddenItems,
         hidingItems,
-        uiStore.SavedItemDps,
-        false
+        ui.SavedItemDps,
+        false,
+        Races.find(x => x.Type === player.Settings[Setting.race])
       )
     )
   }, [
-    uiStore.SelectedItemSlot,
-    uiStore.SelectedItemSubSlot,
-    uiStore.Sources,
-    uiStore.HiddenItems,
-    uiStore.SavedItemDps,
-    playerStore.SelectedItems,
+    ui.SelectedItemSlot,
+    ui.SelectedItemSubSlot,
+    ui.Sources,
+    ui.HiddenItems,
+    ui.SavedItemDps,
+    player.SelectedItems,
     hidingItems,
+    player.Settings,
   ])
 
   useEffect(() => {
     setEnchants(
-      items?.filter(item => !uiStore.HiddenItems.includes(item.Id))?.length
+      items?.filter(item => !ui.HiddenItems.includes(item.Id))?.length
         ? Enchants.filter(
             e =>
-              e.ItemSlot === uiStore.SelectedItemSlot &&
-              uiStore.Sources.includes(e.Phase)
+              e.ItemSlot === ui.SelectedItemSlot &&
+              ui.Sources.includes(e.Phase)
           )
         : undefined
     )
-  }, [items, uiStore.HiddenItems, uiStore.SelectedItemSlot, uiStore.Sources])
+  }, [items, ui.HiddenItems, ui.SelectedItemSlot, ui.Sources])
 
   function changeEquippedItemId(itemSlot: ItemSlotDetailed, newItemId: number) {
-    if (playerStore.SelectedItems[itemSlot] === newItemId) {
+    if (player.SelectedItems[itemSlot] === newItemId) {
       return
     }
 
-    let newSelectedItems = JSON.parse(JSON.stringify(playerStore.SelectedItems))
+    let newSelectedItems = JSON.parse(JSON.stringify(player.SelectedItems))
     newSelectedItems[itemSlot] = newItemId
 
     if (newItemId !== 0) {
@@ -146,12 +150,10 @@ export default function ItemSelection() {
 
     dispatch(setSelectedItems(newSelectedItems))
     dispatch(setItemsStats(GetItemsStats(newSelectedItems)))
-    dispatch(
-      setGemsStats(GetGemsStats(newSelectedItems, playerStore.SelectedGems))
-    )
+    dispatch(setGemsStats(GetGemsStats(newSelectedItems, player.SelectedGems)))
     dispatch(
       setEnchantsStats(
-        GetEnchantsStats(newSelectedItems, playerStore.SelectedEnchants)
+        GetEnchantsStats(newSelectedItems, player.SelectedEnchants)
       )
     )
     dispatch(setItemSetCounts(GetItemSetCounts(newSelectedItems)))
@@ -160,20 +162,20 @@ export default function ItemSelection() {
   function itemClickHandler(item: Item, itemSlot: ItemSlotDetailed) {
     changeEquippedItemId(
       itemSlot,
-      playerStore.SelectedItems[itemSlot] === item.Id ? 0 : item.Id
+      player.SelectedItems[itemSlot] === item.Id ? 0 : item.Id
     )
   }
 
   function enchantClickHandler(enchant: Enchant, itemSlot: ItemSlotDetailed) {
     let newSelectedEnchants = JSON.parse(
-      JSON.stringify(playerStore.SelectedEnchants)
+      JSON.stringify(player.SelectedEnchants)
     )
     newSelectedEnchants[itemSlot] =
       newSelectedEnchants[itemSlot] === enchant.Id ? 0 : enchant.Id
     dispatch(setSelectedEnchants(newSelectedEnchants))
     dispatch(
       setEnchantsStats(
-        GetEnchantsStats(playerStore.SelectedItems, newSelectedEnchants)
+        GetEnchantsStats(player.SelectedItems, newSelectedEnchants)
       )
     )
   }
@@ -192,27 +194,27 @@ export default function ItemSelection() {
       setGemSelectionTable({
         Visible: true,
         ItemId: itemId,
-        ItemSlot: uiStore.SelectedItemSlot,
+        ItemSlot: ui.SelectedItemSlot,
         SocketNumber: socketNumber,
         SocketColor: socketColor,
-        ItemSubSlot: uiStore.SelectedItemSubSlot,
+        ItemSubSlot: ui.SelectedItemSubSlot,
       })
     )
   }
 
   function removeGemFromSocket(itemId: string, socketNumber: number) {
     let newSelectedGems: SelectedGemsStruct = JSON.parse(
-      JSON.stringify(playerStore.SelectedGems)
+      JSON.stringify(player.SelectedGems)
     )
 
     let currentItemSocketsValue =
-      newSelectedGems[uiStore.SelectedItemSlot][itemId]
+      newSelectedGems[ui.SelectedItemSlot][itemId]
 
     if (currentItemSocketsValue[socketNumber] !== 0) {
       currentItemSocketsValue[socketNumber] = 0
       dispatch(setSelectedGems(newSelectedGems))
       dispatch(
-        setGemsStats(GetGemsStats(playerStore.SelectedItems, newSelectedGems))
+        setGemsStats(GetGemsStats(player.SelectedItems, newSelectedGems))
       )
     }
   }
@@ -222,9 +224,7 @@ export default function ItemSelection() {
     subSlot: SubSlotValue
   ): boolean {
     const equippedEnchantId =
-      playerStore.SelectedEnchants[
-        ItemSlotToItemSlotDetailed(itemSlot, subSlot)
-      ]
+      player.SelectedEnchants[ItemSlotToItemSlotDetailed(itemSlot, subSlot)]
 
     if (
       itemSlot === ItemSlot.Finger ||
@@ -237,7 +237,7 @@ export default function ItemSelection() {
     return (
       (!equippedEnchantId || [null, 0].includes(equippedEnchantId)) &&
       [0, null].includes(
-        playerStore.SelectedItems[ItemSlotToItemSlotDetailed(itemSlot, subSlot)]
+        player.SelectedItems[ItemSlotToItemSlotDetailed(itemSlot, subSlot)]
       ) === false
     )
   }
@@ -256,8 +256,8 @@ export default function ItemSelection() {
             <Typography
               onClick={() => itemSlotClickHandler(slot.ItemSlot, slot.SubSlot)}
               data-selected={
-                uiStore.SelectedItemSlot === slot.ItemSlot &&
-                (!slot.SubSlot || uiStore.SelectedItemSubSlot === slot.SubSlot)
+                ui.SelectedItemSlot === slot.ItemSlot &&
+                (!slot.SubSlot || ui.SelectedItemSubSlot === slot.SubSlot)
               }
             >
               {t(slot.Name)}
@@ -277,7 +277,7 @@ export default function ItemSelection() {
         onClick={() =>
           dispatch(
             setFillItemSocketsWindowVisibility(
-              !uiStore.FillItemSocketsWindowVisible
+              !ui.FillItemSocketsWindowVisible
             )
           )
         }
@@ -289,7 +289,7 @@ export default function ItemSelection() {
         onClick={() =>
           dispatch(
             setEquippedItemsWindowVisibility(
-              !uiStore.EquippedItemsWindowVisible
+              !ui.EquippedItemsWindowVisible
             )
           )
         }
@@ -401,20 +401,20 @@ export default function ItemSelection() {
               key={item.Id}
               className='item-row'
               data-selected={
-                playerStore.SelectedItems[
+                player.SelectedItems[
                   ItemSlotToItemSlotDetailed(
-                    uiStore.SelectedItemSlot,
-                    uiStore.SelectedItemSubSlot
+                    ui.SelectedItemSlot,
+                    ui.SelectedItemSubSlot
                   )
                 ] === item.Id
               }
-              data-hidden={uiStore.HiddenItems.includes(item.Id)}
+              data-hidden={ui.HiddenItems.includes(item.Id)}
               onClick={() =>
                 itemClickHandler(
                   item,
                   ItemSlotToItemSlotDetailed(
-                    uiStore.SelectedItemSlot,
-                    uiStore.SelectedItemSubSlot
+                    ui.SelectedItemSlot,
+                    ui.SelectedItemSubSlot
                   )
                 )
               }
@@ -426,7 +426,7 @@ export default function ItemSelection() {
                   color: 'white',
                 }}
                 title={
-                  uiStore.HiddenItems.includes(item.Id)
+                  ui.HiddenItems.includes(item.Id)
                     ? 'Show Item'
                     : 'Hide Item'
                 }
@@ -463,7 +463,7 @@ export default function ItemSelection() {
                 {
                   <ItemSocketDisplay
                     item={item}
-                    itemSlot={uiStore.SelectedItemSlot}
+                    itemSlot={ui.SelectedItemSlot}
                     itemSocketClickHandler={itemSocketClickHandler}
                     removeGemFromSocket={removeGemFromSocket}
                   />
@@ -500,24 +500,24 @@ export default function ItemSelection() {
                 style={{ color: 'white', textAlign: 'center' }}
                 id={item.Id.toString()}
               >
-                {uiStore.SavedItemDps[
+                {ui.SavedItemDps[
                   ItemSlotToItemSlotDetailed(
-                    uiStore.SelectedItemSlot,
-                    uiStore.SelectedItemSubSlot
+                    ui.SelectedItemSlot,
+                    ui.SelectedItemSubSlot
                   )
                 ] &&
-                uiStore.SavedItemDps[
+                ui.SavedItemDps[
                   ItemSlotToItemSlotDetailed(
-                    uiStore.SelectedItemSlot,
-                    uiStore.SelectedItemSubSlot
+                    ui.SelectedItemSlot,
+                    ui.SelectedItemSubSlot
                   )
                 ][item.Id]
                   ? (
                       Math.round(
-                        uiStore.SavedItemDps[
+                        ui.SavedItemDps[
                           ItemSlotToItemSlotDetailed(
-                            uiStore.SelectedItemSlot,
-                            uiStore.SelectedItemSubSlot
+                            ui.SelectedItemSlot,
+                            ui.SelectedItemSubSlot
                           )
                         ][item.Id] * 100
                       ) / 100
@@ -603,10 +603,10 @@ export default function ItemSelection() {
                 key={enchant.Id}
                 className='enchant-row'
                 data-selected={
-                  playerStore.SelectedEnchants[
+                  player.SelectedEnchants[
                     ItemSlotToItemSlotDetailed(
-                      uiStore.SelectedItemSlot,
-                      uiStore.SelectedItemSubSlot
+                      ui.SelectedItemSlot,
+                      ui.SelectedItemSubSlot
                     )
                   ] === enchant.Id
                 }
@@ -614,8 +614,8 @@ export default function ItemSelection() {
                   enchantClickHandler(
                     enchant,
                     ItemSlotToItemSlotDetailed(
-                      uiStore.SelectedItemSlot,
-                      uiStore.SelectedItemSubSlot
+                      ui.SelectedItemSlot,
+                      ui.SelectedItemSubSlot
                     )
                   )
                 }

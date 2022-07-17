@@ -13,7 +13,7 @@ import { GetBaseStats, IsPetActive } from '../Common'
 import { Races } from '../data/Races'
 import { modifySettingValue, setBaseStats } from '../redux/PlayerSlice'
 import { RootState } from '../redux/Store'
-import { AuraId, Pet, Race, Setting } from '../Types'
+import { AuraId, Pet, RaceType, Setting } from '../Types'
 
 const useStyles = makeStyles(() => ({
   textFieldAndSelect: {
@@ -79,17 +79,17 @@ export default function SettingsDisplay() {
           className={`${mui.select} ${mui.textFieldAndSelect}`}
           value={playerStore.Settings[Setting.race]}
           onChange={e => {
-            const race = Races.find(race => race.Race === e.target.value)
+            const race = Races.find(race => race.Type === e.target.value)
 
             settingModifiedHandler(Setting.race, e.target.value)
-            race && dispatch(setBaseStats(GetBaseStats(race.Race)))
+            race && dispatch(setBaseStats(GetBaseStats(race.Type)))
           }}
         >
-          <MenuItem value={Race.Gnome}>{t('Gnome')}</MenuItem>
-          <MenuItem value={Race.Human}>{t('Human')}</MenuItem>
-          <MenuItem value={Race.Orc}>{t('Orc')}</MenuItem>
-          <MenuItem value={Race.Undead}>{t('Undead')}</MenuItem>
-          <MenuItem value={Race.BloodElf}>{t('Blood Elf')}</MenuItem>
+          <MenuItem value={RaceType.Gnome}>{t('Gnome')}</MenuItem>
+          <MenuItem value={RaceType.Human}>{t('Human')}</MenuItem>
+          <MenuItem value={RaceType.Orc}>{t('Orc')}</MenuItem>
+          <MenuItem value={RaceType.Undead}>{t('Undead')}</MenuItem>
+          <MenuItem value={RaceType.BloodElf}>{t('Blood Elf')}</MenuItem>
         </Select>
         <TextField
           size='small'
