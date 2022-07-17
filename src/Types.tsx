@@ -506,19 +506,33 @@ export enum Quality {
 }
 
 export enum ItemSourceUiName {
-  Dungeon = 'Dungeon',
   P1 = 'P1',
   P2 = 'P2',
   P3 = 'P3',
   P4 = 'P4',
+  Dungeon = 'Dungeon',
+  Raid = 'Raid',
+  Heroic = 'Heroic',
+  Normal = 'Normal',
+  TenMan = '10m',
+  TwentyFiveMan = '25m',
+  Professions = 'Professions',
+  BoE = 'BoE',
 }
 
 export const InitialSourceState: SourcesStruct = [
-  ItemSourceUiName.Dungeon,
   ItemSourceUiName.P1,
   ItemSourceUiName.P2,
   ItemSourceUiName.P3,
   ItemSourceUiName.P4,
+  ItemSourceUiName.Dungeon,
+  ItemSourceUiName.Raid,
+  ItemSourceUiName.Heroic,
+  ItemSourceUiName.Normal,
+  ItemSourceUiName.TenMan,
+  ItemSourceUiName.TwentyFiveMan,
+  ItemSourceUiName.Professions,
+  ItemSourceUiName.BoE,
 ]
 
 export type SourcesStruct = ItemSourceUiName[]
@@ -746,6 +760,13 @@ export interface Source {
   Name: ItemSourceUiName
   Phase?: Phase
   Dungeon?: boolean
+  Raid?: boolean
+  Heroic?: boolean
+  Normal?: boolean
+  TenMan?: boolean
+  TwentyFiveMan?: boolean
+  Professions?: boolean
+  BoE?: boolean
 }
 
 export enum BindType {

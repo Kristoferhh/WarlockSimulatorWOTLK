@@ -11,7 +11,7 @@ import {
   GetItemSetCounts,
   GetItemsStats,
 } from '../Common'
-import { UiSources } from '../data/Sources'
+import { UiSources } from '../data/UiSources'
 import {
   DeleteProfile,
   RenameProfile,

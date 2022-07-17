@@ -37,4 +37,22 @@ export const ItemSources: ItemSource[] = [
     BindType: BindType.BoE,
     Profession: Profession.Jewelcrafting,
   },
+  {
+    Name: ItemSourceName.Naxxramas10Normal,
+    BindType: BindType.BoP,
+    Instance: {
+      Size: InstanceSize.Ten,
+      Difficulty: InstanceDifficulty.Normal,
+      Type: InstanceType.Raid,
+    },
+  },
+  {
+    Name: ItemSourceName.Naxxramas25Normal,
+    BindType: BindType.BoP,
+    Instance: {
+      Size: InstanceSize.TwentyFive,
+      Difficulty: InstanceDifficulty.Normal,
+      Type: InstanceType.Raid,
+    },
+  },
 ]

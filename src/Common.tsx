@@ -5,10 +5,11 @@ import { Items } from './data/Items'
 import { ItemSources } from './data/ItemSource'
 import { Races } from './data/Races'
 import { Sockets } from './data/Sockets'
-import { UiSources } from './data/Sources'
 import { TalentTreeStruct } from './data/Talents'
+import { UiSources } from './data/UiSources'
 import {
   AuraId,
+  BindType,
   GemColor,
   InitialPlayerStats,
   InitialSetCounts,
@@ -226,21 +227,23 @@ export function DoesItemMeetSourcesCriteria(
   itemPhase: Phase,
   selectedUiSources: SourcesStruct
 ): boolean {
-  debugger
   const itemSourceObj = ItemSources.find(x => x.Name === itemSource)
 
   for (const uiSource of UiSources) {
-    if (!selectedUiSources.some(x => x === uiSource.Name)) {
-      if (itemPhase === uiSource.Phase) {
-        return false
-      }
-
-      if (
-        itemSourceObj?.Instance?.Type === InstanceType.Dungeon &&
-        uiSource.Dungeon
-      ) {
-        return false
-      }
+    if (
+      // Loops through all sources and if any of them are not selected and they have any attribute (like being from a dungeon or being in phase 1 etc.) and the item also has that attribute then we return false
+      !selectedUiSources.some(
+        selectedUiSource => selectedUiSource === uiSource.Name
+      ) &&
+      (itemPhase === uiSource.Phase ||
+        (itemSourceObj?.Instance?.Type === InstanceType.Dungeon &&
+          uiSource.Dungeon) ||
+        (itemSourceObj?.Instance?.Type === InstanceType.Raid &&
+          uiSource.Raid) ||
+        (itemSourceObj?.BindType === BindType.BoE && uiSource.BoE) ||
+        (itemSourceObj?.Profession !== undefined && uiSource.Professions))
+    ) {
+      return false
     }
   }
 
