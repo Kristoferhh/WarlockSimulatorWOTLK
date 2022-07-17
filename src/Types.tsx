@@ -298,7 +298,7 @@ export const InitialSettings: { [key in Setting]: string } = {
   [Setting.minFightLength]: '150',
   [Setting.maxFightLength]: '210',
   [Setting.targetLevel]: '83',
-  [Setting.petChoice]: '2',
+  [Setting.petChoice]: Pet.Imp,
   [Setting.petIsAggressive]: 'true',
   [Setting.enemyArmor]: '7700',
   [Setting.targetShadowResistance]: '0',

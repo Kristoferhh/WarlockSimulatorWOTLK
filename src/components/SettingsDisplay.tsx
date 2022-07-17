@@ -192,10 +192,10 @@ export default function SettingsDisplay() {
             settingModifiedHandler(Setting.petChoice, e.target.value)
           }
         >
-          <MenuItem value={Pet.Imp}>{t('Imp')}</MenuItem>
-          <MenuItem value={Pet.Succubus}>{t('Succubus')}</MenuItem>
-          <MenuItem value={Pet.Felhunter}>{t('Felhunter')}</MenuItem>
-          <MenuItem value={Pet.Felguard}>{t('Felguard')}</MenuItem>
+          <MenuItem value={Pet.Imp}>{t(Pet.Imp)}</MenuItem>
+          <MenuItem value={Pet.Succubus}>{t(Pet.Succubus)}</MenuItem>
+          <MenuItem value={Pet.Felhunter}>{t(Pet.Felhunter)}</MenuItem>
+          <MenuItem value={Pet.Felguard}>{t(Pet.Felguard)}</MenuItem>
         </Select>
         {isPetActive(playerStore.Settings, true, true) && (
           <TextField
