@@ -35,9 +35,10 @@ ManaPotion::ManaPotion(Player& player,
 void ManaPotion::Cast() {
   Spell::Cast();
   const double kCurrentPlayerMana = entity.stats.mana;
-  const double kManaGain          = entity.player->settings.randomize_values && min_mana_gain > 0 && max_mana_gain > 0
-                                        ? entity.player->rng.Range(min_mana_gain, max_mana_gain)
-                                        : mana_gain;
+  const double kManaGain =
+      entity.player->settings.randomize_values && min_mana_gain > 0 && max_mana_gain > 0
+          ? entity.player->rng.Range(static_cast<int>(min_mana_gain), static_cast<int>(max_mana_gain))
+          : mana_gain;
 
   entity.stats.mana        = std::min(entity.stats.max_mana, kCurrentPlayerMana + kManaGain);
   const double kManaGained = entity.stats.mana - kCurrentPlayerMana;

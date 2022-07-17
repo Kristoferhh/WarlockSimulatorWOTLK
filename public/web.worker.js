@@ -34,7 +34,7 @@ onmessage = event => {
         // TODO for the love of god make this file use TypeScript
         const auras = module.allocAuras()
         auras.felArmor = playerData.Auras.includes(47893)
-        auras.judgementOfWisdom = playerData.Auras.includes(20354)
+        auras.judgementOfWisdom = playerData.Auras.includes(20186)
         auras.manaSpringTotem = playerData.Auras.includes(25570)
         auras.wrathOfAirTotem = playerData.Auras.includes(3738)
         auras.totemOfWrath = playerData.Auras.includes(30706)

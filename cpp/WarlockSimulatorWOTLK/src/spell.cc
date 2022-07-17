@@ -28,8 +28,8 @@ Spell::Spell(Entity& entity,
              std::shared_ptr<DamageOverTime> dot,
              const double kMinDmg,
              const double kMaxDmg,
-             const int kMinManaGain,
-             const int kMaxManaGain,
+             const double kMinManaGain,
+             const double kMaxManaGain,
              const double kManaCost,
              const int kCooldown,
              SpellSchool spell_school,
@@ -53,6 +53,11 @@ Spell::Spell(Entity& entity,
   // If the mana cost is between 0 and 1 then it's a percentage of the entity's base mana
   if (mana_cost > 0 && mana_cost <= 1) {
     mana_cost *= entity.kBaseMana;
+  }
+
+  // If the mana gain is between 0 and 1 then it's a percentage of the entity's base mana
+  if (mana_gain > 0 && mana_gain <= 1) {
+    mana_gain *= entity.kBaseMana;
   }
 
   if (entity.recording_combat_log_breakdown && !entity.combat_log_breakdown.contains(kName)) {

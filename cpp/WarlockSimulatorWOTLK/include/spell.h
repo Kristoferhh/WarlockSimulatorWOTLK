@@ -39,8 +39,8 @@ struct Spell {
   double cast_time                   = 0;
   double cooldown                    = 0;
   double mana_cost                   = 0;
-  int min_mana_gain                  = 0;
-  int max_mana_gain                  = 0;
+  double min_mana_gain               = 0;
+  double max_mana_gain               = 0;
   double mana_gain                   = 0;
   int amount_of_casts_per_fight      = 0;
   int amount_of_casts_this_fight     = 0;
@@ -79,8 +79,8 @@ struct Spell {
                  std::shared_ptr<DamageOverTime> dot = nullptr,
                  double kMinDmg                      = 0,
                  double kMaxDmg                      = 0,
-                 int kMinManaGain                    = 0,
-                 int kMaxManaGain                    = 0,
+                 double kMinManaGain                 = 0,
+                 double kMaxManaGain                 = 0,
                  double kManaCost                    = 0,
                  int kCooldown                       = 0,
                  SpellSchool spell_school            = SpellSchool::kNoSchool,
