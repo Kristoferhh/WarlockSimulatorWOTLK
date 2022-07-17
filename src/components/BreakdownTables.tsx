@@ -6,6 +6,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Typography,
 } from '@mui/material'
 import { nanoid } from 'nanoid'
 import { useTranslation } from 'react-i18next'
@@ -122,7 +123,7 @@ export default function BreakdownTables() {
     <Grid container>
       <Grid
         item
-        xs={5}
+        xs
         className='breakdown-section'
         id='damage-breakdown-section'
         style={{ display: 'inline-block' }}
@@ -137,16 +138,24 @@ export default function BreakdownTables() {
               <TableCell style={{ color: 'white' }}>{t('Name')}</TableCell>
               <TableCell style={{ color: 'white' }}>{t('Damage')}</TableCell>
               <TableCell align='right' style={{ color: 'white' }}>
-                {t('Casts')}
+                <Typography noWrap variant='inherit'>
+                  {t('Casts')}
+                </Typography>
               </TableCell>
               <TableCell align='right' style={{ color: 'white' }}>
-                {t('Avg Cast')}
+                <Typography noWrap variant='inherit'>
+                  {t('Avg Cast')}
+                </Typography>
               </TableCell>
               <TableCell align='right' style={{ color: 'white' }}>
-                {t('Crit %')}
+                <Typography noWrap variant='inherit'>
+                  {t('Crit')}
+                </Typography>
               </TableCell>
               <TableCell align='right' style={{ color: 'white' }}>
-                {t('Miss %')}
+                <Typography noWrap variant='inherit'>
+                  {t('Miss')}
+                </Typography>
               </TableCell>
               <TableCell
                 align='right'
@@ -155,7 +164,9 @@ export default function BreakdownTables() {
                   color: 'white',
                 }}
               >
-                {t('Dodge %')}
+                <Typography noWrap variant='inherit'>
+                  {t('Dodge')}
+                </Typography>
               </TableCell>
               <TableCell
                 align='right'
@@ -164,10 +175,14 @@ export default function BreakdownTables() {
                   color: 'white',
                 }}
               >
-                {t('Glancing %')}
+                <Typography noWrap variant='inherit'>
+                  {t('Glancing')}
+                </Typography>
               </TableCell>
               <TableCell align='right' style={{ color: 'white' }}>
-                {t('Dps')}
+                <Typography noWrap variant='inherit'>
+                  {t('Dps')}
+                </Typography>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -182,230 +197,7 @@ export default function BreakdownTables() {
               return (
                 <TableRow key={nanoid()} className='spell-damage-information'>
                   <TableCell>
-                    {spellObj?.IconName && spellObj.IconName.length > 0 && (
-                      <img
-                        alt={spellObj.Name}
-                        className='breakdown-table-spell-icon'
-                        src={`${process.env.PUBLIC_URL}/img/${spellObj?.IconName}.jpg`}
-                      />
-                    )}
-                    <Link
-                      className='breakdown-table-spell-name'
-                      target='_blank'
-                      rel='noreferrer'
-                      href={
-                        spellObj && spellObj.Id !== 0
-                          ? `${getBaseWowheadUrl(i18n.language)}/${
-                              spellObj.WowheadType
-                            }=${spellObj.Id}`
-                          : ''
-                      }
-                    >
-                      {t(spell.name)}
-                    </Link>
-                  </TableCell>
-                  <TableCell style={{ color: 'white' }}>
-                    <meter
-                      value={
-                        breakdownObj.SpellDamageDict[spell.name]
-                          ? (breakdownObj.SpellDamageDict[spell.name] /
-                              breakdownObj.TotalDamageDone) *
-                            100
-                          : '0'
-                      }
-                      min='0'
-                      max='100'
-                    ></meter>{' '}
-                    {breakdownObj.SpellDamageDict[spell.name]
-                      ? formatPercentage(
-                          breakdownObj.SpellDamageDict[spell.name] /
-                            breakdownObj.TotalDamageDone
-                        )
-                      : 0}
-                    %
-                  </TableCell>
-                  <TableCell
-                    style={{ color: 'white' }}
-                    className='number'
-                    title={spell.casts.toString()}
-                  >
-                    {spell.casts / breakdownObj.TotalIterationAmount < 2
-                      ? Math.round(
-                          (spell.casts / breakdownObj.TotalIterationAmount) * 10
-                        ) / 10
-                      : Math.round(
-                          spell.casts / breakdownObj.TotalIterationAmount
-                        )}
-                  </TableCell>
-                  <TableCell style={{ color: 'white' }} className='number'>
-                    {breakdownObj.SpellDamageDict[spell.name]
-                      ? Math.round(
-                          breakdownObj.SpellDamageDict[spell.name] / spell.casts
-                        )
-                      : 0}
-                  </TableCell>
-                  <TableCell style={{ color: 'white' }} className='number'>
-                    {formatPercentage(spell.crits / spell.casts)}
-                  </TableCell>
-                  <TableCell style={{ color: 'white' }} className='number'>
-                    {formatPercentage(spell.misses / spell.casts)}
-                  </TableCell>
-                  {breakdownObj.SpellDamageDict.Melee && (
-                    <>
-                      <TableCell style={{ color: 'white' }} className='number'>
-                        {formatPercentage(spell.dodges / spell.casts)}
-                      </TableCell>
-                      <TableCell style={{ color: 'white' }} className='number'>
-                        {formatPercentage(spell.glancingBlows / spell.casts)}
-                      </TableCell>
-                    </>
-                  )}
-                  <TableCell style={{ color: 'white' }} className='number'>
-                    {breakdownObj.SpellDamageDict[spell.name]
-                      ? Math.round(
-                          (breakdownObj.SpellDamageDict[spell.name] /
-                            breakdownObj.TotalSimulationFightLength) *
-                            100
-                        ) / 100
-                      : 0}
-                  </TableCell>
-                </TableRow>
-              )
-            })}
-          </TableBody>
-        </Table>
-      </Grid>
-      <Grid
-        item
-        xs={3.5}
-        className='breakdown-section'
-        id='mana-gain-breakdown-section'
-        style={{ display: 'inline-block' }}
-      >
-        <Table
-          className='breakdown-table tablesorter'
-          id='mana-gain-breakdown-table'
-          data-sortlist='[[1,1]]'
-        >
-          <TableHead>
-            <TableRow>
-              <TableCell style={{ color: 'white' }}>{t('Name')}</TableCell>
-              <TableCell style={{ color: 'white' }}>
-                {t('% Of Total Gain')}
-              </TableCell>
-              <TableCell align='right' style={{ color: 'white' }}>
-                {t('Casts')}
-              </TableCell>
-              <TableCell align='right' style={{ color: 'white' }}>
-                {t('Avg Cast')}
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {breakdownObj.Data.filter(
-              e =>
-                breakdownObj.SpellManaGainDict[e.name] &&
-                breakdownObj.SpellManaGainDict[e.name] > 0
-            ).map(spell => {
-              const spellObj = findSpellByName(spell.name, talents)
-
-              return (
-                <TableRow key={nanoid()} className='spell-damage-information'>
-                  <TableCell>
-                    {spellObj?.IconName && spellObj.IconName.length > 0 && (
-                      <img
-                        alt={spellObj.Name}
-                        className='breakdown-table-spell-icon'
-                        src={`${process.env.PUBLIC_URL}/img/${spellObj?.IconName}.jpg`}
-                      />
-                    )}
-                    <Link
-                      className='breakdown-table-spell-name'
-                      target='_blank'
-                      rel='noreferrer'
-                      href={
-                        spellObj && spellObj.Id !== 0
-                          ? `${getBaseWowheadUrl(i18n.language)}/${
-                              spellObj.WowheadType
-                            }=${spellObj.Id}`
-                          : ''
-                      }
-                    >
-                      {t(spell.name)}
-                    </Link>
-                  </TableCell>
-                  <TableCell style={{ color: 'white' }}>
-                    <meter
-                      value={
-                        breakdownObj.SpellManaGainDict[spell.name]
-                          ? (breakdownObj.SpellManaGainDict[spell.name] /
-                              breakdownObj.TotalManaGained) *
-                            100
-                          : '0'
-                      }
-                      min='0'
-                      max='100'
-                    ></meter>{' '}
-                    {breakdownObj.SpellManaGainDict[spell.name]
-                      ? formatPercentage(
-                          breakdownObj.SpellManaGainDict[spell.name] /
-                            breakdownObj.TotalManaGained
-                        )
-                      : 0}
-                    %
-                  </TableCell>
-                  <TableCell style={{ color: 'white' }} className='number'>
-                    {spell.casts / breakdownObj.TotalIterationAmount < 2
-                      ? Math.round(
-                          (spell.casts / breakdownObj.TotalIterationAmount) * 10
-                        ) / 10
-                      : Math.round(
-                          spell.casts / breakdownObj.TotalIterationAmount
-                        )}
-                  </TableCell>
-                  <TableCell style={{ color: 'white' }} className='number'>
-                    {breakdownObj.SpellManaGainDict[spell.name]
-                      ? Math.round(
-                          breakdownObj.SpellManaGainDict[spell.name] /
-                            spell.casts
-                        )
-                      : 0}
-                  </TableCell>
-                </TableRow>
-              )
-            })}
-          </TableBody>
-        </Table>
-      </Grid>
-      <Grid
-        item
-        xs={3.5}
-        className='breakdown-section'
-        id='aura-breakdown-section'
-        style={{ display: 'inline-block' }}
-      >
-        <Table
-          className='breakdown-table tablesorter'
-          id='aura-breakdown-table'
-          data-sortlist='[[2,1]]'
-        >
-          <TableHead>
-            <TableRow>
-              <TableCell style={{ color: 'white' }}>{t('Name')}</TableCell>
-              <TableCell align='right' style={{ color: 'white' }}>
-                {t('Count')}
-              </TableCell>
-              <TableCell style={{ color: 'white' }}>{t('Uptime')}</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {breakdownObj.Data.filter(e => e.uptime_in_seconds > 0).map(
-              spell => {
-                const spellObj = findSpellByName(spell.name, talents)
-
-                return (
-                  <TableRow key={nanoid()} className='spell-damage-information'>
-                    <TableCell>
+                    <Grid container>
                       {spellObj?.IconName && spellObj.IconName.length > 0 && (
                         <img
                           alt={spellObj.Name}
@@ -425,35 +217,344 @@ export default function BreakdownTables() {
                             : ''
                         }
                       >
-                        {t(spell.name)}
+                        <Typography noWrap variant='inherit'>
+                          {t(spell.name)}
+                        </Typography>
                       </Link>
-                    </TableCell>
-                    {/*If the aura's count is less than 2 then show 1 decimal place, otherwise just round the value*/}
-                    <TableCell style={{ color: 'white' }} className='number'>
-                      {spell.count / breakdownObj.TotalIterationAmount < 2
-                        ? Math.round(
-                            (spell.count / breakdownObj.TotalIterationAmount) *
-                              10
-                          ) / 10
-                        : Math.round(
-                            spell.count / breakdownObj.TotalIterationAmount
-                          )}
-                    </TableCell>
-                    <TableCell style={{ color: 'white' }}>
+                    </Grid>
+                  </TableCell>
+                  <TableCell style={{ color: 'white' }}>
+                    <Grid container>
                       <meter
                         value={
-                          (spell.uptime_in_seconds /
-                            breakdownObj.TotalSimulationFightLength) *
-                          100
+                          breakdownObj.SpellDamageDict[spell.name]
+                            ? (breakdownObj.SpellDamageDict[spell.name] /
+                                breakdownObj.TotalDamageDone) *
+                              100
+                            : '0'
                         }
                         min='0'
                         max='100'
-                      ></meter>{' '}
-                      {formatPercentage(
-                        spell.uptime_in_seconds /
-                          breakdownObj.TotalSimulationFightLength
+                      ></meter>
+                      <Typography
+                        noWrap
+                        variant='inherit'
+                        style={{ marginLeft: '5px' }}
+                      >
+                        {breakdownObj.SpellDamageDict[spell.name]
+                          ? formatPercentage(
+                              breakdownObj.SpellDamageDict[spell.name] /
+                                breakdownObj.TotalDamageDone
+                            )
+                          : 0}
+                        %
+                      </Typography>
+                    </Grid>
+                  </TableCell>
+                  <TableCell
+                    style={{ color: 'white' }}
+                    className='number'
+                    title={spell.casts.toString()}
+                  >
+                    <Typography noWrap variant='inherit'>
+                      {spell.casts / breakdownObj.TotalIterationAmount < 2
+                        ? Math.round(
+                            (spell.casts / breakdownObj.TotalIterationAmount) *
+                              10
+                          ) / 10
+                        : Math.round(
+                            spell.casts / breakdownObj.TotalIterationAmount
+                          )}
+                    </Typography>
+                  </TableCell>
+                  <TableCell style={{ color: 'white' }} className='number'>
+                    <Typography noWrap variant='inherit'>
+                      {breakdownObj.SpellDamageDict[spell.name]
+                        ? Math.round(
+                            breakdownObj.SpellDamageDict[spell.name] /
+                              spell.casts
+                          )
+                        : 0}
+                    </Typography>
+                  </TableCell>
+                  <TableCell style={{ color: 'white' }} className='number'>
+                    <Typography noWrap variant='inherit'>
+                      {`${formatPercentage(spell.crits / spell.casts)}%`}
+                    </Typography>
+                  </TableCell>
+                  <TableCell style={{ color: 'white' }} className='number'>
+                    <Typography noWrap variant='inherit'>{`${formatPercentage(
+                      spell.misses / spell.casts
+                    )}%`}</Typography>
+                  </TableCell>
+                  {breakdownObj.SpellDamageDict.Melee && (
+                    <>
+                      <TableCell style={{ color: 'white' }} className='number'>
+                        <Typography
+                          noWrap
+                          variant='inherit'
+                        >{`${formatPercentage(
+                          spell.dodges / spell.casts
+                        )}%`}</Typography>
+                      </TableCell>
+                      <TableCell style={{ color: 'white' }} className='number'>
+                        <Typography
+                          noWrap
+                          variant='inherit'
+                        >{`${formatPercentage(
+                          spell.glancingBlows / spell.casts
+                        )}%`}</Typography>
+                      </TableCell>
+                    </>
+                  )}
+                  <TableCell style={{ color: 'white' }} className='number'>
+                    <Typography noWrap variant='inherit'>
+                      {breakdownObj.SpellDamageDict[spell.name]
+                        ? Math.round(
+                            (breakdownObj.SpellDamageDict[spell.name] /
+                              breakdownObj.TotalSimulationFightLength) *
+                              100
+                          ) / 100
+                        : 0}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )
+            })}
+          </TableBody>
+        </Table>
+      </Grid>
+      <Grid
+        item
+        xs={3.5}
+        className='breakdown-section'
+        id='mana-gain-breakdown-section'
+        style={{ display: 'inline-block', maxWidth: '550px' }}
+      >
+        <Table
+          className='breakdown-table tablesorter'
+          id='mana-gain-breakdown-table'
+          data-sortlist='[[1,1]]'
+        >
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ color: 'white' }}>
+                <Typography noWrap variant='inherit'>
+                  {t('Name')}
+                </Typography>
+              </TableCell>
+              <TableCell style={{ color: 'white' }}>
+                <Typography noWrap variant='inherit'>
+                  {t('% Of Total Gain')}
+                </Typography>
+              </TableCell>
+              <TableCell align='right' style={{ color: 'white' }}>
+                <Typography noWrap variant='inherit'>
+                  {t('Casts')}
+                </Typography>
+              </TableCell>
+              <TableCell align='right' style={{ color: 'white' }}>
+                <Typography noWrap variant='inherit'>
+                  {t('Avg Cast')}
+                </Typography>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {breakdownObj.Data.filter(
+              e =>
+                breakdownObj.SpellManaGainDict[e.name] &&
+                breakdownObj.SpellManaGainDict[e.name] > 0
+            ).map(spell => {
+              const spellObj = findSpellByName(spell.name, talents)
+
+              return (
+                <TableRow key={nanoid()} className='spell-damage-information'>
+                  <TableCell>
+                    <Grid container>
+                      {spellObj?.IconName && spellObj.IconName.length > 0 && (
+                        <img
+                          alt={spellObj.Name}
+                          className='breakdown-table-spell-icon'
+                          src={`${process.env.PUBLIC_URL}/img/${spellObj?.IconName}.jpg`}
+                        />
                       )}
-                      %
+                      <Link
+                        className='breakdown-table-spell-name'
+                        target='_blank'
+                        rel='noreferrer'
+                        href={
+                          spellObj && spellObj.Id !== 0
+                            ? `${getBaseWowheadUrl(i18n.language)}/${
+                                spellObj.WowheadType
+                              }=${spellObj.Id}`
+                            : ''
+                        }
+                      >
+                        <Typography noWrap variant='inherit'>
+                          {t(spell.name)}
+                        </Typography>
+                      </Link>
+                    </Grid>
+                  </TableCell>
+                  <TableCell style={{ color: 'white' }}>
+                    <Grid container>
+                      <meter
+                        value={
+                          breakdownObj.SpellManaGainDict[spell.name]
+                            ? (breakdownObj.SpellManaGainDict[spell.name] /
+                                breakdownObj.TotalManaGained) *
+                              100
+                            : '0'
+                        }
+                        min='0'
+                        max='100'
+                      ></meter>
+                      <Typography
+                        noWrap
+                        variant='inherit'
+                        style={{ marginLeft: '5px' }}
+                      >
+                        {breakdownObj.SpellManaGainDict[spell.name]
+                          ? formatPercentage(
+                              breakdownObj.SpellManaGainDict[spell.name] /
+                                breakdownObj.TotalManaGained
+                            )
+                          : 0}
+                        %
+                      </Typography>
+                    </Grid>
+                  </TableCell>
+                  <TableCell style={{ color: 'white' }} className='number'>
+                    <Typography noWrap variant='inherit'>
+                      {spell.casts / breakdownObj.TotalIterationAmount < 2
+                        ? Math.round(
+                            (spell.casts / breakdownObj.TotalIterationAmount) *
+                              10
+                          ) / 10
+                        : Math.round(
+                            spell.casts / breakdownObj.TotalIterationAmount
+                          )}
+                    </Typography>
+                  </TableCell>
+                  <TableCell style={{ color: 'white' }} className='number'>
+                    <Typography noWrap variant='inherit'>
+                      {breakdownObj.SpellManaGainDict[spell.name]
+                        ? Math.round(
+                            breakdownObj.SpellManaGainDict[spell.name] /
+                              spell.casts
+                          )
+                        : 0}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )
+            })}
+          </TableBody>
+        </Table>
+      </Grid>
+      <Grid
+        item
+        xs={3}
+        className='breakdown-section'
+        id='aura-breakdown-section'
+        style={{ display: 'inline-block', maxWidth: '500px' }}
+      >
+        <Table
+          className='breakdown-table tablesorter'
+          id='aura-breakdown-table'
+          data-sortlist='[[2,1]]'
+        >
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ color: 'white' }}>
+                <Typography noWrap variant='inherit'>
+                  {t('Name')}
+                </Typography>
+              </TableCell>
+              <TableCell align='right' style={{ color: 'white' }}>
+                <Typography noWrap variant='inherit'>
+                  {t('Count')}
+                </Typography>
+              </TableCell>
+              <TableCell style={{ color: 'white' }}>
+                <Typography noWrap variant='inherit'>
+                  {t('Uptime')}
+                </Typography>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {breakdownObj.Data.filter(e => e.uptime_in_seconds > 0).map(
+              spell => {
+                const spellObj = findSpellByName(spell.name, talents)
+
+                return (
+                  <TableRow key={nanoid()} className='spell-damage-information'>
+                    <TableCell>
+                      <Grid container>
+                        {spellObj?.IconName && spellObj.IconName.length > 0 && (
+                          <img
+                            alt={spellObj.Name}
+                            className='breakdown-table-spell-icon'
+                            src={`${process.env.PUBLIC_URL}/img/${spellObj?.IconName}.jpg`}
+                          />
+                        )}
+                        <Link
+                          className='breakdown-table-spell-name'
+                          target='_blank'
+                          rel='noreferrer'
+                          href={
+                            spellObj && spellObj.Id !== 0
+                              ? `${getBaseWowheadUrl(i18n.language)}/${
+                                  spellObj.WowheadType
+                                }=${spellObj.Id}`
+                              : ''
+                          }
+                        >
+                          <Typography noWrap variant='inherit'>
+                            {t(spell.name)}
+                          </Typography>
+                        </Link>
+                      </Grid>
+                    </TableCell>
+                    {/*If the aura's count is less than 2 then show 1 decimal place, otherwise just round the value*/}
+                    <TableCell style={{ color: 'white' }} className='number'>
+                      <Typography noWrap variant='inherit'>
+                        {spell.count / breakdownObj.TotalIterationAmount < 2
+                          ? Math.round(
+                              (spell.count /
+                                breakdownObj.TotalIterationAmount) *
+                                10
+                            ) / 10
+                          : Math.round(
+                              spell.count / breakdownObj.TotalIterationAmount
+                            )}
+                      </Typography>
+                    </TableCell>
+                    <TableCell style={{ color: 'white' }}>
+                      <Grid container>
+                        <meter
+                          value={
+                            (spell.uptime_in_seconds /
+                              breakdownObj.TotalSimulationFightLength) *
+                            100
+                          }
+                          min='0'
+                          max='100'
+                        ></meter>
+                        <Typography
+                          noWrap
+                          variant='inherit'
+                          style={{ marginLeft: '5px' }}
+                        >
+                          {formatPercentage(
+                            spell.uptime_in_seconds /
+                              breakdownObj.TotalSimulationFightLength
+                          )}
+                          %
+                        </Typography>
+                      </Grid>
                     </TableCell>
                   </TableRow>
                 )
