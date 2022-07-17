@@ -425,5 +425,5 @@ void Simulation::SimulationEnd(const long long kSimulationDuration) const {
 
 // TODO :-)
 int Simulation::GetEnemyHealthPercent() const {
-  return static_cast<int>(std::ceil(fight_time_remaining / iteration_fight_length));
+  return static_cast<int>(std::ceil(fight_time_remaining / iteration_fight_length * 100));
 }
