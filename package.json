@@ -1,7 +1,7 @@
 {
   "homepage": "https://kristoferhh.github.io/WarlockSimulatorWOTLK",
   "name": "warlock-simulator-wotlk",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.0",
