@@ -13,6 +13,8 @@ import {
   GemColor,
   InitialPlayerStats,
   InitialSetCounts,
+  InstanceDifficulty,
+  InstanceSize,
   InstanceType,
   Item,
   ItemSlot,
@@ -223,31 +225,48 @@ export function CanGemColorBeInsertedIntoSocketColor(
 }
 
 export function DoesItemMeetSourcesCriteria(
-  itemSource: ItemSourceName,
+  itemSources: ItemSourceName[],
   itemPhase: Phase,
   selectedUiSources: SourcesStruct
 ): boolean {
-  const itemSourceObj = ItemSources.find(x => x.Name === itemSource)
+  let amountOfSourcesThatMeetSourceCriteria = itemSources?.length || 0
 
-  for (const uiSource of UiSources) {
-    if (
-      // Loops through all sources and if any of them are not selected and they have any attribute (like being from a dungeon or being in phase 1 etc.) and the item also has that attribute then we return false
-      !selectedUiSources.some(
-        selectedUiSource => selectedUiSource === uiSource.Name
-      ) &&
-      (itemPhase === uiSource.Phase ||
-        (itemSourceObj?.Instance?.Type === InstanceType.Dungeon &&
-          uiSource.Dungeon) ||
-        (itemSourceObj?.Instance?.Type === InstanceType.Raid &&
-          uiSource.Raid) ||
-        (itemSourceObj?.BindType === BindType.BoE && uiSource.BoE) ||
-        (itemSourceObj?.Profession !== undefined && uiSource.Professions))
-    ) {
-      return false
+  // TODO remove this when Sources isnt nullable anymore
+  if (itemSources) {
+    for (const itemSource of itemSources) {
+      const itemSourceObj = ItemSources.find(x => x.Name === itemSource)
+
+      for (const uiSource of UiSources) {
+        if (
+          // Loops through all sources and if any of them are not selected and they have any attribute (like being from a dungeon or being in phase 1 etc.) and the item also has that attribute then we return false
+          !selectedUiSources.some(
+            selectedUiSource => selectedUiSource === uiSource.Name
+          ) &&
+          (itemPhase === uiSource.Phase ||
+            (itemSourceObj?.Instance?.Type === InstanceType.Dungeon &&
+              uiSource.Dungeon) ||
+            (itemSourceObj?.Instance?.Type === InstanceType.Raid &&
+              uiSource.Raid) ||
+            (itemSourceObj?.BindType === BindType.BoE && uiSource.BoE) ||
+            (itemSourceObj?.Profession !== undefined && uiSource.Professions) ||
+            (itemSourceObj?.Instance?.Difficulty ===
+              InstanceDifficulty.Normal &&
+              uiSource.Normal) ||
+            (itemSourceObj?.Instance?.Difficulty ===
+              InstanceDifficulty.Heroic &&
+              uiSource.Heroic) ||
+            (itemSourceObj?.Instance?.Size === InstanceSize.TwentyFive &&
+              uiSource.TwentyFiveMan) ||
+            (itemSourceObj?.Instance?.Size === InstanceSize.Ten &&
+              uiSource.TenMan))
+        ) {
+          amountOfSourcesThatMeetSourceCriteria--
+        }
+      }
     }
   }
 
-  return true
+  return amountOfSourcesThatMeetSourceCriteria > 0 || itemSources === undefined // TODO change this when Sources isn't nullable anymore
 }
 
 /**
@@ -278,7 +297,7 @@ export function GetItemTableItems(
       selectedItems[itemSlotDetailed] === e.Id ||
       (e.ItemSlot === itemSlot &&
         (e.Faction === undefined || playerRace?.Faction === e.Faction) &&
-        DoesItemMeetSourcesCriteria(e.Source!, e.Phase, sources) &&
+        DoesItemMeetSourcesCriteria(e.Sources!, e.Phase, sources) &&
         (!hiddenItems.includes(e.Id) || hidingItems) &&
         (!e.Unique ||
           secondRingOrTrinket !== e.Id ||

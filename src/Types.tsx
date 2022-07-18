@@ -55,7 +55,7 @@ export interface Item {
   Set?: ItemSet
   DisplayId?: number
   Unique?: boolean
-  Source?: ItemSourceName // TODO make this not nullable
+  Sources?: ItemSourceName[] // TODO make this not nullable
   Phase: Phase
   IsTwoHand?: boolean
 }
@@ -66,7 +66,7 @@ export interface Enchant {
   Quality: Quality
   Stats?: StatsCollection
   Id: number
-  Source?: ItemSourceName // TODO make this not nullable
+  Sources?: ItemSourceName[] // TODO make this not nullable
   Phase: Phase
 }
 
@@ -703,21 +703,74 @@ export enum TalentTree {
 }
 
 export enum ItemSourceName {
+  PitOfSaron = 'Pit of Saron',
+  PitOfSaronHeroic = 'Pit of Saron (H)',
+  HallsOfReflection = 'Halls of Reflection',
+  ForgeOfSouls = 'Forge of Souls',
+  ForgeOfSoulsHeroic = 'Forge of Souls Heroic',
+  BoE = 'Bind on Equip',
+  TrialOfTheCrusader10 = 'Trial of the Crusader 10m',
+  TrialOfTheCrusader10Heroic = 'Trial of the Crusader 10m (H)',
+  BlacksmithingBoE = 'Blacksmithing BoE',
+  ChampionsSeal = `Champion's Seal`,
+  UtgardePinnacle = 'Utgarde Pinnacle',
+  UtgardePinnacleHeroic = 'Utgarde Pinnacle (H)',
+  EmblemOfFrost = 'Emblem of Frost',
+  IcecrownCitadel10 = 'Icecrown Citadel 10m',
+  IcecrownCitadel10Heroic = 'Icecrown Citadel 10m (H)',
+  IcecrownCitadel25 = 'Icecrown Citadel 25m',
+  IcecrownCitadel25Heroic = 'Icecrown Citadel 25m (H)',
+  HallsOfReflectionHeroic = 'Halls of Reflection (H)',
+  Onyxia10 = 'Onyxia 10m',
+  Onyxia25 = 'Onyxia 25m',
+  TrialOfTheCrusader25 = 'Trial of the Crusader 25m',
+  TrialOfTheCrusader25Heroic = 'Trial of the Crusader 25m (H)',
+  EmblemOfTriumph = 'Emblem of Triumph',
+  TrialOfTheChampionHeroic = 'Trial of the Champion (H)',
+  Ulduar10 = 'Ulduar 10m',
+  Ulduar25 = 'Ulduar 25m',
+  Ulduar10Heroic = 'Ulduar 10m (H)',
+  Ulduar25Heroic = 'Ulduar 25m (H)',
+  Quest = 'Quest',
+  ObsidianSanctum10 = 'Obsidian Sanctum 10m',
+  ObsidianSanctum25 = 'Obsidian Sanctum 25m',
+  EmblemOfHeroism = 'Emblem of Heroism',
+  EyeOfEternity25 = 'Eye of Eternity 25m',
+  EyeOfEternity10 = 'Eye of Eternity 10m',
+  DrakTharonKeep = `Drak'Tharon Keep`,
+  DrakTharonKeepHeroic = `Drak'Tharon Keep (H)`,
+  CullingOfStratholme = 'Culling of Stratholme',
+  CullingOfStratholmeHeroic = 'Culling of Stratholme (H)',
+  AhnkahetTheOldKingdom = `Ahn'kahet: The Old Kingdom`,
+  AhnkahetTheOldKingdomHeroic = `Ahn'kahet: The Old Kingdom (H)`,
+  HallsOfLightning = 'Halls of Lightning',
+  HallsOfLightningHeroic = 'Halls of Lightning (H)',
   JewelcraftingBoE = 'Jewelcrafting BoE',
   Jewelcrafting = 'Jewelcrafting',
   Blacksmithing = 'Blacksmithing',
   Enchanting = 'Enchanting',
+  Engineering = 'Engineering',
   Tailoring = 'Tailoring',
+  TailoringBoE = 'Tailoring BoE',
   Inscription = 'Inscription',
   HallsOfStoneHeroic = 'Halls of Stone (H)',
+  HallsOfStone = 'Halls of Stone',
   Oculus = 'The Oculus',
   OculusHeroic = 'The Oculus (H)',
-  Naxxramas25Normal = 'Naxxramas 25m',
-  Naxxramas10Normal = 'Naxxramas 10m',
+  Naxxramas25 = 'Naxxramas 25m',
+  Naxxramas10 = 'Naxxramas 10m',
   KirinTorRevered = 'Kirin Tor - Revered',
   Sunwell = 'Sunwell Plateau',
   BlackTemple = 'Black Temple',
   TheSonsOfHodirExalted = 'The Sons of Hodir - Exalted',
+}
+
+export enum ReputationLevel {
+  Neutral = 'Neutral',
+  Friendly = 'Friendly',
+  Honored = 'Honored',
+  Revered = 'Revered',
+  Exalted = 'Exalted',
 }
 
 export enum InstanceType {
@@ -730,6 +783,7 @@ export enum Profession {
   Enchanting,
   Tailoring,
   Jewelcrafting,
+  Engineering,
 }
 
 export enum InstanceDifficulty {
@@ -745,8 +799,8 @@ export enum InstanceSize {
 
 export interface Instance {
   Type: InstanceType
-  Difficulty: InstanceDifficulty
-  Size: InstanceSize
+  Difficulty?: InstanceDifficulty
+  Size?: InstanceSize
 }
 
 export interface ItemSource {
@@ -754,6 +808,7 @@ export interface ItemSource {
   BindType: BindType
   Instance?: Instance
   Profession?: Profession
+  ReputationLevel?: ReputationLevel
 }
 
 export interface Source {

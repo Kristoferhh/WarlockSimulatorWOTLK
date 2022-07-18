@@ -127,8 +127,8 @@ export default function ItemSelection() {
         ? Enchants.filter(
             e =>
               e.ItemSlot === ui.SelectedItemSlot &&
-              e.Source &&
-              DoesItemMeetSourcesCriteria(e.Source, e.Phase, ui.Sources)
+              e.Sources &&
+              DoesItemMeetSourcesCriteria(e.Sources, e.Phase, ui.Sources)
           )
         : undefined
     )
@@ -465,7 +465,7 @@ export default function ItemSelection() {
                 }
               </TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center' }}>
-                {item.Source && t(item.Source)}
+                {item.Sources && t(item.Sources)}
               </TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center' }}>
                 {item.Stats && item.Stats[Stat.Stamina]}
