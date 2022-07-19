@@ -17,6 +17,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import {
+  DoesItemMeetSourcesCriteria,
   GetBaseWowheadUrl,
   GetEnchantsStats,
   GetGemsStats,
@@ -125,7 +126,9 @@ export default function ItemSelection() {
       items?.filter(item => !ui.HiddenItems.includes(item.Id))?.length
         ? Enchants.filter(
             e =>
-              e.ItemSlot === ui.SelectedItemSlot && ui.Sources.includes(e.Phase)
+              e.ItemSlot === ui.SelectedItemSlot &&
+              e.Sources &&
+              DoesItemMeetSourcesCriteria(e.Sources, e.Phase, ui.Sources)
           )
         : undefined
     )
@@ -462,7 +465,7 @@ export default function ItemSelection() {
                 }
               </TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center' }}>
-                {item.Source && t(item.Source)}
+                {item.Sources && t(item.Sources)}
               </TableCell>
               <TableCell style={{ color: 'white', textAlign: 'center' }}>
                 {item.Stats && item.Stats[Stat.Stamina]}

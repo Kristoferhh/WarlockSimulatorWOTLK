@@ -55,7 +55,7 @@ export interface Item {
   Set?: ItemSet
   DisplayId?: number
   Unique?: boolean
-  Source?: ItemSource // TODO make this not nullable
+  Sources?: ItemSourceName[] // TODO make this not nullable
   Phase: Phase
   IsTwoHand?: boolean
 }
@@ -66,7 +66,7 @@ export interface Enchant {
   Quality: Quality
   Stats?: StatsCollection
   Id: number
-  Source: ItemSource
+  Sources?: ItemSourceName[] // TODO make this not nullable
   Phase: Phase
 }
 
@@ -505,7 +505,37 @@ export enum Quality {
   Common = 'Common',
 }
 
-export type SourcesStruct = Phase[]
+export enum ItemSourceUiName {
+  P1 = 'P1',
+  P2 = 'P2',
+  P3 = 'P3',
+  P4 = 'P4',
+  Dungeon = 'Dungeon',
+  Raid = 'Raid',
+  Heroic = 'Heroic',
+  Normal = 'Normal',
+  TenMan = '10m',
+  TwentyFiveMan = '25m',
+  Professions = 'Professions',
+  BoE = 'BoE',
+}
+
+export const InitialSourceState: SourcesStruct = [
+  ItemSourceUiName.P1,
+  ItemSourceUiName.P2,
+  ItemSourceUiName.P3,
+  ItemSourceUiName.P4,
+  ItemSourceUiName.Dungeon,
+  ItemSourceUiName.Raid,
+  ItemSourceUiName.Heroic,
+  ItemSourceUiName.Normal,
+  ItemSourceUiName.TenMan,
+  ItemSourceUiName.TwentyFiveMan,
+  ItemSourceUiName.Professions,
+  ItemSourceUiName.BoE,
+]
+
+export type SourcesStruct = ItemSourceUiName[]
 
 export type SavedItemDps = {
   [key in ItemSlotDetailed]: {
@@ -672,24 +702,143 @@ export enum TalentTree {
   Destruction = 'Destruction',
 }
 
-export enum ItemSource {
+export enum ItemSourceName {
+  TrialOfTheChampion = 'Trial of the Champion',
+  VioletHoldHeroic = 'Violet Hold (H)',
+  InscriptionBoE = 'Inscription BoE',
+  VioletHoldBoE = 'Violet Hold BoE',
+  NexusHeroic = 'The Nexus (H)',
+  Ahune = 'Ahune',
+  PitOfSaron = 'Pit of Saron',
+  PitOfSaronHeroic = 'Pit of Saron (H)',
+  HallsOfReflection = 'Halls of Reflection',
+  ForgeOfSouls = 'Forge of Souls',
+  ForgeOfSoulsHeroic = 'Forge of Souls (H)',
+  BoE = 'Bind on Equip',
+  TrialOfTheCrusader10 = 'Trial of the Crusader 10m',
+  TrialOfTheCrusader10Heroic = 'Trial of the Crusader 10m (H)',
+  BlacksmithingBoE = 'Blacksmithing BoE',
+  ChampionsSeal = `Champion's Seal`,
+  UtgardePinnacle = 'Utgarde Pinnacle',
+  UtgardePinnacleHeroic = 'Utgarde Pinnacle (H)',
+  EmblemOfConquest = 'Emblem of Conquest',
+  EmblemOfFrost = 'Emblem of Frost',
+  IcecrownCitadel10 = 'Icecrown Citadel 10m',
+  IcecrownCitadel10Heroic = 'Icecrown Citadel 10m (H)',
+  IcecrownCitadel25 = 'Icecrown Citadel 25m',
+  IcecrownCitadel25Heroic = 'Icecrown Citadel 25m (H)',
+  HallsOfReflectionHeroic = 'Halls of Reflection (H)',
+  Onyxia10 = 'Onyxia 10m',
+  Onyxia25 = 'Onyxia 25m',
+  TrialOfTheCrusader25 = 'Trial of the Crusader 25m',
+  TrialOfTheCrusader25Heroic = 'Trial of the Crusader 25m (H)',
+  EmblemOfTriumph = 'Emblem of Triumph',
+  TrialOfTheChampionHeroic = 'Trial of the Champion (H)',
+  Ulduar10 = 'Ulduar 10m',
+  Ulduar25 = 'Ulduar 25m',
+  Ulduar10Heroic = 'Ulduar 10m (H)',
+  Ulduar25Heroic = 'Ulduar 25m (H)',
+  Quest = 'Quest',
+  ObsidianSanctum10 = 'Obsidian Sanctum 10m',
+  ObsidianSanctum25 = 'Obsidian Sanctum 25m',
+  EmblemOfHeroism = 'Emblem of Heroism',
+  EyeOfEternity25 = 'Eye of Eternity 25m',
+  EyeOfEternity10 = 'Eye of Eternity 10m',
+  DrakTharonKeep = `Drak'Tharon Keep`,
+  DrakTharonKeepHeroic = `Drak'Tharon Keep (H)`,
+  CullingOfStratholme = 'Culling of Stratholme',
+  CullingOfStratholmeHeroic = 'Culling of Stratholme (H)',
+  AhnkahetTheOldKingdom = `Ahn'kahet: The Old Kingdom`,
+  AhnkahetTheOldKingdomHeroic = `Ahn'kahet: The Old Kingdom (H)`,
+  HallsOfLightning = 'Halls of Lightning',
+  HallsOfLightningHeroic = 'Halls of Lightning (H)',
   JewelcraftingBoE = 'Jewelcrafting BoE',
   Jewelcrafting = 'Jewelcrafting',
   Blacksmithing = 'Blacksmithing',
   Enchanting = 'Enchanting',
+  Engineering = 'Engineering',
   Tailoring = 'Tailoring',
+  TailoringBoE = 'Tailoring BoE',
   Inscription = 'Inscription',
   HallsOfStoneHeroic = 'Halls of Stone (H)',
-  OculusHeroic = 'Oculus (H)',
-  Naxxramas25Normal = 'Naxxramas 25m',
-  Naxxramas10Normal = 'Naxxramas 10m',
+  HallsOfStone = 'Halls of Stone',
+  Oculus = 'The Oculus',
+  OculusHeroic = 'The Oculus (H)',
+  OculusBoE = 'The Oculus BoE',
+  Naxxramas25 = 'Naxxramas 25m',
+  Naxxramas10 = 'Naxxramas 10m',
+  Naxxramas10BoE = 'Naxxramas 10m BoE',
   KirinTorRevered = 'Kirin Tor - Revered',
-  Sunwell = 'Sunwell Plateau',
-  BlackTemple = 'Black Temple',
   TheSonsOfHodirExalted = 'The Sons of Hodir - Exalted',
 }
 
-export type Phase = 0 | 1 | 2 | 3 | 4 | 5
+export enum ReputationLevel {
+  Neutral = 'Neutral',
+  Friendly = 'Friendly',
+  Honored = 'Honored',
+  Revered = 'Revered',
+  Exalted = 'Exalted',
+}
+
+export enum InstanceType {
+  Dungeon,
+  Raid,
+  PvP,
+}
+
+export enum Profession {
+  Inscription,
+  Blacksmithing,
+  Enchanting,
+  Tailoring,
+  Jewelcrafting,
+  Engineering,
+}
+
+export enum InstanceDifficulty {
+  Normal,
+  Heroic,
+}
+
+export enum InstanceSize {
+  Five,
+  Ten,
+  TwentyFive,
+}
+
+export interface Instance {
+  Type: InstanceType
+  Difficulty?: InstanceDifficulty
+  Size?: InstanceSize
+}
+
+export interface ItemSource {
+  Name: ItemSourceName
+  BindType: BindType
+  Instance?: Instance
+  Profession?: Profession
+  ReputationLevel?: ReputationLevel
+}
+
+export interface Source {
+  Name: ItemSourceUiName
+  Phase?: Phase
+  Dungeon?: boolean
+  Raid?: boolean
+  Heroic?: boolean
+  Normal?: boolean
+  TenMan?: boolean
+  TwentyFiveMan?: boolean
+  Professions?: boolean
+  BoE?: boolean
+}
+
+export enum BindType {
+  BoP,
+  BoE,
+}
+
+export type Phase = 1 | 2 | 3 | 4 | undefined
 
 export type SubSlotValue = '' | '1' | '2'
 

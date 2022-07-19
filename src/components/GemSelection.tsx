@@ -96,7 +96,11 @@ export default function GemSelection() {
             CanGemColorBeInsertedIntoSocketColor(
               ui.GemSelectionTable.SocketColor,
               gem.Color
-            ) && ui.Sources.some(phase => phase >= gem.Phase)
+            ) /*&&
+            ui.Sources.some(source => { // TODO fix this
+
+              return source && gem.Phase && source >= gem.Phase
+            })*/
         )
           .sort(function (a, b) {
             return (

@@ -4,9 +4,10 @@ import {
   GemSelectionTableStruct,
   InitialGemSelectionTableValue,
   InitialGlyphSelectionTableValue,
+  InitialSourceState,
   ItemSlot,
   ItemSlotDetailed,
-  Phase,
+  ItemSourceUiName,
   Stat,
   StatWeightStats,
   SubSlotValue,
@@ -15,7 +16,7 @@ import {
 
 const initialUiState: UiState = {
   Sources: JSON.parse(
-    localStorage.getItem('wotlk_sources') || JSON.stringify([0, 1, 2, 3, 4, 5])
+    localStorage.getItem('wotlk_sources') || JSON.stringify(InitialSourceState)
   ),
   GemSelectionTable: InitialGemSelectionTableValue,
   GemPreferences: JSON.parse(
@@ -69,11 +70,9 @@ export const UiSlice = createSlice({
   name: 'ui',
   initialState: initialUiState,
   reducers: {
-    TogglePhase: (state, action: PayloadAction<Phase>) => {
-      if (state.Sources.includes(action.payload)) {
-        state.Sources = state.Sources.filter(
-          (e: number) => e !== action.payload
-        )
+    ToggleSource: (state, action: PayloadAction<ItemSourceUiName>) => {
+      if (state.Sources.find(x => x === action.payload) !== undefined) {
+        state.Sources = state.Sources.filter(e => e !== action.payload)
       } else {
         state.Sources.push(action.payload)
       }
@@ -250,7 +249,7 @@ export const {
   ToggleHiddenItemId,
   SetImportExportWindowVisibility,
   SetSelectedProfile,
-  TogglePhase,
+  ToggleSource,
   SetGemSelectionTable,
   FavoriteGem,
   HideGem,

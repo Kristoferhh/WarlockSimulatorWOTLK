@@ -2,20 +2,28 @@ import { Auras } from './data/Auras'
 import { Enchants } from './data/Enchants'
 import { Gems } from './data/Gems'
 import { Items } from './data/Items'
+import { ItemSources } from './data/ItemSource'
 import { Races } from './data/Races'
 import { Sockets } from './data/Sockets'
 import { TalentTreeStruct } from './data/Talents'
+import { UiSources } from './data/UiSources'
 import {
   AuraId,
+  BindType,
   GemColor,
   InitialPlayerStats,
   InitialSetCounts,
+  InstanceDifficulty,
+  InstanceSize,
+  InstanceType,
   Item,
   ItemSlot,
   ItemSlotDetailed,
   ItemSlotDetailedStruct,
+  ItemSourceName,
   Languages,
   Pet,
+  Phase,
   PlayerState,
   Quality,
   Race,
@@ -216,6 +224,52 @@ export function CanGemColorBeInsertedIntoSocketColor(
   )
 }
 
+export function DoesItemMeetSourcesCriteria(
+  itemSources: ItemSourceName[],
+  itemPhase: Phase,
+  selectedUiSources: SourcesStruct
+): boolean {
+  let amountOfSourcesThatMeetSourceCriteria = itemSources?.length || 0
+
+  // TODO remove this when Sources isnt nullable anymore
+  if (itemSources) {
+    for (const itemSource of itemSources) {
+      const itemSourceObj = ItemSources.find(x => x.Name === itemSource)
+
+      for (const uiSource of UiSources) {
+        if (
+          // Loops through all sources and if any of them are not selected and they have any attribute (like being from a dungeon or being in phase 1 etc.) and the item also has that attribute then we return false
+          // TODO show boe profession items even if Professions isn't selected but BoE is selected
+          !selectedUiSources.some(
+            selectedUiSource => selectedUiSource === uiSource.Name
+          ) &&
+          (itemPhase === uiSource.Phase ||
+            (itemSourceObj?.Instance?.Type === InstanceType.Dungeon &&
+              uiSource.Dungeon) ||
+            (itemSourceObj?.Instance?.Type === InstanceType.Raid &&
+              uiSource.Raid) ||
+            (itemSourceObj?.BindType === BindType.BoE && uiSource.BoE) ||
+            (itemSourceObj?.Profession !== undefined && uiSource.Professions) ||
+            (itemSourceObj?.Instance?.Difficulty ===
+              InstanceDifficulty.Normal &&
+              uiSource.Normal) ||
+            (itemSourceObj?.Instance?.Difficulty ===
+              InstanceDifficulty.Heroic &&
+              uiSource.Heroic) ||
+            (itemSourceObj?.Instance?.Size === InstanceSize.TwentyFive &&
+              uiSource.TwentyFiveMan) ||
+            (itemSourceObj?.Instance?.Size === InstanceSize.Ten &&
+              uiSource.TenMan))
+        ) {
+          amountOfSourcesThatMeetSourceCriteria--
+        }
+      }
+    }
+  }
+
+  return amountOfSourcesThatMeetSourceCriteria > 0 || itemSources === undefined // TODO change this when Sources isn't nullable anymore
+}
+
 /**
  * Returns an array of items meeting the criteria to be displayed in the item selection table.
  * The item needs to be of the specified item slot, the item's phase needs to be selected, it needs to not be hidden unless the player is showing hidden items, or the item needs to be currently equipped in the slot
@@ -244,27 +298,21 @@ export function GetItemTableItems(
       selectedItems[itemSlotDetailed] === e.Id ||
       (e.ItemSlot === itemSlot &&
         (e.Faction === undefined || playerRace?.Faction === e.Faction) &&
-        sources.includes(e.Phase) &&
+        DoesItemMeetSourcesCriteria(e.Sources!, e.Phase, sources) &&
         (!hiddenItems.includes(e.Id) || hidingItems) &&
         (!e.Unique ||
           secondRingOrTrinket !== e.Id ||
           (e.Unique && e.ItemSlot === ItemSlot.Weapon)))
     )
   }).sort((a, b) => {
-    // If it's a multi-item simulation then sort by phase from highest to lowest then by id from highest to lowest, otherwise sort by the saved dps
+    // If it's a multi-item simulation then sort by id from highest to lowest, otherwise sort by the saved dps
     if (
       isMultiItemSimulation ||
       !savedItemSlotDpsExists ||
       (!savedItemDps[itemSlotDetailed][a.Id] &&
         !savedItemDps[itemSlotDetailed][b.Id])
     ) {
-      return a.Phase < b.Phase
-        ? 1
-        : b.Phase < a.Phase
-        ? -1
-        : a.Id < b.Id
-        ? 1
-        : -1
+      return a.Id < b.Id ? 1 : -1
     } else if (!savedItemDps[itemSlotDetailed][b.Id]) {
       return -1
     } else if (!savedItemDps[itemSlotDetailed][a.Id]) {

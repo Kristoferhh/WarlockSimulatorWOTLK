@@ -11,6 +11,7 @@ import {
   GetItemSetCounts,
   GetItemsStats,
 } from '../Common'
+import { UiSources } from '../data/UiSources'
 import {
   DeleteProfile,
   RenameProfile,
@@ -33,17 +34,9 @@ import { RootState } from '../redux/Store'
 import {
   SetImportExportWindowVisibility,
   SetSelectedProfile,
-  TogglePhase,
+  ToggleSource,
 } from '../redux/UiSlice'
-import { Phase, ProfileContainer, RaceType, Setting } from '../Types'
-
-const phases: { title: string; phase: Phase }[] = [
-  { title: 'TBC', phase: 0 },
-  { title: 'P1', phase: 1 },
-  { title: 'P2', phase: 2 },
-  { title: 'P3', phase: 3 },
-  { title: 'P4', phase: 4 },
-]
+import { ProfileContainer, RaceType, Setting } from '../Types'
 
 export default function ProfilesAndSources() {
   const player = useSelector((state: RootState) => state.player)
@@ -144,108 +137,116 @@ export default function ProfilesAndSources() {
       id='profiles-and-sources'
       style={{ paddingLeft: '40px', paddingRight: '40px' }}
     >
-      <fieldset id='profile-fieldset'>
-        <legend>
-          <Typography>{t('Profile Options')}</Typography>
-        </legend>
-        <TextField
-          size='small'
-          placeholder={t('E.g. "P3 Shadow BiS"')}
-          id='profile-name-input'
-          value={profileName}
-          onChange={e => SetProfileName(e.target.value)}
-          name='profileName'
-        />
-        <Button
-          variant='contained'
-          id='save-new-profile-button'
-          onClick={() => CallSetProfile(true)}
-          disabled={profileName.length === 0}
-        >
-          <Typography>{t('Save New Profile')}</Typography>
-        </Button>
-        <Grid id='update-profile-Grid'>
+      <Grid item xs={4} style={{ maxWidth: '480px' }}>
+        <fieldset id='profile-fieldset'>
+          <legend>
+            <Typography>{t('Profile Options')}</Typography>
+          </legend>
+          <TextField
+            size='small'
+            placeholder={t('E.g. "P3 Shadow BiS"')}
+            id='profile-name-input'
+            value={profileName}
+            onChange={e => SetProfileName(e.target.value)}
+            name='profileName'
+          />
           <Button
             variant='contained'
-            style={{
-              display: selectedProfileExists ? '' : 'none',
-            }}
-            id='save-profile-button'
-            onClick={() => CallSetProfile(false)}
+            id='save-new-profile-button'
+            onClick={() => CallSetProfile(true)}
+            disabled={profileName.length === 0}
           >
-            <Typography>{t('Save')}</Typography>
-          </Button>{' '}
-          <Button
-            variant='contained'
-            style={{
-              display: selectedProfileExists ? '' : 'none',
-            }}
-            id='delete-profile-button'
-            onClick={() => DeleteProfileHandler()}
-          >
-            <Typography>{t('Delete')}</Typography>
-          </Button>{' '}
-          <Button
-            variant='contained'
-            style={{
-              display: selectedProfileExists ? '' : 'none',
-            }}
-            id='rename-profile-button'
-            onClick={() => RenameProfileHandler()}
-          >
-            <Typography>{t('Rename')}</Typography>
-          </Button>{' '}
-          <Button
-            variant='contained'
-            id='import-export-button'
-            onClick={() => dispatch(SetImportExportWindowVisibility(true))}
-          >
-            <Typography>{t('Import/Export')}</Typography>
+            <Typography>{t('Save New Profile')}</Typography>
           </Button>
-        </Grid>
-      </fieldset>
-      <fieldset
-        id='saved-profiles'
-        style={{
-          display: player.Profiles.length === 0 ? 'none' : '',
-        }}
-      >
-        <legend>
-          <Typography>{t('Saved Profiles')}</Typography>
-        </legend>
-        <Grid container id='profile-list'>
-          {player.Profiles.map(profileContainer => (
-            <Grid
-              item
-              key={nanoid()}
-              className='saved-profile'
-              data-checked={ui.SelectedProfile === profileContainer.Name}
-              onClick={() => ProfileClickHandler(profileContainer)}
+          <Grid id='update-profile-Grid'>
+            <Button
+              variant='contained'
+              style={{
+                display: selectedProfileExists ? '' : 'none',
+              }}
+              id='save-profile-button'
+              onClick={() => CallSetProfile(false)}
             >
-              <Typography>{profileContainer.Name}</Typography>
-            </Grid>
-          ))}
-        </Grid>
-      </fieldset>
-
-      <fieldset id='source-filters'>
-        <legend>
-          <Typography>{t('Sources')}</Typography>
-        </legend>
-        <Grid container id='source-list'>
-          {phases.map(phase => (
-            <Grid
-              item
-              key={phase.phase}
-              data-checked={ui.Sources.includes(phase.phase)}
-              className='phase-btn'
-              onClick={() => dispatch(TogglePhase(phase.phase))}
+              <Typography>{t('Save')}</Typography>
+            </Button>{' '}
+            <Button
+              variant='contained'
+              style={{
+                display: selectedProfileExists ? '' : 'none',
+              }}
+              id='delete-profile-button'
+              onClick={() => DeleteProfileHandler()}
             >
-              <Typography>{t(phase.title)}</Typography>
-            </Grid>
-          ))}
-        </Grid>
-      </fieldset>
+              <Typography>{t('Delete')}</Typography>
+            </Button>{' '}
+            <Button
+              variant='contained'
+              style={{
+                display: selectedProfileExists ? '' : 'none',
+              }}
+              id='rename-profile-button'
+              onClick={() => RenameProfileHandler()}
+            >
+              <Typography>{t('Rename')}</Typography>
+            </Button>{' '}
+            <Button
+              variant='contained'
+              id='import-export-button'
+              onClick={() => dispatch(SetImportExportWindowVisibility(true))}
+            >
+              <Typography>{t('Import/Export')}</Typography>
+            </Button>
+          </Grid>
+        </fieldset>
+      </Grid>
+      <Grid item xs alignSelf='center'>
+        <fieldset
+          id='saved-profiles'
+          style={{
+            display: player.Profiles.length === 0 ? 'none' : '',
+          }}
+        >
+          <legend>
+            <Typography>{t('Saved Profiles')}</Typography>
+          </legend>
+          <Grid container id='profile-list'>
+            {player.Profiles.map(profileContainer => (
+              <Grid
+                item
+                key={nanoid()}
+                className='saved-profile'
+                data-checked={ui.SelectedProfile === profileContainer.Name}
+                onClick={() => ProfileClickHandler(profileContainer)}
+              >
+                <Typography>{profileContainer.Name}</Typography>
+              </Grid>
+            ))}
+          </Grid>
+        </fieldset>
+      </Grid>
+      <Grid item xs={4} style={{ marginLeft: 'auto', maxWidth: '400px' }}>
+        <fieldset id='source-filters'>
+          <legend>
+            <Typography>{t('Sources')}</Typography>
+          </legend>
+          <Grid container id='source-list'>
+            {UiSources.map(source => (
+              <Grid
+                item
+                key={nanoid()}
+                data-checked={
+                  ui.Sources.find(x => x === source.Name) !== undefined
+                }
+                className='phase-btn'
+                onClick={() => dispatch(ToggleSource(source.Name))}
+                style={{ marginBottom: '4px' }}
+              >
+                <Typography>{t(source.Name)}</Typography>
+              </Grid>
+            ))}
+          </Grid>
+        </fieldset>
+      </Grid>
     </Grid>
   )
 }
