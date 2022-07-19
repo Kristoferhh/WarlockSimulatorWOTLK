@@ -469,7 +469,7 @@ export default function ItemSelection() {
                 }}
               >
                 <Link
-                  href={`${GetBaseWowheadUrl(i18n.language)}/?item=${
+                  href={`${GetBaseWowheadUrl(i18n.language)}/item=${
                     item.DisplayId || item.Id
                   }`}
                   onClick={e => e.preventDefault()}
