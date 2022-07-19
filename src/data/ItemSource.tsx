@@ -28,6 +28,15 @@ export const ItemSources: ItemSource[] = [
     },
   },
   {
+    Name: ItemSourceName.UtgardeKeepHeroicBoE,
+    BindType: BindType.BoE,
+    Instance: {
+      Size: InstanceSize.Five,
+      Difficulty: InstanceDifficulty.Heroic,
+      Type: InstanceType.Dungeon,
+    },
+  },
+  {
     Name: ItemSourceName.InscriptionBoE,
     BindType: BindType.BoE,
     Profession: Profession.Inscription,

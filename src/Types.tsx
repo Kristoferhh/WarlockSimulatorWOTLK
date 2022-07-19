@@ -703,6 +703,7 @@ export enum TalentTree {
 }
 
 export enum ItemSourceName {
+  UtgardeKeepHeroicBoE = 'Utgarde Keep (H) BoE',
   TrialOfTheChampion = 'Trial of the Champion',
   VioletHoldHeroic = 'Violet Hold (H)',
   InscriptionBoE = 'Inscription BoE',

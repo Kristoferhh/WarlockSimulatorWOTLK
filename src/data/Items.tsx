@@ -6,7 +6,7 @@ import {
   ItemSourceName,
   Quality,
   SocketColor,
-  Stat,
+  Stat
 } from '../Types'
 
 export const Items: Item[] = [
@@ -697,6 +697,7 @@ export const Items: Item[] = [
     Quality: Quality.Rare,
     Unique: true,
     Name: 'Dragon Prow Amulet',
+    Sources: [ItemSourceName.UtgardeKeepHeroicBoE],
     Id: 37290,
     Phase: 1,
     ItemSlot: ItemSlot.Neck,
