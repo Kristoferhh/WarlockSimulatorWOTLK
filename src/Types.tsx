@@ -703,11 +703,17 @@ export enum TalentTree {
 }
 
 export enum ItemSourceName {
+  TrialOfTheChampion = 'Trial of the Champion',
+  VioletHoldHeroic = 'Violet Hold (H)',
+  InscriptionBoE = 'Inscription BoE',
+  VioletHoldBoE = 'Violet Hold BoE',
+  NexusHeroic = 'The Nexus (H)',
+  Ahune = 'Ahune',
   PitOfSaron = 'Pit of Saron',
   PitOfSaronHeroic = 'Pit of Saron (H)',
   HallsOfReflection = 'Halls of Reflection',
   ForgeOfSouls = 'Forge of Souls',
-  ForgeOfSoulsHeroic = 'Forge of Souls Heroic',
+  ForgeOfSoulsHeroic = 'Forge of Souls (H)',
   BoE = 'Bind on Equip',
   TrialOfTheCrusader10 = 'Trial of the Crusader 10m',
   TrialOfTheCrusader10Heroic = 'Trial of the Crusader 10m (H)',
@@ -715,6 +721,7 @@ export enum ItemSourceName {
   ChampionsSeal = `Champion's Seal`,
   UtgardePinnacle = 'Utgarde Pinnacle',
   UtgardePinnacleHeroic = 'Utgarde Pinnacle (H)',
+  EmblemOfConquest = 'Emblem of Conquest',
   EmblemOfFrost = 'Emblem of Frost',
   IcecrownCitadel10 = 'Icecrown Citadel 10m',
   IcecrownCitadel10Heroic = 'Icecrown Citadel 10m (H)',
@@ -757,11 +764,11 @@ export enum ItemSourceName {
   HallsOfStone = 'Halls of Stone',
   Oculus = 'The Oculus',
   OculusHeroic = 'The Oculus (H)',
+  OculusBoE = 'The Oculus BoE',
   Naxxramas25 = 'Naxxramas 25m',
   Naxxramas10 = 'Naxxramas 10m',
+  Naxxramas10BoE = 'Naxxramas 10m BoE',
   KirinTorRevered = 'Kirin Tor - Revered',
-  Sunwell = 'Sunwell Plateau',
-  BlackTemple = 'Black Temple',
   TheSonsOfHodirExalted = 'The Sons of Hodir - Exalted',
 }
 
@@ -780,6 +787,8 @@ export enum InstanceType {
 }
 
 export enum Profession {
+  Inscription,
+  Blacksmithing,
   Enchanting,
   Tailoring,
   Jewelcrafting,

@@ -10,15 +10,6 @@ import {
 
 export const ItemSources: ItemSource[] = [
   {
-    Name: ItemSourceName.Sunwell,
-    BindType: BindType.BoP,
-    Instance: {
-      Size: InstanceSize.TwentyFive,
-      Difficulty: InstanceDifficulty.Normal,
-      Type: InstanceType.Raid,
-    },
-  },
-  {
     Name: ItemSourceName.Oculus,
     BindType: BindType.BoP,
     Instance: {
@@ -30,6 +21,29 @@ export const ItemSources: ItemSource[] = [
   {
     Name: ItemSourceName.OculusHeroic,
     BindType: BindType.BoP,
+    Instance: {
+      Size: InstanceSize.Five,
+      Difficulty: InstanceDifficulty.Heroic,
+      Type: InstanceType.Dungeon,
+    },
+  },
+  {
+    Name: ItemSourceName.InscriptionBoE,
+    BindType: BindType.BoE,
+    Profession: Profession.Inscription,
+  },
+  {
+    Name: ItemSourceName.OculusBoE,
+    BindType: BindType.BoE,
+    Instance: {
+      Size: InstanceSize.Five,
+      Difficulty: InstanceDifficulty.Normal,
+      Type: InstanceType.Dungeon,
+    },
+  },
+  {
+    Name: ItemSourceName.VioletHoldBoE,
+    BindType: BindType.BoE,
     Instance: {
       Size: InstanceSize.Five,
       Difficulty: InstanceDifficulty.Heroic,
@@ -105,6 +119,34 @@ export const ItemSources: ItemSource[] = [
       Type: InstanceType.Dungeon,
     },
   },
+  { Name: ItemSourceName.EmblemOfConquest, BindType: BindType.BoP },
+  {
+    Name: ItemSourceName.VioletHoldHeroic,
+    BindType: BindType.BoP,
+    Instance: {
+      Size: InstanceSize.Five,
+      Difficulty: InstanceDifficulty.Heroic,
+      Type: InstanceType.Dungeon,
+    },
+  },
+  {
+    Name: ItemSourceName.Naxxramas10BoE,
+    BindType: BindType.BoE,
+    Instance: {
+      Size: InstanceSize.Ten,
+      Difficulty: InstanceDifficulty.Normal,
+      Type: InstanceType.Raid,
+    },
+  },
+  {
+    Name: ItemSourceName.CullingOfStratholme,
+    BindType: BindType.BoP,
+    Instance: {
+      Size: InstanceSize.Five,
+      Difficulty: InstanceDifficulty.Normal,
+      Type: InstanceType.Dungeon,
+    },
+  },
   {
     Name: ItemSourceName.CullingOfStratholmeHeroic,
     BindType: BindType.BoP,
@@ -131,6 +173,25 @@ export const ItemSources: ItemSource[] = [
       Difficulty: InstanceDifficulty.Normal,
       Type: InstanceType.Raid,
     },
+  },
+  {
+    Name: ItemSourceName.NexusHeroic,
+    BindType: BindType.BoP,
+    Instance: {
+      Size: InstanceSize.Five,
+      Difficulty: InstanceDifficulty.Heroic,
+      Type: InstanceType.Dungeon,
+    },
+  },
+  {
+    Name: ItemSourceName.Blacksmithing,
+    BindType: BindType.BoP,
+    Profession: Profession.Blacksmithing,
+  },
+  {
+    Name: ItemSourceName.BlacksmithingBoE,
+    BindType: BindType.BoE,
+    Profession: Profession.Blacksmithing,
   },
   {
     Name: ItemSourceName.ChampionsSeal,
@@ -209,6 +270,15 @@ export const ItemSources: ItemSource[] = [
       Size: InstanceSize.TwentyFive,
       Difficulty: InstanceDifficulty.Heroic,
       Type: InstanceType.Raid,
+    },
+  },
+  {
+    Name: ItemSourceName.TrialOfTheChampion,
+    BindType: BindType.BoP,
+    Instance: {
+      Size: InstanceSize.Five,
+      Difficulty: InstanceDifficulty.Normal,
+      Type: InstanceType.Dungeon,
     },
   },
   {
@@ -401,6 +471,15 @@ export const ItemSources: ItemSource[] = [
     Instance: {
       Size: InstanceSize.Five,
       Difficulty: InstanceDifficulty.Heroic,
+      Type: InstanceType.Dungeon,
+    },
+  },
+  {
+    Name: ItemSourceName.Ahune,
+    BindType: BindType.BoP,
+    Instance: {
+      Size: InstanceSize.Five,
+      Difficulty: InstanceDifficulty.Normal,
       Type: InstanceType.Dungeon,
     },
   },

@@ -239,6 +239,7 @@ export function DoesItemMeetSourcesCriteria(
       for (const uiSource of UiSources) {
         if (
           // Loops through all sources and if any of them are not selected and they have any attribute (like being from a dungeon or being in phase 1 etc.) and the item also has that attribute then we return false
+          // TODO show boe profession items even if Professions isn't selected but BoE is selected
           !selectedUiSources.some(
             selectedUiSource => selectedUiSource === uiSource.Name
           ) &&
