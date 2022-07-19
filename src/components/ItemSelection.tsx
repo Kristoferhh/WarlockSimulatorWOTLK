@@ -51,6 +51,7 @@ import {
 } from '../redux/UiSlice'
 import {
   Enchant,
+  EnchantId,
   Item,
   ItemSlot,
   ItemSlotDetailed,
@@ -152,7 +153,15 @@ export default function ItemSelection() {
 
     dispatch(SetSelectedItems(newSelectedItems))
     dispatch(SetItemsStats(GetItemsStats(newSelectedItems)))
-    dispatch(SetGemsStats(GetGemsStats(newSelectedItems, player.SelectedGems)))
+    dispatch(
+      SetGemsStats(
+        GetGemsStats(
+          newSelectedItems,
+          player.SelectedGems,
+          player.SelectedEnchants
+        )
+      )
+    )
     dispatch(
       SetEnchantsStats(
         GetEnchantsStats(newSelectedItems, player.SelectedEnchants)
@@ -180,6 +189,21 @@ export default function ItemSelection() {
         GetEnchantsStats(player.SelectedItems, newSelectedEnchants)
       )
     )
+
+    if (
+      itemSlot === ItemSlotDetailed.Waist &&
+      enchant.Id === EnchantId.EternalBeltBuckle
+    ) {
+      dispatch(
+        SetGemsStats(
+          GetGemsStats(
+            player.SelectedItems,
+            player.SelectedGems,
+            newSelectedEnchants
+          )
+        )
+      )
+    }
   }
 
   function ItemSlotClickHandler(slot: ItemSlot, subSlot: SubSlotValue) {
@@ -215,7 +239,13 @@ export default function ItemSelection() {
       currentItemSocketsValue[socketNumber] = 0
       dispatch(SetSelectedGems(newSelectedGems))
       dispatch(
-        SetGemsStats(GetGemsStats(player.SelectedItems, newSelectedGems))
+        SetGemsStats(
+          GetGemsStats(
+            player.SelectedItems,
+            newSelectedGems,
+            player.SelectedEnchants
+          )
+        )
       )
     }
   }

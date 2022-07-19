@@ -10,6 +10,7 @@ import { UiSources } from './data/UiSources'
 import {
   AuraId,
   BindType,
+  EnchantId,
   GemColor,
   InitialPlayerStats,
   InitialSetCounts,
@@ -128,15 +129,15 @@ export function ItemSlotDetailedToItemSlot(
 export function ItemMeetsSocketRequirements(params: {
   ItemId: number
   selectedGems?: SelectedGemsStruct
-  SocketArray?: number[]
+  socketArray?: number[]
 }): boolean {
-  let socketArray = params.SocketArray
+  let socketArray = params.socketArray
 
   // If the socketArray parameter is undefined then find the array using the selectedGems parameter instead
   if (
     socketArray === undefined &&
     params.selectedGems === undefined &&
-    params.selectedGems
+    params.selectedGems // TODO wtf?
   ) {
     for (const itemSlotKey of Object.keys(params.selectedGems)) {
       const itemSlot = ItemSlotDetailedToItemSlot(
@@ -152,8 +153,19 @@ export function ItemMeetsSocketRequirements(params: {
   }
 
   if (socketArray) {
-    // Loop through the gems in the item and if any of gems don't match the socket's color or if a gem isn't equipped then return false.
-    for (let i = 0; i < socketArray.length; i++) {
+    const item = Items.find(e => e.Id === params.ItemId)
+
+    // Loop through the gems in the item and if any of gems don't match the socket's color (and it's not a prismatic socket from belt buckle) or if a gem isn't equipped then return false.
+    for (let i = 0; i < (item?.Sockets?.length || 0); i++) {
+      const socketColor = item?.Sockets?.at(i)
+
+      if (
+        socketColor === SocketColor.Prismatic &&
+        item?.ItemSlot === ItemSlot.Waist
+      ) {
+        continue
+      }
+
       const currentGemId = socketArray[i]
 
       if (currentGemId === 0) {
@@ -161,9 +173,6 @@ export function ItemMeetsSocketRequirements(params: {
       }
 
       const gemColor = Gems.find(e => e.Id === currentGemId)?.Color
-      const socketColor = Items.find(e => e.Id === params.ItemId)?.Sockets?.at(
-        i
-      )
 
       // Check if the array of valid gem colors for this socket color does not include the equipped gem color.
       if (
@@ -413,47 +422,61 @@ export function GetItemsStats(
 }
 
 export function GetGemsStats(
-  items: ItemSlotDetailedStruct,
-  gems: SelectedGemsStruct,
-  statsObj?: StatsCollection
+  equippedItems: ItemSlotDetailedStruct,
+  equippedGems: SelectedGemsStruct,
+  equippedEnchants: ItemSlotDetailedStruct,
+  statsToModify?: StatsCollection
 ): StatsCollection {
   let stats: StatsCollection = JSON.parse(JSON.stringify(InitialPlayerStats))
 
-  Object.entries(items).forEach(item => {
-    const itemSlotGems =
-      gems[ItemSlotDetailedToItemSlot(item[0] as unknown as ItemSlotDetailed)]
+  Object.entries(equippedItems).forEach(equippedItem => {
+    const itemSlotDetailed = equippedItem[0] as ItemSlotDetailed
+    const itemId = equippedItem[1]
+    const item = Items.find(x => x.Id === itemId)
+    const gemsEquippedInItemSlot =
+      equippedGems[ItemSlotDetailedToItemSlot(itemSlotDetailed)]
 
-    if (itemSlotGems) {
-      const itemGemIds = itemSlotGems[item[1]]
+    if (gemsEquippedInItemSlot) {
+      const equippedGemsInItem = gemsEquippedInItemSlot[itemId]
 
-      if (itemGemIds) {
-        for (const gemId of itemGemIds) {
-          if (gemId) {
-            const gem = Gems.find(e => e.Id === gemId)
+      if (equippedGemsInItem) {
+        equippedGemsInItem.forEach((equippedGemId, index) => {
+          if (equippedGemId) {
+            const socketColor = item?.Sockets?.at(index)
+            const socketIsMostLikelyPrismaticInBeltFromEternalBeltBuckle =
+              socketColor === undefined &&
+              index === (item?.Sockets?.length || 0)
 
-            gem?.Stats &&
-              Object.entries(gem.Stats).forEach(gemStat => {
-                AddOrMultiplyStat(
-                  statsObj || stats,
-                  gemStat[0] as unknown as Stat,
-                  gemStat[1]
-                )
-              })
+            if (
+              socketIsMostLikelyPrismaticInBeltFromEternalBeltBuckle &&
+              item?.ItemSlot === ItemSlot.Waist &&
+              equippedEnchants.Waist !== EnchantId.EternalBeltBuckle
+            ) {
+            } else {
+              const gem = Gems.find(e => e.Id === equippedGemId)
+
+              gem?.Stats &&
+                Object.entries(gem.Stats).forEach(gemStat => {
+                  AddOrMultiplyStat(
+                    statsToModify || stats,
+                    gemStat[0] as unknown as Stat,
+                    gemStat[1]
+                  )
+                })
+            }
           }
-        }
+        })
 
         if (
           ItemMeetsSocketRequirements({
-            ItemId: item[1],
-            SocketArray: itemGemIds,
+            ItemId: itemId,
+            socketArray: equippedGemsInItem,
           })
         ) {
-          const itemObj = Items.find(e => e.Id === item[1])
-
-          if (itemObj?.SocketBonus) {
-            Object.entries(itemObj.SocketBonus).forEach(stat => {
+          if (item?.SocketBonus) {
+            Object.entries(item.SocketBonus).forEach(stat => {
               AddOrMultiplyStat(
-                statsObj || stats,
+                statsToModify || stats,
                 stat[0] as unknown as Stat,
                 stat[1]
               )
@@ -464,7 +487,7 @@ export function GetGemsStats(
     }
   })
 
-  return statsObj || stats
+  return statsToModify || stats
 }
 
 export function GetEnchantsStats(
@@ -636,7 +659,12 @@ export function CalculatePlayerStats(player: PlayerState): StatsCollection {
   )
   GetAurasStats(player.Auras, mainStatsObj)
   GetItemsStats(player.SelectedItems, mainStatsObj)
-  GetGemsStats(player.SelectedItems, player.SelectedGems, mainStatsObj)
+  GetGemsStats(
+    player.SelectedItems,
+    player.SelectedGems,
+    player.SelectedEnchants,
+    mainStatsObj
+  )
   GetEnchantsStats(player.SelectedItems, player.SelectedEnchants, mainStatsObj)
   GetTalentsStats(player.Talents, player.Settings, mainStatsObj)
 

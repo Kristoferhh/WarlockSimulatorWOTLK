@@ -1,12 +1,13 @@
 import { Grid, Link } from '@mui/material'
 import { nanoid } from '@reduxjs/toolkit'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { GetBaseWowheadUrl } from '../Common'
 import { Gems } from '../data/Gems'
 import { Sockets } from '../data/Sockets'
 import i18n from '../i18n/config'
 import { RootState } from '../redux/Store'
-import { Item, ItemSlot, SocketColor } from '../Types'
+import { EnchantId, Item, ItemSlot, SocketColor } from '../Types'
 
 interface Props {
   item: Item
@@ -21,15 +22,34 @@ interface Props {
 
 export default function ItemSocketDisplay(props: Props) {
   const player = useSelector((state: RootState) => state.player)
-  const itemSockets = player.SelectedGems[props.itemSlot]
+  const equippedGemsInItemSlot = player.SelectedGems[props.itemSlot]
+  const [sockets, setSockets] = useState<SocketColor[] | undefined>()
+
+  useEffect(() => {
+    let socketArray: SocketColor[] = []
+    let itemSockets = props.item.Sockets
+
+    if (itemSockets !== undefined) {
+      socketArray = socketArray.concat(itemSockets)
+    }
+
+    if (
+      props.itemSlot === ItemSlot.Waist &&
+      player.SelectedEnchants.Waist === EnchantId.EternalBeltBuckle
+    ) {
+      socketArray.push(SocketColor.Prismatic)
+    }
+
+    setSockets(socketArray)
+  }, [player.SelectedEnchants.Waist, props.item.Sockets, props.itemSlot])
 
   return (
     <Grid className='item-sockets-container'>
-      {props.item.Sockets?.map((socket, j) => {
+      {sockets?.map((socket, j) => {
         const equippedGemId =
-          itemSockets &&
-          itemSockets[props.item.Id] &&
-          itemSockets[props.item.Id][j]
+          equippedGemsInItemSlot &&
+          equippedGemsInItemSlot[props.item.Id] &&
+          equippedGemsInItemSlot[props.item.Id][j]
 
         return (
           <Link

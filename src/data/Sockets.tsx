@@ -1,4 +1,4 @@
-import { SocketColor, GemColor } from '../Types'
+import { GemColor, SocketColor } from '../Types'
 
 export const Sockets: {
   Color: SocketColor
@@ -38,6 +38,20 @@ export const Sockets: {
       GemColor.Green,
       GemColor.Purple,
       GemColor.Void,
+    ],
+  },
+  {
+    Color: SocketColor.Prismatic,
+    IconName: 'UI-EmptySocket-Prismatic',
+    ValidColors: [
+      GemColor.Red,
+      GemColor.Yellow,
+      GemColor.Blue,
+      GemColor.Orange,
+      GemColor.Green,
+      GemColor.Purple,
+      GemColor.Void,
+      GemColor.Prismatic,
     ],
   },
 ]

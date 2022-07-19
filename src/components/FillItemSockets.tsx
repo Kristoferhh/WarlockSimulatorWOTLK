@@ -74,7 +74,13 @@ export function FillItemSockets() {
 
       dispatch(SetSelectedGems(newSelectedGems))
       dispatch(
-        SetGemsStats(GetGemsStats(player.SelectedItems, newSelectedGems))
+        SetGemsStats(
+          GetGemsStats(
+            player.SelectedItems,
+            newSelectedGems,
+            player.SelectedEnchants
+          )
+        )
       )
       dispatch(SetFillItemSocketsWindowVisibility(false))
     }

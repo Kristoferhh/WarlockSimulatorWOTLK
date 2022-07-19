@@ -1,4 +1,4 @@
-import { Enchant, ItemSlot, ItemSourceName, Quality, Stat } from '../Types'
+import { Enchant, EnchantId, ItemSlot, ItemSourceName, Quality, Stat } from '../Types'
 
 export const Enchants: Enchant[] = [
   {
@@ -56,7 +56,7 @@ export const Enchants: Enchant[] = [
   },
   {
     Phase: 1,
-    Id: 55655,
+    Id: EnchantId.EternalBeltBuckle,
     Name: 'Eternal Belt Buckle',
     ItemSlot: ItemSlot.Waist,
     Quality: Quality.Rare,

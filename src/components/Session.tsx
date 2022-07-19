@@ -34,7 +34,13 @@ export default function Session() {
     dispatch(SetAurasStats(GetAurasStats(player.Auras)))
     dispatch(SetItemsStats(GetItemsStats(player.SelectedItems)))
     dispatch(
-      SetGemsStats(GetGemsStats(player.SelectedItems, player.SelectedGems))
+      SetGemsStats(
+        GetGemsStats(
+          player.SelectedItems,
+          player.SelectedGems,
+          player.SelectedEnchants
+        )
+      )
     )
     dispatch(
       SetEnchantsStats(

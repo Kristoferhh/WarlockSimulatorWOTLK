@@ -94,7 +94,13 @@ export default function ProfilesAndSources() {
     dispatch(SetAurasStats(GetAurasStats(params.Profile.Auras)))
     dispatch(SetItemsStats(GetItemsStats(params.Profile.Items)))
     dispatch(
-      SetGemsStats(GetGemsStats(params.Profile.Items, params.Profile.Gems))
+      SetGemsStats(
+        GetGemsStats(
+          params.Profile.Items,
+          params.Profile.Gems,
+          params.Profile.Enchants
+        )
+      )
     )
     dispatch(
       SetEnchantsStats(

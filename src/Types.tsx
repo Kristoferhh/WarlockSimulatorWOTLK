@@ -358,6 +358,10 @@ export enum ItemSet {
   T10 = '884',
 }
 
+export enum EnchantId {
+  EternalBeltBuckle = 55655,
+}
+
 export const InitialSelectedItemsAndEnchants: ItemSlotDetailedStruct = {
   [ItemSlotDetailed.Head]: 0,
   [ItemSlotDetailed.Neck]: 0,
@@ -638,6 +642,7 @@ export interface GlyphSelectionTableStruct {
 }
 
 export enum SocketColor {
+  Prismatic = 'Prismatic',
   Meta = 'Meta',
   Red = 'Red',
   Yellow = 'Yellow',

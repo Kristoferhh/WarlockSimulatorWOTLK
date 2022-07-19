@@ -107,7 +107,8 @@ export default function ImportExport() {
           SetGemsStats(
             GetGemsStats(
               data.Items ? data.Items : player.SelectedItems,
-              data.Gems
+              data.Gems,
+              data.Enchants ? data.Enchants : player.SelectedEnchants
             )
           )
         )

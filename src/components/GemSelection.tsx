@@ -62,7 +62,15 @@ export default function GemSelection() {
       ui.GemSelectionTable.ItemId
     ] = currentItemGemIds
     dispatch(SetSelectedGems(newSelectedGems))
-    dispatch(SetGemsStats(GetGemsStats(player.SelectedItems, newSelectedGems)))
+    dispatch(
+      SetGemsStats(
+        GetGemsStats(
+          player.SelectedItems,
+          newSelectedGems,
+          player.SelectedEnchants
+        )
+      )
+    )
   }
 
   return (
