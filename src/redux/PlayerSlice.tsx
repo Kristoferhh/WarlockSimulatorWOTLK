@@ -3,6 +3,7 @@ import { GetRemainingTalentPoints } from '../Common'
 import {
   AuraId,
   GlyphId,
+  GlyphStore,
   GlyphType,
   InitialGlyphs,
   InitialPlayerStats,
@@ -24,7 +25,7 @@ import {
   Spell,
   SpellId,
   StatsCollection,
-  TalentStore,
+  TalentStore
 } from '../Types'
 
 const initialPlayerState: PlayerState = {
@@ -209,6 +210,10 @@ export const PlayerSlice = createSlice({
       state.Glyphs[GlyphType.Major][action.payload.slot] = action.payload.id
       localStorage.setItem('wotlk_glyphs', JSON.stringify(state.Glyphs))
     },
+    SetSelectedGlyphs: (state, action: PayloadAction<GlyphStore>) => {
+      state.Glyphs = action.payload
+      localStorage.setItem('wotlk_glyphs', JSON.stringify(action.payload))
+    },
   },
 })
 
@@ -233,5 +238,6 @@ export const {
   SetProfile,
   SetTalentsStats,
   SetGlyphSlotId,
+  SetSelectedGlyphs,
 } = PlayerSlice.actions
 export default PlayerSlice.reducer

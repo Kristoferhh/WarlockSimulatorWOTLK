@@ -26,6 +26,7 @@ import {
   SetSelectedAuras,
   SetSelectedEnchants,
   SetSelectedGems,
+  SetSelectedGlyphs,
   SetSelectedItems,
   SetSelectedTalents,
   SetSettingsState,
@@ -61,6 +62,7 @@ export default function ProfilesAndSources() {
           Talents: player.Talents,
           Rotation: player.Rotation,
           Settings: player.Settings,
+          Glyphs: player.Glyphs,
         },
       })
     )
@@ -80,6 +82,7 @@ export default function ProfilesAndSources() {
     dispatch(SetRotationState(params.Profile.Rotation))
     dispatch(SetSelectedEnchants(params.Profile.Enchants))
     dispatch(SetSettingsState(params.Profile.Settings))
+    dispatch(SetSelectedGlyphs(params.Profile.Glyphs))
     // Recalculate the player's stats
     dispatch(
       SetBaseStats(

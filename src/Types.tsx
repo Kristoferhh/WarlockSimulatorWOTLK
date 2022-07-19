@@ -453,6 +453,7 @@ export interface Profile {
   Rotation: RotationStruct
   Enchants: ItemSlotDetailedStruct
   Settings: Settings
+  Glyphs: GlyphStore
 }
 
 export type ProfileContainer = {
