@@ -34,7 +34,7 @@ export default function RotationSelection() {
                 : '',
           }}
         >
-          <fieldset>
+          <fieldset style={{ minWidth: '0' }}>
             <legend>
               <Typography noWrap>{t(group.Header)}</Typography>
             </legend>
