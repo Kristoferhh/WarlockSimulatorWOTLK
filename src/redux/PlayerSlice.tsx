@@ -25,7 +25,7 @@ import {
   Spell,
   SpellId,
   StatsCollection,
-  TalentStore
+  TalentStore,
 } from '../Types'
 
 const initialPlayerState: PlayerState = {
