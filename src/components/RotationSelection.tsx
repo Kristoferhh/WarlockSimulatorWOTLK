@@ -36,7 +36,7 @@ export default function RotationSelection() {
         >
           <fieldset>
             <legend>
-              <Typography>{t(group.Header)}</Typography>
+              <Typography noWrap>{t(group.Header)}</Typography>
             </legend>
             <Grid container justifyContent='center'>
               {Spells.filter(s => s.Group === group.Header).map(spell => (

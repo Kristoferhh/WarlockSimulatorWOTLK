@@ -549,4 +549,9 @@ export const Auras: Aura[] = [
     IconName: 'spell_shadow_deathpact',
     Id: 32850,
   },
+  {
+    Name: 'Blood Fury',
+    IconName: 'racial_orc_berserkerstrength',
+    Id: 20572,
+  },
 ]
