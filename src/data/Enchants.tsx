@@ -1,4 +1,11 @@
-import { Enchant, EnchantId, ItemSlot, ItemSourceName, Quality, Stat } from '../Types'
+import {
+  Enchant,
+  EnchantId,
+  ItemSlot,
+  ItemSourceName,
+  Quality,
+  Stat,
+} from '../Types'
 
 export const Enchants: Enchant[] = [
   {
