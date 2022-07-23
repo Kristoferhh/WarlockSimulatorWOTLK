@@ -73,6 +73,10 @@ export const Enchants: Enchant[] = [
     Phase: 1,
     Id: 55631,
     Name: 'Brilliant Spellthread',
+    Stats: {
+      [Stat.SpellPower]: 50,
+      [Stat.Spirit]: 20,
+    },
     ItemSlot: ItemSlot.Legs,
     Quality: Quality.Epic,
     Sources: [ItemSourceName.Tailoring],
@@ -90,6 +94,9 @@ export const Enchants: Enchant[] = [
     Id: 60714,
     Name: 'Mighty Spellpower',
     ItemSlot: ItemSlot.Weapon,
+    Stats: {
+      [Stat.SpellPower]: 63,
+    },
     Quality: Quality.Rare,
     Sources: [ItemSourceName.Enchanting],
   },
@@ -155,7 +162,7 @@ export const Enchants: Enchant[] = [
     Phase: 1,
     Id: 44635,
     Name: 'Greater Spellpower',
-    ItemSlot: ItemSlot.Weapon,
+    ItemSlot: ItemSlot.Wrist,
     Quality: Quality.Rare,
     Sources: [ItemSourceName.Enchanting],
     Stats: {
