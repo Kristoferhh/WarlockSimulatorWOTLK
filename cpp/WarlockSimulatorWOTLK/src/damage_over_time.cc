@@ -89,27 +89,27 @@ void DamageOverTime::Fade() {
 
 std::vector<double> DamageOverTime::GetConstantDamage() const {
   const auto kCurrentSpellPower       = is_active ? spell_power : player.GetSpellPower(school);
-  const auto kModifier                = GetDamageModifier();
+  auto modifier                       = GetDamageModifier();
   const auto kPartialResistMultiplier = parent_spell->GetPartialResistMultiplier();
-  auto dmg                            = base_damage;
-  auto total_damage                   = dmg;
-
-  total_damage += kCurrentSpellPower * coefficient;
-  total_damage *= kModifier * kPartialResistMultiplier;
+  const auto kDmg                     = base_damage / (duration / tick_timer_total);
+  auto total_damage                   = kDmg;
 
   if (name == WarlockSimulatorConstants::kDrainSoul && player.simulation->GetEnemyHealthPercent() <= 25) {
-    total_damage *= 4;
+    modifier *= 4;
   }
 
   if (name == WarlockSimulatorConstants::kCorruption) {
-    total_damage *= 1 + 0.02 * player.talents.improved_corruption;
+    modifier *= 1 + 0.02 * player.talents.improved_corruption;
   }
 
-  return std::vector{dmg, total_damage, kCurrentSpellPower, kModifier, kPartialResistMultiplier};
+  total_damage += kCurrentSpellPower * coefficient;
+  total_damage *= modifier * kPartialResistMultiplier;
+
+  return std::vector{kDmg, total_damage, kCurrentSpellPower, modifier, kPartialResistMultiplier};
 }
 
 double DamageOverTime::PredictDamage() const {
-  return GetConstantDamage()[1];
+  return GetConstantDamage()[1] * (duration / tick_timer_total);  // TODO check for crit
 }
 
 double DamageOverTime::GetDamageModifier() const {
@@ -162,7 +162,7 @@ void DamageOverTime::Tick(const double kTime) {
   if (tick_timer_remaining <= 0) {
     const std::vector<double> kConstantDamage = GetConstantDamage();
     const auto kBaseDamage                    = kConstantDamage[0];
-    auto damage                               = kConstantDamage[1] / (duration / tick_timer_total);
+    auto damage                               = kConstantDamage[1];
     const auto kSpellPower                    = kConstantDamage[2];
     const auto kModifier                      = kConstantDamage[3];
     const auto kPartialResistMultiplier       = kConstantDamage[4];
@@ -290,6 +290,6 @@ ConflagrateDot::ConflagrateDot(Player& player)
 DrainSoulDot::DrainSoulDot(Player& player)
     : DamageOverTime(player, WarlockSimulatorConstants::kDrainSoul, SpellSchool::kShadow, 15, 3) {
   base_damage       = 710;
-  coefficient       = 0.429;
+  coefficient       = 1.5 / 3.5;
   scales_with_haste = true;
 }
