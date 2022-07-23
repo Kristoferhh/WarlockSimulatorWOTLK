@@ -14,6 +14,9 @@ struct DamageOverTime {
   SpellSchool school;
   double duration         = 0.0;  // Total duration of the dot
   double tick_timer_total = 3.0;  // Total duration of each tick (default is 3 seconds
+  bool scales_with_haste;
+  int original_duration;          // For when a dot's duration scales with haste.
+  int original_tick_timer_total;  // For when a dot's duration scales with haste.
   // between ticks)
   double tick_timer_remaining   = 0;  // Time until next tick
   int ticks_remaining           = 0;  // Amount of ticks remaining before the dot expires
@@ -31,19 +34,15 @@ struct DamageOverTime {
   virtual void Apply();
   void Fade();
   virtual void Tick(double kTime);
+  void CalculateTickTimerTotal();
   [[nodiscard]] std::vector<double> GetConstantDamage() const;
   [[nodiscard]] double PredictDamage() const;
   [[nodiscard]] double GetDamageModifier() const;
 };
 
 struct CorruptionDot final : DamageOverTime {
-  int original_duration;
-  int original_tick_timer_total;
-
   explicit CorruptionDot(Player& player);
   void Tick(double kTime) override;
-  void Apply() override;
-  void CalculateTickTimerTotal();
 };
 
 struct UnstableAfflictionDot final : DamageOverTime {

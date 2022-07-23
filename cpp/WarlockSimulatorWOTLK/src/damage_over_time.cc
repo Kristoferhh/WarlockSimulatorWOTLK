@@ -20,6 +20,9 @@ DamageOverTime::DamageOverTime(Player& player,
       school(kSpellSchool),
       duration(kDuration),
       tick_timer_total(kTickTimerTotal),
+      scales_with_haste(false),
+      original_duration(kDuration),
+      original_tick_timer_total(kTickTimerTotal),
       ticks_total(static_cast<int>(kDuration) / static_cast<int>(kTickTimerTotal)),
       name(kName) {
   if (player.recording_combat_log_breakdown && !player.combat_log_breakdown.contains(kName)) {
@@ -42,6 +45,11 @@ DamageOverTime::DamageOverTime(Player& player,
 void DamageOverTime::Apply() {
   const bool kIsAlreadyActive = is_active == true;
 
+  if (scales_with_haste) {
+    duration = original_duration / player.GetHastePercent();
+    CalculateTickTimerTotal();
+  }
+
   if (kIsAlreadyActive && player.ShouldWriteToCombatLog()) {
     player.CombatLog(name + " refreshed before letting it expire");
   } else if (!kIsAlreadyActive && player.recording_combat_log_breakdown) {
@@ -61,6 +69,10 @@ void DamageOverTime::Apply() {
     player.CombatLog(name + " " + (kIsAlreadyActive ? "refreshed" : "applied") + " (" + DoubleToString(spell_power) +
                      " Spell Power)");
   }
+}
+
+void DamageOverTime::CalculateTickTimerTotal() {
+  tick_timer_total = duration / (static_cast<double>(original_duration) / original_tick_timer_total);
 }
 
 void DamageOverTime::Fade() {
@@ -190,12 +202,11 @@ void DamageOverTime::Tick(const double kTime) {
 }
 
 CorruptionDot::CorruptionDot(Player& player)
-    : DamageOverTime(player, WarlockSimulatorConstants::kCorruption, SpellSchool::kShadow, 18, 3),
-      original_duration(18),
-      original_tick_timer_total(3) {
+    : DamageOverTime(player, WarlockSimulatorConstants::kCorruption, SpellSchool::kShadow, 18, 3) {
   base_damage = 1080;
   coefficient = 3.0 / 15.0 + 0.12 * player.talents.empowered_corruption + 0.01 * player.talents.everlasting_affliction +
                 0.05 * player.talents.siphon_life;
+  scales_with_haste = player.has_glyph_of_quick_decay;
 }
 
 void CorruptionDot::Tick(const double kTime) {
@@ -205,19 +216,6 @@ void CorruptionDot::Tick(const double kTime) {
     should_reset_duration_on_next_tick = false;
     ticks_remaining                    = ticks_total;
   }
-}
-
-void CorruptionDot::Apply() {
-  if (player.has_glyph_of_quick_decay) {
-    duration = original_duration / player.GetHastePercent();
-    CalculateTickTimerTotal();
-  }
-
-  DamageOverTime::Apply();
-}
-
-void CorruptionDot::CalculateTickTimerTotal() {
-  tick_timer_total = duration / (static_cast<double>(original_duration) / original_tick_timer_total);
 }
 
 UnstableAfflictionDot::UnstableAfflictionDot(Player& player)
@@ -257,9 +255,9 @@ ShadowflameDot::ShadowflameDot(Player& player) : DamageOverTime(player, "Shadowf
 ConflagrateDot::ConflagrateDot(Player& player)
     : DamageOverTime(player, WarlockSimulatorConstants::kConflagrate, SpellSchool::kFire, 6, 2) {}
 
-// TODO drain soul's duration is reduced with haste
 DrainSoulDot::DrainSoulDot(Player& player)
     : DamageOverTime(player, WarlockSimulatorConstants::kDrainSoul, SpellSchool::kShadow, 15, 3) {
-  base_damage = 710;
-  coefficient = 0.429;
+  base_damage       = 710;
+  coefficient       = 0.429;
+  scales_with_haste = true;
 }
