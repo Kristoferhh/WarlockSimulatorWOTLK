@@ -765,9 +765,7 @@ void Player::Reset() {
   iteration_damage      = 0;
   power_infusions_ready = settings.power_infusion_amount;
 
-  for (auto& trinket : trinkets) {
-    trinket.Reset();
-  }
+  for (auto& trinket : trinkets) { trinket.Reset(); }
 }
 
 void Player::EndAuras() {
@@ -927,9 +925,7 @@ void Player::ThrowError(const std::string& kError) const {
 }
 
 void Player::SendCombatLogEntries() const {
-  for (const auto& kValue : combat_log_entries) {
-    CombatLogUpdate(kValue.c_str());
-  }
+  for (const auto& kValue : combat_log_entries) { CombatLogUpdate(kValue.c_str()); }
 }
 
 // TODO improve
@@ -989,9 +985,7 @@ double Player::FindTimeUntilNextAction() {
 void Player::Tick(const double kTime) {
   Entity::Tick(kTime);
 
-  for (auto& trinket : trinkets) {
-    trinket.Tick(kTime);
-  }
+  for (auto& trinket : trinkets) { trinket.Tick(kTime); }
 
   if (mp5_timer_remaining <= 0) {
     mp5_timer_remaining = 5;
