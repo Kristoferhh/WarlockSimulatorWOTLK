@@ -5,6 +5,7 @@
 #include "../include/combat_log_breakdown.h"
 #include "../include/common.h"
 #include "../include/on_dot_tick_proc.h"
+#include "../include/pet.h"
 #include "../include/player.h"
 #include "../include/player_settings.h"
 #include "../include/sets.h"
@@ -139,16 +140,41 @@ double DamageOverTime::GetDamageModifier() const {
   return damage_modifier;
 }
 
+bool DamageOverTime::IsCrit() const {
+  const auto kCritChance = GetCritChance();
+  return player.RollRng(kCritChance);
+}
+
+double DamageOverTime::GetCritChance() const {
+  auto crit_chance = player.GetSpellCritChance();
+
+  if (player.pet != nullptr && (school == SpellSchool::kFire && player.pet->pet_name == PetName::kImp ||
+                                school == SpellSchool::kShadow && player.pet->pet_name == PetName::kSuccubus)) {
+    crit_chance += player.talents.master_demonologist;
+  }
+
+  return crit_chance;
+}
+
 void DamageOverTime::Tick(const double kTime) {
   tick_timer_remaining -= kTime;
 
   if (tick_timer_remaining <= 0) {
     const std::vector<double> kConstantDamage = GetConstantDamage();
-    const double kBaseDamage                  = kConstantDamage[0];
-    const double kDamage                      = kConstantDamage[1] / (static_cast<double>(duration) / tick_timer_total);
-    const double kSpellPower                  = kConstantDamage[2];
-    const double kModifier                    = kConstantDamage[3];
-    const double kPartialResistMultiplier     = kConstantDamage[4];
+    const auto kBaseDamage                    = kConstantDamage[0];
+    auto damage                               = kConstantDamage[1] / (duration / tick_timer_total);
+    const auto kSpellPower                    = kConstantDamage[2];
+    const auto kModifier                      = kConstantDamage[3];
+    const auto kPartialResistMultiplier       = kConstantDamage[4];
+    const auto kIsCrit                        = can_crit && IsCrit();
+
+    if (kIsCrit) {
+      if (player.recording_combat_log_breakdown) {
+        player.combat_log_breakdown.at(name)->crits++;
+      }
+
+      damage *= crit_damage_multiplier;
+    }
 
     // Check for Nightfall proc
     // TODO OnDotTickProc
@@ -173,19 +199,20 @@ void DamageOverTime::Tick(const double kTime) {
       player.RollEverlastingAfflictionProc();
     }
 
-    player.iteration_damage += kDamage;
+    player.iteration_damage += damage;
     ticks_remaining--;
     tick_timer_remaining = tick_timer_total;
 
     if (player.recording_combat_log_breakdown) {
-      player.combat_log_breakdown.at(name)->iteration_damage += kDamage;
+      player.combat_log_breakdown.at(name)->iteration_damage += damage;
     }
 
     if (player.ShouldWriteToCombatLog()) {
-      player.CombatLog(name + " Tick " + DoubleToString(round(kDamage)) + " (" + DoubleToString(kBaseDamage) +
-                       " Base Damage - " + DoubleToString(kSpellPower) + " Spell Power - " +
-                       DoubleToString(coefficient, 3) + " Coefficient - " +
-                       DoubleToString(round(kModifier * 10000) / 100, 3) + "% Damage Modifier - " +
+      player.CombatLog(name + " Tick " + (kIsCrit ? "*" : "") + DoubleToString(round(damage)) + (kIsCrit ? "*" : "") +
+                       " (" + DoubleToString(kBaseDamage) + " Base Damage - " + DoubleToString(kSpellPower) +
+                       " Spell Power - " + DoubleToString(coefficient, 3) + " Coefficient" +
+                       (kIsCrit ? " - " + DoubleToString(crit_damage_multiplier * 100, 3) + "% Crit Multiplier" : "") +
+                       " - " + DoubleToString(round(kModifier * 10000) / 100, 3) + "% Damage Modifier - " +
                        DoubleToString(round(kPartialResistMultiplier * 1000) / 10) + "% Partial Resist Multiplier)");
     }
 
@@ -260,4 +287,5 @@ DrainSoulDot::DrainSoulDot(Player& player)
   base_damage       = 710;
   coefficient       = 0.429;
   scales_with_haste = true;
+  can_crit          = false;
 }

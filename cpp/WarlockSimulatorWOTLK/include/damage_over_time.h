@@ -28,12 +28,15 @@ struct DamageOverTime {
   double crit_damage_multiplier = 1.5;
   std::string name;
   bool should_reset_duration_on_next_tick = false;  // Corruption - Everlasting Affliction
+  bool can_crit                           = true;
 
   explicit DamageOverTime(
       Player& player, const std::string& kName, SpellSchool kSpellSchool, double kDuration, double kTickTimerTotal);
   virtual void Apply();
   void Fade();
   virtual void Tick(double kTime);
+  bool IsCrit() const;
+  double GetCritChance() const;
   [[nodiscard]] std::vector<double> GetConstantDamage() const;
   [[nodiscard]] double PredictDamage() const;
   [[nodiscard]] double GetDamageModifier() const;

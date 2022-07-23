@@ -380,6 +380,11 @@ double Spell::GetCritChance() const {
     crit_chance += 15;
   }
 
+  if (name == WarlockSimulatorConstants::kShadowburn && entity.player->has_glyph_of_shadowburn &&
+      entity.simulation->GetEnemyHealthPercent() < 35) {
+    crit_chance += 20;
+  }
+
   return crit_chance;
 }
 
@@ -536,14 +541,8 @@ bool Spell::IsCrit() const {
     return true;
   }
 
-  auto crit_chance = GetCritChance();
-
-  if (name == WarlockSimulatorConstants::kShadowburn && entity.player->has_glyph_of_shadowburn &&
-      entity.simulation->GetEnemyHealthPercent() < 35) {
-    crit_chance += 20;
-  }
-
-  return entity.player->RollRng(crit_chance);
+  const auto kCritChance = GetCritChance();
+  return entity.player->RollRng(kCritChance);
 }
 
 bool Spell::IsHit() const {

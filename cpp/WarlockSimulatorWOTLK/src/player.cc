@@ -742,8 +742,10 @@ void Player::InitializeSpells() {
     filler = spells.incinerate;
   } else if (settings.has_searing_pain) {
     filler = spells.searing_pain;
-  } else {
+  } else if (settings.has_shadow_bolt) {
     filler = spells.shadow_bolt;
+  } else {
+    ThrowError("No filter selected");
   }
 
   // Set the curseSpell and curseAura properties

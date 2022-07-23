@@ -177,6 +177,35 @@ export interface IRotationGroup {
   Header: RotationGroup
 }
 
+export enum SpellId {
+  ShadowBolt = 47809,
+  Corruption = 47813,
+  CurseOfAgony = 47864,
+  CurseOfDoom = 47867,
+  CurseOfTheElements = 47865,
+  DeathCoil = 47860,
+  DrainSoul = 47855,
+  LifeTap = 57946,
+  SeedOfCorruption = 47836,
+  Hellfire = 47823,
+  Immolate = 47811,
+  Incinerate = 47838,
+  RainOfFire = 47820,
+  SearingPain = 47815,
+  Shadowflame = 61290,
+  SoulFire = 47825,
+  SiphonLife = 63108,
+  UnstableAffliction = 47843,
+  Haunt = 59164,
+  SoulLink = 19028,
+  Shadowburn = 47827,
+  Conflagrate = 17962,
+  Shadowfury = 47847,
+  ChaosBolt = 59172,
+  DarkPact = 59092,
+  CurseOfRecklessness = 16231,
+}
+
 export const RotationGroups: IRotationGroup[] = [
   { Header: RotationGroup.Dots },
   { Header: RotationGroup.Filler },
@@ -439,7 +468,7 @@ export const InitialSelectedGems: SelectedGemsStruct = {
 export const InitialRotation: RotationStruct = {
   [RotationGroup.Curse]: [],
   [RotationGroup.Dots]: [],
-  [RotationGroup.Filler]: [],
+  [RotationGroup.Filler]: [SpellId.ShadowBolt],
   [RotationGroup.Aoe]: [],
   [RotationGroup.Finishers]: [],
   [RotationGroup.Other]: [],
@@ -942,35 +971,6 @@ export const StatConstant = {
   CritPercentPerIntellect: 1 / 166.6,
   BaseCritChancePercent: 1.70458,
   HitPercentCap: 17,
-}
-
-export enum SpellId {
-  ShadowBolt = 47809,
-  Corruption = 47813,
-  CurseOfAgony = 47864,
-  CurseOfDoom = 47867,
-  CurseOfTheElements = 47865,
-  DeathCoil = 47860,
-  DrainSoul = 47855,
-  LifeTap = 57946,
-  SeedOfCorruption = 47836,
-  Hellfire = 47823,
-  Immolate = 47811,
-  Incinerate = 47838,
-  RainOfFire = 47820,
-  SearingPain = 47815,
-  Shadowflame = 61290,
-  SoulFire = 47825,
-  SiphonLife = 63108,
-  UnstableAffliction = 47843,
-  Haunt = 59164,
-  SoulLink = 19028,
-  Shadowburn = 47827,
-  Conflagrate = 17962,
-  Shadowfury = 47847,
-  ChaosBolt = 59172,
-  DarkPact = 59092,
-  CurseOfRecklessness = 16231,
 }
 
 export enum AuraId {
