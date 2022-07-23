@@ -763,7 +763,9 @@ void Player::Reset() {
   iteration_damage      = 0;
   power_infusions_ready = settings.power_infusion_amount;
 
-  for (auto& trinket : trinkets) { trinket.Reset(); }
+  for (auto& trinket : trinkets) {
+    trinket.Reset();
+  }
 }
 
 void Player::EndAuras() {
@@ -923,34 +925,36 @@ void Player::ThrowError(const std::string& kError) const {
 }
 
 void Player::SendCombatLogEntries() const {
-  for (const auto& kValue : combat_log_entries) { CombatLogUpdate(kValue.c_str()); }
+  for (const auto& kValue : combat_log_entries) {
+    CombatLogUpdate(kValue.c_str());
+  }
 }
 
 // TODO improve
 int Player::GetActiveAfflictionEffectsCount() const {
   int count = 0;
 
-  if (player->auras.corruption != nullptr && player->auras.corruption->is_active) {
+  if (auras.corruption != nullptr && auras.corruption->is_active) {
     count++;
   }
 
-  if (player->auras.curse_of_agony != nullptr && player->auras.curse_of_agony->is_active) {
+  if (auras.curse_of_agony != nullptr && auras.curse_of_agony->is_active) {
     count++;
   }
 
-  if (player->auras.curse_of_doom != nullptr && player->auras.curse_of_doom->is_active) {
+  if (auras.curse_of_doom != nullptr && auras.curse_of_doom->is_active) {
     count++;
   }
 
-  if (player->auras.curse_of_the_elements != nullptr && player->auras.curse_of_the_elements->is_active) {
+  if (auras.curse_of_the_elements != nullptr && auras.curse_of_the_elements->is_active) {
     count++;
   }
 
-  if (player->auras.haunt != nullptr && player->auras.haunt->is_active) {
+  if (auras.haunt != nullptr && auras.haunt->is_active) {
     count++;
   }
 
-  if (player->auras.unstable_affliction != nullptr && player->auras.unstable_affliction->is_active) {
+  if (auras.unstable_affliction != nullptr && auras.unstable_affliction->is_active) {
     count++;
   }
 
@@ -983,7 +987,9 @@ double Player::FindTimeUntilNextAction() {
 void Player::Tick(const double kTime) {
   Entity::Tick(kTime);
 
-  for (auto& trinket : trinkets) { trinket.Tick(kTime); }
+  for (auto& trinket : trinkets) {
+    trinket.Tick(kTime);
+  }
 
   if (mp5_timer_remaining <= 0) {
     mp5_timer_remaining = 5;
@@ -1025,6 +1031,12 @@ void Player::Tick(const double kTime) {
                   DoubleToString(kCurrentPlayerMana) + " -> " + DoubleToString(stats.mana) + ")");
       }
     }
+  }
+}
+
+void Player::RollEverlastingAfflictionProc() {
+  if (auras.corruption != nullptr && auras.corruption->is_active && RollRng(20 * talents.everlasting_affliction)) {
+    auras.corruption->should_reset_duration_on_next_tick = true;
   }
 }
 

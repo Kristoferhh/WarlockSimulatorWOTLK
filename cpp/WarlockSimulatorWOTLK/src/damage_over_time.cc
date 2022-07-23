@@ -46,8 +46,8 @@ void DamageOverTime::Apply() {
   const bool kIsAlreadyActive = is_active == true;
 
   if (scales_with_haste) {
-    duration = original_duration / player.GetHastePercent();
-    CalculateTickTimerTotal();
+    duration         = original_duration / player.GetHastePercent();
+    tick_timer_total = duration / (static_cast<double>(original_duration) / original_tick_timer_total);
   }
 
   if (kIsAlreadyActive && player.ShouldWriteToCombatLog()) {
@@ -69,10 +69,6 @@ void DamageOverTime::Apply() {
     player.CombatLog(name + " " + (kIsAlreadyActive ? "refreshed" : "applied") + " (" + DoubleToString(spell_power) +
                      " Spell Power)");
   }
-}
-
-void DamageOverTime::CalculateTickTimerTotal() {
-  tick_timer_total = duration / (static_cast<double>(original_duration) / original_tick_timer_total);
 }
 
 void DamageOverTime::Fade() {
@@ -171,6 +167,10 @@ void DamageOverTime::Tick(const double kTime) {
     // TODO this can maybe be changed into a OnDotTickProc
     if (name == WarlockSimulatorConstants::kCorruption && player.auras.eradication != nullptr && player.RollRng(6)) {
       player.auras.eradication->Apply();
+    }
+
+    if (name == WarlockSimulatorConstants::kDrainSoul) {
+      player.RollEverlastingAfflictionProc();
     }
 
     player.iteration_damage += kDamage;

@@ -69,5 +69,6 @@ struct Player final : Entity {
   double FindTimeUntilNextAction() override;
   int GetRand();
   bool RollRng(double kChance);
-  int GetActiveAfflictionEffectsCount() const;
+  [[nodiscard]] int GetActiveAfflictionEffectsCount() const;
+  void RollEverlastingAfflictionProc();
 };

@@ -443,11 +443,8 @@ void Spell::OnHitProcs() {
   }
 
   if (entity.type == EntityType::kPlayer &&
-      (name == WarlockSimulatorConstants::kDrainSoul || name == WarlockSimulatorConstants::kShadowBolt ||
-       name == WarlockSimulatorConstants::kHaunt) &&
-      entity.auras.corruption != nullptr && entity.auras.corruption->is_active &&
-      entity.player->RollRng(20 * entity.player->talents.everlasting_affliction)) {
-    entity.player->auras.corruption->should_reset_duration_on_next_tick = true;
+      (name == WarlockSimulatorConstants::kShadowBolt || name == WarlockSimulatorConstants::kHaunt)) {
+    entity.player->RollEverlastingAfflictionProc();
   }
 }
 

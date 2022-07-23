@@ -34,7 +34,6 @@ struct DamageOverTime {
   virtual void Apply();
   void Fade();
   virtual void Tick(double kTime);
-  void CalculateTickTimerTotal();
   [[nodiscard]] std::vector<double> GetConstantDamage() const;
   [[nodiscard]] double PredictDamage() const;
   [[nodiscard]] double GetDamageModifier() const;
