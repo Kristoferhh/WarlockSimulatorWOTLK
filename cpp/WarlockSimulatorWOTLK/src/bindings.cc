@@ -45,7 +45,8 @@ void PostCombatLogBreakdown(const char* name,
                             uint32_t count,
                             double uptime_in_seconds,
                             uint32_t dodges,
-                            uint32_t glancing_blows) {
+                            uint32_t glancing_blows,
+                            uint32_t tick_count) {
 #ifdef EMSCRIPTEN
   EM_ASM(
       {
@@ -57,9 +58,10 @@ void PostCombatLogBreakdown(const char* name,
               crits : $2,
               misses : $3,
               count : $4,
-              uptime_in_seconds : $5,
+              uptimeInSeconds : $5,
               dodges : $6,
               glancingBlows : $7,
+              tickCount : $8,
               damage : 0,
               manaGain : 0
             }
@@ -73,7 +75,8 @@ void PostCombatLogBreakdown(const char* name,
       count,
       uptime_in_seconds,
       dodges,
-      glancing_blows);
+      glancing_blows,
+      tick_count);
 #endif
 }
 
@@ -150,7 +153,9 @@ std::vector<uint32_t> AllocRandomSeeds(const int kAmountOfSeeds, const uint32_t 
   srand(kRandSeed);
   std::vector<uint32_t> seeds(kAmountOfSeeds);
 
-  for (int i = 0; i < kAmountOfSeeds; i++) { seeds[i] = rand(); }
+  for (int i = 0; i < kAmountOfSeeds; i++) {
+    seeds[i] = rand();
+  }
 
   return seeds;
 }

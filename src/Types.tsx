@@ -278,11 +278,12 @@ export interface CombatLogBreakdownData {
   crits: number
   misses: number
   count: number
-  uptime_in_seconds: number
+  uptimeInSeconds: number
   dodges: number
   glancingBlows: number
   damage: number
   manaGain: number
+  tickCount: number
 }
 
 export type StatsCollection = {

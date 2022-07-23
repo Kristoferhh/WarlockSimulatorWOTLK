@@ -205,6 +205,7 @@ void DamageOverTime::Tick(const double kTime) {
 
     if (player.recording_combat_log_breakdown) {
       player.combat_log_breakdown.at(name)->iteration_damage += damage;
+      player.combat_log_breakdown.at(name)->tick_count++;
     }
 
     if (player.ShouldWriteToCombatLog()) {

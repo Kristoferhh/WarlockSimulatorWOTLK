@@ -13,6 +13,7 @@ struct CombatLogBreakdown {
   uint32_t glancing_blows    = 0;
   double applied_at          = 0;
   double uptime_in_seconds   = 0;
+  uint32_t tick_count        = 0;
 
   explicit CombatLogBreakdown(std::string name) : name(std::move(name)) {}
 };

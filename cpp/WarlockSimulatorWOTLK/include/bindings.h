@@ -37,7 +37,8 @@ void PostCombatLogBreakdown(const char* name,
                             uint32_t count,
                             double uptime_in_seconds,
                             uint32_t dodges,
-                            uint32_t glancing_blows);
+                            uint32_t glancing_blows,
+                            uint32_t tick_count);
 void CombatLogUpdate(const char* combat_log_entry);
 void SimulationUpdate(int iteration, int iteration_amount, double median_dps, int item_id, const char* custom_stat);
 void SendSimulationResults(double median_dps,

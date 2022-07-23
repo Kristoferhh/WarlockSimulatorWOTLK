@@ -279,7 +279,10 @@ export default function BreakdownTables() {
                   </TableCell>
                   <TableCell style={{ color: 'white' }} className='number'>
                     <Typography noWrap variant='inherit'>
-                      {`${FormatPercentage(spell.crits / spell.casts)}%`}
+                      {`${FormatPercentage(
+                        spell.crits /
+                          (spell.tickCount > 0 ? spell.tickCount : spell.casts)
+                      )}%`}
                     </Typography>
                   </TableCell>
                   <TableCell style={{ color: 'white' }} className='number'>
@@ -485,81 +488,78 @@ export default function BreakdownTables() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {breakdownObj.Data.filter(e => e.uptime_in_seconds > 0).map(
-              spell => {
-                const spellObj = FindSpellByName(spell.name, talents)
+            {breakdownObj.Data.filter(e => e.uptimeInSeconds > 0).map(spell => {
+              const spellObj = FindSpellByName(spell.name, talents)
 
-                return (
-                  <TableRow key={nanoid()} className='spell-damage-information'>
-                    <TableCell>
-                      <Grid container>
-                        {spellObj?.IconName && spellObj.IconName.length > 0 && (
-                          <img
-                            alt={spellObj.Name}
-                            className='breakdown-table-spell-icon'
-                            src={`${process.env.PUBLIC_URL}/img/${spellObj?.IconName}.jpg`}
-                          />
-                        )}
-                        <Link
-                          className='breakdown-table-spell-name'
-                          target='_blank'
-                          rel='noreferrer'
-                          href={
-                            spellObj && spellObj.Id !== 0
-                              ? `${GetBaseWowheadUrl(i18n.language)}/${
-                                  spellObj.WowheadType
-                                }=${spellObj.Id}`
-                              : ''
-                          }
-                        >
-                          <Typography noWrap variant='inherit'>
-                            {t(spell.name)}
-                          </Typography>
-                        </Link>
-                      </Grid>
-                    </TableCell>
-                    {/*If the aura's count is less than 2 then show 1 decimal place, otherwise just round the value*/}
-                    <TableCell style={{ color: 'white' }} className='number'>
-                      <Typography noWrap variant='inherit'>
-                        {spell.count / breakdownObj.TotalIterationAmount < 2
-                          ? Math.round(
-                              (spell.count /
-                                breakdownObj.TotalIterationAmount) *
-                                10
-                            ) / 10
-                          : Math.round(
-                              spell.count / breakdownObj.TotalIterationAmount
-                            )}
-                      </Typography>
-                    </TableCell>
-                    <TableCell style={{ color: 'white' }}>
-                      <Grid container>
-                        <meter
-                          value={
-                            (spell.uptime_in_seconds /
-                              breakdownObj.TotalSimulationFightLength) *
-                            100
-                          }
-                          min='0'
-                          max='100'
-                        ></meter>
-                        <Typography
-                          noWrap
-                          variant='inherit'
-                          style={{ marginLeft: '5px' }}
-                        >
-                          {FormatPercentage(
-                            spell.uptime_in_seconds /
-                              breakdownObj.TotalSimulationFightLength
-                          )}
-                          %
+              return (
+                <TableRow key={nanoid()} className='spell-damage-information'>
+                  <TableCell>
+                    <Grid container>
+                      {spellObj?.IconName && spellObj.IconName.length > 0 && (
+                        <img
+                          alt={spellObj.Name}
+                          className='breakdown-table-spell-icon'
+                          src={`${process.env.PUBLIC_URL}/img/${spellObj?.IconName}.jpg`}
+                        />
+                      )}
+                      <Link
+                        className='breakdown-table-spell-name'
+                        target='_blank'
+                        rel='noreferrer'
+                        href={
+                          spellObj && spellObj.Id !== 0
+                            ? `${GetBaseWowheadUrl(i18n.language)}/${
+                                spellObj.WowheadType
+                              }=${spellObj.Id}`
+                            : ''
+                        }
+                      >
+                        <Typography noWrap variant='inherit'>
+                          {t(spell.name)}
                         </Typography>
-                      </Grid>
-                    </TableCell>
-                  </TableRow>
-                )
-              }
-            )}
+                      </Link>
+                    </Grid>
+                  </TableCell>
+                  {/*If the aura's count is less than 2 then show 1 decimal place, otherwise just round the value*/}
+                  <TableCell style={{ color: 'white' }} className='number'>
+                    <Typography noWrap variant='inherit'>
+                      {spell.count / breakdownObj.TotalIterationAmount < 2
+                        ? Math.round(
+                            (spell.count / breakdownObj.TotalIterationAmount) *
+                              10
+                          ) / 10
+                        : Math.round(
+                            spell.count / breakdownObj.TotalIterationAmount
+                          )}
+                    </Typography>
+                  </TableCell>
+                  <TableCell style={{ color: 'white' }}>
+                    <Grid container>
+                      <meter
+                        value={
+                          (spell.uptimeInSeconds /
+                            breakdownObj.TotalSimulationFightLength) *
+                          100
+                        }
+                        min='0'
+                        max='100'
+                      ></meter>
+                      <Typography
+                        noWrap
+                        variant='inherit'
+                        style={{ marginLeft: '5px' }}
+                      >
+                        {FormatPercentage(
+                          spell.uptimeInSeconds /
+                            breakdownObj.TotalSimulationFightLength
+                        )}
+                        %
+                      </Typography>
+                    </Grid>
+                  </TableCell>
+                </TableRow>
+              )
+            })}
           </TableBody>
         </Table>
       </Grid>
