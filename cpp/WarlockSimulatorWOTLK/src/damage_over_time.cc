@@ -146,7 +146,7 @@ bool DamageOverTime::IsCrit() const {
 }
 
 double DamageOverTime::GetCritChance() const {
-  auto crit_chance = player.GetSpellCritChance();
+  auto crit_chance = bonus_crit_chance + player.GetSpellCritChance();
 
   if (player.pet != nullptr && (school == SpellSchool::kFire && player.pet->pet_name == PetName::kImp ||
                                 school == SpellSchool::kShadow && player.pet->pet_name == PetName::kSuccubus)) {
@@ -235,6 +235,8 @@ CorruptionDot::CorruptionDot(Player& player)
   coefficient = 3.0 / 15.0 + 0.12 * player.talents.empowered_corruption + 0.01 * player.talents.everlasting_affliction +
                 0.05 * player.talents.siphon_life;
   scales_with_haste = player.has_glyph_of_quick_decay;
+  bonus_crit_chance += 3 * player.talents.malediction;
+  can_crit = player.talents.pandemic == 1;
 }
 
 void CorruptionDot::Tick(const double kTime) {
@@ -250,6 +252,8 @@ UnstableAfflictionDot::UnstableAfflictionDot(Player& player)
     : DamageOverTime(player, WarlockSimulatorConstants::kUnstableAffliction, SpellSchool::kShadow, 15, 3) {
   base_damage = 1380;
   coefficient = 1.2 + 0.01 * player.talents.everlasting_affliction + 0.05 * player.talents.siphon_life;
+  bonus_crit_chance += 3 * player.talents.malediction;
+  can_crit = player.talents.pandemic == 1;
 }
 
 ImmolateDot::ImmolateDot(Player& player)
@@ -288,5 +292,4 @@ DrainSoulDot::DrainSoulDot(Player& player)
   base_damage       = 710;
   coefficient       = 0.429;
   scales_with_haste = true;
-  can_crit          = false;
 }

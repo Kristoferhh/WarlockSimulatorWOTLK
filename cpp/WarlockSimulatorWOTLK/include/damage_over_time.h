@@ -25,10 +25,11 @@ struct DamageOverTime {
   double base_damage            = 0;
   double coefficient            = 0;
   bool is_active                = false;
-  double crit_damage_multiplier = 1.5;
+  double crit_damage_multiplier = 2;
   std::string name;
   bool should_reset_duration_on_next_tick = false;  // Corruption - Everlasting Affliction
-  bool can_crit                           = true;
+  double bonus_crit_chance                = 0;
+  bool can_crit                           = false;
 
   explicit DamageOverTime(
       Player& player, const std::string& kName, SpellSchool kSpellSchool, double kDuration, double kTickTimerTotal);
